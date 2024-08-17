@@ -42,7 +42,7 @@ async function generateCodeWithClaude(readmeContent) {
     const response = await anthropic.messages.create(
         {
             model: "claude-3-5-sonnet-20240620",
-            max_tokens: 4096,
+            max_tokens: 8192,
             temperature: 0.7,
             system: systemPrompt,
             messages: [{ role: "user", content: userPrompt }],

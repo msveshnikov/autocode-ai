@@ -17,15 +17,19 @@ No installation is required. CodeCraftAI can be run directly using npx.
 
 ## Usage
 
-1. Set up your Claude API key:
+1. Create a .env file in the project root and add your Claude API key:
 
-`export CLAUDE_KEY=your_api_key_here`
+```
+CLAUDE_KEY=your_api_key_here
+```
 
 2. Navigate to your project folder in the terminal.
 
 3. Run the following command:
 
-`npx codecraft-ai`
+```
+npx codecraft-ai
+```
 
 4. Follow the prompts and watch as your project comes to life!
 
