@@ -3,17 +3,12 @@
 import fs from "fs/promises";
 import path from "path";
 import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import axios from "axios";
 import ora from "ora";
 import chalk from "chalk";
 import inquirer from "inquirer";
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const CLAUDE_API_KEY = process.env.CLAUDE_KEY;
 const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
@@ -41,8 +36,8 @@ async function generateCode(instructions) {
         const response = await axios.post(
             CLAUDE_API_URL,
             {
-                model: "claude-3-sonnet-20240229",
-                max_tokens: 4000,
+                model: "claude-3-5-sonnet-20240620",
+                max_tokens: 8192,
                 messages: [
                     {
                         role: "user",
@@ -74,7 +69,7 @@ async function saveGeneratedCode(code) {
             type: "input",
             name: "fileName",
             message: "Enter the file name to save the generated code:",
-            default: "generated_code.js",
+            default: "index.js",
         },
     ]);
 
