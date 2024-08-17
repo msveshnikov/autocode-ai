@@ -1,3 +1,3 @@
 # Test Project
 
-Generate 100 fibonacci numbers
+Generate 100 fibonacci numbers in NodeJS

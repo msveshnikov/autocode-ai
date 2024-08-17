@@ -2,10 +2,11 @@
 
 import fs from "fs/promises";
 import path from "path";
+import Anthropic from "@anthropic-ai/sdk";
 import dotenv from "dotenv";
+
 dotenv.config({ override: true });
 
-const CLAUDE_API_URL = "https://api.anthropic.com/v1/messages";
 const CLAUDE_KEY = process.env.CLAUDE_KEY;
 
 if (!CLAUDE_KEY) {
@@ -26,40 +27,32 @@ async function parseReadme() {
     const content = await fs.readFile(readmePath, "utf8");
     return content;
 }
-
 async function generateCodeWithClaude(readmeContent) {
+    const anthropic = new Anthropic({ apiKey: CLAUDE_KEY });
+
     const systemPrompt =
         "You are an expert software developer. Your task is to generate working code based on the README instructions provided. Focus on creating functional, well-structured code that implements the described features.";
 
     const userPrompt = `Please generate the main code file for a project based on the following README instructions. Ensure the code is complete, functional, and follows best practices:
+  
+  ${readmeContent}
+  
+  Provide only the code without any explanations or markdown formatting.`;
 
-${readmeContent}
-
-Provide only the code without any explanations or markdown formatting.`;
-
-    const response = await fetch(CLAUDE_API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-api-key": CLAUDE_KEY,
-            "anthropic-version": "2023-06-01",
+    const response = await anthropic.messages.create(
+        {
+            model: "claude-3-5-sonnet-20240620",
+            max_tokens: 4096,
+            temperature: 0.7,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }],
         },
-        body: JSON.stringify({
-            model: "claude-3-sonnet-20240229",
-            max_tokens: 4000,
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: userPrompt },
-            ],
-        }),
-    });
+        {
+            headers: { "anthropic-beta": "max-tokens-3-5-sonnet-2024-07-15" },
+        }
+    );
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.content[0].text;
+    return response.content[0].text;
 }
 
 async function writeGeneratedCode(code) {
