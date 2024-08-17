@@ -67,22 +67,22 @@ async function createOrUpdateFile(filePath, content) {
     }
 }
 async function processFiles(files, readme) {
-    const excludedFiles = ['package-lock.json', '.gitignore', 'eslint.config.js'];
-    const excludedDirs = ['.git', 'node_modules'];
-    
+    const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env"];
+    const excludedDirs = [".git", "node_modules"];
+
     for (const file of files) {
         // Check if the file is in the excluded list
         if (excludedFiles.includes(file)) {
             console.log(chalk.yellow(`Skipping ${file}...`));
             continue;
         }
-        
+
         // Check if the file is in or below an excluded directory
-        if (excludedDirs.some(dir => file.startsWith(dir + path.sep) || file === dir)) {
+        if (excludedDirs.some((dir) => file.startsWith(dir + path.sep) || file === dir)) {
             console.log(chalk.yellow(`Skipping ${file} (in excluded directory)...`));
             continue;
         }
-        
+
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`Processing ${file}...`));
         let currentContent = await readFile(filePath);
@@ -118,6 +118,7 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     try {
         console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
+        // eslint-disable-next-line no-unused-vars
         const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
         if (stderr) {
             console.error(chalk.red(`ESLint error: ${stderr}`));
@@ -317,6 +318,7 @@ async function main() {
         return;
     }
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         console.log(chalk.yellow("\nProcessing files..."));
         const filesToProcess = await getFilesToProcess();
