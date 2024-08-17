@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-case-declarations */
 
 import fs from "fs/promises";
 import path from "path";
@@ -11,6 +12,9 @@ import { promisify } from "util";
 import ignore from "ignore";
 
 dotenv.config();
+
+const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env"];
+const excludedDirs = [".git", "node_modules"];
 
 const anthropic = new Anthropic({
     apiKey: process.env.CLAUDE_KEY,
@@ -66,23 +70,9 @@ async function createOrUpdateFile(filePath, content) {
         console.error(chalk.red(`Error creating/updating file ${filePath}:`), error);
     }
 }
+
 async function processFiles(files, readme) {
-    const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env"];
-    const excludedDirs = [".git", "node_modules"];
-
     for (const file of files) {
-        // Check if the file is in the excluded list
-        if (excludedFiles.includes(file)) {
-            console.log(chalk.yellow(`Skipping ${file}...`));
-            continue;
-        }
-
-        // Check if the file is in or below an excluded directory
-        if (excludedDirs.some((dir) => file.startsWith(dir + path.sep) || file === dir)) {
-            console.log(chalk.yellow(`Skipping ${file} (in excluded directory)...`));
-            continue;
-        }
-
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`Processing ${file}...`));
         let currentContent = await readFile(filePath);
@@ -158,12 +148,11 @@ async function gitCommit() {
         console.error(chalk.red(`Error committing to Git: ${error.message}`));
     }
 }
-
 async function getFilesToProcess() {
     const gitignorePath = path.join(process.cwd(), ".gitignore");
     let gitignoreContent = "";
     try {
-        gitignoreContent = await readFile(gitignorePath);
+        gitignoreContent = await fs.readFile(gitignorePath, "utf-8");
     } catch (error) {
         console.log(chalk.yellow("No .gitignore file found. Processing all files."));
     }
@@ -172,14 +161,22 @@ async function getFilesToProcess() {
 
     const files = await fs.readdir(process.cwd(), { withFileTypes: true, recursive: true });
     const filesToProcess = files
-        .filter((file) => file.isFile() && !ig.ignores(path.relative(process.cwd(), path.join(file.path, file.name))))
+        .filter((file) => {
+            const relativePath = path.relative(process.cwd(), path.join(file.path, file.name));
+            return (
+                file.isFile() &&
+                !ig.ignores(relativePath) &&
+                !excludedFiles.includes(file.name) &&
+                !excludedDirs.some((dir) => relativePath.startsWith(dir))
+            );
+        })
         .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
 
     return filesToProcess;
 }
 
 async function splitLargeFile(filePath, content) {
-    const maxFileSize = 100 * 1024; // 100 KB
+    const maxFileSize = 100 * 1024;
     if (content.length <= maxFileSize) {
         return;
     }
