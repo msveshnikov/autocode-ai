@@ -1,0 +1,20 @@
+{
+    "name": "codecraft-ai",
+    "version": "0.1.0",
+    "description": "An automatic coding tool that generates projects from README.md",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "codecraft-ai": "./index.js"
+    },
+    "scripts": {
+        "start": "node index.js"
+    },
+    "keywords": [
+        "ai",
+        "code generation",
+        "automation"
+    ],
+    "author": "Max Sveshnikov",
+    "license": "MIT"
+}
