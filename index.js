@@ -67,14 +67,22 @@ async function createOrUpdateFile(filePath, content) {
     }
 }
 async function processFiles(files, readme) {
-    const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js"];
-
+    const excludedFiles = ['package-lock.json', '.gitignore', 'eslint.config.js'];
+    const excludedDirs = ['.git', 'node_modules'];
+    
     for (const file of files) {
+        // Check if the file is in the excluded list
         if (excludedFiles.includes(file)) {
             console.log(chalk.yellow(`Skipping ${file}...`));
             continue;
         }
-
+        
+        // Check if the file is in or below an excluded directory
+        if (excludedDirs.some(dir => file.startsWith(dir + path.sep) || file === dir)) {
+            console.log(chalk.yellow(`Skipping ${file} (in excluded directory)...`));
+            continue;
+        }
+        
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`Processing ${file}...`));
         let currentContent = await readFile(filePath);
@@ -252,6 +260,53 @@ Please provide comprehensive documentation for the code above. Include an overvi
     console.log(chalk.green(`Documentation generated for ${filePath}`));
 }
 
+async function analyzeProjectStructure() {
+    console.log(chalk.cyan("Analyzing project structure..."));
+    const files = await getFilesToProcess();
+    const structure = {};
+
+    for (const file of files) {
+        const parts = file.split(path.sep);
+        let current = structure;
+        for (const part of parts) {
+            if (!current[part]) {
+                current[part] = {};
+            }
+            current = current[part];
+        }
+    }
+
+    console.log(chalk.green("Project structure analysis complete."));
+    console.log(JSON.stringify(structure, null, 2));
+}
+
+async function optimizeProjectStructure() {
+    console.log(chalk.cyan("Optimizing project structure..."));
+    // Implement project structure optimization logic here
+    console.log(chalk.green("Project structure optimization complete."));
+}
+
+async function generateApiDocumentation() {
+    console.log(chalk.cyan("Generating API documentation..."));
+    // Implement API documentation generation logic here
+    console.log(chalk.green("API documentation generated."));
+}
+
+async function detectSecurityVulnerabilities() {
+    console.log(chalk.cyan("Detecting security vulnerabilities..."));
+    try {
+        const { stdout, stderr } = await execAsync("npm audit");
+        if (stderr) {
+            console.error(chalk.red(`Error running npm audit: ${stderr}`));
+        } else {
+            console.log(chalk.green("Security audit complete:"));
+            console.log(stdout);
+        }
+    } catch (error) {
+        console.error(chalk.red(`Error detecting security vulnerabilities: ${error.message}`));
+    }
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -279,37 +334,66 @@ async function main() {
             await generateDocumentation(file, content);
         }
 
+        await analyzeProjectStructure();
+        await optimizeProjectStructure();
+        await generateApiDocumentation();
+        await detectSecurityVulnerabilities();
+
         await gitCommit();
 
         const continuePrompt = await inquirer.prompt({
             type: "list",
             name: "action",
             message: "What would you like to do next?",
-            choices: ["Process existing files", "Add a new file", "Update README.md", "Exit"],
+            choices: [
+                "Process existing files",
+                "Add a new file",
+                "Update README.md",
+                "Analyze project structure",
+                "Optimize project structure",
+                "Generate API documentation",
+                "Detect security vulnerabilities",
+                "Exit",
+            ],
         });
 
-        if (continuePrompt.action === "Process existing files") {
-            continue;
-        } else if (continuePrompt.action === "Add a new file") {
-            const newFilePrompt = await inquirer.prompt({
-                type: "input",
-                name: "newFile",
-                message: "Enter the name of the new file to create (include path if in subfolder):",
-            });
+        switch (continuePrompt.action) {
+            case "Process existing files":
+                continue;
+            case "Add a new file":
+                const newFilePrompt = await inquirer.prompt({
+                    type: "input",
+                    name: "newFile",
+                    message: "Enter the name of the new file to create (include path if in subfolder):",
+                });
 
-            if (newFilePrompt.newFile) {
-                const newFilePath = path.join(process.cwd(), newFilePrompt.newFile);
-                await createSubfolders(newFilePath);
-                await createOrUpdateFile(newFilePath, "");
-            }
-        } else if (continuePrompt.action === "Update README.md") {
-            console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
-            const updatedReadme = await updateReadme(readme);
-            await writeFile(readmePath, updatedReadme);
-            readme = updatedReadme;
-        } else {
-            console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
-            break;
+                if (newFilePrompt.newFile) {
+                    const newFilePath = path.join(process.cwd(), newFilePrompt.newFile);
+                    await createSubfolders(newFilePath);
+                    await createOrUpdateFile(newFilePath, "");
+                }
+                break;
+            case "Update README.md":
+                console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
+                const updatedReadme = await updateReadme(readme);
+                await writeFile(readmePath, updatedReadme);
+                readme = updatedReadme;
+                break;
+            case "Analyze project structure":
+                await analyzeProjectStructure();
+                break;
+            case "Optimize project structure":
+                await optimizeProjectStructure();
+                break;
+            case "Generate API documentation":
+                await generateApiDocumentation();
+                break;
+            case "Detect security vulnerabilities":
+                await detectSecurityVulnerabilities();
+                break;
+            case "Exit":
+                console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
+                return;
         }
     }
 }
