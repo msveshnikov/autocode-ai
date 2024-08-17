@@ -155,10 +155,10 @@ async function getFilesToProcess() {
 
     const ig = ignore().add(gitignoreContent);
 
-    const files = await fs.readdir(process.cwd(), { withFileTypes: true });
+    const files = await fs.readdir(process.cwd(), { withFileTypes: true, recursive: true });
     const filesToProcess = files
-        .filter(file => file.isFile() && !ig.ignores(file.name))
-        .map(file => file.name);
+        .filter(file => file.isFile() && !ig.ignores(path.relative(process.cwd(), path.join(file.path, file.name))))
+        .map(file => path.relative(process.cwd(), path.join(file.path, file.name)));
 
     return filesToProcess;
 }
@@ -195,6 +195,50 @@ async function splitLargeFile(filePath, content) {
     console.log(chalk.green(`File ${filePath} has been split into ${moduleIndex} modules.`));
 }
 
+async function generateUnitTests(filePath, content) {
+    console.log(chalk.cyan(`Generating unit tests for ${filePath}...`));
+    const testFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.test${path.extname(filePath)}`);
+    
+    const prompt = `
+Generate unit tests for the following code:
+
+${content}
+
+Please provide complete and functional unit tests for the code above. Use a modern testing framework suitable for the language and follow best practices for unit testing.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    await writeFile(testFilePath, response.content[0].text);
+    console.log(chalk.green(`Unit tests generated for ${filePath}`));
+}
+
+async function generateDocumentation(filePath, content) {
+    console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
+    const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
+    
+    const prompt = `
+Generate documentation for the following code:
+
+${content}
+
+Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    await writeFile(docFilePath, response.content[0].text);
+    console.log(chalk.green(`Documentation generated for ${filePath}`));
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -218,6 +262,8 @@ async function main() {
             await runCodeQualityChecks(file);
             const content = await readFile(file);
             await splitLargeFile(file, content);
+            await generateUnitTests(file, content);
+            await generateDocumentation(file, content);
         }
 
         await gitCommit();
