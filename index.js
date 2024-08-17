@@ -8,6 +8,7 @@ import inquirer from "inquirer";
 import dotenv from "dotenv";
 import { exec } from "child_process";
 import { promisify } from "util";
+import ignore from "ignore";
 
 dotenv.config();
 
@@ -143,6 +144,57 @@ async function gitCommit() {
     }
 }
 
+async function getFilesToProcess() {
+    const gitignorePath = path.join(process.cwd(), '.gitignore');
+    let gitignoreContent = '';
+    try {
+        gitignoreContent = await readFile(gitignorePath);
+    } catch (error) {
+        console.log(chalk.yellow("No .gitignore file found. Processing all files."));
+    }
+
+    const ig = ignore().add(gitignoreContent);
+
+    const files = await fs.readdir(process.cwd(), { withFileTypes: true });
+    const filesToProcess = files
+        .filter(file => file.isFile() && !ig.ignores(file.name))
+        .map(file => file.name);
+
+    return filesToProcess;
+}
+
+async function splitLargeFile(filePath, content) {
+    const maxFileSize = 100 * 1024; // 100 KB
+    if (content.length <= maxFileSize) {
+        return;
+    }
+
+    console.log(chalk.yellow(`File ${filePath} is too large. Splitting into modules...`));
+
+    const lines = content.split('\n');
+    let currentModule = '';
+    let moduleIndex = 1;
+
+    for (const line of lines) {
+        currentModule += line + '\n';
+        if (currentModule.length > maxFileSize) {
+            const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(filePath)}`;
+            const modulePath = path.join(path.dirname(filePath), moduleName);
+            await writeFile(modulePath, currentModule);
+            currentModule = '';
+            moduleIndex++;
+        }
+    }
+
+    if (currentModule) {
+        const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(filePath)}`;
+        const modulePath = path.join(path.dirname(filePath), moduleName);
+        await writeFile(modulePath, currentModule);
+    }
+
+    console.log(chalk.green(`File ${filePath} has been split into ${moduleIndex} modules.`));
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -153,10 +205,9 @@ async function main() {
         return;
     }
 
-    let filesToProcess = ["index.js"];
-
     while (true) {
         console.log(chalk.yellow("\nProcessing files..."));
+        const filesToProcess = await getFilesToProcess();
         await processFiles(filesToProcess, readme);
 
         console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
@@ -165,6 +216,8 @@ async function main() {
 
         for (const file of filesToProcess) {
             await runCodeQualityChecks(file);
+            const content = await readFile(file);
+            await splitLargeFile(file, content);
         }
 
         await gitCommit();
@@ -188,7 +241,7 @@ async function main() {
             if (newFilePrompt.newFile) {
                 const newFilePath = path.join(process.cwd(), newFilePrompt.newFile);
                 await createSubfolders(newFilePath);
-                filesToProcess.push(newFilePrompt.newFile);
+                await createOrUpdateFile(newFilePath, "");
             }
         } else if (continuePrompt.action === "Update README.md") {
             console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));

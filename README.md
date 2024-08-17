@@ -51,6 +51,7 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   New design ideas and considerations should be added to README.md by the tool (similar to index.js)
 -   Ask user for important steps in software development process (like, new file creation, refactoring, etc)
 -   Install new packages via npm install if needed
+-   Use DRY, KISS, SRP principles during coding
 
 ## Design Ideas and Considerations
 
