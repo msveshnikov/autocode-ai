@@ -108,14 +108,4 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 - Comprehensive file coverage with configurable exceptions
 - Integration with version control systems for automatic commits and branching
 
-## Future Enhancements
-
-- Support for multi-language projects and polyglot programming
-- Support for containerization and deployment automation
-- AI-powered code review and security vulnerability detection
-- Add support for code performance analysis and optimization
-- Implement a chat-like interface for interactive project development
-- Implement a caching system to improve performance
-- Add support for React.JS development
-
 This documentation provides an overview of CodeCraftAI, its features, usage instructions, and core components. As the project evolves, this documentation will be updated to reflect new features and improvements.
