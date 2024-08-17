@@ -4,22 +4,22 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 
 ## Features
 
--   NodeJS-based console application
--   Automatic code generation based on README.md instructions
--   Utilizes Claude 3.5 Sonnet API for intelligent code generation
--   Incremental project building
--   Easy installation and execution using npx
--   Creates and modifies source files in the current folder and subfolders
--   Self-updating README.md with new design ideas and considerations
--   Intelligent project structure analysis and optimization
--   Automatic dependency management and version control integration
--   Code quality checks and suggestions
--   Support for multiple programming languages and frameworks
--   Visual representation of project structure and dependencies
--   Automatic code optimization and refactoring suggestions
--   Modular file splitting for efficient AI processing
--   Comprehensive file coverage with configurable exceptions
--   Integration with version control systems for automatic commits and branching
+- NodeJS-based console application
+- Automatic code generation based on README.md instructions
+- Utilizes Claude 3.5 Sonnet API for intelligent code generation
+- Incremental project building
+- Easy installation and execution using npx
+- Creates and modifies source files in the current folder and subfolders
+- Self-updating README.md with new design ideas and considerations
+- Intelligent project structure analysis and optimization
+- Automatic dependency management and version control integration
+- Code quality checks and suggestions
+- Support for multiple programming languages and frameworks
+- Visual representation of project structure and dependencies
+- Automatic code optimization and refactoring suggestions
+- Modular file splitting for efficient AI processing
+- Comprehensive file coverage with configurable exceptions
+- Integration with version control systems for automatic commits and branching
 
 ## Installation
 
@@ -49,25 +49,25 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 ## Requirements
 
--   Node.js (version 20.0.0 or higher)
--   ES6 imports and async/await syntax
--   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
--   Chalk for UI enhancements
--   Exclude non-source files!! (csv, png, binary, etc)
--   Ask user before generating documentation!!
--   User interaction for important development steps
--   Automatic package installation via npm
--   Adherence to DRY, KISS, and SRP principles
+- Node.js (version 20.0.0 or higher)
+- ES6 imports and async/await syntax
+- Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
+- Chalk for UI enhancements
+- Exclude non-source files!! (csv, png, binary, etc)
+- Ask user before generating documentation!!
+- User interaction for important development steps
+- Automatic package installation via npm
+- Adherence to DRY, KISS, and SRP principles
 
 ## Design Ideas and Considerations
 
--   Implement a chat-like interface for interactive project development
--   Implement a caching system to improve performance
--   Add support for React.JS development
+- Implement a chat-like interface for interactive project development
+- Implement a caching system to improve performance
+- Add support for React.JS development
 
 ## Future Enhancements
 
--   Support for multi-language projects and polyglot programming
--   Support for containerization and deployment automation
--   AI-powered code review and security vulnerability detection
--   Add support for code performance analysis and optimization
+- Support for multi-language projects and polyglot programming
+- Support for containerization and deployment automation
+- AI-powered code review and security vulnerability detection
+- Add support for code performance analysis and optimization

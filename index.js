@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-case-declarations */
 
 import fs from "fs/promises";
 import path from "path";
@@ -108,7 +107,6 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     try {
         console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
-        // eslint-disable-next-line no-unused-vars
         const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
         if (stderr) {
             console.error(chalk.red(`ESLint error: ${stderr}`));
@@ -148,6 +146,7 @@ async function gitCommit() {
         console.error(chalk.red(`Error committing to Git: ${error.message}`));
     }
 }
+
 async function getFilesToProcess() {
     const gitignorePath = path.join(process.cwd(), ".gitignore");
     let gitignoreContent = "";
@@ -167,7 +166,8 @@ async function getFilesToProcess() {
                 file.isFile() &&
                 !ig.ignores(relativePath) &&
                 !excludedFiles.includes(file.name) &&
-                !excludedDirs.some((dir) => relativePath.startsWith(dir))
+                !excludedDirs.some((dir) => relativePath.startsWith(dir)) &&
+                ![".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(path.extname(file.name).toLowerCase())
             );
         })
         .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
@@ -176,11 +176,15 @@ async function getFilesToProcess() {
 }
 
 async function generateDocumentation(filePath, content) {
+    if (path.extname(filePath).toLowerCase() !== ".js") {
+        return;
+    }
+
     console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
     const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
 
     const prompt = `
-Generate documentation for the following code:
+Generate documentation for the following JavaScript code:
 
 ${content}
 
@@ -331,7 +335,6 @@ async function main() {
         return;
     }
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
         console.log(chalk.yellow("\nProcessing files..."));
         const filesToProcess = await getFilesToProcess();
@@ -344,12 +347,14 @@ async function main() {
         for (const file of filesToProcess) {
             await runCodeQualityChecks(file);
             const content = await readFile(file);
-            // await generateDocumentation(file, content); !! only for JS files!!!
+            if (path.extname(file).toLowerCase() === ".js") {
+                await generateDocumentation(file, content);
+            }
         }
 
         await gitCommit();
 
-        const continuePrompt = await inquirer.prompt({
+        const { action } = await inquirer.prompt({
             type: "list",
             name: "action",
             message: "What would you like to do next?",
@@ -365,18 +370,18 @@ async function main() {
             ],
         });
 
-        switch (continuePrompt.action) {
+        switch (action) {
             case "Process existing files":
                 continue;
             case "Add a new file":
-                const newFilePrompt = await inquirer.prompt({
+                const { newFile } = await inquirer.prompt({
                     type: "input",
                     name: "newFile",
                     message: "Enter the name of the new file to create (include path if in subfolder):",
                 });
 
-                if (newFilePrompt.newFile) {
-                    const newFilePath = path.join(process.cwd(), newFilePrompt.newFile);
+                if (newFile) {
+                    const newFilePath = path.join(process.cwd(), newFile);
                     await createSubfolders(newFilePath);
                     await createOrUpdateFile(newFilePath, "");
                 }
