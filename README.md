@@ -39,7 +39,7 @@ CodeCraftAI reads your README.md file and sends the instructions to the Claude 3
 
 ## Requirements
 
--   Node.js (version 14.0.0 or higher)
+-   Node.js (version 20.0.0 or higher), always use ES6 imports and async/await
 -   An active internet connection
 -   Claude API key
 
