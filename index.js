@@ -167,7 +167,7 @@ async function getFilesToProcess() {
                 !ig.ignores(relativePath) &&
                 !excludedFiles.includes(file.name) &&
                 !excludedDirs.some((dir) => relativePath.startsWith(dir)) &&
-                ![".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(path.extname(file.name).toLowerCase())
+                ![".md", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(path.extname(file.name).toLowerCase())
             );
         })
         .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
@@ -352,7 +352,7 @@ async function main() {
             }
         }
 
-        await gitCommit();
+        // await gitCommit();
 
         const { action } = await inquirer.prompt({
             type: "list",
