@@ -6,12 +6,16 @@ import Anthropic from "@anthropic-ai/sdk";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import dotenv from "dotenv";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 dotenv.config();
 
 const anthropic = new Anthropic({
     apiKey: process.env.CLAUDE_KEY,
 });
+
+const execAsync = promisify(exec);
 
 async function readFile(filePath) {
     try {
@@ -91,6 +95,54 @@ Please update the README.md file with new design ideas and considerations. Ensur
     return response.content[0].text;
 }
 
+async function createSubfolders(filePath) {
+    const dir = path.dirname(filePath);
+    await fs.mkdir(dir, { recursive: true });
+}
+
+async function runCodeQualityChecks(filePath) {
+    try {
+        console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
+        const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
+        if (stderr) {
+            console.error(chalk.red(`ESLint error: ${stderr}`));
+        } else {
+            console.log(chalk.green(`ESLint passed for ${filePath}`));
+        }
+    } catch (error) {
+        console.error(chalk.red(`Error running ESLint: ${error.message}`));
+    }
+}
+
+async function manageDependencies() {
+    try {
+        console.log(chalk.cyan("Checking and updating dependencies..."));
+        const { stdout, stderr } = await execAsync("npm outdated");
+        if (stderr) {
+            console.error(chalk.red(`Error checking outdated dependencies: ${stderr}`));
+        } else if (stdout) {
+            console.log(chalk.yellow("Outdated dependencies found. Updating..."));
+            await execAsync("npm update");
+            console.log(chalk.green("Dependencies updated successfully."));
+        } else {
+            console.log(chalk.green("All dependencies are up to date."));
+        }
+    } catch (error) {
+        console.error(chalk.red(`Error managing dependencies: ${error.message}`));
+    }
+}
+
+async function gitCommit() {
+    try {
+        console.log(chalk.cyan("Committing changes to Git..."));
+        await execAsync("git add .");
+        await execAsync('git commit -m "Auto-commit by CodeCraftAI"');
+        console.log(chalk.green("Changes committed successfully."));
+    } catch (error) {
+        console.error(chalk.red(`Error committing to Git: ${error.message}`));
+    }
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -109,6 +161,14 @@ async function main() {
 
         console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
 
+        await manageDependencies();
+
+        for (const file of filesToProcess) {
+            await runCodeQualityChecks(file);
+        }
+
+        await gitCommit();
+
         const continuePrompt = await inquirer.prompt({
             type: "list",
             name: "action",
@@ -122,10 +182,12 @@ async function main() {
             const newFilePrompt = await inquirer.prompt({
                 type: "input",
                 name: "newFile",
-                message: "Enter the name of the new file to create:",
+                message: "Enter the name of the new file to create (include path if in subfolder):",
             });
 
             if (newFilePrompt.newFile) {
+                const newFilePath = path.join(process.cwd(), newFilePrompt.newFile);
+                await createSubfolders(newFilePath);
                 filesToProcess.push(newFilePrompt.newFile);
             }
         } else if (continuePrompt.action === "Update README.md") {
