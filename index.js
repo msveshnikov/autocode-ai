@@ -66,9 +66,15 @@ async function createOrUpdateFile(filePath, content) {
         console.error(chalk.red(`Error creating/updating file ${filePath}:`), error);
     }
 }
-
 async function processFiles(files, readme) {
+    const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js"];
+
     for (const file of files) {
+        if (excludedFiles.includes(file)) {
+            console.log(chalk.yellow(`Skipping ${file}...`));
+            continue;
+        }
+
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`Processing ${file}...`));
         let currentContent = await readFile(filePath);
@@ -145,8 +151,8 @@ async function gitCommit() {
 }
 
 async function getFilesToProcess() {
-    const gitignorePath = path.join(process.cwd(), '.gitignore');
-    let gitignoreContent = '';
+    const gitignorePath = path.join(process.cwd(), ".gitignore");
+    let gitignoreContent = "";
     try {
         gitignoreContent = await readFile(gitignorePath);
     } catch (error) {
@@ -157,8 +163,8 @@ async function getFilesToProcess() {
 
     const files = await fs.readdir(process.cwd(), { withFileTypes: true, recursive: true });
     const filesToProcess = files
-        .filter(file => file.isFile() && !ig.ignores(path.relative(process.cwd(), path.join(file.path, file.name))))
-        .map(file => path.relative(process.cwd(), path.join(file.path, file.name)));
+        .filter((file) => file.isFile() && !ig.ignores(path.relative(process.cwd(), path.join(file.path, file.name))))
+        .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
 
     return filesToProcess;
 }
@@ -171,23 +177,27 @@ async function splitLargeFile(filePath, content) {
 
     console.log(chalk.yellow(`File ${filePath} is too large. Splitting into modules...`));
 
-    const lines = content.split('\n');
-    let currentModule = '';
+    const lines = content.split("\n");
+    let currentModule = "";
     let moduleIndex = 1;
 
     for (const line of lines) {
-        currentModule += line + '\n';
+        currentModule += line + "\n";
         if (currentModule.length > maxFileSize) {
-            const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(filePath)}`;
+            const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(
+                filePath
+            )}`;
             const modulePath = path.join(path.dirname(filePath), moduleName);
             await writeFile(modulePath, currentModule);
-            currentModule = '';
+            currentModule = "";
             moduleIndex++;
         }
     }
 
     if (currentModule) {
-        const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(filePath)}`;
+        const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(
+            filePath
+        )}`;
         const modulePath = path.join(path.dirname(filePath), moduleName);
         await writeFile(modulePath, currentModule);
     }
@@ -197,8 +207,11 @@ async function splitLargeFile(filePath, content) {
 
 async function generateUnitTests(filePath, content) {
     console.log(chalk.cyan(`Generating unit tests for ${filePath}...`));
-    const testFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.test${path.extname(filePath)}`);
-    
+    const testFilePath = path.join(
+        path.dirname(filePath),
+        `${path.basename(filePath, path.extname(filePath))}.test${path.extname(filePath)}`
+    );
+
     const prompt = `
 Generate unit tests for the following code:
 
@@ -220,7 +233,7 @@ Please provide complete and functional unit tests for the code above. Use a mode
 async function generateDocumentation(filePath, content) {
     console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
     const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
-    
+
     const prompt = `
 Generate documentation for the following code:
 
