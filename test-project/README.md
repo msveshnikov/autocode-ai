@@ -35,13 +35,13 @@ npx codecraft-ai
 
 ## How It Works
 
-CodeCraftAI reads your README.md file and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code to your project directory.
+CodeCraftAI reads your README.md file and your sources (initially index.js only) and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content (initially index.js only). CodeCraftAI then saves the generated code (initially index.js only) back to your project directory.
 
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher), always use ES6 imports and async/await
--   An active internet connection
--   Claude API key
+-   Always pass previous index.js (along with README.md contents) for incremental improvement
+-   Always use model: "claude-3-5-sonnet-20240620", max_tokens: 8192
 
 ## Contributing
 
