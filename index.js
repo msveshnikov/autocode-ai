@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-case-declarations */
 
 import fs from "fs/promises";
 import path from "path";
@@ -107,6 +108,7 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     try {
         console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
+        // eslint-disable-next-line no-unused-vars
         const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
         if (stderr) {
             console.error(chalk.red(`ESLint error: ${stderr}`));
@@ -136,6 +138,7 @@ async function manageDependencies() {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 async function gitCommit() {
     try {
         console.log(chalk.cyan("Committing changes to Git..."));
@@ -167,7 +170,9 @@ async function getFilesToProcess() {
                 !ig.ignores(relativePath) &&
                 !excludedFiles.includes(file.name) &&
                 !excludedDirs.some((dir) => relativePath.startsWith(dir)) &&
-                ![".md", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(path.extname(file.name).toLowerCase())
+                ![".md", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(
+                    path.extname(file.name).toLowerCase()
+                )
             );
         })
         .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
@@ -335,25 +340,26 @@ async function main() {
         return;
     }
 
-    while (true) {
-        console.log(chalk.yellow("\nProcessing files..."));
-        const filesToProcess = await getFilesToProcess();
-        await processFiles(filesToProcess, readme);
+    console.log(chalk.yellow("\nProcessing files..."));
+    const filesToProcess = await getFilesToProcess();
+    await processFiles(filesToProcess, readme);
 
-        console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
+    console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
 
-        await manageDependencies();
+    await manageDependencies();
 
-        for (const file of filesToProcess) {
-            await runCodeQualityChecks(file);
-            const content = await readFile(file);
-            if (path.extname(file).toLowerCase() === ".js") {
-                await generateDocumentation(file, content);
-            }
+    for (const file of filesToProcess) {
+        await runCodeQualityChecks(file);
+        const content = await readFile(file);
+        if (path.extname(file).toLowerCase() === ".js") {
+            await generateDocumentation(file, content);
         }
+    }
 
-        // await gitCommit();
+    // await gitCommit();
 
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
         const { action } = await inquirer.prompt({
             type: "list",
             name: "action",
