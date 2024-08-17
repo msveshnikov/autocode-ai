@@ -1,6 +1,6 @@
 {
     "name": "codecraft-ai",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -24,7 +24,13 @@
         "continuous integration",
         "code optimization",
         "unit testing",
-        "documentation generation"
+        "documentation generation",
+        "project structure analysis",
+        "dependency management",
+        "version control integration",
+        "code quality",
+        "multi-language support",
+        "visual project structure"
     ],
     "author": "Max Sveshnikov",
     "license": "MIT",
@@ -41,11 +47,13 @@
         "simple-git": "^3.23.0",
         "fs-extra": "^11.2.0",
         "istanbul": "^0.4.5",
-        "jsdoc": "^4.0.2"
+        "jsdoc": "^4.0.2",
+        "dependency-tree": "^9.0.0",
+        "madge": "^6.1.0",
+        "eslint": "^8.57.0"
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
-        "eslint": "^8.57.0",
         "eslint-config-standard": "^17.1.0",
         "globals": "^15.9.0",
         "jest": "^29.7.0"

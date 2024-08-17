@@ -175,42 +175,6 @@ async function getFilesToProcess() {
     return filesToProcess;
 }
 
-async function splitLargeFile(filePath, content) {
-    const maxFileSize = 100 * 1024;
-    if (content.length <= maxFileSize) {
-        return;
-    }
-
-    console.log(chalk.yellow(`File ${filePath} is too large. Splitting into modules...`));
-
-    const lines = content.split("\n");
-    let currentModule = "";
-    let moduleIndex = 1;
-
-    for (const line of lines) {
-        currentModule += line + "\n";
-        if (currentModule.length > maxFileSize) {
-            const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(
-                filePath
-            )}`;
-            const modulePath = path.join(path.dirname(filePath), moduleName);
-            await writeFile(modulePath, currentModule);
-            currentModule = "";
-            moduleIndex++;
-        }
-    }
-
-    if (currentModule) {
-        const moduleName = `${path.basename(filePath, path.extname(filePath))}_module${moduleIndex}${path.extname(
-            filePath
-        )}`;
-        const modulePath = path.join(path.dirname(filePath), moduleName);
-        await writeFile(modulePath, currentModule);
-    }
-
-    console.log(chalk.green(`File ${filePath} has been split into ${moduleIndex} modules.`));
-}
-
 async function generateDocumentation(filePath, content) {
     console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
     const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
@@ -380,14 +344,8 @@ async function main() {
         for (const file of filesToProcess) {
             await runCodeQualityChecks(file);
             const content = await readFile(file);
-            await splitLargeFile(file, content);
-            await generateDocumentation(file, content);
+            // await generateDocumentation(file, content); !! only for JS files!!!
         }
-
-        await analyzeProjectStructure();
-        await optimizeProjectStructure();
-        await generateApiDocumentation();
-        await detectSecurityVulnerabilities();
 
         await gitCommit();
 

@@ -2,175 +2,156 @@
 
 ## Overview
 
-CodeCraftAI is an automatic coding tool that generates, updates, and manages code based on project requirements specified in a README.md file. It uses the Anthropic AI API to generate code, create unit tests, produce documentation, and optimize project structure. The tool also includes features for managing dependencies, running code quality checks, and handling version control with Git.
+CodeCraftAI is a Node.js-based automated coding tool that generates, updates, and manages project files based on a README.md file. It uses the Anthropic API to generate code, provides various project management features, and offers an interactive command-line interface for user interaction.
+
+## Table of Contents
+
+1. [Dependencies](#dependencies)
+2. [Configuration](#configuration)
+3. [Main Functions](#main-functions)
+4. [Utility Functions](#utility-functions)
+5. [File Processing Functions](#file-processing-functions)
+6. [Project Management Functions](#project-management-functions)
+7. [Main Execution](#main-execution)
+
+## Dependencies
+
+The script uses the following external libraries:
+
+- fs/promises: File system operations
+- path: File path manipulations
+- @anthropic-ai/sdk: Anthropic API client
+- chalk: Console text styling
+- inquirer: Interactive command-line user interface
+- dotenv: Environment variable management
+- child_process: Executing system commands
+- util: Utility functions
+- ignore: Parsing .gitignore files
+
+## Configuration
+
+- The script uses environment variables loaded from a .env file.
+- It requires an Anthropic API key stored in the CLAUDE_KEY environment variable.
 
 ## Main Functions
 
-### `main()`
+### async function main()
 
-The main entry point of the application. It runs a loop that processes files, manages dependencies, runs quality checks, generates tests and documentation, and provides options for further actions.
+The main entry point of the application. It runs an interactive loop that allows users to perform various actions on the project.
 
-**Usage:**
-
+Usage:
 ```javascript
 main().catch((error) => {
     console.error(chalk.red("An error occurred:"), error);
 });
 ```
 
-### `readFile(filePath)`
+## Utility Functions
 
-Reads the content of a file.
+### async function readFile(filePath)
 
-**Parameters:**
+Reads the contents of a file.
 
--   `filePath` (string): The path to the file to be read.
+Parameters:
+- filePath: string - The path to the file to be read
 
-**Returns:**
+Returns: string | null - The file contents or null if an error occurs
 
--   (Promise<string|null>): The content of the file or null if an error occurs.
-
-### `writeFile(filePath, content)`
+### async function writeFile(filePath, content)
 
 Writes content to a file.
 
-**Parameters:**
+Parameters:
+- filePath: string - The path to the file to be written
+- content: string - The content to write to the file
 
--   `filePath` (string): The path to the file to be written.
--   `content` (string): The content to write to the file.
+### async function createSubfolders(filePath)
 
-### `generateCode(readme, currentCode, fileName)`
+Creates any necessary subfolders for a given file path.
 
-Generates or updates code based on the README and current file content.
+Parameters:
+- filePath: string - The path of the file for which to create subfolders
 
-**Parameters:**
+### async function execAsync(command)
 
--   `readme` (string): Content of the README.md file.
--   `currentCode` (string): Current content of the file being processed.
--   `fileName` (string): Name of the file being processed.
+Promisified version of child_process.exec.
 
-**Returns:**
+Parameters:
+- command: string - The command to execute
 
--   (Promise<string>): Generated code content.
+Returns: Promise<{ stdout: string, stderr: string }> - The result of the command execution
 
-### `processFiles(files, readme)`
+## File Processing Functions
+
+### async function generateCode(readme, currentCode, fileName)
+
+Generates code for a file based on the README.md content and existing code.
+
+Parameters:
+- readme: string - The content of the README.md file
+- currentCode: string | null - The current content of the file (if it exists)
+- fileName: string - The name of the file being processed
+
+Returns: string - The generated code
+
+### async function processFiles(files, readme)
 
 Processes multiple files, generating or updating their content.
 
-**Parameters:**
+Parameters:
+- files: string[] - An array of file paths to process
+- readme: string - The content of the README.md file
 
--   `files` (string[]): Array of file paths to process.
--   `readme` (string): Content of the README.md file.
+### async function splitLargeFile(filePath, content)
 
-### `updateReadme(readme)`
+Splits a large file into multiple smaller modules.
 
-Updates the README.md file with new design ideas and considerations.
+Parameters:
+- filePath: string - The path of the file to split
+- content: string - The content of the file
 
-**Parameters:**
+### async function generateDocumentation(filePath, content)
 
--   `readme` (string): Current content of the README.md file.
+Generates documentation for a file.
 
-**Returns:**
+Parameters:
+- filePath: string - The path of the file to document
+- content: string - The content of the file
 
--   (Promise<string>): Updated README content.
+## Project Management Functions
 
-### `runCodeQualityChecks(filePath)`
-
-Runs ESLint on a specified file.
-
-**Parameters:**
-
--   `filePath` (string): Path to the file to check.
-
-### `manageDependencies()`
+### async function manageDependencies()
 
 Checks for outdated dependencies and updates them if necessary.
 
-### `gitCommit()`
+### async function gitCommit()
 
-Commits changes to Git.
+Commits changes to the Git repository.
 
-### `getFilesToProcess()`
-
-Retrieves a list of files to be processed, respecting .gitignore rules.
-
-**Returns:**
-
--   (Promise<string[]>): Array of file paths to process.
-
-### `splitLargeFile(filePath, content)`
-
-Splits large files into smaller modules.
-
-**Parameters:**
-
--   `filePath` (string): Path to the file to split.
--   `content` (string): Content of the file.
-
-### `generateUnitTests(filePath, content)`
-
-Generates unit tests for a given file.
-
-**Parameters:**
-
--   `filePath` (string): Path to the file to generate tests for.
--   `content` (string): Content of the file.
-
-### `generateDocumentation(filePath, content)`
-
-Generates documentation for a given file.
-
-**Parameters:**
-
--   `filePath` (string): Path to the file to document.
--   `content` (string): Content of the file.
-
-### `analyzeProjectStructure()`
+### async function analyzeProjectStructure()
 
 Analyzes and displays the current project structure.
 
-### `optimizeProjectStructure()`
+### async function optimizeProjectStructure()
 
-Provides suggestions for optimizing the project structure.
+Generates suggestions for optimizing the project structure.
 
-### `generateApiDocumentation()`
+### async function generateApiDocumentation()
 
 Generates API documentation for the entire project.
 
-### `detectSecurityVulnerabilities()`
+### async function detectSecurityVulnerabilities()
 
-Runs npm audit to detect security vulnerabilities in dependencies.
+Runs a security audit on the project dependencies.
 
-## Usage Example
+## Main Execution
 
-To use CodeCraftAI, ensure you have a README.md file in your project directory and run the script:
+The script is executed by running the `main()` function, which presents an interactive menu to the user and performs the selected actions. The main loop continues until the user chooses to exit the program.
 
-```bash
+Usage example:
+
+```javascript
 node codecraftai.js
 ```
 
-The tool will guide you through various options for managing your project, including processing files, adding new files, updating the README, analyzing project structure, and more.
-
-## Dependencies
-
--   fs/promises
--   path
--   @anthropic-ai/sdk
--   chalk
--   inquirer
--   dotenv
--   child_process
--   util
--   ignore
-
-Ensure all dependencies are installed before running the script.
-
-## Environment Variables
-
-Set the following environment variable in a .env file:
-
--   CLAUDE_KEY: Your Anthropic API key
-
-## Note
-
-This tool makes significant changes to your project files. Always use version control and backup your project before running CodeCraftAI.
+This will start the interactive CodeCraftAI tool, allowing users to manage and optimize their project through various automated functions.

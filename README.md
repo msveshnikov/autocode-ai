@@ -4,10 +4,10 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 
 ## Features
 
+-   NodeJS-based console application
 -   Automatic code generation based on README.md instructions
 -   Utilizes Claude 3.5 Sonnet API for intelligent code generation
 -   Incremental project building
--   NodeJS-based console application
 -   Easy installation and execution using npx
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
@@ -15,7 +15,6 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Automatic dependency management and version control integration
 -   Code quality checks and suggestions
 -   Support for multiple programming languages and frameworks
--   Automatic code documentation generation
 -   Visual representation of project structure and dependencies
 -   Automatic code optimization and refactoring suggestions
 -   Modular file splitting for efficient AI processing
@@ -54,6 +53,7 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   ES6 imports and async/await syntax
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
 -   Chalk for UI enhancements
+-   Exclude non-source files!! (csv, png, binary, etc)
 -   Ask user before generating documentation!!
 -   User interaction for important development steps
 -   Automatic package installation via npm
@@ -61,16 +61,13 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 ## Design Ideas and Considerations
 
+-   Implement a chat-like interface for interactive project development
 -   Implement a caching system to improve performance
--   Add support for code style enforcement and linting
+-   Add support for React.JS development
 
 ## Future Enhancements
 
+-   Support for multi-language projects and polyglot programming
 -   Support for containerization and deployment automation
 -   AI-powered code review and security vulnerability detection
--   Support for multi-language projects and polyglot programming
--   Implement a chat-like interface for interactive project development
--   Develop a web-based interface for easier project management
--   Implement a collaborative coding feature for team projects
 -   Add support for code performance analysis and optimization
--   Implement automatic code migration and upgrading tools
