@@ -1,6 +1,6 @@
 # CodeCraftAI
 
-CodeCraftAI is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API.
+CodeCraftAI is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. CodeCraftAI was bootstrapped by itself from one simple prompt.
 
 ## Features
 
@@ -28,6 +28,7 @@ CLAUDE_KEY=your_api_key_here
 3. Run the following command:
 
 ```
+npm link
 npx codecraft-ai
 ```
 
@@ -42,6 +43,9 @@ CodeCraftAI reads your README.md file and your sources (initially index.js only)
 -   Node.js (version 20.0.0 or higher), always use ES6 imports and async/await
 -   Always pass previous index.js (along with README.md contents) for incremental improvement
 -   Always use model: "claude-3-5-sonnet-20240620", max_tokens: 8192
+-   Provide nice UI with chalk so all steps are transparent to user
+-   Each step should improve application to the goals described in README.md
+-   New design ideas and considerations should be added to README.md by the tool (similar to index.js)
 
 ## Contributing
 
