@@ -211,31 +211,6 @@ async function splitLargeFile(filePath, content) {
     console.log(chalk.green(`File ${filePath} has been split into ${moduleIndex} modules.`));
 }
 
-async function generateUnitTests(filePath, content) {
-    console.log(chalk.cyan(`Generating unit tests for ${filePath}...`));
-    const testFilePath = path.join(
-        path.dirname(filePath),
-        `${path.basename(filePath, path.extname(filePath))}.test${path.extname(filePath)}`
-    );
-
-    const prompt = `
-Generate unit tests for the following code:
-
-${content}
-
-Please provide complete and functional unit tests for the code above. Use a modern testing framework suitable for the language and follow best practices for unit testing.
-`;
-
-    const response = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20240620",
-        max_tokens: 8192,
-        messages: [{ role: "user", content: prompt }],
-    });
-
-    await writeFile(testFilePath, response.content[0].text);
-    console.log(chalk.green(`Unit tests generated for ${filePath}`));
-}
-
 async function generateDocumentation(filePath, content) {
     console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
     const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
@@ -280,14 +255,91 @@ async function analyzeProjectStructure() {
 
 async function optimizeProjectStructure() {
     console.log(chalk.cyan("Optimizing project structure..."));
-    // Implement project structure optimization logic here
-    console.log(chalk.green("Project structure optimization complete."));
+    const files = await getFilesToProcess();
+    const structure = {};
+
+    for (const file of files) {
+        const parts = file.split(path.sep);
+        let current = structure;
+        for (const part of parts) {
+            if (!current[part]) {
+                current[part] = {};
+            }
+            current = current[part];
+        }
+    }
+
+    const optimizationSuggestions = await generateOptimizationSuggestions(structure);
+    console.log(chalk.green("Project structure optimization suggestions:"));
+    console.log(optimizationSuggestions);
+}
+
+async function generateOptimizationSuggestions(structure) {
+    const prompt = `
+Analyze the following project structure and provide optimization suggestions:
+
+${JSON.stringify(structure, null, 2)}
+
+Please provide suggestions for optimizing the project structure, including:
+1. Reorganizing files and folders
+2. Splitting or merging modules
+3. Improving naming conventions
+4. Enhancing overall project architecture
+
+Provide the suggestions in a structured format.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    return response.content[0].text;
 }
 
 async function generateApiDocumentation() {
     console.log(chalk.cyan("Generating API documentation..."));
-    // Implement API documentation generation logic here
+    const files = await getFilesToProcess();
+    let apiDocs = "# API Documentation\n\n";
+
+    for (const file of files) {
+        const content = await readFile(file);
+        const fileApiDocs = await generateFileApiDocs(file, content);
+        apiDocs += fileApiDocs + "\n\n";
+    }
+
+    const apiDocsPath = path.join(process.cwd(), "API_DOCUMENTATION.md");
+    await writeFile(apiDocsPath, apiDocs);
     console.log(chalk.green("API documentation generated."));
+}
+
+async function generateFileApiDocs(filePath, content) {
+    const prompt = `
+Generate API documentation for the following file:
+
+File: ${filePath}
+
+Content:
+${content}
+
+Please provide API documentation for the public functions, classes, and methods in this file. Include:
+1. Function/method signatures
+2. Parameter descriptions
+3. Return value descriptions
+4. Brief description of functionality
+5. Usage examples (if applicable)
+
+Format the documentation in Markdown.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    return response.content[0].text;
 }
 
 async function detectSecurityVulnerabilities() {
@@ -329,7 +381,6 @@ async function main() {
             await runCodeQualityChecks(file);
             const content = await readFile(file);
             await splitLargeFile(file, content);
-            await generateUnitTests(file, content);
             await generateDocumentation(file, content);
         }
 

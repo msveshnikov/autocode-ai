@@ -16,7 +16,6 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Code quality checks and suggestions
 -   Support for multiple programming languages and frameworks
 -   Automatic code documentation generation
--   Unit test generation and code coverage analysis
 -   Visual representation of project structure and dependencies
 -   Automatic code optimization and refactoring suggestions
 -   Modular file splitting for efficient AI processing
@@ -55,32 +54,23 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   ES6 imports and async/await syntax
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
 -   Chalk for UI enhancements
--   Incremental improvement based on previous index.js and README.md contents
+-   Ask user before generating documentation!!
 -   User interaction for important development steps
 -   Automatic package installation via npm
 -   Adherence to DRY, KISS, and SRP principles
 
 ## Design Ideas and Considerations
 
--   Implement a plugin system for extending functionality
--   Add support for custom code generation templates
--   Develop a command-line interface for advanced users
 -   Implement a caching system to improve performance
 -   Add support for code style enforcement and linting
--   Implement a progress tracking system for long-running tasks
--   Develop a conflict resolution system for merge conflicts
--   Add support for custom AI models and APIs
 
 ## Future Enhancements
 
 -   Support for containerization and deployment automation
 -   AI-powered code review and security vulnerability detection
--   Automatic API documentation generation
 -   Support for multi-language projects and polyglot programming
 -   Implement a chat-like interface for interactive project development
--   Integration with cloud services for seamless deployment
 -   Develop a web-based interface for easier project management
 -   Implement a collaborative coding feature for team projects
 -   Add support for code performance analysis and optimization
--   Develop an AI-powered debugging assistant
 -   Implement automatic code migration and upgrading tools

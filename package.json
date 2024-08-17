@@ -1,6 +1,6 @@
 {
     "name": "codecraft-ai",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -11,7 +11,8 @@
         "start": "node index.js",
         "lint": "eslint .",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-        "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+        "coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+        "docs": "jsdoc -c jsdoc.json"
     },
     "keywords": [
         "ai",
@@ -20,7 +21,10 @@
         "project bootstrap",
         "claude",
         "incremental development",
-        "continuous integration"
+        "continuous integration",
+        "code optimization",
+        "unit testing",
+        "documentation generation"
     ],
     "author": "Max Sveshnikov",
     "license": "MIT",
@@ -35,7 +39,9 @@
         "ora": "^8.0.1",
         "prettier": "^3.2.5",
         "simple-git": "^3.23.0",
-        "fs-extra": "^11.2.0"
+        "fs-extra": "^11.2.0",
+        "istanbul": "^0.4.5",
+        "jsdoc": "^4.0.2"
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
