@@ -32,7 +32,6 @@ CLAUDE_KEY=your_api_key_here
 3. Run the following command:
 
 ```
-npm link
 npx codecraft-ai
 ```
 
@@ -50,41 +49,26 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   Provide nice UI with chalk so all steps are transparent to user
 -   Each step should improve application to the goals described in README.md
 -   New design ideas and considerations should be added to README.md by the tool (similar to index.js)
+-   Ask user for important steps in software development process (like, new file creation, refactoring, etc)
+-   Install new packages via npm install if needed
 
 ## Design Ideas and Considerations
 
--   Implement a plugin system for extending CodeCraftAI's functionality
 -   Add support for multiple programming languages and frameworks
--   Develop a web-based interface for easier project management
--   Implement machine learning algorithms to improve code generation over time
--   Add support for collaborative coding and real-time updates
--   Integrate with popular IDEs and code editors
 -   Implement automatic code documentation generation
 -   Add support for unit test generation and code coverage analysis
 -   Develop a visual representation of the project structure and dependencies
 -   Implement automatic code optimization and refactoring suggestions
+-   Split bigger files to modules automatically and send for AI processing only relevant context
+-   Cover all files in repo folder (with exceptions of course, like package-lock or .env or anything from .gitignore)
+-   Integration with version control systems for automatic commits and branching
 
 ## Future Enhancements
 
--   Natural language processing for more intuitive project instructions
--   Integration with version control systems for automatic commits and branching
 -   Support for containerization and deployment automation
 -   AI-powered code review and security vulnerability detection
 -   Automatic API documentation generation
 -   Support for multi-language projects and polyglot programming
--   Integration with cloud services for seamless deployment
 -   Implement a chat-like interface for interactive project development
--   Add support for voice commands and speech-to-code functionality
--   Develop a mobile app for on-the-go project management and code generation
-
-## Contributing
-
-We welcome contributions to CodeCraftAI! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Disclaimer
-
-CodeCraftAI is an AI-powered tool and may require human oversight and validation. Always review the generated code before using it in production environments.
+-   Integration with cloud services for seamless deployment
+-   Develop a web-based interface for easier project management
