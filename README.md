@@ -11,11 +11,7 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Intelligent project structure analysis and optimization
--   Automatic dependency management and creation of missing files
--   Code quality checks and suggestions/auto fixes (exclude package.json please)
--   Support for multiple programming languages and frameworks
--   Automatic code optimization and refactoring suggestions
--   Modular file splitting for efficient AI processing
+-   Code quality checks and suggestions/auto fixes
 
 ## Installation
 
@@ -30,6 +26,7 @@ No installation is required. CodeCraftAI can be run directly using npx.
 ```
 npx codecraft-ai
 ```
+
 4. Follow the prompts and watch as your project comes to life!
 
 ## How It Works
@@ -44,7 +41,6 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   Exclude non-source files from processing (csv, png, binary, svg, etc)
 -   Detect missing files/references and ask user confirmation to create them (suggest folder and name by AI)
 -   Adherence to DRY, KISS, and SRP principles
-
-## Design Ideas and Considerations
-
--   Implement a chat-like interface for interactive project development
+-   Automatic dependency management and creation of missing files
+-   Add an optional code optimization and refactoring of individual files (request user consent)
+-   Implement a chat-like interface for interactive project development - provide README.md context along with user query and append new requirement to README.md (for next process run)

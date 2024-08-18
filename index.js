@@ -160,28 +160,6 @@ Please provide the corrected code that addresses all the ESLint errors. Do not i
     console.log(chalk.green(`Lint errors fixed for ${filePath}`));
 }
 
-async function manageDependencies() {
-    try {
-        console.log(chalk.cyan("Checking and updating dependencies..."));
-        const { stdout } = await execAsync("npm outdated --json");
-        const outdatedDeps = JSON.parse(stdout);
-
-        if (Object.keys(outdatedDeps).length > 0) {
-            console.log(chalk.yellow("Outdated dependencies found. Updating..."));
-            await execAsync("npm update");
-            console.log(chalk.green("Dependencies updated successfully."));
-        } else {
-            console.log(chalk.green("All dependencies are up to date."));
-        }
-    } catch (error) {
-        if (error.stderr && error.stderr.includes("No outdated dependencies")) {
-            console.log(chalk.green("All dependencies are up to date."));
-        } else {
-            console.error(chalk.red(`Error managing dependencies: ${error.message}`));
-        }
-    }
-}
-
 async function getFilesToProcess() {
     const gitignorePath = path.join(process.cwd(), ".gitignore");
     let gitignoreContent = "";
@@ -341,8 +319,8 @@ async function main() {
         return;
     }
 
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
+    let continueExecution = true;
+    while (continueExecution) {
         const { action } = await inquirer.prompt({
             type: "list",
             name: "action",
@@ -352,7 +330,7 @@ async function main() {
                 "Add a new file",
                 "Update README.md",
                 "Optimize project structure",
-                // "Detect security vulnerabilities",
+                "Detect security vulnerabilities",
                 "Run code quality checks",
                 "Generate documentation",
                 "Chat interface",
@@ -366,7 +344,6 @@ async function main() {
                 const filesToProcess = await getFilesToProcess();
                 await processFiles(filesToProcess, readme);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
-                await manageDependencies();
                 break;
             }
             case "Add a new file": {
@@ -396,6 +373,9 @@ async function main() {
             case "Run code quality checks": {
                 const filesToCheck = await getFilesToProcess();
                 for (const file of filesToCheck) {
+                    if (file.includes("package.json")) {
+                        continue;
+                    }
                     await runCodeQualityChecks(file);
                 }
                 break;
@@ -417,7 +397,8 @@ async function main() {
             }
             case "Exit":
                 console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
-                return;
+                continueExecution = false;
+                break;
         }
     }
 }
