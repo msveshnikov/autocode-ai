@@ -276,15 +276,17 @@ Provide the suggestions in a structured format.
 async function detectSecurityVulnerabilities() {
     console.log(chalk.cyan("Detecting security vulnerabilities..."));
     try {
-        const { stdout, stderr } = await execAsync("npm audit");
-        if (stderr) {
-            console.error(chalk.red(`Error running npm audit: ${stderr}`));
-        } else {
-            console.log(chalk.green("Security audit complete:"));
-            console.log(stdout);
-        }
+        const { stdout } = await execAsync("npm audit");
+        console.log(chalk.green("Security audit complete:"));
+        console.log(stdout);
     } catch (error) {
-        console.error(chalk.red(`Error detecting security vulnerabilities: ${error.message}`));
+        if (error.stderr) {
+            console.error(chalk.red(`Error running npm audit: ${error.stderr}`));
+        } else if (error.stdout) {
+            console.log(error.stdout);
+        } else {
+            console.error(chalk.red(`Error detecting security vulnerabilities: ${error.message}`));
+        }
     }
 }
 

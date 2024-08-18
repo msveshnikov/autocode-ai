@@ -39,7 +39,3 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   Detect missing files/references and ask user confirmation to create them (suggest folder and name by AI)
 -   Adherence to DRY, KISS, and SRP principles
 -   Automatic dependency management and creation of missing files
-
-## New request
-
--   Add an optimization and refactoring of seleted file (with specific refactorin prompt addition + README)
