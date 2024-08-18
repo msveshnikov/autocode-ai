@@ -12,6 +12,7 @@ import ignore from "ignore";
 
 const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"];
 const excludedDirs = [".git", "node_modules"];
+const excludedExtensions = [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"];
 
 const anthropic = new Anthropic({
     apiKey: process.env.CLAUDE_KEY,
@@ -105,27 +106,51 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     try {
         console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
-        // !! handle please, error code always non zero so we go to catch, but we need to process ESLint errors by AI, sending
-        // lint results and asking Claude to fix !!!
         const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
         if (stderr) {
             console.error(chalk.red(`ESLint error: ${stderr}`));
+            await fixLintErrors(filePath, stderr);
         } else {
             console.log(chalk.green(`ESLint passed for ${filePath}`));
         }
     } catch (error) {
         console.error(chalk.red(`Error running ESLint: ${error.message}`));
+        await fixLintErrors(filePath, error.message);
     }
+}
+
+async function fixLintErrors(filePath, lintOutput) {
+    console.log(chalk.yellow(`Attempting to fix lint errors for ${filePath}...`));
+    const fileContent = await readFile(filePath);
+    const prompt = `
+Please fix the following ESLint errors in the file ${filePath}:
+
+${lintOutput}
+
+Current file content:
+${fileContent}
+
+Please provide the corrected code that addresses all the ESLint errors. Do not include any explanations, just the corrected code.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    const correctedCode = response.content[0].text;
+    await writeFile(filePath, correctedCode);
+    console.log(chalk.green(`Lint errors fixed for ${filePath}`));
 }
 
 async function manageDependencies() {
     try {
         console.log(chalk.cyan("Checking and updating dependencies..."));
-        // !! Please fix here we always go to catch but tool returns proper results
-        const { stdout, stderr } = await execAsync("npm outdated");
-        if (stderr) {
-            console.error(chalk.red(`Error checking outdated dependencies: ${stderr}`));
-        } else if (stdout) {
+        const { stdout } = await execAsync("npm outdated --json");
+        const outdatedDeps = JSON.parse(stdout);
+
+        if (Object.keys(outdatedDeps).length > 0) {
             console.log(chalk.yellow("Outdated dependencies found. Updating..."));
             await execAsync("npm update");
             console.log(chalk.green("Dependencies updated successfully."));
@@ -133,7 +158,11 @@ async function manageDependencies() {
             console.log(chalk.green("All dependencies are up to date."));
         }
     } catch (error) {
-        console.error(chalk.red(`Error managing dependencies: ${error.message}`));
+        if (error.stderr && error.stderr.includes("No outdated dependencies")) {
+            console.log(chalk.green("All dependencies are up to date."));
+        } else {
+            console.error(chalk.red(`Error managing dependencies: ${error.message}`));
+        }
     }
 }
 
@@ -157,9 +186,7 @@ async function getFilesToProcess() {
                 !ig.ignores(relativePath) &&
                 !excludedFiles.includes(file.name) &&
                 !excludedDirs.some((dir) => relativePath.startsWith(dir)) &&
-                ![".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(
-                    path.extname(file.name).toLowerCase()
-                )
+                !excludedExtensions.includes(path.extname(file.name).toLowerCase())
             );
         })
         .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
@@ -168,19 +195,18 @@ async function getFilesToProcess() {
 }
 
 async function generateDocumentation(filePath, content) {
-    if (path.extname(filePath).toLowerCase() !== ".js") {
-        return;
-    }
-
     console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
     const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
 
     const prompt = `
-Generate documentation for the following JavaScript code:
+Generate documentation for the following code file:
 
+File: ${filePath}
+
+Content:
 ${content}
 
-Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable.
+Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable. Format the documentation in Markdown.
 `;
 
     const response = await anthropic.messages.create({
@@ -317,6 +343,42 @@ async function detectSecurityVulnerabilities() {
     }
 }
 
+async function addNewFile(filePath) {
+    console.log(chalk.cyan(`Adding new file: ${filePath}`));
+    await createSubfolders(filePath);
+    await createOrUpdateFile(filePath, "");
+    console.log(chalk.green(`New file ${filePath} has been created.`));
+}
+
+async function chatInterface() {
+    const { input } = await inquirer.prompt({
+        type: "input",
+        name: "input",
+        message: "Enter your request (or 'exit' to quit):",
+    });
+
+    if (input.toLowerCase() === "exit") {
+        return false;
+    }
+
+    const prompt = `
+You are CodeCraftAI, an automatic coding assistant. The user has made the following request:
+
+${input}
+
+Please provide a response to help the user with their request. If it involves coding tasks, provide specific instructions or code snippets as needed.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    console.log(chalk.cyan("CodeCraftAI:"), response.content[0].text);
+    return true;
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -327,7 +389,6 @@ async function main() {
         return;
     }
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
         const { action } = await inquirer.prompt({
             type: "list",
@@ -335,12 +396,15 @@ async function main() {
             message: "What would you like to do next?",
             choices: [
                 "Process existing files",
-                "Add a new file", // !!! this should be automated if lint shows broken refernces we need to add empty file with proper path and then allow AI to generate contents of the file
+                "Add a new file",
                 "Update README.md",
                 "Analyze project structure",
                 "Optimize project structure",
                 "Generate API documentation",
                 "Detect security vulnerabilities",
+                "Run code quality checks",
+                "Generate documentation",
+                "Chat interface",
                 "Exit",
             ],
         });
@@ -350,19 +414,8 @@ async function main() {
                 console.log(chalk.yellow("\nProcessing files..."));
                 const filesToProcess = await getFilesToProcess();
                 await processFiles(filesToProcess, readme);
-
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
-
                 await manageDependencies();
-
-                for (const file of filesToProcess) {
-                    // await runCodeQualityChecks(file); !! only by request in main interactive loop
-                    const content = await readFile(file);
-                    if (path.extname(file).toLowerCase() === ".js") {
-                        // add any source file type (.py, .tsx, .java)
-                        // await generateDocumentation(file, content); !! only by request in main interactive loop
-                    }
-                }
                 break;
             case "Add a new file":
                 const { newFile } = await inquirer.prompt({
@@ -370,11 +423,8 @@ async function main() {
                     name: "newFile",
                     message: "Enter the name of the new file to create (include path if in subfolder):",
                 });
-
                 if (newFile) {
-                    const newFilePath = path.join(process.cwd(), newFile);
-                    await createSubfolders(newFilePath);
-                    await createOrUpdateFile(newFilePath, "");
+                    await addNewFile(path.join(process.cwd(), newFile));
                 }
                 break;
             case "Update README.md":
@@ -394,6 +444,25 @@ async function main() {
                 break;
             case "Detect security vulnerabilities":
                 await detectSecurityVulnerabilities();
+                break;
+            case "Run code quality checks":
+                const filesToCheck = await getFilesToProcess();
+                for (const file of filesToCheck) {
+                    await runCodeQualityChecks(file);
+                }
+                break;
+            case "Generate documentation":
+                const filesToDocument = await getFilesToProcess();
+                for (const file of filesToDocument) {
+                    const content = await readFile(file);
+                    await generateDocumentation(file, content);
+                }
+                break;
+            case "Chat interface":
+                let chatContinue = true;
+                while (chatContinue) {
+                    chatContinue = await chatInterface();
+                }
                 break;
             case "Exit":
                 console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
