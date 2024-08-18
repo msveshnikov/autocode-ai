@@ -12,7 +12,7 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Self-updating README.md with new design ideas and considerations
 -   Intelligent project structure analysis and optimization
 -   Automatic dependency management and creation of missing files
--   Code quality checks and suggestions/auto fixes
+-   Code quality checks and suggestions/auto fixes (exclude package.json please)
 -   Support for multiple programming languages and frameworks
 -   Automatic code optimization and refactoring suggestions
 -   Modular file splitting for efficient AI processing

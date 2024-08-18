@@ -104,24 +104,44 @@ async function createSubfolders(filePath) {
 }
 
 async function runCodeQualityChecks(filePath) {
+    console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
     try {
-        console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
-        const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
+        const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`, { encoding: 'utf8' });
+        
+        // Process stdout (warnings) if present
+        if (stdout) {
+            console.log(chalk.yellow(`ESLint warnings:\n${stdout}`));
+            await fixLintErrors(filePath, stdout);
+        }
+        
+        // Process stderr (errors) if present
         if (stderr) {
-            console.error(chalk.red(`ESLint error: ${stderr}`));
+            console.error(chalk.red(`ESLint errors:\n${stderr}`));
             await fixLintErrors(filePath, stderr);
-        } else {
+        }
+        
+        if (!stdout && !stderr) {
             console.log(chalk.green(`ESLint passed for ${filePath}`));
         }
     } catch (error) {
-        console.error(chalk.red(`Error running ESLint: ${error.message}`));
-        await fixLintErrors(filePath, error.message);
+        // ESLint returns non-zero exit code for warnings and errors
+        if (error.stdout) {
+            console.log(chalk.yellow(`ESLint warnings:\n${error.stdout}`));
+            await fixLintErrors(filePath, error.stdout);
+        }
+        if (error.stderr) {
+            console.error(chalk.red(`ESLint errors:\n${error.stderr}`));
+            await fixLintErrors(filePath, error.stderr);
+        }
+        // If there's an actual execution error, it will be in error.message
+        if (!error.stdout && !error.stderr) {
+            console.error(chalk.red(`Error running ESLint: ${error.message}`));
+        }
     }
 }
 
 async function fixLintErrors(filePath, lintOutput) {
     console.log(chalk.yellow(`Attempting to fix lint errors for ${filePath}...`));
-    console.log(chalk.yellow(`Lint output ${lintOutput}`));
     const fileContent = await readFile(filePath);
     const prompt = `
 Please fix the following ESLint errors in the file ${filePath}:
@@ -326,6 +346,7 @@ async function main() {
         return;
     }
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         const { action } = await inquirer.prompt({
             type: "list",
@@ -336,7 +357,7 @@ async function main() {
                 "Add a new file",
                 "Update README.md",
                 "Optimize project structure",
-                "Detect security vulnerabilities",
+                // "Detect security vulnerabilities",
                 "Run code quality checks",
                 "Generate documentation",
                 "Chat interface",
