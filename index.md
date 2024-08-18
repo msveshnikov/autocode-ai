@@ -2,33 +2,30 @@
 
 ## Overview
 
-CodeCraftAI is an automatic coding tool that helps developers generate, update, and manage code based on project requirements. It uses the Anthropic AI API to assist with various tasks such as code generation, documentation creation, project structure analysis, and more.
+CodeCraftAI is an automatic coding tool that assists in generating, updating, and managing code based on project requirements specified in a README.md file. It uses the Anthropic API to generate code, provides various project management features, and offers an interactive interface for users to work with their codebase.
 
 ## Table of Contents
 
 1. [Dependencies](#dependencies)
 2. [Global Constants](#global-constants)
-3. [Main Function](#main-function)
-4. [Core Functions](#core-functions)
-5. [File Operations](#file-operations)
-6. [Code Generation and Updates](#code-generation-and-updates)
-7. [Project Analysis and Optimization](#project-analysis-and-optimization)
-8. [Security and Code Quality](#security-and-code-quality)
-9. [Documentation Generation](#documentation-generation)
-10. [User Interface](#user-interface)
+3. [Main Functions](#main-functions)
+4. [Utility Functions](#utility-functions)
+5. [File Processing Functions](#file-processing-functions)
+6. [Project Management Functions](#project-management-functions)
+7. [Security and Code Quality Functions](#security-and-code-quality-functions)
+8. [User Interface Functions](#user-interface-functions)
+9. [Main Execution](#main-execution)
 
 ## Dependencies
 
-The script uses the following external dependencies:
-
-- `fs/promises`: File system operations with promises
-- `path`: File path operations
-- `@anthropic-ai/sdk`: Anthropic AI API client
-- `chalk`: Terminal string styling
-- `inquirer`: Command-line user interfaces
-- `child_process`: Spawning child processes
-- `util`: Utility functions
-- `ignore`: Parsing gitignore files
+- fs/promises
+- path
+- @anthropic-ai/sdk
+- chalk
+- inquirer
+- child_process
+- util
+- ignore
 
 ## Global Constants
 
@@ -40,159 +37,141 @@ const excludedExtensions = [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gi
 
 These constants define files, directories, and file extensions that should be excluded from processing.
 
-## Main Function
+## Main Functions
 
-```javascript
-async function main()
-```
+### `async function main()`
 
-The `main` function is the entry point of the script. It provides a menu-driven interface for users to interact with various features of CodeCraftAI.
+The main entry point of the application. It provides an interactive menu for users to choose various actions such as processing files, adding new files, updating README, optimizing project structure, etc.
 
-## Core Functions
+## Utility Functions
 
-### `readFile(filePath)`
+### `async function readFile(filePath)`
 
 Reads the content of a file.
 
-- Parameters:
-  - `filePath` (string): Path to the file
-- Returns: Promise<string | null>
+- **Parameters**: `filePath` (string) - Path to the file
+- **Returns**: Promise<string|null> - File content or null if an error occurs
 
-### `writeFile(filePath, content)`
+### `async function writeFile(filePath, content)`
 
 Writes content to a file.
 
-- Parameters:
-  - `filePath` (string): Path to the file
-  - `content` (string): Content to write
+- **Parameters**:
+  - `filePath` (string) - Path to the file
+  - `content` (string) - Content to write
+- **Returns**: Promise<void>
 
-### `createOrUpdateFile(filePath, content)`
+### `async function createSubfolders(filePath)`
 
-Creates a new file or updates an existing one with the given content.
+Creates subfolders for a given file path if they don't exist.
 
-- Parameters:
-  - `filePath` (string): Path to the file
-  - `content` (string): Content to write
+- **Parameters**: `filePath` (string) - Path to the file
+- **Returns**: Promise<void>
 
-### `createSubfolders(filePath)`
+## File Processing Functions
 
-Creates necessary subfolders for a given file path.
+### `async function generateCode(readme, currentCode, fileName)`
 
-- Parameters:
-  - `filePath` (string): Path to the file
+Generates or updates code based on README content and current file content.
 
-### `getFilesToProcess()`
+- **Parameters**:
+  - `readme` (string) - Content of README.md
+  - `currentCode` (string|null) - Current content of the file (if exists)
+  - `fileName` (string) - Name of the file to generate/update
+- **Returns**: Promise<string> - Generated code
 
-Retrieves a list of files to process, respecting `.gitignore` and exclusion rules.
+### `async function processFiles(files, readme)`
 
-- Returns: Promise<string[]>
+Processes multiple files by generating or updating their content.
 
-## Code Generation and Updates
+- **Parameters**:
+  - `files` (string[]) - Array of file paths to process
+  - `readme` (string) - Content of README.md
+- **Returns**: Promise<void>
 
-### `generateCode(readme, currentCode, fileName)`
+### `async function getFilesToProcess()`
 
-Generates or updates code based on README content and existing code.
+Gets a list of files to process, excluding those specified in global constants and .gitignore.
 
-- Parameters:
-  - `readme` (string): Content of the README file
-  - `currentCode` (string | null): Current content of the file (if it exists)
-  - `fileName` (string): Name of the file being processed
-- Returns: Promise<string>
+- **Returns**: Promise<string[]> - Array of file paths to process
 
-### `processFiles(files, readme)`
+## Project Management Functions
 
-Processes multiple files, generating or updating their content.
+### `async function updateReadme(readme)`
 
-- Parameters:
-  - `files` (string[]): Array of file paths to process
-  - `readme` (string): Content of the README file
+Updates the README.md file with new design ideas and considerations.
 
-### `updateReadme(readme)`
+- **Parameters**: `readme` (string) - Current content of README.md
+- **Returns**: Promise<string> - Updated README content
 
-Updates the README file with new design ideas and considerations.
+### `async function optimizeProjectStructure()`
 
-- Parameters:
-  - `readme` (string): Current content of the README file
-- Returns: Promise<string>
+Analyzes the current project structure and provides optimization suggestions.
 
-## Project Analysis and Optimization
+- **Returns**: Promise<void>
 
-### `analyzeProjectStructure()`
+### `async function generateOptimizationSuggestions(structure)`
 
-Analyzes the current project structure and outputs a JSON representation.
+Generates optimization suggestions for the project structure.
 
-### `optimizeProjectStructure()`
+- **Parameters**: `structure` (object) - Current project structure
+- **Returns**: Promise<string> - Optimization suggestions
 
-Generates suggestions for optimizing the project structure.
+## Security and Code Quality Functions
 
-### `generateOptimizationSuggestions(structure)`
+### `async function detectSecurityVulnerabilities()`
 
-Generates optimization suggestions based on the current project structure.
+Runs npm audit to detect security vulnerabilities in the project.
 
-- Parameters:
-  - `structure` (object): JSON representation of the project structure
-- Returns: Promise<string>
+- **Returns**: Promise<void>
 
-## Security and Code Quality
-
-### `runCodeQualityChecks(filePath)`
+### `async function runCodeQualityChecks(filePath)`
 
 Runs ESLint on a specific file and attempts to fix any issues.
 
-- Parameters:
-  - `filePath` (string): Path to the file to check
+- **Parameters**: `filePath` (string) - Path to the file to check
+- **Returns**: Promise<void>
 
-### `fixLintErrors(filePath, lintOutput)`
+### `async function fixLintErrors(filePath, lintOutput)`
 
-Attempts to fix ESLint errors in a file using AI assistance.
+Attempts to fix lint errors in a file using AI-generated corrections.
 
-- Parameters:
-  - `filePath` (string): Path to the file
-  - `lintOutput` (string): ESLint error output
+- **Parameters**:
+  - `filePath` (string) - Path to the file
+  - `lintOutput` (string) - ESLint output containing errors
+- **Returns**: Promise<void>
 
-### `manageDependencies()`
+## User Interface Functions
 
-Checks for outdated dependencies and updates them if necessary.
+### `async function chatInterface(readme)`
 
-### `detectSecurityVulnerabilities()`
+Provides an interactive chat interface for users to make requests and potentially update the README.
 
-Runs `npm audit` to detect security vulnerabilities in the project.
+- **Parameters**: `readme` (string) - Current content of README.md
+- **Returns**: Promise<{continue: boolean, updatedReadme: string}> - Object indicating whether to continue and the updated README content
 
-## Documentation Generation
-
-### `generateDocumentation(filePath, content)`
-
-Generates documentation for a specific file.
-
-- Parameters:
-  - `filePath` (string): Path to the file
-  - `content` (string): Content of the file
-
-## User Interface
-
-### `addNewFile(filePath)`
+### `async function addNewFile(filePath)`
 
 Adds a new file to the project.
 
-- Parameters:
-  - `filePath` (string): Path of the new file to create
+- **Parameters**: `filePath` (string) - Path of the new file to create
+- **Returns**: Promise<void>
 
-### `chatInterface()`
+### `async function createMissingFiles(lintOutput)`
 
-Provides a chat interface for users to interact with CodeCraftAI.
+Creates missing files detected during lint checks.
 
-- Returns: Promise<boolean>
+- **Parameters**: `lintOutput` (string) - ESLint output containing missing file information
+- **Returns**: Promise<void>
 
-## Usage Example
+## Main Execution
 
-To use CodeCraftAI, run the script and follow the interactive prompts:
+The script is executed by running the `main()` function, which provides an interactive interface for users to perform various actions on their project.
 
-```bash
-node index.js
+```javascript
+main().catch((error) => {
+    console.error(chalk.red("An error occurred:"), error);
+});
 ```
 
-The script will present a menu of options, allowing you to process files, add new files, update the README, analyze the project structure, and more.
-
----
-
-This documentation provides an overview of the CodeCraftAI script and its main functions. For more detailed information about each function, refer to the inline comments in the source code.
+This catches any uncaught errors and logs them to the console.

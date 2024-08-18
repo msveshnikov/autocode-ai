@@ -2,7 +2,7 @@
 
 ## Overview
 
-CodeCraft AI is an innovative automatic coding tool that generates projects from README.md files using the Claude 3.5 Sonnet API. This documentation covers the `package.json` file, which defines the project configuration, dependencies, and scripts.
+CodeCraft AI is an innovative automatic coding tool that generates projects from README.md files using the Claude 3.5 Sonnet API. This document provides details about the project configuration as defined in the `package.json` file.
 
 ## Project Configuration
 
@@ -14,7 +14,7 @@ CodeCraft AI is an innovative automatic coding tool that generates projects from
 - **Main File**: index.js
 - **Type**: module (Uses ECMAScript modules)
 
-### Binary
+### Command Line Interface
 
 The project can be run as a command-line tool:
 
@@ -24,19 +24,12 @@ The project can be run as a command-line tool:
 }
 ```
 
-This allows users to run the tool using the `codecraft-ai` command after installation.
+This allows users to run the tool using the command `codecraft-ai` in their terminal after installation.
 
 ### Scripts
 
-- **start**: Runs the main application
-  ```
-  npm start
-  ```
-
-- **lint**: Runs ESLint to check code quality
-  ```
-  npm run lint
-  ```
+- **Start**: `npm start` or `yarn start` will run `node index.js`
+- **Lint**: `npm run lint` or `yarn lint` will run ESLint on the project
 
 ### Keywords
 
@@ -51,7 +44,7 @@ The project is tagged with the following keywords:
 - **Author**: Max Sveshnikov
 - **License**: MIT
 
-### Engine Requirements
+### Node.js Version Requirement
 
 The project requires Node.js version 20.0.0 or higher:
 
@@ -61,51 +54,59 @@ The project requires Node.js version 20.0.0 or higher:
 }
 ```
 
-## Dependencies
+### Dependencies
 
-### Production Dependencies
+Production dependencies:
+- **@anthropic-ai/sdk**: ^0.26.1 (Anthropic AI SDK for interacting with Claude API)
+- **chalk**: ^5.3.0 (Terminal string styling)
+- **inquirer**: ^10.1.8 (Interactive command line user interfaces)
 
-1. **@anthropic-ai/sdk** (v0.26.1): SDK for interacting with the Anthropic AI API
-2. **chalk** (v5.3.0): Terminal string styling
-3. **inquirer** (v10.1.8): A collection of common interactive command-line user interfaces
+Development dependencies:
+- **@eslint/js**: ^9.9.0
+- **eslint**: ^8.57.0
+- **eslint-config-standard**: ^17.1.0
+- **globals**: ^15.9.0
 
-### Development Dependencies
-
-1. **@eslint/js** (v9.9.0): ESLint's official JavaScript integration
-2. **eslint** (v9.9.0): Tool for identifying and reporting on patterns in JavaScript
-3. **eslint-config-standard** (v17.1.0): JavaScript Standard Style ESLint config
-4. **globals** (v15.9.0): Global identifiers from different JavaScript environments
+These dev dependencies are related to code linting and style enforcement.
 
 ## Usage
 
 To use this project:
+
+1. Ensure you have Node.js version 20.0.0 or higher installed.
+2. Clone the repository or install the package via npm:
+   ```
+   npm install -g codecraft-ai
+   ```
+3. Run the tool using:
+   ```
+   codecraft-ai
+   ```
+
+For development:
 
 1. Clone the repository
 2. Install dependencies:
    ```
    npm install
    ```
-3. Run the application:
+3. Run the project:
    ```
    npm start
    ```
-   or
-   ```
-   codecraft-ai
-   ```
-
-## Development
-
-To contribute to the project:
-
-1. Fork the repository
-2. Make your changes
-3. Run linting to ensure code quality:
+4. To lint the project:
    ```
    npm run lint
    ```
-4. Submit a pull request
 
-## Version History
+## Contributing
 
-The current version is 0.7.0. Refer to the project's changelog or release notes for information on updates and changes in each version.
+When contributing to this project, please ensure you follow the established coding standards by running the linter before submitting pull requests:
+
+```
+npm run lint
+```
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.

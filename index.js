@@ -37,7 +37,7 @@ async function writeFile(filePath, content) {
     }
 }
 
-async function generateCode(readme, currentCode, fileName) {
+async function generateCode(readme, currentCode, fileName, temperature = 0.7) {
     const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions and the current ${fileName} content (if any).
 
@@ -53,6 +53,7 @@ Please generate or update the ${fileName} file to implement the features describ
     const response = await anthropic.messages.create({
         model: "claude-3-5-sonnet-20240620",
         max_tokens: 8192,
+        temperature,
         messages: [{ role: "user", content: prompt }],
     });
 
@@ -68,7 +69,7 @@ async function createOrUpdateFile(filePath, content) {
     }
 }
 
-async function processFiles(files, readme) {
+async function processFiles(files, readme, temperature) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
         const { processFile } = await inquirer.prompt({
@@ -80,7 +81,7 @@ async function processFiles(files, readme) {
         if (processFile) {
             console.log(chalk.cyan(`Processing ${file}...`));
             const currentContent = await readFile(filePath);
-            const generatedContent = await generateCode(readme, currentContent, file);
+            const generatedContent = await generateCode(readme, currentContent, file, temperature);
             await createOrUpdateFile(filePath, generatedContent);
         } else {
             console.log(chalk.yellow(`Skipping ${file}`));
@@ -88,7 +89,7 @@ async function processFiles(files, readme) {
     }
 }
 
-async function updateReadme(readme) {
+async function updateReadme(readme, temperature) {
     const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content.
 
@@ -101,6 +102,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
     const response = await anthropic.messages.create({
         model: "claude-3-5-sonnet-20240620",
         max_tokens: 8192,
+        temperature,
         messages: [{ role: "user", content: prompt }],
     });
 
@@ -130,6 +132,8 @@ async function runCodeQualityChecks(filePath) {
         if (!stdout && !stderr) {
             console.log(chalk.green(`ESLint passed for ${filePath}`));
         }
+
+        return stdout || stderr;
     } catch (error) {
         if (error.stdout) {
             console.log(chalk.yellow(`ESLint warnings:\n${error.stdout}`));
@@ -142,6 +146,7 @@ async function runCodeQualityChecks(filePath) {
         if (!error.stdout && !error.stderr) {
             console.error(chalk.red(`Error running ESLint: ${error.message}`));
         }
+        return error.stdout || error.stderr || error.message;
     }
 }
 
@@ -367,6 +372,18 @@ async function main() {
         return;
     }
 
+    const { temperature } = await inquirer.prompt({
+        type: "input",
+        name: "temperature",
+        message: "Enter the temperature for AI generation (default is 0.7):",
+        default: "0.7",
+        validate: (value) => {
+            const floatValue = parseFloat(value);
+            return floatValue >= 0 && floatValue <= 1 ? true : "Please enter a number between 0 and 1";
+        },
+        filter: (value) => parseFloat(value),
+    });
+
     let continueExecution = true;
     while (continueExecution) {
         const { action } = await inquirer.prompt({
@@ -390,7 +407,7 @@ async function main() {
             case "Process existing files": {
                 console.log(chalk.yellow("\nProcessing files..."));
                 const filesToProcess = await getFilesToProcess();
-                await processFiles(filesToProcess, readme);
+                await processFiles(filesToProcess, readme, temperature);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
                 break;
             }
@@ -407,7 +424,7 @@ async function main() {
             }
             case "Update README.md": {
                 console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
-                const updatedReadme = await updateReadme(readme);
+                const updatedReadme = await updateReadme(readme, temperature);
                 await writeFile(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
