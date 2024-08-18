@@ -263,17 +263,19 @@ const UserInterface = {
     },
 
     async promptForTemperature() {
-        return inquirer.prompt({
-            type: "input",
-            name: "temperature",
-            message: "Enter the temperature for AI generation (default is 0.7):",
-            default: "0.7",
-            validate: (value) => {
-                const floatValue = parseFloat(value);
-                return floatValue >= 0 && floatValue <= 1 ? true : "Please enter a number between 0 and 1";
-            },
-            filter: (value) => parseFloat(value),
-        });
+        return parseFloat(
+            inquirer.prompt({
+                type: "input",
+                name: "temperature",
+                message: "Enter the temperature for AI generation (default is 0.7):",
+                default: "0.7",
+                validate: (value) => {
+                    const floatValue = parseFloat(value);
+                    return floatValue >= 0 && floatValue <= 1 ? true : "Please enter a number between 0 and 1";
+                },
+                filter: (value) => parseFloat(value),
+            })
+        );
     },
 
     async chatInterface(readme) {
