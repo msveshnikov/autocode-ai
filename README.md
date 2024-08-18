@@ -11,6 +11,9 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Code quality checks and suggestions/auto fixes
+-   Detect missing files/references and ask user confirmation to create them
+-   Adherence to DRY, KISS, and SRP principles
+-   Automatic dependency management and creation of missing files
 
 ## Installation
 
@@ -35,12 +38,11 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher)
--   ES6 imports and async/await syntax
--   Detect missing files/references and ask user confirmation to create them (suggest folder and name by AI)
--   Adherence to DRY, KISS, and SRP principles
--   Automatic dependency management and creation of missing files
 
+## New Design Ideas and Considerations
 
-## New Requirement
-
-Add project file structure (eligible files list with paths) to AI processing as well
+1. Add support for multiple programming languages and frameworks
+2. Add support for generating unit tests and documentation
+3. Implement a caching mechanism to improve performance for repeated tasks
+4. Add support for generating boilerplate code for common design patterns
+5. Add support for generating and managing database schemas

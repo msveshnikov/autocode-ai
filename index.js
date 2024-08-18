@@ -63,12 +63,29 @@ const FileManager = {
             })
             .map((file) => path.relative(process.cwd(), path.join(file.path, file.name)));
     },
+
+    async getProjectStructure() {
+        const files = await this.getFilesToProcess();
+        return files.reduce((acc, file) => {
+            const parts = file.split(path.sep);
+            let current = acc;
+            parts.forEach((part, index) => {
+                if (index === parts.length - 1) {
+                    current[part] = null;
+                } else {
+                    current[part] = current[part] || {};
+                    current = current[part];
+                }
+            });
+            return acc;
+        }, {});
+    },
 };
 
 const CodeGenerator = {
-    async generate(readme, currentCode, fileName, temperature = 0.7) {
+    async generate(readme, currentCode, fileName, projectStructure, temperature = 0.7) {
         const prompt = `
-You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions and the current ${fileName} content (if any).
+You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
 
 README.md content:
 ${readme}
@@ -76,7 +93,10 @@ ${readme}
 Current ${fileName} content (if exists):
 ${currentCode || "No existing code"}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Do not include any explanations or comments in your response, just provide the code.
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const response = await anthropic.messages.create({
@@ -89,14 +109,17 @@ Please generate or update the ${fileName} file to implement the features describ
         return response.content[0].text;
     },
 
-    async updateReadme(readme, temperature) {
+    async updateReadme(readme, projectStructure, temperature) {
         const prompt = `
-You are CodeCraftAI, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content.
+You are CodeCraftAI, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content and project structure.
 
 Current README.md content:
 ${readme}
 
-Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Do not include any explanations or comments in your response, just provide the updated README.md content.
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Do not include any explanations or comments in your response, just provide the updated README.md content.
 `;
 
         const response = await anthropic.messages.create({
@@ -125,7 +148,7 @@ const CodeAnalyzer = {
         }
     },
 
-    async fixLintErrors(filePath, lintOutput) {
+    async fixLintErrors(filePath, lintOutput, projectStructure) {
         console.log(chalk.yellow(`Attempting to fix lint errors for ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
         const prompt = `
@@ -136,7 +159,10 @@ ${lintOutput}
 Current file content:
 ${fileContent}
 
-Please provide the corrected code that addresses all the ESLint errors. Do not include any explanations, just the corrected code.
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please provide the corrected code that addresses all the ESLint errors. Consider the project structure when making changes. Do not include any explanations, just the corrected code.
 `;
 
         const response = await anthropic.messages.create({
@@ -160,22 +186,13 @@ Please provide the corrected code that addresses all the ESLint errors. Do not i
         }
     },
 
-    async optimizeProjectStructure() {
+    async optimizeProjectStructure(projectStructure) {
         console.log(chalk.cyan("Optimizing project structure..."));
-        const files = await FileManager.getFilesToProcess();
-        const structure = files.reduce((acc, file) => {
-            const parts = file.split(path.sep);
-            parts.reduce((obj, part, index) => {
-                if (!obj[part]) obj[part] = index === parts.length - 1 ? null : {};
-                return obj[part];
-            }, acc);
-            return acc;
-        }, {});
 
         const prompt = `
 Analyze the following project structure and provide optimization suggestions:
 
-${JSON.stringify(structure, null, 2)}
+${JSON.stringify(projectStructure, null, 2)}
 
 Please provide suggestions for optimizing the project structure, including:
 1. Reorganizing files and folders
@@ -198,7 +215,7 @@ Provide the suggestions in a structured format.
 };
 
 const DocumentationGenerator = {
-    async generate(filePath, content) {
+    async generate(filePath, content, projectStructure) {
         console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
         const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
 
@@ -210,7 +227,10 @@ File: ${filePath}
 Content:
 ${content}
 
-Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable. Format the documentation in Markdown.
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable. Consider the project structure when describing the file's role in the overall project. Format the documentation in Markdown.
 `;
 
         const response = await anthropic.messages.create({
@@ -278,7 +298,7 @@ const UserInterface = {
         );
     },
 
-    async chatInterface(readme) {
+    async chatInterface(readme, projectStructure) {
         const { input } = await inquirer.prompt({
             type: "input",
             name: "input",
@@ -297,7 +317,10 @@ ${input}
 Current README.md content:
 ${readme}
 
-Please provide a response to help the user with their request. If it involves coding tasks, provide specific instructions or code snippets as needed. If the request implies a new feature or requirement, suggest an appropriate addition to the README.md file.
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please provide a response to help the user with their request. If it involves coding tasks, provide specific instructions or code snippets as needed. If the request implies a new feature or requirement, suggest an appropriate addition to the README.md file. Consider the current project structure when providing suggestions or solutions.
 `;
 
         const response = await anthropic.messages.create({
@@ -326,7 +349,7 @@ Please provide a response to help the user with their request. If it involves co
     },
 };
 
-async function processFiles(files, readme, temperature) {
+async function processFiles(files, readme, projectStructure, temperature) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
         const { processFile } = await inquirer.prompt({
@@ -338,7 +361,13 @@ async function processFiles(files, readme, temperature) {
         if (processFile) {
             console.log(chalk.cyan(`Processing ${file}...`));
             const currentContent = await FileManager.read(filePath);
-            const generatedContent = await CodeGenerator.generate(readme, currentContent, file, temperature);
+            const generatedContent = await CodeGenerator.generate(
+                readme,
+                currentContent,
+                file,
+                projectStructure,
+                temperature
+            );
             await FileManager.write(filePath, generatedContent);
         } else {
             console.log(chalk.yellow(`Skipping ${file}`));
@@ -353,7 +382,7 @@ async function addNewFile(filePath) {
     console.log(chalk.green(`New file ${filePath} has been created.`));
 }
 
-async function createMissingFiles(lintOutput) {
+async function createMissingFiles(lintOutput, projectStructure) {
     const missingFileRegex = /Cannot find module '(.+?)'/g;
     const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
 
@@ -369,11 +398,13 @@ async function createMissingFiles(lintOutput) {
         if (createFile) {
             await addNewFile(filePath);
             console.log(chalk.green(`Created missing file: ${filePath}`));
+            const generatedContent = await CodeGenerator.generate("", "", filePath, projectStructure);
+            await FileManager.write(filePath, generatedContent);
         }
     }
 }
 
-async function optimizeAndRefactorFile(filePath) {
+async function optimizeAndRefactorFile(filePath, projectStructure) {
     console.log(chalk.cyan(`Optimizing and refactoring ${filePath}...`));
     const fileContent = await FileManager.read(filePath);
     const prompt = `
@@ -381,12 +412,16 @@ Please optimize and refactor the following code from ${filePath}:
 
 ${fileContent}
 
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
 Focus on:
 1. Improving code efficiency
 2. Enhancing readability
 3. Applying design patterns where appropriate
 4. Reducing code duplication
 5. Improving overall code structure
+6. Ensuring consistency with the project structure
 
 Provide the optimized and refactored code without explanations.
 `;
@@ -415,13 +450,14 @@ async function main() {
 
     let continueExecution = true;
     while (continueExecution) {
+        const projectStructure = await FileManager.getProjectStructure();
         const { action } = await UserInterface.promptForAction();
 
         switch (action) {
             case "Process existing files": {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
-                await processFiles(selectedFiles, readme, temperature);
+                await processFiles(selectedFiles, readme, projectStructure, temperature);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
                 break;
             }
@@ -434,13 +470,13 @@ async function main() {
             }
             case "Update README.md": {
                 console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
-                const updatedReadme = await CodeGenerator.updateReadme(readme, temperature);
+                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure, temperature);
                 await FileManager.write(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
             }
             case "Optimize project structure":
-                await CodeAnalyzer.optimizeProjectStructure();
+                await CodeAnalyzer.optimizeProjectStructure(projectStructure);
                 break;
             case "Detect security vulnerabilities":
                 await CodeAnalyzer.detectSecurityVulnerabilities();
@@ -451,8 +487,8 @@ async function main() {
                 for (const file of selectedFiles) {
                     if (file.includes("package.json")) continue;
                     const lintOutput = await CodeAnalyzer.runLintChecks(file);
-                    await CodeAnalyzer.fixLintErrors(file, lintOutput);
-                    await createMissingFiles(lintOutput);
+                    await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
+                    await createMissingFiles(lintOutput, projectStructure);
                 }
                 break;
             }
@@ -461,14 +497,14 @@ async function main() {
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);
                 for (const file of selectedFiles) {
                     const content = await FileManager.read(file);
-                    await DocumentationGenerator.generate(file, content);
+                    await DocumentationGenerator.generate(file, content, projectStructure);
                 }
                 break;
             }
             case "Chat interface": {
                 let chatContinue = true;
                 while (chatContinue) {
-                    const result = await UserInterface.chatInterface(readme);
+                    const result = await UserInterface.chatInterface(readme, projectStructure);
                     chatContinue = result.continue;
                     readme = result.updatedReadme;
                 }
@@ -478,7 +514,7 @@ async function main() {
                 const filesToOptimize = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
                 for (const file of selectedFiles) {
-                    await optimizeAndRefactorFile(file);
+                    await optimizeAndRefactorFile(file, projectStructure);
                 }
                 break;
             }
