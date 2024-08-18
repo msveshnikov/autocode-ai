@@ -14,6 +14,10 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Detect missing files/references and ask user confirmation to create them
 -   Adherence to DRY, KISS, and SRP principles
 -   Automatic dependency management and creation of missing files
+-   Modular architecture for easy extensibility
+-   Intelligent code analysis and refactoring suggestions
+-   Automated documentation generation
+-   User-friendly command-line interface
 
 ## Installation
 
@@ -39,3 +43,25 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 -   Node.js (version 20.0.0 or higher)
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
+
+## Project Structure
+
+-   `codeAnalyzer.js`: Analyzes existing code for quality and improvement opportunities
+-   `codeGenerator.js`: Generates new code based on instructions and API responses
+-   `config.js`: Manages configuration settings for the application
+-   `documentationGenerator.js`: Automatically generates documentation for the project
+-   `fileManager.js`: Handles file operations and project structure management
+-   `index.js`: Main entry point of the application
+-   `userInterface.js`: Manages user interactions and command-line interface
+
+## Future Enhancements
+
+-   Integration with popular version control systems (e.g., Git)
+-   Support for multiple programming languages and frameworks
+-   AI-powered code optimization and performance tuning
+-   Real-time collaboration features for team projects
+-   Integration with CI/CD pipelines for automated testing and deployment
+-   Custom plugin system for extending functionality
+-   Visual interface for project management and code generation
+-   Natural language processing for more intuitive project instructions
+

@@ -1,115 +1,122 @@
-# CodeCraftAI Documentation
+# CodeCraftAI - index.js Documentation
 
 ## Overview
 
-CodeCraftAI is an automated coding tool that helps developers generate, update, and optimize code based on project requirements specified in a README.md file. It uses the Anthropic AI model to assist with various coding tasks, including file generation, code optimization, documentation creation, and project structure analysis.
+`index.js` is the main entry point for the CodeCraftAI application. It orchestrates the entire process of code generation, analysis, optimization, and documentation. The file integrates various modules to provide a comprehensive set of features for managing and improving software projects.
 
-## Table of Contents
+## Dependencies
 
-1. [Configuration](#configuration)
-2. [Main Components](#main-components)
-3. [Utility Functions](#utility-functions)
-4. [Main Execution Flow](#main-execution-flow)
+-   fs/promises
+-   path
+-   @anthropic-ai/sdk
+-   chalk
+-   inquirer
 
-## Configuration
+## Imported Modules
 
-The `CONFIG` object contains various settings for the application:
+-   CONFIG (from ./config.js)
+-   FileManager (from ./fileManager.js)
+-   CodeGenerator (from ./codeGenerator.js)
+-   CodeAnalyzer (from ./codeAnalyzer.js)
+-   DocumentationGenerator (from ./documentationGenerator.js)
+-   UserInterface (from ./userInterface.js)
 
-```javascript
-const CONFIG = {
-    excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
-    excludedDirs: [".git", "node_modules"],
-    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
-    anthropicModel: "claude-3-5-sonnet-20240620",
-    maxTokens: 8192,
-};
-```
+## Main Functions
 
-## Main Components
+### processFiles(files, readme, projectStructure)
 
-### FileManager
+Processes the selected files by generating new content based on the README and project structure.
 
-Handles file system operations.
+Parameters:
 
-#### Methods:
+-   `files`: Array of file paths to process
+-   `readme`: Content of the README.md file
+-   `projectStructure`: Object representing the project's file structure
 
-- `read(filePath)`: Reads the content of a file.
-- `write(filePath, content)`: Writes content to a file.
-- `createSubfolders(filePath)`: Creates necessary subfolders for a given file path.
-- `getFilesToProcess()`: Returns a list of files to be processed, excluding those specified in the configuration.
+### splitLargeFile(filePath, content, projectStructure)
 
-### CodeGenerator
+Splits a large file into smaller, more manageable parts using AI suggestions.
 
-Generates and updates code using the Anthropic AI model.
+Parameters:
 
-#### Methods:
+-   `filePath`: Path of the file to split
+-   `content`: Content of the file
+-   `projectStructure`: Object representing the project's file structure
 
-- `generate(readme, currentCode, fileName, temperature)`: Generates or updates code for a given file.
-- `updateReadme(readme, temperature)`: Updates the README.md file with new design ideas.
+### parseSplitSuggestion(suggestion)
 
-### CodeAnalyzer
+Parses the AI-generated suggestion for splitting a file.
 
-Analyzes and improves code quality.
+Parameters:
 
-#### Methods:
+-   `suggestion`: String containing the AI-generated file split suggestion
 
-- `runLintChecks(filePath)`: Runs ESLint on a file.
-- `fixLintErrors(filePath, lintOutput)`: Attempts to fix lint errors using AI.
-- `detectSecurityVulnerabilities()`: Runs npm audit to detect security vulnerabilities.
-- `optimizeProjectStructure()`: Analyzes and suggests optimizations for the project structure.
+Returns:
 
-### DocumentationGenerator
+-   Object with file names as keys and their content as values
 
-Generates documentation for code files.
+### saveFiles(originalFilePath, files)
 
-#### Methods:
+Saves the split files to disk.
 
-- `generate(filePath, content)`: Generates documentation for a given file.
+Parameters:
 
-### UserInterface
+-   `originalFilePath`: Path of the original file
+-   `files`: Object containing new file names and their content
 
-Handles user interactions and prompts.
+### addNewFile(filePath)
 
-#### Methods:
+Creates a new file at the specified path.
 
-- `promptForAction()`: Prompts the user to choose an action.
-- `promptForFiles(files)`: Prompts the user to select files for processing.
-- `promptForNewFile()`: Prompts the user to enter a new file name.
-- `promptForTemperature()`: Prompts the user to enter the AI temperature.
-- `chatInterface(readme)`: Provides a chat interface for user interactions.
+Parameters:
 
-## Utility Functions
+-   `filePath`: Path where the new file should be created
 
-- `processFiles(files, readme, temperature)`: Processes selected files.
-- `addNewFile(filePath)`: Adds a new file to the project.
-- `createMissingFiles(lintOutput)`: Creates missing files detected during linting.
-- `optimizeAndRefactorFile(filePath)`: Optimizes and refactors a given file.
+### createMissingFiles(lintOutput, projectStructure)
 
-## Main Execution Flow
+Creates missing files based on lint output.
 
-The `main()` function orchestrates the execution of CodeCraftAI:
+Parameters:
 
-1. Reads the README.md file.
-2. Prompts for AI temperature.
-3. Enters a loop to continuously prompt for actions until the user chooses to exit.
-4. Executes the chosen action:
-   - Process existing files
-   - Add a new file
-   - Update README.md
-   - Optimize project structure
-   - Detect security vulnerabilities
-   - Run code quality checks
-   - Generate documentation
-   - Chat interface
-   - Optimize and refactor file
-   - Exit
+-   `lintOutput`: Output from the linter
+-   `projectStructure`: Object representing the project's file structure
+
+### optimizeAndRefactorFile(filePath, projectStructure)
+
+Optimizes and refactors a single file using AI suggestions.
+
+Parameters:
+
+-   `filePath`: Path of the file to optimize and refactor
+-   `projectStructure`: Object representing the project's file structure
+
+### main()
+
+The main function that runs the CodeCraftAI application. It provides a menu-driven interface for various actions such as processing files, adding new files, updating README, optimizing project structure, running code quality checks, generating documentation, and more.
 
 ## Usage
 
-To use CodeCraftAI, run the script and follow the prompts. Ensure you have the necessary dependencies installed and the `CLAUDE_KEY` environment variable set with your Anthropic API key.
+To run the CodeCraftAI application, execute the `index.js` file using Node.js:
 
 ```bash
 node index.js
 ```
 
-The tool will guide you through various options to manage and improve your project's codebase.
+The application will present a menu of options for the user to choose from, allowing them to perform various actions on their project.
+
+## Error Handling
+
+The main function is wrapped in a try-catch block to handle any unexpected errors that may occur during execution. Errors are logged to the console in red text for easy identification.
+
+## Project Structure
+
+This file is part of a larger project that includes several other modules:
+
+-   codeAnalyzer.js: Handles code analysis and optimization
+-   codeGenerator.js: Generates code based on project requirements
+-   config.js: Contains configuration settings for the application
+-   documentationGenerator.js: Generates documentation for code files
+-   fileManager.js: Manages file operations and project structure
+-   userInterface.js: Handles user interaction and input/output
+
+The `index.js` file acts as the central coordinator, utilizing these modules to provide a comprehensive code management and improvement tool.
