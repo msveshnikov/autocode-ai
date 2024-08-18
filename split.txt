@@ -1,27 +1,122 @@
+📂 File C:\My-progs\Node.JS\codecraft-ai\index.js exceeds 500 lines. Splitting...
+📋 File splitting suggestion:
+# Original File: index.js
 #!/usr/bin/env node
 
+import { main } from './src/main.js';
+
+main().catch((error) => {
+    console.error(chalk.red("❌ An error occurred:"), error.message);
+});
+
+# New File: src/main.js
+import chalk from "chalk";
+import { FileManager } from './fileManager.js';
+import { CodeGenerator } from './codeGenerator.js';
+import { CodeAnalyzer } from './codeAnalyzer.js';
+import { DocumentationGenerator } from './documentationGenerator.js';
+import { UserInterface } from './userInterface.js';
+import { processFiles, addNewFile, createMissingFiles, optimizeAndRefactorFile } from './utils.js';
+import path from "path";
+
+export async function main() {
+    console.log(chalk.blue("👋 Welcome to CodeCraftAI!"));
+
+    const readmePath = path.join(process.cwd(), "README.md");
+    let readme = await FileManager.read(readmePath);
+    if (!readme) {
+        console.error(chalk.red("❌ README.md not found or unable to read."));
+        return;
+    }
+
+    let continueExecution = true;
+    while (continueExecution) {
+        const projectStructure = await FileManager.getProjectStructure();
+        const { action } = await UserInterface.promptForAction();
+
+        switch (action) {
+            case "🔧 Process files": {
+                const filesToProcess = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
+                await processFiles(selectedFiles, readme, projectStructure);
+                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
+                break;
+            }
+            case "➕ Add a new file": {
+                const { newFile } = await UserInterface.promptForNewFile();
+                if (newFile) {
+                    await addNewFile(path.join(process.cwd(), newFile));
+                }
+                break;
+            }
+            case "📝 Update README.md": {
+                console.log(chalk.cyan("📝 Updating README.md with new design ideas and considerations..."));
+                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
+                await FileManager.write(readmePath, updatedReadme);
+                readme = updatedReadme;
+                break;
+            }
+            case "🔍 Optimize project structure":
+                await CodeAnalyzer.optimizeProjectStructure(projectStructure);
+                break;
+            case "🚀 Run code quality checks": {
+                const filesToCheck = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToCheck);
+                for (const file of selectedFiles) {
+                    if (file.includes("package.json")) continue;
+                    const lintOutput = await CodeAnalyzer.runLintChecks(file);
+                    await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
+                    await createMissingFiles(lintOutput, projectStructure);
+                }
+                break;
+            }
+            case "📚 Generate documentation": {
+                const filesToDocument = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);
+                for (const file of selectedFiles) {
+                    const content = await FileManager.read(file);
+                    await DocumentationGenerator.generate(file, content, projectStructure);
+                }
+                break;
+            }
+            case "💬 Chat interface": {
+                let chatContinue = true;
+                while (chatContinue) {
+                    const result = await UserInterface.chatInterface(readme, projectStructure);
+                    chatContinue = result.continue;
+                    readme = result.updatedReadme;
+                }
+                break;
+            }
+            case "🔄 Optimize and refactor file": {
+                const filesToOptimize = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
+                for (const file of selectedFiles) {
+                    await optimizeAndRefactorFile(file, projectStructure);
+                }
+                break;
+            }
+            case "🚪 Exit":
+                console.log(chalk.yellow("👋 Thanks for using CodeCraftAI. See you next time!"));
+                continueExecution = false;
+                break;
+        }
+    }
+}
+
+# New File: src/fileManager.js
 import fs from "fs/promises";
 import path from "path";
-import Anthropic from "@anthropic-ai/sdk";
 import chalk from "chalk";
-import inquirer from "inquirer";
-import { exec } from "child_process";
-import { promisify } from "util";
 import ignore from "ignore";
 
 const CONFIG = {
     excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
     excludedDirs: [".git", "node_modules"],
     excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
-    anthropicModel: "claude-3-5-sonnet-20240620",
-    maxTokens: 8192,
-    maxFileLines: 500,
 };
 
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
-const execAsync = promisify(exec);
-
-const FileManager = {
+export const FileManager = {
     async read(filePath) {
         try {
             return await fs.readFile(filePath, "utf8");
@@ -82,7 +177,17 @@ const FileManager = {
     },
 };
 
-const CodeGenerator = {
+# New File: src/codeGenerator.js
+import Anthropic from "@anthropic-ai/sdk";
+
+const CONFIG = {
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+
+export const CodeGenerator = {
     async generate(readme, currentCode, fileName, projectStructure) {
         const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
@@ -133,7 +238,22 @@ Please update the README.md file with new design ideas and considerations. Ensur
     },
 };
 
-const CodeAnalyzer = {
+# New File: src/codeAnalyzer.js
+import chalk from "chalk";
+import { exec } from "child_process";
+import { promisify } from "util";
+import { FileManager } from './fileManager.js';
+import Anthropic from "@anthropic-ai/sdk";
+
+const CONFIG = {
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+const execAsync = promisify(exec);
+
+export const CodeAnalyzer = {
     async runLintChecks(filePath) {
         console.log(chalk.cyan(`🔍 Running code quality checks for ${filePath}...`));
         try {
@@ -203,7 +323,20 @@ Provide the suggestions in a structured format.
     },
 };
 
-const DocumentationGenerator = {
+# New File: src/documentationGenerator.js
+import chalk from "chalk";
+import path from "path";
+import { FileManager } from './fileManager.js';
+import Anthropic from "@anthropic-ai/sdk";
+
+const CONFIG = {
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+
+export const DocumentationGenerator = {
     async generate(filePath, content, projectStructure) {
         console.log(chalk.cyan(`📝 Generating documentation for ${filePath}...`));
         const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
@@ -233,7 +366,21 @@ Please provide comprehensive documentation for the code above. Include an overvi
     },
 };
 
-const UserInterface = {
+# New File: src/userInterface.js
+import inquirer from "inquirer";
+import chalk from "chalk";
+import { FileManager } from './fileManager.js';
+import path from "path";
+import Anthropic from "@anthropic-ai/sdk";
+
+const CONFIG = {
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+
+export const UserInterface = {
     async promptForAction() {
         return inquirer.prompt({
             type: "list",
@@ -321,7 +468,23 @@ Please provide a response to help the user with their request. If it involves co
     },
 };
 
-async function processFiles(files, readme, projectStructure) {
+# New File: src/utils.js
+import chalk from "chalk";
+import path from "path";
+import { FileManager } from './fileManager.js';
+import { CodeGenerator } from './codeGenerator.js';
+import inquirer from "inquirer";
+import Anthropic from "@anthropic-ai/sdk";
+
+const CONFIG = {
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+    maxFileLines: 500,
+};
+
+const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+
+export async function processFiles(files, readme, projectStructure) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`🔧 Processing ${file}...`));
@@ -339,9 +502,7 @@ async function splitLargeFile(filePath, content, projectStructure) {
     console.log(chalk.yellow(`📂 File ${filePath} exceeds ${CONFIG.maxFileLines} lines. Splitting...`));
 
     const prompt = `
-The file ${filePath} exceeds ${
-        CONFIG.maxFileLines
-    } lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
+The file ${filePath} exceeds ${CONFIG.maxFileLines} lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
 
 1. Identify logical components or functionalities that can be separated.
 2. Suggest new file names for the extracted parts.
@@ -356,13 +517,13 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Please provide your suggestions in the following Markdown format:
 
-# Original ${"File"}: [original_file_name]
+# Original File: [original_file_name]
 [content for the original file]
 
-# New ${"File"}: [new_file_name_1]
+# New File: [new_file_name_1]
 [content for new_file_1]
 
-# New ${"File"}: [new_file_name_2]
+# New File: [new_file_name_2]
 [content for new_file_2]
 
 ... (repeat for all new files)
@@ -418,22 +579,19 @@ async function saveFiles(originalFilePath, files) {
             filePath = path.join(originalDir, fileName);
         }
 
-        // Create middle folders if they don't exist
-        await fs.mkdir(path.dirname(filePath), { recursive: true });
-
-        await fs.writeFile(filePath, content);
+        await FileManager.write(filePath, content);
         console.log(chalk.green(`✅ Saved file: ${filePath}`));
     }
 }
 
-async function addNewFile(filePath) {
+export async function addNewFile(filePath) {
     console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
     await FileManager.createSubfolders(filePath);
     await FileManager.write(filePath, "");
     console.log(chalk.green(`✅ New file ${filePath} has been created.`));
 }
 
-async function createMissingFiles(lintOutput, projectStructure) {
+export async function createMissingFiles(lintOutput, projectStructure) {
     const missingFileRegex = /Cannot find module '(.+?)'/g;
     const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
 
@@ -455,7 +613,7 @@ async function createMissingFiles(lintOutput, projectStructure) {
     }
 }
 
-async function optimizeAndRefactorFile(filePath, projectStructure) {
+export async function optimizeAndRefactorFile(filePath, projectStructure) {
     console.log(chalk.cyan(`🔄 Optimizing and refactoring ${filePath}...`));
     const fileContent = await FileManager.read(filePath);
     const prompt = `
@@ -486,92 +644,64 @@ Provide the optimized and refactored code without explanations.
     await FileManager.write(filePath, response.content[0].text);
     console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
 }
-
-async function main() {
-    console.log(chalk.blue("👋 Welcome to CodeCraftAI!"));
-
-    const readmePath = path.join(process.cwd(), "README.md");
-    let readme = await FileManager.read(readmePath);
-    if (!readme) {
-        console.error(chalk.red("❌ README.md not found or unable to read."));
-        return;
-    }
-
-    let continueExecution = true;
-    while (continueExecution) {
-        const projectStructure = await FileManager.getProjectStructure();
-        const { action } = await UserInterface.promptForAction();
-
-        switch (action) {
-            case "🔧 Process files": {
-                const filesToProcess = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
-                await processFiles(selectedFiles, readme, projectStructure);
-                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
-                break;
-            }
-            case "➕ Add a new file": {
-                const { newFile } = await UserInterface.promptForNewFile();
-                if (newFile) {
-                    await addNewFile(path.join(process.cwd(), newFile));
-                }
-                break;
-            }
-            case "📝 Update README.md": {
-                console.log(chalk.cyan("📝 Updating README.md with new design ideas and considerations..."));
-                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
-                await FileManager.write(readmePath, updatedReadme);
-                readme = updatedReadme;
-                break;
-            }
-            case "🔍 Optimize project structure":
-                await CodeAnalyzer.optimizeProjectStructure(projectStructure);
-                break;
-            case "🚀 Run code quality checks": {
-                const filesToCheck = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToCheck);
-                for (const file of selectedFiles) {
-                    if (file.includes("package.json")) continue;
-                    const lintOutput = await CodeAnalyzer.runLintChecks(file);
-                    await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
-                    await createMissingFiles(lintOutput, projectStructure);
-                }
-                break;
-            }
-            case "📚 Generate documentation": {
-                const filesToDocument = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);
-                for (const file of selectedFiles) {
-                    const content = await FileManager.read(file);
-                    await DocumentationGenerator.generate(file, content, projectStructure);
-                }
-                break;
-            }
-            case "💬 Chat interface": {
-                let chatContinue = true;
-                while (chatContinue) {
-                    const result = await UserInterface.chatInterface(readme, projectStructure);
-                    chatContinue = result.continue;
-                    readme = result.updatedReadme;
-                }
-                break;
-            }
-            case "🔄 Optimize and refactor file": {
-                const filesToOptimize = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
-                for (const file of selectedFiles) {
-                    await optimizeAndRefactorFile(file, projectStructure);
-                }
-                break;
-            }
-            case "🚪 Exit":
-                console.log(chalk.yellow("👋 Thanks for using CodeCraftAI. See you next time!"));
-                continueExecution = false;
-                break;
-        }
-    }
+? Do you want to proceed with the suggested file split? yes
+✅ File C:\My-progs\Node.JS\codecraft-ai\index.js has been updated.
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\index.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\main.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\main.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\main.js'
 }
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\main.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\fileManager.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\fileManager.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\fileManager.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\fileManager.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\codeGenerator.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\codeGenerator.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\codeGenerator.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\codeGenerator.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\codeAnalyzer.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\codeAnalyzer.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\codeAnalyzer.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\codeAnalyzer.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\documentationGenerator.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\documentationGenerator.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\documentationGenerator.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\documentationGenerator.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\userInterface.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\userInterface.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\userInterface.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\userInterface.js
+❌ Error writing file C:\My-progs\Node.JS\codecraft-ai\src\utils.js: [Error: ENOENT: no such file or directory, open 'C:\My-progs\Node.JS\codecraft-ai\src\utils.js'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\My-progs\\Node.JS\\codecraft-ai\\src\\utils.js'
+}
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\src\utils.js
+✅ File C:\My-progs\Node.JS\codecraft-ai\[original_file_name] has been updated.
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\[original_file_name]
+✅ File C:\My-progs\Node.JS\codecraft-ai\[new_file_name_1] has been updated.
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\[new_file_name_1]
+✅ File C:\My-progs\Node.JS\codecraft-ai\[new_file_name_2] has been updated.
+✅ Saved file: C:\My-progs\Node.JS\codecraft-ai\[new_file_name_2]
+✅ File split completed.
 
-main().catch((error) => {
-    console.error(chalk.red("❌ An error occurred:"), error.message);
-});
+✅ CodeCraftAI has successfully generated
