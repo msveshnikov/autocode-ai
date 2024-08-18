@@ -372,6 +372,35 @@ async function selectFilesForProcessing(files) {
     return selectedFiles;
 }
 
+async function optimizeAndRefactorFile(filePath) {
+    console.log(chalk.cyan(`Optimizing and refactoring ${filePath}...`));
+    const fileContent = await readFile(filePath);
+    const prompt = `
+Please optimize and refactor the following code from ${filePath}:
+
+${fileContent}
+
+Focus on:
+1. Improving code efficiency
+2. Enhancing readability
+3. Applying design patterns where appropriate
+4. Reducing code duplication
+5. Improving overall code structure
+
+Provide the optimized and refactored code without explanations.
+`;
+
+    const response = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20240620",
+        max_tokens: 8192,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    const optimizedCode = response.content[0].text;
+    await writeFile(filePath, optimizedCode);
+    console.log(chalk.green(`${filePath} has been optimized and refactored.`));
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -411,6 +440,7 @@ async function main() {
                 "Run code quality checks",
                 "Generate documentation",
                 "Chat interface",
+                "Optimize and refactor file",
                 "Exit",
             ],
         });
@@ -475,6 +505,14 @@ async function main() {
                     const result = await chatInterface(readme);
                     chatContinue = result.continue;
                     readme = result.updatedReadme;
+                }
+                break;
+            }
+            case "Optimize and refactor file": {
+                const filesToOptimize = await getFilesToProcess();
+                const selectedFiles = await selectFilesForProcessing(filesToOptimize);
+                for (const file of selectedFiles) {
+                    await optimizeAndRefactorFile(file);
                 }
                 break;
             }
