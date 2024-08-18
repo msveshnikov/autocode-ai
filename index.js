@@ -240,14 +240,14 @@ const UserInterface = {
             name: "action",
             message: "What would you like to do next?",
             choices: [
-                "Process existing files",
+                "Process files",
                 "Add a new file",
                 "Update README.md",
                 "Optimize project structure",
                 "Run code quality checks",
                 "Generate documentation",
-                "Chat interface",
                 "Optimize and refactor file",
+                "Chat interface",
                 "Exit",
             ],
         });
@@ -477,5 +477,5 @@ async function main() {
 }
 
 main().catch((error) => {
-    console.error(chalk.red("An error occurred:"), error);
+    console.error(chalk.red("An error occurred:"), error.message);
 });
