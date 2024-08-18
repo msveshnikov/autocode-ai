@@ -12,14 +12,11 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Intelligent project structure analysis and optimization
--   Automatic dependency management and version control integration
--   Code quality checks and suggestions
+-   Automatic dependency management and creation of missing files
+-   Code quality checks and suggestions/auto fixes
 -   Support for multiple programming languages and frameworks
--   Visual representation of project structure and dependencies
 -   Automatic code optimization and refactoring suggestions
 -   Modular file splitting for efficient AI processing
--   Comprehensive file coverage with configurable exceptions
--   Integration with version control systems for automatic commits and branching
 
 ## Installation
 
@@ -27,46 +24,29 @@ No installation is required. CodeCraftAI can be run directly using npx.
 
 ## Usage
 
-1. Create a .env file in the project root and add your Claude API key:
-
-```
-CLAUDE_KEY=your_api_key_here
-```
-
+1. Create CLAUDE_KEY environment variable
 2. Navigate to your project folder in the terminal.
-
 3. Run the following command:
 
 ```
 npx codecraft-ai
 ```
-
 4. Follow the prompts and watch as your project comes to life!
 
 ## How It Works
 
-CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory. If you develop CodeCraftAI itself, use git commit often and restart process to bring your new code to life.
+CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory.
 
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher)
 -   ES6 imports and async/await syntax
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
--   Chalk for UI enhancements
--   Exclude non-source files!! (csv, png, binary, etc)
--   Ask user before generating documentation!!
--   User interaction for important development steps
--   Automatic package installation via npm
+-   Exclude non-source files from processing (csv, png, binary, svg, etc)
+-   Ask user before generating documentation or quality check
+-   Automatic package installation via npm install
 -   Adherence to DRY, KISS, and SRP principles
 
 ## Design Ideas and Considerations
 
 -   Implement a chat-like interface for interactive project development
--   Implement a caching system to improve performance
-
-## Future Enhancements
-
--   Support for multi-language projects and polyglot programming
--   Support for containerization and deployment automation
--   AI-powered code review and security vulnerability detection
--   Add support for code performance analysis and optimization

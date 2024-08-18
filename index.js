@@ -6,14 +6,11 @@ import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 import chalk from "chalk";
 import inquirer from "inquirer";
-import dotenv from "dotenv";
 import { exec } from "child_process";
 import { promisify } from "util";
 import ignore from "ignore";
 
-dotenv.config();
-
-const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env"];
+const excludedFiles = ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"];
 const excludedDirs = [".git", "node_modules"];
 
 const anthropic = new Anthropic({
@@ -108,7 +105,8 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     try {
         console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
-        // eslint-disable-next-line no-unused-vars
+        // !! handle please, error code always non zero so we go to catch, but we need to process ESLint errors by AI, sending
+        // lint results and asking Claude to fix !!!
         const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`);
         if (stderr) {
             console.error(chalk.red(`ESLint error: ${stderr}`));
@@ -123,6 +121,7 @@ async function runCodeQualityChecks(filePath) {
 async function manageDependencies() {
     try {
         console.log(chalk.cyan("Checking and updating dependencies..."));
+        // !! Please fix here we always go to catch but tool returns proper results
         const { stdout, stderr } = await execAsync("npm outdated");
         if (stderr) {
             console.error(chalk.red(`Error checking outdated dependencies: ${stderr}`));
@@ -135,18 +134,6 @@ async function manageDependencies() {
         }
     } catch (error) {
         console.error(chalk.red(`Error managing dependencies: ${error.message}`));
-    }
-}
-
-// eslint-disable-next-line no-unused-vars
-async function gitCommit() {
-    try {
-        console.log(chalk.cyan("Committing changes to Git..."));
-        await execAsync("git add .");
-        await execAsync('git commit -m "Auto-commit by CodeCraftAI"');
-        console.log(chalk.green("Changes committed successfully."));
-    } catch (error) {
-        console.error(chalk.red(`Error committing to Git: ${error.message}`));
     }
 }
 
@@ -170,7 +157,7 @@ async function getFilesToProcess() {
                 !ig.ignores(relativePath) &&
                 !excludedFiles.includes(file.name) &&
                 !excludedDirs.some((dir) => relativePath.startsWith(dir)) &&
-                ![".md", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(
+                ![".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"].includes(
                     path.extname(file.name).toLowerCase()
                 )
             );
@@ -340,24 +327,6 @@ async function main() {
         return;
     }
 
-    console.log(chalk.yellow("\nProcessing files..."));
-    const filesToProcess = await getFilesToProcess();
-    await processFiles(filesToProcess, readme);
-
-    console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
-
-    await manageDependencies();
-
-    for (const file of filesToProcess) {
-        await runCodeQualityChecks(file);
-        const content = await readFile(file);
-        if (path.extname(file).toLowerCase() === ".js") {
-            await generateDocumentation(file, content);
-        }
-    }
-
-    // await gitCommit();
-
     // eslint-disable-next-line no-constant-condition
     while (true) {
         const { action } = await inquirer.prompt({
@@ -366,7 +335,7 @@ async function main() {
             message: "What would you like to do next?",
             choices: [
                 "Process existing files",
-                "Add a new file",
+                "Add a new file", // !!! this should be automated if lint shows broken refernces we need to add empty file with proper path and then allow AI to generate contents of the file
                 "Update README.md",
                 "Analyze project structure",
                 "Optimize project structure",
@@ -378,7 +347,23 @@ async function main() {
 
         switch (action) {
             case "Process existing files":
-                continue;
+                console.log(chalk.yellow("\nProcessing files..."));
+                const filesToProcess = await getFilesToProcess();
+                await processFiles(filesToProcess, readme);
+
+                console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
+
+                await manageDependencies();
+
+                for (const file of filesToProcess) {
+                    // await runCodeQualityChecks(file); !! only by request in main interactive loop
+                    const content = await readFile(file);
+                    if (path.extname(file).toLowerCase() === ".js") {
+                        // add any source file type (.py, .tsx, .java)
+                        // await generateDocumentation(file, content); !! only by request in main interactive loop
+                    }
+                }
+                break;
             case "Add a new file":
                 const { newFile } = await inquirer.prompt({
                     type: "input",
