@@ -2,194 +2,114 @@
 
 ## Overview
 
-CodeCraftAI is a powerful Node.js-based tool that automates various aspects of software development. It uses the Anthropic AI API to generate, update, and optimize code based on project requirements specified in a README.md file. The tool offers features such as file processing, documentation generation, code quality checks, security vulnerability detection, and project structure optimization.
+CodeCraftAI is an automated coding tool that helps developers generate, update, and optimize code based on project requirements specified in a README.md file. It uses the Anthropic AI model to assist with various coding tasks, including file generation, code optimization, documentation creation, and project structure analysis.
 
 ## Table of Contents
 
-1. [Dependencies](#dependencies)
-2. [Global Variables](#global-variables)
-3. [Main Functions](#main-functions)
-4. [Utility Functions](#utility-functions)
-5. [File Processing Functions](#file-processing-functions)
-6. [Code Quality and Optimization Functions](#code-quality-and-optimization-functions)
-7. [Documentation and Structure Functions](#documentation-and-structure-functions)
-8. [User Interface Functions](#user-interface-functions)
-9. [Main Execution](#main-execution)
+1. [Configuration](#configuration)
+2. [Main Components](#main-components)
+3. [Utility Functions](#utility-functions)
+4. [Main Execution Flow](#main-execution-flow)
 
-## Dependencies
+## Configuration
 
-- fs/promises: File system operations
-- path: File path manipulations
-- @anthropic-ai/sdk: Anthropic AI API
-- chalk: Terminal string styling
-- inquirer: Command-line user interface
-- child_process: Executing shell commands
-- util: Utility functions
-- ignore: .gitignore parsing
+The `CONFIG` object contains various settings for the application:
 
-## Global Variables
+```javascript
+const CONFIG = {
+    excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
+    excludedDirs: [".git", "node_modules"],
+    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
+    anthropicModel: "claude-3-5-sonnet-20240620",
+    maxTokens: 8192,
+};
+```
 
-- `excludedFiles`: Array of filenames to exclude from processing
-- `excludedDirs`: Array of directory names to exclude from processing
-- `excludedExtensions`: Array of file extensions to exclude from processing
-- `anthropic`: Instance of the Anthropic AI client
-- `execAsync`: Promisified version of child_process.exec
+## Main Components
 
-## Main Functions
+### FileManager
 
-### `main()`
+Handles file system operations.
 
-The main entry point of the application. It sets up the initial configuration and provides a menu-driven interface for users to interact with various features of CodeCraftAI.
+#### Methods:
+
+- `read(filePath)`: Reads the content of a file.
+- `write(filePath, content)`: Writes content to a file.
+- `createSubfolders(filePath)`: Creates necessary subfolders for a given file path.
+- `getFilesToProcess()`: Returns a list of files to be processed, excluding those specified in the configuration.
+
+### CodeGenerator
+
+Generates and updates code using the Anthropic AI model.
+
+#### Methods:
+
+- `generate(readme, currentCode, fileName, temperature)`: Generates or updates code for a given file.
+- `updateReadme(readme, temperature)`: Updates the README.md file with new design ideas.
+
+### CodeAnalyzer
+
+Analyzes and improves code quality.
+
+#### Methods:
+
+- `runLintChecks(filePath)`: Runs ESLint on a file.
+- `fixLintErrors(filePath, lintOutput)`: Attempts to fix lint errors using AI.
+- `detectSecurityVulnerabilities()`: Runs npm audit to detect security vulnerabilities.
+- `optimizeProjectStructure()`: Analyzes and suggests optimizations for the project structure.
+
+### DocumentationGenerator
+
+Generates documentation for code files.
+
+#### Methods:
+
+- `generate(filePath, content)`: Generates documentation for a given file.
+
+### UserInterface
+
+Handles user interactions and prompts.
+
+#### Methods:
+
+- `promptForAction()`: Prompts the user to choose an action.
+- `promptForFiles(files)`: Prompts the user to select files for processing.
+- `promptForNewFile()`: Prompts the user to enter a new file name.
+- `promptForTemperature()`: Prompts the user to enter the AI temperature.
+- `chatInterface(readme)`: Provides a chat interface for user interactions.
 
 ## Utility Functions
 
-### `readFile(filePath)`
+- `processFiles(files, readme, temperature)`: Processes selected files.
+- `addNewFile(filePath)`: Adds a new file to the project.
+- `createMissingFiles(lintOutput)`: Creates missing files detected during linting.
+- `optimizeAndRefactorFile(filePath)`: Optimizes and refactors a given file.
 
-Reads the content of a file.
+## Main Execution Flow
 
-- **Parameters**: `filePath` (string) - Path to the file
-- **Returns**: Promise<string|null> - File content or null if an error occurs
+The `main()` function orchestrates the execution of CodeCraftAI:
 
-### `writeFile(filePath, content)`
+1. Reads the README.md file.
+2. Prompts for AI temperature.
+3. Enters a loop to continuously prompt for actions until the user chooses to exit.
+4. Executes the chosen action:
+   - Process existing files
+   - Add a new file
+   - Update README.md
+   - Optimize project structure
+   - Detect security vulnerabilities
+   - Run code quality checks
+   - Generate documentation
+   - Chat interface
+   - Optimize and refactor file
+   - Exit
 
-Writes content to a file.
+## Usage
 
-- **Parameters**:
-  - `filePath` (string) - Path to the file
-  - `content` (string) - Content to write
-- **Returns**: Promise<void>
-
-### `createSubfolders(filePath)`
-
-Creates necessary subfolders for a given file path.
-
-- **Parameters**: `filePath` (string) - Path to the file
-- **Returns**: Promise<void>
-
-## File Processing Functions
-
-### `generateCode(readme, currentCode, fileName, temperature)`
-
-Generates or updates code based on README content and existing code.
-
-- **Parameters**:
-  - `readme` (string) - Content of README.md
-  - `currentCode` (string) - Existing code content
-  - `fileName` (string) - Name of the file being processed
-  - `temperature` (number) - AI generation temperature
-- **Returns**: Promise<string> - Generated code
-
-### `createOrUpdateFile(filePath, content)`
-
-Creates or updates a file with the given content.
-
-- **Parameters**:
-  - `filePath` (string) - Path to the file
-  - `content` (string) - Content to write
-- **Returns**: Promise<void>
-
-### `processFiles(files, readme, temperature)`
-
-Processes multiple files, generating or updating code for each.
-
-- **Parameters**:
-  - `files` (string[]) - Array of file paths to process
-  - `readme` (string) - Content of README.md
-  - `temperature` (number) - AI generation temperature
-- **Returns**: Promise<void>
-
-### `getFilesToProcess()`
-
-Retrieves a list of files to process, respecting .gitignore and exclusion rules.
-
-- **Returns**: Promise<string[]> - Array of file paths to process
-
-### `addNewFile(filePath)`
-
-Adds a new file to the project.
-
-- **Parameters**: `filePath` (string) - Path of the new file to create
-- **Returns**: Promise<void>
-
-## Code Quality and Optimization Functions
-
-### `runCodeQualityChecks(filePath)`
-
-Runs ESLint on a file and attempts to fix lint errors.
-
-- **Parameters**: `filePath` (string) - Path to the file to check
-- **Returns**: Promise<string> - Lint output or error message
-
-### `fixLintErrors(filePath, lintOutput)`
-
-Attempts to fix lint errors in a file using AI.
-
-- **Parameters**:
-  - `filePath` (string) - Path to the file
-  - `lintOutput` (string) - ESLint output
-- **Returns**: Promise<void>
-
-### `optimizeAndRefactorFile(filePath)`
-
-Optimizes and refactors the code in a file using AI.
-
-- **Parameters**: `filePath` (string) - Path to the file to optimize
-- **Returns**: Promise<void>
-
-### `detectSecurityVulnerabilities()`
-
-Runs npm audit to detect security vulnerabilities in the project.
-
-- **Returns**: Promise<void>
-
-## Documentation and Structure Functions
-
-### `generateDocumentation(filePath, content)`
-
-Generates documentation for a given file.
-
-- **Parameters**:
-  - `filePath` (string) - Path to the file
-  - `content` (string) - Content of the file
-- **Returns**: Promise<void>
-
-### `optimizeProjectStructure()`
-
-Analyzes the project structure and provides optimization suggestions.
-
-- **Returns**: Promise<void>
-
-### `generateOptimizationSuggestions(structure)`
-
-Generates optimization suggestions for the project structure using AI.
-
-- **Parameters**: `structure` (object) - Project structure object
-- **Returns**: Promise<string> - Optimization suggestions
-
-## User Interface Functions
-
-### `chatInterface(readme)`
-
-Provides a chat interface for users to interact with CodeCraftAI.
-
-- **Parameters**: `readme` (string) - Content of README.md
-- **Returns**: Promise<{continue: boolean, updatedReadme: string}>
-
-### `selectFilesForProcessing(files)`
-
-Allows users to select files for processing from a list.
-
-- **Parameters**: `files` (string[]) - Array of file paths
-- **Returns**: Promise<string[]> - Selected file paths
-
-## Main Execution
-
-The script is executed by running the `main()` function, which provides a menu-driven interface for users to interact with various features of CodeCraftAI. The main loop continues until the user chooses to exit.
-
-Usage example:
+To use CodeCraftAI, run the script and follow the prompts. Ensure you have the necessary dependencies installed and the `CLAUDE_KEY` environment variable set with your Anthropic API key.
 
 ```bash
 node index.js
 ```
 
-This will start the CodeCraftAI tool and present the user with a menu of options to choose from.
+The tool will guide you through various options to manage and improve your project's codebase.
