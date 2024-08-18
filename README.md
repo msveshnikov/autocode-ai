@@ -39,6 +39,3 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 -   Node.js (version 20.0.0 or higher)
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
-
-## new req
--   Add nice empjies in messages and menus
