@@ -9,6 +9,7 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Utilizes Claude 3.5 Sonnet API for intelligent code generation
 -   Incremental project building
 -   Creates and modifies source files in the current folder and subfolders
+-   Automatic creation of missing files based on lint errors
 -   Self-updating README.md with new design ideas and considerations
 -   Code quality checks and suggestions/auto fixes
 
@@ -30,7 +31,7 @@ npx codecraft-ai
 
 ## How It Works
 
-CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory.
+CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory. Additionally, CodeCraftAI analyzes lint errors to identify missing files. It then uses AI to generate appropriate content for these files and creates them in the correct locations within the project structure.
 
 ## Requirements
 

@@ -337,6 +337,26 @@ Please provide a response to help the user with their request. If it involves co
     return { continue: true, updatedReadme: readme };
 }
 
+async function createMissingFiles(lintOutput) {
+    const missingFileRegex = /Cannot find module '(.+?)'/g;
+    const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
+
+    for (const file of missingFiles) {
+        const filePath = path.join(process.cwd(), `${file}.js`);
+        const { createFile } = await inquirer.prompt({
+            type: "confirm",
+            name: "createFile",
+            message: `Do you want to create the missing file: ${filePath}?`,
+            default: true,
+        });
+
+        if (createFile) {
+            await addNewFile(filePath);
+            console.log(chalk.green(`Created missing file: ${filePath}`));
+        }
+    }
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -404,7 +424,8 @@ async function main() {
                     if (file.includes("package.json")) {
                         continue;
                     }
-                    await runCodeQualityChecks(file);
+                    const lintOutput = await runCodeQualityChecks(file);
+                    await createMissingFiles(lintOutput);
                 }
                 break;
             }
