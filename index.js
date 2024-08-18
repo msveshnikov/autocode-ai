@@ -83,7 +83,7 @@ const FileManager = {
 };
 
 const CodeGenerator = {
-    async generate(readme, currentCode, fileName, projectStructure, temperature = 0.7) {
+    async generate(readme, currentCode, fileName, projectStructure) {
         const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
 
@@ -102,14 +102,14 @@ Please generate or update the ${fileName} file to implement the features describ
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
-            temperature,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
         return response.content[0].text;
     },
 
-    async updateReadme(readme, projectStructure, temperature) {
+    async updateReadme(readme, projectStructure) {
         const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content and project structure.
 
@@ -125,7 +125,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
-            temperature,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -173,17 +173,6 @@ Please provide the corrected code that addresses all the ESLint errors. Consider
 
         await FileManager.write(filePath, response.content[0].text);
         console.log(chalk.green(`Lint errors fixed for ${filePath}`));
-    },
-
-    async detectSecurityVulnerabilities() {
-        console.log(chalk.cyan("Detecting security vulnerabilities..."));
-        try {
-            const { stdout } = await execAsync("npm audit");
-            console.log(chalk.green("Security audit complete:"));
-            console.log(stdout);
-        } catch (error) {
-            console.error(chalk.red(`Error detecting security vulnerabilities: ${error.message}`));
-        }
     },
 
     async optimizeProjectStructure(projectStructure) {
@@ -255,7 +244,6 @@ const UserInterface = {
                 "Add a new file",
                 "Update README.md",
                 "Optimize project structure",
-                "Detect security vulnerabilities",
                 "Run code quality checks",
                 "Generate documentation",
                 "Chat interface",
@@ -281,23 +269,6 @@ const UserInterface = {
             message: "Enter the name of the new file to create (include path if in subfolder):",
         });
     },
-
-    async promptForTemperature() {
-        return parseFloat(
-            inquirer.prompt({
-                type: "input",
-                name: "temperature",
-                message: "Enter the temperature for AI generation (default is 0.7):",
-                default: "0.7",
-                validate: (value) => {
-                    const floatValue = parseFloat(value);
-                    return floatValue >= 0 && floatValue <= 1 ? true : "Please enter a number between 0 and 1";
-                },
-                filter: (value) => parseFloat(value),
-            })
-        );
-    },
-
     async chatInterface(readme, projectStructure) {
         const { input } = await inquirer.prompt({
             type: "input",
@@ -349,29 +320,13 @@ Please provide a response to help the user with their request. If it involves co
     },
 };
 
-async function processFiles(files, readme, projectStructure, temperature) {
+async function processFiles(files, readme, projectStructure) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
-        const { processFile } = await inquirer.prompt({
-            type: "confirm",
-            name: "processFile",
-            message: `Do you want to process ${file}?`,
-            default: true,
-        });
-        if (processFile) {
-            console.log(chalk.cyan(`Processing ${file}...`));
-            const currentContent = await FileManager.read(filePath);
-            const generatedContent = await CodeGenerator.generate(
-                readme,
-                currentContent,
-                file,
-                projectStructure,
-                temperature
-            );
-            await FileManager.write(filePath, generatedContent);
-        } else {
-            console.log(chalk.yellow(`Skipping ${file}`));
-        }
+        console.log(chalk.cyan(`Processing ${file}...`));
+        const currentContent = await FileManager.read(filePath);
+        const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
+        await FileManager.write(filePath, generatedContent);
     }
 }
 
@@ -446,8 +401,6 @@ async function main() {
         return;
     }
 
-    const { temperature } = await UserInterface.promptForTemperature();
-
     let continueExecution = true;
     while (continueExecution) {
         const projectStructure = await FileManager.getProjectStructure();
@@ -457,7 +410,7 @@ async function main() {
             case "Process existing files": {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
-                await processFiles(selectedFiles, readme, projectStructure, temperature);
+                await processFiles(selectedFiles, readme, projectStructure);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
                 break;
             }
@@ -470,16 +423,13 @@ async function main() {
             }
             case "Update README.md": {
                 console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
-                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure, temperature);
+                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
                 await FileManager.write(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
             }
             case "Optimize project structure":
                 await CodeAnalyzer.optimizeProjectStructure(projectStructure);
-                break;
-            case "Detect security vulnerabilities":
-                await CodeAnalyzer.detectSecurityVulnerabilities();
                 break;
             case "Run code quality checks": {
                 const filesToCheck = await FileManager.getFilesToProcess();

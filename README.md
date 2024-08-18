@@ -38,11 +38,5 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher)
+-   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
 
-## New Design Ideas and Considerations
-
-1. Add support for multiple programming languages and frameworks
-2. Add support for generating unit tests and documentation
-3. Implement a caching mechanism to improve performance for repeated tasks
-4. Add support for generating boilerplate code for common design patterns
-5. Add support for generating and managing database schemas
