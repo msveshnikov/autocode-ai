@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-case-declarations */
 
 import fs from "fs/promises";
 import path from "path";
@@ -106,25 +105,22 @@ async function createSubfolders(filePath) {
 async function runCodeQualityChecks(filePath) {
     console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
     try {
-        const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`, { encoding: 'utf8' });
-        
-        // Process stdout (warnings) if present
+        const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`, { encoding: "utf8" });
+
         if (stdout) {
             console.log(chalk.yellow(`ESLint warnings:\n${stdout}`));
             await fixLintErrors(filePath, stdout);
         }
-        
-        // Process stderr (errors) if present
+
         if (stderr) {
             console.error(chalk.red(`ESLint errors:\n${stderr}`));
             await fixLintErrors(filePath, stderr);
         }
-        
+
         if (!stdout && !stderr) {
             console.log(chalk.green(`ESLint passed for ${filePath}`));
         }
     } catch (error) {
-        // ESLint returns non-zero exit code for warnings and errors
         if (error.stdout) {
             console.log(chalk.yellow(`ESLint warnings:\n${error.stdout}`));
             await fixLintErrors(filePath, error.stdout);
@@ -133,7 +129,6 @@ async function runCodeQualityChecks(filePath) {
             console.error(chalk.red(`ESLint errors:\n${error.stderr}`));
             await fixLintErrors(filePath, error.stderr);
         }
-        // If there's an actual execution error, it will be in error.message
         if (!error.stdout && !error.stderr) {
             console.error(chalk.red(`Error running ESLint: ${error.message}`));
         }
@@ -366,14 +361,15 @@ async function main() {
         });
 
         switch (action) {
-            case "Process existing files":
+            case "Process existing files": {
                 console.log(chalk.yellow("\nProcessing files..."));
                 const filesToProcess = await getFilesToProcess();
                 await processFiles(filesToProcess, readme);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
                 await manageDependencies();
                 break;
-            case "Add a new file":
+            }
+            case "Add a new file": {
                 const { newFile } = await inquirer.prompt({
                     type: "input",
                     name: "newFile",
@@ -383,37 +379,42 @@ async function main() {
                     await addNewFile(path.join(process.cwd(), newFile));
                 }
                 break;
-            case "Update README.md":
+            }
+            case "Update README.md": {
                 console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
                 const updatedReadme = await updateReadme(readme);
                 await writeFile(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
+            }
             case "Optimize project structure":
                 await optimizeProjectStructure();
                 break;
             case "Detect security vulnerabilities":
                 await detectSecurityVulnerabilities();
                 break;
-            case "Run code quality checks":
+            case "Run code quality checks": {
                 const filesToCheck = await getFilesToProcess();
                 for (const file of filesToCheck) {
                     await runCodeQualityChecks(file);
                 }
                 break;
-            case "Generate documentation":
+            }
+            case "Generate documentation": {
                 const filesToDocument = await getFilesToProcess();
                 for (const file of filesToDocument) {
                     const content = await readFile(file);
                     await generateDocumentation(file, content);
                 }
                 break;
-            case "Chat interface":
+            }
+            case "Chat interface": {
                 let chatContinue = true;
                 while (chatContinue) {
                     chatContinue = await chatInterface();
                 }
                 break;
+            }
             case "Exit":
                 console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
                 return;
