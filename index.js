@@ -372,7 +372,7 @@ async function main() {
         return;
     }
 
-    const { temperature } = await inquirer.prompt({
+    let { temperature } = await inquirer.prompt({
         type: "input",
         name: "temperature",
         message: "Enter the temperature for AI generation (default is 0.7):",
@@ -384,6 +384,8 @@ async function main() {
         filter: (value) => parseFloat(value),
     });
 
+    temperature = parseFloat(temperature);
+    
     let continueExecution = true;
     while (continueExecution) {
         const { action } = await inquirer.prompt({
