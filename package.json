@@ -9,8 +9,7 @@
     },
     "scripts": {
         "start": "node index.js",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
+        "lint": "eslint ."
     },
     "keywords": [
         "ai",
@@ -30,7 +29,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
-        "eslint": "^8.57.0",
+        "eslint": "^9.9.0",
         "eslint-config-standard": "^17.1.0",
         "globals": "^15.9.0"
     }
