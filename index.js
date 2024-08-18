@@ -73,7 +73,7 @@ async function processFiles(files, readme) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
         console.log(chalk.cyan(`Processing ${file}...`));
-        let currentContent = await readFile(filePath);
+        const currentContent = await readFile(filePath);
         const generatedContent = await generateCode(readme, currentContent, file);
         await createOrUpdateFile(filePath, generatedContent);
     }
@@ -121,6 +121,7 @@ async function runCodeQualityChecks(filePath) {
 
 async function fixLintErrors(filePath, lintOutput) {
     console.log(chalk.yellow(`Attempting to fix lint errors for ${filePath}...`));
+    console.log(chalk.yellow(`Lint output ${lintOutput}`));
     const fileContent = await readFile(filePath);
     const prompt = `
 Please fix the following ESLint errors in the file ${filePath}:
@@ -217,26 +218,6 @@ Please provide comprehensive documentation for the code above. Include an overvi
 
     await writeFile(docFilePath, response.content[0].text);
     console.log(chalk.green(`Documentation generated for ${filePath}`));
-}
-
-async function analyzeProjectStructure() {
-    console.log(chalk.cyan("Analyzing project structure..."));
-    const files = await getFilesToProcess();
-    const structure = {};
-
-    for (const file of files) {
-        const parts = file.split(path.sep);
-        let current = structure;
-        for (const part of parts) {
-            if (!current[part]) {
-                current[part] = {};
-            }
-            current = current[part];
-        }
-    }
-
-    console.log(chalk.green("Project structure analysis complete."));
-    console.log(JSON.stringify(structure, null, 2));
 }
 
 async function optimizeProjectStructure() {
@@ -354,7 +335,6 @@ async function main() {
                 "Process existing files",
                 "Add a new file",
                 "Update README.md",
-                "Analyze project structure",
                 "Optimize project structure",
                 "Detect security vulnerabilities",
                 "Run code quality checks",
@@ -387,9 +367,6 @@ async function main() {
                 const updatedReadme = await updateReadme(readme);
                 await writeFile(readmePath, updatedReadme);
                 readme = updatedReadme;
-                break;
-            case "Analyze project structure":
-                await analyzeProjectStructure();
                 break;
             case "Optimize project structure":
                 await optimizeProjectStructure();
