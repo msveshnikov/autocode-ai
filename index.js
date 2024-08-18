@@ -15,6 +15,7 @@ const CONFIG = {
     excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
     anthropicModel: "claude-3-5-sonnet-20240620",
     maxTokens: 8192,
+    maxFileLines: 500,
 };
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
@@ -327,6 +328,56 @@ async function processFiles(files, readme, projectStructure) {
         const currentContent = await FileManager.read(filePath);
         const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
         await FileManager.write(filePath, generatedContent);
+
+        if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
+            await splitLargeFile(filePath, generatedContent, projectStructure);
+        }
+    }
+}
+
+async function splitLargeFile(filePath, content, projectStructure) {
+    console.log(chalk.yellow(`File ${filePath} exceeds ${CONFIG.maxFileLines} lines. Splitting...`));
+
+    const prompt = `
+The file ${filePath} exceeds ${CONFIG.maxFileLines} lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
+
+1. Identify logical components or functionalities that can be separated.
+2. Suggest new file names for the extracted parts.
+3. Provide the content for each new file, including the updated content for the original file.
+4. Ensure that the split maintains the overall functionality and doesn't break any dependencies.
+
+Current file content:
+${content}
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please provide your suggestions in a structured format, including the new file names and their contents.
+`;
+
+    const response = await anthropic.messages.create({
+        model: CONFIG.anthropicModel,
+        max_tokens: CONFIG.maxTokens,
+        messages: [{ role: "user", content: prompt }],
+    });
+
+    const splitSuggestion = response.content[0].text;
+    console.log(chalk.cyan("File splitting suggestion:"));
+    console.log(splitSuggestion);
+
+    const { confirmSplit } = await inquirer.prompt({
+        type: "confirm",
+        name: "confirmSplit",
+        message: "Do you want to proceed with the suggested file split?",
+        default: true,
+    });
+
+    if (confirmSplit) {
+        // Implement the file split based on the AI suggestion
+        // This part would require parsing the AI's response and creating new files accordingly
+        console.log(chalk.green("File split completed."));
+    } else {
+        console.log(chalk.yellow("File split cancelled."));
     }
 }
 
