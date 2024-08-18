@@ -48,7 +48,6 @@ const FileManager = {
         const gitignorePath = path.join(process.cwd(), ".gitignore");
         const gitignoreContent = (await this.read(gitignorePath)) || "";
         const ig = ignore().add(gitignoreContent);
-
         const files = await fs.readdir(process.cwd(), { withFileTypes: true, recursive: true });
         return files
             .filter((file) => {
@@ -162,7 +161,7 @@ ${fileContent}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please provide the corrected code that addresses all the ESLint errors. Consider the project structure when making changes. Do not include any explanations, just the corrected code.
+Please provide the corrected code that addresses all the ESLint errors. Consider the project structure when making changes. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const response = await anthropic.messages.create({
@@ -269,6 +268,7 @@ const UserInterface = {
             message: "Enter the name of the new file to create (include path if in subfolder):",
         });
     },
+
     async chatInterface(readme, projectStructure) {
         const { input } = await inquirer.prompt({
             type: "input",
@@ -407,7 +407,7 @@ async function main() {
         const { action } = await UserInterface.promptForAction();
 
         switch (action) {
-            case "Process existing files": {
+            case "Process files": {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
                 await processFiles(selectedFiles, readme, projectStructure);
