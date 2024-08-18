@@ -47,7 +47,7 @@ ${readme}
 Current ${fileName} content (if exists):
 ${currentCode || "No existing code"}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Use ES6 imports and async/await syntax. Do not include any explanations or comments in your response, just provide the code.
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Do not include any explanations or comments in your response, just provide the code.
 `;
 
     const response = await anthropic.messages.create({
@@ -362,6 +362,16 @@ async function createMissingFiles(lintOutput) {
     }
 }
 
+async function selectFilesForProcessing(files) {
+    const { selectedFiles } = await inquirer.prompt({
+        type: "checkbox",
+        name: "selectedFiles",
+        message: "Select files for processing:",
+        choices: files,
+    });
+    return selectedFiles;
+}
+
 async function main() {
     console.log(chalk.blue("Welcome to CodeCraftAI!"));
 
@@ -385,7 +395,7 @@ async function main() {
     });
 
     temperature = parseFloat(temperature);
-    
+
     let continueExecution = true;
     while (continueExecution) {
         const { action } = await inquirer.prompt({
@@ -409,7 +419,8 @@ async function main() {
             case "Process existing files": {
                 console.log(chalk.yellow("\nProcessing files..."));
                 const filesToProcess = await getFilesToProcess();
-                await processFiles(filesToProcess, readme, temperature);
+                const selectedFiles = await selectFilesForProcessing(filesToProcess);
+                await processFiles(selectedFiles, readme, temperature);
                 console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
                 break;
             }
@@ -439,7 +450,8 @@ async function main() {
                 break;
             case "Run code quality checks": {
                 const filesToCheck = await getFilesToProcess();
-                for (const file of filesToCheck) {
+                const selectedFiles = await selectFilesForProcessing(filesToCheck);
+                for (const file of selectedFiles) {
                     if (file.includes("package.json")) {
                         continue;
                     }
@@ -450,7 +462,8 @@ async function main() {
             }
             case "Generate documentation": {
                 const filesToDocument = await getFilesToProcess();
-                for (const file of filesToDocument) {
+                const selectedFiles = await selectFilesForProcessing(filesToDocument);
+                for (const file of selectedFiles) {
                     const content = await readFile(file);
                     await generateDocumentation(file, content);
                 }
