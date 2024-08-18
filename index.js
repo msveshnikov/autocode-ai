@@ -34,9 +34,9 @@ const FileManager = {
     async write(filePath, content) {
         try {
             await fs.writeFile(filePath, content, "utf8");
-            console.log(chalk.green(`File ${filePath} has been updated.`));
+            console.log(chalk.green(`✅ File ${filePath} has been updated.`));
         } catch (error) {
-            console.error(chalk.red(`Error writing file ${filePath}:`), error);
+            console.error(chalk.red(`❌ Error writing file ${filePath}:`), error);
         }
     },
 
@@ -135,21 +135,21 @@ Please update the README.md file with new design ideas and considerations. Ensur
 
 const CodeAnalyzer = {
     async runLintChecks(filePath) {
-        console.log(chalk.cyan(`Running code quality checks for ${filePath}...`));
+        console.log(chalk.cyan(`🔍 Running code quality checks for ${filePath}...`));
         try {
             const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`, { encoding: "utf8" });
-            if (stdout) console.log(chalk.yellow(`ESLint warnings:\n${stdout}`));
-            if (stderr) console.error(chalk.red(`ESLint errors:\n${stderr}`));
-            if (!stdout && !stderr) console.log(chalk.green(`ESLint passed for ${filePath}`));
+            if (stdout) console.log(chalk.yellow(`⚠️ ESLint warnings:\n${stdout}`));
+            if (stderr) console.error(chalk.red(`❌ ESLint errors:\n${stderr}`));
+            if (!stdout && !stderr) console.log(chalk.green(`✅ ESLint passed for ${filePath}`));
             return stdout || stderr;
         } catch (error) {
-            console.error(chalk.red(`Error running ESLint: ${error.message}`));
+            console.error(chalk.red(`❌ Error running ESLint: ${error.message}`));
             return error.stdout || error.stderr || error.message;
         }
     },
 
     async fixLintErrors(filePath, lintOutput, projectStructure) {
-        console.log(chalk.yellow(`Attempting to fix lint errors for ${filePath}...`));
+        console.log(chalk.yellow(`🔧 Attempting to fix lint errors for ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
         const prompt = `
 Please fix the following ESLint errors in the file ${filePath}:
@@ -172,11 +172,11 @@ Please provide the corrected code that addresses all the ESLint errors. Consider
         });
 
         await FileManager.write(filePath, response.content[0].text);
-        console.log(chalk.green(`Lint errors fixed for ${filePath}`));
+        console.log(chalk.green(`✅ Lint errors fixed for ${filePath}`));
     },
 
     async optimizeProjectStructure(projectStructure) {
-        console.log(chalk.cyan("Optimizing project structure..."));
+        console.log(chalk.cyan("🔧 Optimizing project structure..."));
 
         const prompt = `
 Analyze the following project structure and provide optimization suggestions:
@@ -198,14 +198,14 @@ Provide the suggestions in a structured format.
             messages: [{ role: "user", content: prompt }],
         });
 
-        console.log(chalk.green("Project structure optimization suggestions:"));
+        console.log(chalk.green("📊 Project structure optimization suggestions:"));
         console.log(response.content[0].text);
     },
 };
 
 const DocumentationGenerator = {
     async generate(filePath, content, projectStructure) {
-        console.log(chalk.cyan(`Generating documentation for ${filePath}...`));
+        console.log(chalk.cyan(`📝 Generating documentation for ${filePath}...`));
         const docFilePath = path.join(path.dirname(filePath), `${path.basename(filePath, path.extname(filePath))}.md`);
 
         const prompt = `
@@ -229,7 +229,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
         });
 
         await FileManager.write(docFilePath, response.content[0].text);
-        console.log(chalk.green(`Documentation generated for ${filePath}`));
+        console.log(chalk.green(`✅ Documentation generated for ${filePath}`));
     },
 };
 
@@ -240,15 +240,15 @@ const UserInterface = {
             name: "action",
             message: "What would you like to do next?",
             choices: [
-                "Process files",
-                "Add a new file",
-                "Update README.md",
-                "Optimize project structure",
-                "Run code quality checks",
-                "Generate documentation",
-                "Optimize and refactor file",
-                "Chat interface",
-                "Exit",
+                "🔧 Process files",
+                "➕ Add a new file",
+                "📝 Update README.md",
+                "🔍 Optimize project structure",
+                "🚀 Run code quality checks",
+                "📚 Generate documentation",
+                "🔄 Optimize and refactor file",
+                "💬 Chat interface",
+                "🚪 Exit",
             ],
         });
     },
@@ -301,7 +301,7 @@ Please provide a response to help the user with their request. If it involves co
             messages: [{ role: "user", content: prompt }],
         });
 
-        console.log(chalk.cyan("CodeCraftAI:"), response.content[0].text);
+        console.log(chalk.cyan("🤖 CodeCraftAI:"), response.content[0].text);
 
         const { updateReadme } = await inquirer.prompt({
             type: "confirm",
@@ -313,7 +313,7 @@ Please provide a response to help the user with their request. If it involves co
         if (updateReadme) {
             const updatedReadme = `${readme}\n\n## New Requirement\n\n${input}`;
             await FileManager.write(path.join(process.cwd(), "README.md"), updatedReadme);
-            console.log(chalk.green("README.md has been updated with the new requirement."));
+            console.log(chalk.green("✅ README.md has been updated with the new requirement."));
             return { continue: true, updatedReadme };
         }
 
@@ -324,7 +324,7 @@ Please provide a response to help the user with their request. If it involves co
 async function processFiles(files, readme, projectStructure) {
     for (const file of files) {
         const filePath = path.join(process.cwd(), file);
-        console.log(chalk.cyan(`Processing ${file}...`));
+        console.log(chalk.cyan(`🔧 Processing ${file}...`));
         const currentContent = await FileManager.read(filePath);
         const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
         await FileManager.write(filePath, generatedContent);
@@ -336,7 +336,7 @@ async function processFiles(files, readme, projectStructure) {
 }
 
 async function splitLargeFile(filePath, content, projectStructure) {
-    console.log(chalk.yellow(`File ${filePath} exceeds ${CONFIG.maxFileLines} lines. Splitting...`));
+    console.log(chalk.yellow(`📂 File ${filePath} exceeds ${CONFIG.maxFileLines} lines. Splitting...`));
 
     const prompt = `
 The file ${filePath} exceeds ${CONFIG.maxFileLines} lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
@@ -362,7 +362,7 @@ Please provide your suggestions in a structured format, including the new file n
     });
 
     const splitSuggestion = response.content[0].text;
-    console.log(chalk.cyan("File splitting suggestion:"));
+    console.log(chalk.cyan("📋 File splitting suggestion:"));
     console.log(splitSuggestion);
 
     const { confirmSplit } = await inquirer.prompt({
@@ -375,17 +375,17 @@ Please provide your suggestions in a structured format, including the new file n
     if (confirmSplit) {
         // Implement the file split based on the AI suggestion
         // This part would require parsing the AI's response and creating new files accordingly
-        console.log(chalk.green("File split completed."));
+        console.log(chalk.green("✅ File split completed."));
     } else {
-        console.log(chalk.yellow("File split cancelled."));
+        console.log(chalk.yellow("⏹️ File split cancelled."));
     }
 }
 
 async function addNewFile(filePath) {
-    console.log(chalk.cyan(`Adding new file: ${filePath}`));
+    console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
     await FileManager.createSubfolders(filePath);
     await FileManager.write(filePath, "");
-    console.log(chalk.green(`New file ${filePath} has been created.`));
+    console.log(chalk.green(`✅ New file ${filePath} has been created.`));
 }
 
 async function createMissingFiles(lintOutput, projectStructure) {
@@ -403,7 +403,7 @@ async function createMissingFiles(lintOutput, projectStructure) {
 
         if (createFile) {
             await addNewFile(filePath);
-            console.log(chalk.green(`Created missing file: ${filePath}`));
+            console.log(chalk.green(`✅ Created missing file: ${filePath}`));
             const generatedContent = await CodeGenerator.generate("", "", filePath, projectStructure);
             await FileManager.write(filePath, generatedContent);
         }
@@ -411,7 +411,7 @@ async function createMissingFiles(lintOutput, projectStructure) {
 }
 
 async function optimizeAndRefactorFile(filePath, projectStructure) {
-    console.log(chalk.cyan(`Optimizing and refactoring ${filePath}...`));
+    console.log(chalk.cyan(`🔄 Optimizing and refactoring ${filePath}...`));
     const fileContent = await FileManager.read(filePath);
     const prompt = `
 Please optimize and refactor the following code from ${filePath}:
@@ -439,16 +439,16 @@ Provide the optimized and refactored code without explanations.
     });
 
     await FileManager.write(filePath, response.content[0].text);
-    console.log(chalk.green(`${filePath} has been optimized and refactored.`));
+    console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
 }
 
 async function main() {
-    console.log(chalk.blue("Welcome to CodeCraftAI!"));
+    console.log(chalk.blue("👋 Welcome to CodeCraftAI!"));
 
     const readmePath = path.join(process.cwd(), "README.md");
     let readme = await FileManager.read(readmePath);
     if (!readme) {
-        console.error(chalk.red("README.md not found or unable to read."));
+        console.error(chalk.red("❌ README.md not found or unable to read."));
         return;
     }
 
@@ -458,31 +458,31 @@ async function main() {
         const { action } = await UserInterface.promptForAction();
 
         switch (action) {
-            case "Process files": {
+            case "🔧 Process files": {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
                 await processFiles(selectedFiles, readme, projectStructure);
-                console.log(chalk.green("\nCodeCraftAI has successfully generated/updated your project files."));
+                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
                 break;
             }
-            case "Add a new file": {
+            case "➕ Add a new file": {
                 const { newFile } = await UserInterface.promptForNewFile();
                 if (newFile) {
                     await addNewFile(path.join(process.cwd(), newFile));
                 }
                 break;
             }
-            case "Update README.md": {
-                console.log(chalk.cyan("Updating README.md with new design ideas and considerations..."));
+            case "📝 Update README.md": {
+                console.log(chalk.cyan("📝 Updating README.md with new design ideas and considerations..."));
                 const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
                 await FileManager.write(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
             }
-            case "Optimize project structure":
+            case "🔍 Optimize project structure":
                 await CodeAnalyzer.optimizeProjectStructure(projectStructure);
                 break;
-            case "Run code quality checks": {
+            case "🚀 Run code quality checks": {
                 const filesToCheck = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToCheck);
                 for (const file of selectedFiles) {
@@ -493,7 +493,7 @@ async function main() {
                 }
                 break;
             }
-            case "Generate documentation": {
+            case "📚 Generate documentation": {
                 const filesToDocument = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);
                 for (const file of selectedFiles) {
@@ -502,7 +502,7 @@ async function main() {
                 }
                 break;
             }
-            case "Chat interface": {
+            case "💬 Chat interface": {
                 let chatContinue = true;
                 while (chatContinue) {
                     const result = await UserInterface.chatInterface(readme, projectStructure);
@@ -511,7 +511,7 @@ async function main() {
                 }
                 break;
             }
-            case "Optimize and refactor file": {
+            case "🔄 Optimize and refactor file": {
                 const filesToOptimize = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
                 for (const file of selectedFiles) {
@@ -519,8 +519,8 @@ async function main() {
                 }
                 break;
             }
-            case "Exit":
-                console.log(chalk.yellow("Thanks for using CodeCraftAI. See you next time!"));
+            case "🚪 Exit":
+                console.log(chalk.yellow("👋 Thanks for using CodeCraftAI. See you next time!"));
                 continueExecution = false;
                 break;
         }
@@ -528,5 +528,5 @@ async function main() {
 }
 
 main().catch((error) => {
-    console.error(chalk.red("An error occurred:"), error.message);
+    console.error(chalk.red("❌ An error occurred:"), error.message);
 });
