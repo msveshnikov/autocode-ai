@@ -284,50 +284,6 @@ Provide the suggestions in a structured format.
     return response.content[0].text;
 }
 
-async function generateApiDocumentation() {
-    console.log(chalk.cyan("Generating API documentation..."));
-    const files = await getFilesToProcess();
-    let apiDocs = "# API Documentation\n\n";
-
-    for (const file of files) {
-        const content = await readFile(file);
-        const fileApiDocs = await generateFileApiDocs(file, content);
-        apiDocs += fileApiDocs + "\n\n";
-    }
-
-    const apiDocsPath = path.join(process.cwd(), "API_DOCUMENTATION.md");
-    await writeFile(apiDocsPath, apiDocs);
-    console.log(chalk.green("API documentation generated."));
-}
-
-async function generateFileApiDocs(filePath, content) {
-    const prompt = `
-Generate API documentation for the following file:
-
-File: ${filePath}
-
-Content:
-${content}
-
-Please provide API documentation for the public functions, classes, and methods in this file. Include:
-1. Function/method signatures
-2. Parameter descriptions
-3. Return value descriptions
-4. Brief description of functionality
-5. Usage examples (if applicable)
-
-Format the documentation in Markdown.
-`;
-
-    const response = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20240620",
-        max_tokens: 8192,
-        messages: [{ role: "user", content: prompt }],
-    });
-
-    return response.content[0].text;
-}
-
 async function detectSecurityVulnerabilities() {
     console.log(chalk.cyan("Detecting security vulnerabilities..."));
     try {
@@ -400,7 +356,6 @@ async function main() {
                 "Update README.md",
                 "Analyze project structure",
                 "Optimize project structure",
-                "Generate API documentation",
                 "Detect security vulnerabilities",
                 "Run code quality checks",
                 "Generate documentation",
@@ -438,9 +393,6 @@ async function main() {
                 break;
             case "Optimize project structure":
                 await optimizeProjectStructure();
-                break;
-            case "Generate API documentation":
-                await generateApiDocumentation();
                 break;
             case "Detect security vulnerabilities":
                 await detectSecurityVulnerabilities();

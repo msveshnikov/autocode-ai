@@ -8,7 +8,6 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Automatic code generation based on README.md instructions
 -   Utilizes Claude 3.5 Sonnet API for intelligent code generation
 -   Incremental project building
--   Easy installation and execution using npx
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Intelligent project structure analysis and optimization
@@ -43,8 +42,7 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 -   ES6 imports and async/await syntax
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
 -   Exclude non-source files from processing (csv, png, binary, svg, etc)
--   Ask user before generating documentation or quality check
--   Automatic package installation via npm install
+-   Detect missing files/references and ask user confirmation to create them (suggest folder and name by AI)
 -   Adherence to DRY, KISS, and SRP principles
 
 ## Design Ideas and Considerations
