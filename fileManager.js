@@ -16,6 +16,7 @@ const FileManager = {
 
     async write(filePath, content) {
         try {
+            await this.createSubfolders(filePath);
             await fs.writeFile(filePath, content, "utf8");
             console.log(chalk.green(`✅ File ${filePath} has been updated.`));
         } catch (error) {

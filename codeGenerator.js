@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import chalk from "chalk";
 import inquirer from "inquirer";
-import fs from "fs/promises";
 import path from "path";
 import FileManager from "./fileManager.js";
 
@@ -134,15 +133,9 @@ Please provide your suggestions in the following Markdown format:
         const originalDir = path.dirname(originalFilePath);
 
         for (const [fileName, content] of Object.entries(files)) {
-            let filePath;
-            if (fileName === path.basename(originalFilePath)) {
-                filePath = originalFilePath;
-            } else {
-                filePath = path.join(originalDir, fileName);
-            }
-
-            await fs.mkdir(path.dirname(filePath), { recursive: true });
-            await fs.writeFile(filePath, content);
+            const filePath =
+                fileName === path.basename(originalFilePath) ? originalFilePath : path.join(originalDir, fileName);
+            await FileManager.write(filePath, content);
             console.log(chalk.green(`✅ Saved file: ${filePath}`));
         }
     },
@@ -175,7 +168,8 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write(filePath, response.content[0].text);
+        const optimizedCode = response.content[0].text;
+        await FileManager.write(filePath, optimizedCode);
         console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
     },
 };
