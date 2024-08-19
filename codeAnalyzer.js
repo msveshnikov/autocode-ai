@@ -107,6 +107,7 @@ Provide the suggestions in a structured format.
         console.log(chalk.green(`📊 Code quality analysis for ${filePath}:`));
         console.log(response.content[0].text);
     },
+
     async detectMissingDependencies(projectStructure) {
         console.log(chalk.cyan("🔍 Detecting missing dependencies..."));
         const prompt = `
@@ -159,11 +160,11 @@ Provide the suggestions in a structured format.
 
     extractDependencies(content) {
         const importRegex =
-            /import\s+(?:\*\s+as\s+\w+\s+from\s+['"](.+?)['"]|{\s*[\w\s,]+\s*}\s+from\s+['"](.+?)['"]|\w+\s+from\s+['"](.+?)['"])/g;
+            /(?:import\s+(?:\*\s+as\s+\w+\s+from\s+['"](.+?)['"]|{\s*[\w\s,]+\s*}\s+from\s+['"](.+?)['"]|\w+\s+from\s+['"](.+?)['"])|lazy\(\s*\(\)\s*=>\s*import\(['"](.+?)['"]\)\s*\))/g;
         const dependencies = [];
         let match;
         while ((match = importRegex.exec(content)) !== null) {
-            const dependency = match[1] || match[2] || match[3];
+            const dependency = match[1] || match[2] || match[3] || match[4];
             dependencies.push(dependency);
         }
         return dependencies;
