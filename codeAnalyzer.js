@@ -134,6 +134,12 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
+
+        // Parse the structured results
+        const structuredResults = JSON.parse(response.content[0].text.match(/```json([\s\S]*?)```/)[1]);
+
+        // Create missing files
+        await this.createMissingFiles(structuredResults.missingFiles);
     },
 
     async analyzeDependencies(projectStructure) {
@@ -170,6 +176,17 @@ Provide the suggestions in a structured format.
         return dependencies;
     },
 
+    async createMissingFiles(missingFiles) {
+        console.log(chalk.cyan("📁 Creating missing files..."));
+        for (const filePath of missingFiles) {
+            try {
+                this.addNewFile(filePath);
+            } catch (error) {
+                console.error(chalk.red(`❌ Error creating file ${filePath}: ${error.message}`));
+            }
+        }
+    },
+
     async addNewFile(filePath) {
         console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
         await FileManager.createSubfolders(filePath);
@@ -177,7 +194,7 @@ Provide the suggestions in a structured format.
         console.log(chalk.green(`✅ New file ${filePath} has been created.`));
     },
 
-    async createMissingFiles(lintOutput, projectStructure) {
+    async createMissingFilesFromLint(lintOutput, projectStructure) {
         const missingFileRegex = /Cannot find module '(.+?)'/g;
         const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
 

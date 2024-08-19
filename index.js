@@ -79,7 +79,7 @@ async function main() {
                     const lintOutput = await CodeAnalyzer.runLintChecks(file);
                     if (lintOutput) {
                         await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
-                        await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
+                        await CodeAnalyzer.createMissingFilesFromLint(lintOutput, projectStructure);
                     }
                 }
                 break;
