@@ -182,6 +182,10 @@ Provide the optimized and refactored code without explanations.
 
 async function main() {
     console.log(chalk.blue("👋 Welcome to CodeCraftAI!"));
+    if (!process.env.CLAUDE_KEY) {
+        console.log(chalk.red("Please set up CLAUDE_KEY variable"));
+        return;
+    }
 
     const readmePath = path.join(process.cwd(), "README.md");
     let readme = await FileManager.read(readmePath);
@@ -231,6 +235,10 @@ async function main() {
                 }
                 break;
             }
+            case "📚 Generate project documentation":
+                await DocumentationGenerator.generateProjectDocumentation(projectStructure);
+                break;
+
             case "📚 Generate documentation": {
                 const filesToDocument = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);

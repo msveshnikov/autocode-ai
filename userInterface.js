@@ -20,6 +20,7 @@ const UserInterface = {
                 "🔍 Optimize project structure",
                 "🚀 Run code quality checks",
                 "📚 Generate documentation",
+                "📚 Generate project documentation",
                 "🔄 Optimize and refactor file",
                 "💬 Chat interface",
                 "🚪 Exit",
