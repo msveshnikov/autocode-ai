@@ -2,7 +2,6 @@
 
 import path from "path";
 import chalk from "chalk";
-import inquirer from "inquirer";
 
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
@@ -21,35 +20,6 @@ async function processFiles(files, readme, projectStructure) {
 
         if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
             await CodeGenerator.splitLargeFile(filePath, generatedContent, projectStructure);
-        }
-    }
-}
-
-async function addNewFile(filePath) {
-    console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
-    await FileManager.createSubfolders(filePath);
-    await FileManager.write(filePath, "");
-    console.log(chalk.green(`✅ New file ${filePath} has been created.`));
-}
-
-async function createMissingFiles(lintOutput, projectStructure) {
-    const missingFileRegex = /Cannot find module '(.+?)'/g;
-    const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
-
-    for (const file of missingFiles) {
-        const filePath = path.join(process.cwd(), `${file}.js`);
-        const { createFile } = await inquirer.prompt({
-            type: "confirm",
-            name: "createFile",
-            message: `Do you want to create the missing file: ${filePath}?`,
-            default: true,
-        });
-
-        if (createFile) {
-            await addNewFile(filePath);
-            console.log(chalk.green(`✅ Created missing file: ${filePath}`));
-            const generatedContent = await CodeGenerator.generate("", "", filePath, projectStructure);
-            await FileManager.write(filePath, generatedContent);
         }
     }
 }
@@ -84,7 +54,7 @@ async function main() {
             case "➕ Add a new file": {
                 const { newFile } = await UserInterface.promptForNewFile();
                 if (newFile) {
-                    await addNewFile(path.join(process.cwd(), newFile));
+                    await CodeAnalyzer.addNewFile(path.join(process.cwd(), newFile));
                 }
                 break;
             }
@@ -108,7 +78,7 @@ async function main() {
                     if (file.includes("package.json")) continue;
                     const lintOutput = await CodeAnalyzer.runLintChecks(file);
                     await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
-                    await createMissingFiles(lintOutput, projectStructure);
+                    await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
                 }
                 break;
             }

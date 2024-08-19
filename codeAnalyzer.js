@@ -4,6 +4,9 @@ import { promisify } from "util";
 import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
+import CodeGenerator from "./codeGenerator.js";
+import path from "path";
+import inquirer from "inquirer";
 
 const execAsync = promisify(exec);
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
@@ -155,6 +158,35 @@ Provide the results in a structured format.
             dependencies.push(dependency);
         }
         return dependencies;
+    },
+
+    async addNewFile(filePath) {
+        console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
+        await FileManager.createSubfolders(filePath);
+        await FileManager.write(filePath, "");
+        console.log(chalk.green(`✅ New file ${filePath} has been created.`));
+    },
+
+    async createMissingFiles(lintOutput, projectStructure) {
+        const missingFileRegex = /Cannot find module '(.+?)'/g;
+        const missingFiles = [...lintOutput.matchAll(missingFileRegex)].map((match) => match[1]);
+
+        for (const file of missingFiles) {
+            const filePath = path.join(process.cwd(), `${file}.js`);
+            const { createFile } = await inquirer.prompt({
+                type: "confirm",
+                name: "createFile",
+                message: `Do you want to create the missing file: ${filePath}?`,
+                default: true,
+            });
+
+            if (createFile) {
+                await this.addNewFile(filePath);
+                console.log(chalk.green(`✅ Created missing file: ${filePath}`));
+                const generatedContent = await CodeGenerator.generate("", "", filePath, projectStructure);
+                await FileManager.write(filePath, generatedContent);
+            }
+        }
     },
 };
 
