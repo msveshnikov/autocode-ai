@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import path from "path";
-import Anthropic from "@anthropic-ai/sdk";
 import chalk from "chalk";
 import inquirer from "inquirer";
 
@@ -11,8 +10,6 @@ import CodeGenerator from "./codeGenerator.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import UserInterface from "./userInterface.js";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
 async function processFiles(files, readme, projectStructure) {
     for (const file of files) {
@@ -55,38 +52,6 @@ async function createMissingFiles(lintOutput, projectStructure) {
             await FileManager.write(filePath, generatedContent);
         }
     }
-}
-
-async function optimizeAndRefactorFile(filePath, projectStructure) {
-    console.log(chalk.cyan(`🔄 Optimizing and refactoring ${filePath}...`));
-    const fileContent = await FileManager.read(filePath);
-    const prompt = `
-Please optimize and refactor the following code from ${filePath}:
-
-${fileContent}
-
-Project structure:
-${JSON.stringify(projectStructure, null, 2)}
-
-Focus on:
-1. Improving code efficiency
-2. Enhancing readability
-3. Applying design patterns where appropriate
-4. Reducing code duplication
-5. Improving overall code structure
-6. Ensuring consistency with the project structure
-
-Provide the optimized and refactored code without explanations.
-`;
-
-    const response = await anthropic.messages.create({
-        model: CONFIG.anthropicModel,
-        max_tokens: CONFIG.maxTokens,
-        messages: [{ role: "user", content: prompt }],
-    });
-
-    await FileManager.write(filePath, response.content[0].text);
-    console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
 }
 
 async function main() {
@@ -173,7 +138,7 @@ async function main() {
                 const filesToOptimize = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
                 for (const file of selectedFiles) {
-                    await optimizeAndRefactorFile(file, projectStructure);
+                    await CodeGenerator.optimizeAndRefactorFile(file, projectStructure);
                 }
                 break;
             }
