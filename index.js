@@ -133,6 +133,9 @@ async function main() {
             case "🔍 Optimize project structure":
                 await CodeAnalyzer.optimizeProjectStructure(projectStructure);
                 break;
+            case "🔍 Detect missing dependencies":
+                await CodeAnalyzer.detectMissingDependencies(projectStructure);
+                break;
             case "🚀 Run code quality checks": {
                 const filesToCheck = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToCheck);
@@ -171,6 +174,14 @@ async function main() {
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
                 for (const file of selectedFiles) {
                     await optimizeAndRefactorFile(file, projectStructure);
+                }
+                break;
+            }
+            case "🤔 Analyze code quality": {
+                const filesToOptimize = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
+                for (const file of selectedFiles) {
+                    await CodeAnalyzer.analyzeCodeQuality(file);
                 }
                 break;
             }
