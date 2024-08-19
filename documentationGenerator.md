@@ -2,84 +2,108 @@
 
 ## Overview
 
-This file contains the `DocumentationGenerator` module, which is responsible for generating documentation for code files in a project. It uses the Anthropic API to generate comprehensive documentation in Markdown format.
+`DocumentationGenerator.js` is a module responsible for generating documentation for individual code files and the entire project. It uses the Anthropic AI API to analyze code and create comprehensive documentation in Markdown format.
 
-The `DocumentationGenerator` is part of a larger project that includes code analysis, generation, and file management components. It plays a crucial role in automating the documentation process for the entire project.
+This module is part of a larger project that includes code analysis, generation, and file management components. It plays a crucial role in maintaining up-to-date and accurate documentation for the codebase.
 
 ## Dependencies
 
 -   `chalk`: For colorful console output
--   `path`: For handling file paths
--   `@anthropic-ai/sdk`: For interacting with the Anthropic API
--   `./config.js`: For accessing configuration settings
--   `./fileManager.js`: For file read/write operations
+-   `path`: For file path manipulation
+-   `@anthropic-ai/sdk`: Anthropic AI API client
+-   `./config.js`: Project configuration
+-   `./fileManager.js`: File read/write operations
 
-## Module: DocumentationGenerator
+## Main Object: DocumentationGenerator
 
 ### Methods
 
-#### `generate(filePath, content, projectStructure)`
+#### 1. generate(filePath, content, projectStructure)
 
-Generates documentation for a given code file.
+Generates documentation for a single code file.
 
-##### Parameters
+**Parameters:**
 
--   `filePath` (string): The path to the code file for which documentation is being generated.
--   `content` (string): The content of the code file.
--   `projectStructure` (object): An object representing the structure of the project.
+-   `filePath` (string): Path to the file being documented
+-   `content` (string): Content of the file
+-   `projectStructure` (object): Structure of the entire project
 
-##### Returns
+**Functionality:**
 
--   (Promise): A promise that resolves when the documentation has been generated and saved.
+1. Logs the start of documentation generation for the file
+2. Constructs the output file path for the documentation
+3. Creates a prompt for the Anthropic AI model
+4. Sends the prompt to the AI model and receives the response
+5. Writes the generated documentation to a Markdown file
+6. Logs the completion of documentation generation
 
-##### Process
-
-1. Logs the start of the documentation generation process.
-2. Constructs the path for the output documentation file (`.md` extension).
-3. Prepares a prompt for the Anthropic API, including the file path, content, and project structure.
-4. Sends a request to the Anthropic API to generate the documentation.
-5. Writes the generated documentation to the output file.
-6. Logs the successful completion of the documentation generation.
-
-##### Error Handling
-
-The method doesn't explicitly handle errors. It's recommended to implement try-catch blocks or error handling mechanisms in the calling code.
-
-## Usage Example
+**Usage Example:**
 
 ```javascript
-import DocumentationGenerator from "./documentationGenerator.js";
-
-const filePath = "./src/example.js";
-const content = `
-function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-`;
-const projectStructure = {
-    src: {
-        "example.js": null,
-    },
-};
-
-await DocumentationGenerator.generate(filePath, content, projectStructure);
+await DocumentationGenerator.generate("codeAnalyzer.js", "// Content of codeAnalyzer.js", projectStructure);
 ```
 
-## Notes
+#### 2. generateProjectDocumentation(projectStructure)
 
--   The module relies on an environment variable `CLAUDE_KEY` for Anthropic API authentication.
--   The `CONFIG` object is imported from `./config.js` and is used to specify the Anthropic model and maximum tokens for the API request.
--   The generated documentation is saved in the same directory as the source file, with the same name but a `.md` extension.
--   The module uses colorful console output to provide visual feedback on the documentation generation process.
+Generates comprehensive documentation for the entire project.
+
+**Parameters:**
+
+-   `projectStructure` (object): Structure of the entire project
+
+**Functionality:**
+
+1. Logs the start of project-wide documentation generation
+2. Reads the content of README.md
+3. Retrieves the content of all files in the project
+4. Creates a prompt for the Anthropic AI model
+5. Sends the prompt to the AI model and receives the response
+6. Writes the generated project documentation to DOCUMENTATION.md
+7. Logs the completion of project documentation generation
+
+**Usage Example:**
+
+```javascript
+await DocumentationGenerator.generateProjectDocumentation(projectStructure);
+```
+
+#### 3. getFilesContent(projectStructure)
+
+Helper method to retrieve the content of all files in the project.
+
+**Parameters:**
+
+-   `projectStructure` (object): Structure of the entire project
+
+**Returns:**
+
+-   An object with file paths as keys and file contents as values
+
+**Functionality:**
+
+1. Iterates through the project structure
+2. Reads the content of each file
+3. Returns an object containing all file contents
 
 ## Integration with Project
 
-This module is an integral part of the project's documentation automation system. It works in conjunction with:
+`DocumentationGenerator.js` is designed to work alongside other modules in the project:
 
--   `codeAnalyzer.js`: Likely provides code analysis that could be used to enhance documentation.
--   `codeGenerator.js`: May use the generated documentation for code generation tasks.
--   `fileManager.js`: Used for reading and writing files.
--   `index.js`: Probably the main entry point that coordinates the use of this and other modules.
--   `userInterface.js`: Might provide a user interface for initiating documentation generation.
+-   It uses `FileManager.js` for reading and writing files
+-   It references `config.js` for configuration settings
+-   It can be called by `index.js` or other modules to generate documentation as needed
 
-The `DocumentationGenerator` module contributes to the project by automating the creation of detailed, context-aware documentation for code files, enhancing the overall development and maintenance process.
+The module contributes to the project's goal of maintaining comprehensive and up-to-date documentation for both individual files and the overall project structure.
+
+## Error Handling
+
+While not explicitly implemented in the provided code, it's recommended to add error handling for API calls, file operations, and other potential points of failure to ensure robust operation of the documentation generation process.
+
+## Future Improvements
+
+1. Add support for different documentation styles or templates
+2. Implement caching to avoid regenerating documentation for unchanged files
+3. Add options for customizing the AI model's behavior or output format
+4. Integrate with version control systems to track documentation changes
+
+By leveraging AI-powered documentation generation, this module significantly reduces the manual effort required to maintain high-quality project documentation, ensuring that it remains current with the evolving codebase.

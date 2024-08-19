@@ -2,76 +2,138 @@
 
 ## Overview
 
-`codeGenerator.js` is a core component of the CodeCraftAI project, responsible for generating and updating code files based on project requirements and structure. It utilizes the Anthropic AI model to generate code and update README files intelligently.
-
-This module exports a `CodeGenerator` object with two main methods: `generate` for code generation and `updateReadme` for README file updates.
+`CodeGenerator.js` is a core module in the project that handles the generation and modification of code files. It interacts with the Anthropic API to leverage AI for code generation, README updates, file splitting, and code optimization. This module is designed to work within the project structure, considering other components like `FileManager` and `config.js`.
 
 ## Dependencies
 
--   `@anthropic-ai/sdk`: Used to interact with the Anthropic AI model.
--   `./config.js`: Imports configuration settings for the Anthropic model.
+-   `@anthropic-ai/sdk`: For interacting with the Anthropic API
+-   `chalk`: For console text styling
+-   `inquirer`: For user prompts
+-   `path`: For file path operations
+-   `FileManager`: Custom module for file operations
+-   `CONFIG`: Configuration object imported from `config.js`
 
-## CodeGenerator Object
+## Main Object: CodeGenerator
 
 ### Methods
 
 #### 1. generate(readme, currentCode, fileName, projectStructure)
 
-Generates or updates a code file based on the provided README content, current code, file name, and project structure.
+Generates or updates a code file based on README instructions and project structure.
 
 **Parameters:**
 
--   `readme` (string): Content of the README.md file.
--   `currentCode` (string): Current content of the file to be generated/updated (if any).
--   `fileName` (string): Name of the file to be generated or updated.
--   `projectStructure` (object): JSON representation of the project file structure.
+-   `readme` (string): Content of the README.md file
+-   `currentCode` (string): Current content of the file (if exists)
+-   `fileName` (string): Name of the file to generate/update
+-   `projectStructure` (object): Current project structure
 
 **Returns:**
 
--   Promise<string>: The generated or updated code content.
+-   Promise<string>: Generated or updated code content
 
 **Usage Example:**
 
 ```javascript
-const newCode = await CodeGenerator.generate(readmeContent, existingCode, "example.js", projectStructure);
+const newCode = await CodeGenerator.generate(readmeContent, existingCode, "index.js", projectStructure);
 ```
 
 #### 2. updateReadme(readme, projectStructure)
 
-Updates the README.md file with new design ideas and considerations based on the current content and project structure.
+Updates the README.md file with new design ideas based on the current project structure.
 
 **Parameters:**
 
--   `readme` (string): Current content of the README.md file.
--   `projectStructure` (object): JSON representation of the project file structure.
+-   `readme` (string): Current content of the README.md file
+-   `projectStructure` (object): Current project structure
 
 **Returns:**
 
--   Promise<string>: The updated README.md content.
+-   Promise<string>: Updated README content
 
 **Usage Example:**
 
 ```javascript
-const updatedReadme = await CodeGenerator.updateReadme(currentReadmeContent, projectStructure);
+const updatedReadme = await CodeGenerator.updateReadme(currentReadme, projectStructure);
 ```
 
-## Internal Functionality
+#### 3. splitLargeFile(filePath, content, projectStructure)
 
-Both methods use the Anthropic AI model to generate content. They construct prompts that include the necessary context (README content, current code, file name, project structure) and send these to the AI model for processing.
+Splits a large file into smaller, more manageable parts.
 
-The AI responses are then returned as the generated code or updated README content.
+**Parameters:**
 
-## Configuration
+-   `filePath` (string): Path of the file to split
+-   `content` (string): Content of the file to split
+-   `projectStructure` (object): Current project structure
 
-The module uses configuration settings imported from `./config.js`, including:
+**Returns:**
 
--   `CONFIG.anthropicModel`: Specifies the Anthropic model to use.
--   `CONFIG.maxTokens`: Sets the maximum number of tokens for the AI response.
+-   Promise<void>
 
-## Environment Variables
+**Usage Example:**
 
-The module requires the `CLAUDE_KEY` environment variable to be set with the Anthropic API key.
+```javascript
+await CodeGenerator.splitLargeFile("/path/to/large/file.js", fileContent, projectStructure);
+```
 
-## Project Context
+#### 4. parseSplitSuggestion(suggestion)
 
-Within the CodeCraftAI project structure, `codeGenerator.js` works alongside other components like `codeAnalyzer.js`, `documentationGenerator.js`, and `fileManager.js` to provide a comprehensive code generation and project management solution.
+Parses the AI-generated file splitting suggestion.
+
+**Parameters:**
+
+-   `suggestion` (string): AI-generated splitting suggestion
+
+**Returns:**
+
+-   object: Parsed files with their contents
+
+#### 5. saveFiles(originalFilePath, files)
+
+Saves the split files to the file system.
+
+**Parameters:**
+
+-   `originalFilePath` (string): Path of the original file
+-   `files` (object): Object containing file names and their contents
+
+**Returns:**
+
+-   Promise<void>
+
+#### 6. optimizeAndRefactorFile(filePath, projectStructure)
+
+Optimizes and refactors a given file using AI suggestions.
+
+**Parameters:**
+
+-   `filePath` (string): Path of the file to optimize
+-   `projectStructure` (object): Current project structure
+
+**Returns:**
+
+-   Promise<void>
+
+**Usage Example:**
+
+```javascript
+await CodeGenerator.optimizeAndRefactorFile("/path/to/file.js", projectStructure);
+```
+
+## Integration with Project Structure
+
+`CodeGenerator.js` works closely with other modules in the project:
+
+-   It uses `FileManager` for reading and writing files.
+-   It relies on `config.js` for configuration settings like `maxFileLines` and API model details.
+-   It's likely called by `index.js` or `userInterface.js` to perform code generation tasks.
+-   It considers the entire project structure when generating or modifying code to ensure consistency and avoid duplication.
+
+## Error Handling
+
+The module uses `console.log` with `chalk` to provide colorful feedback about its operations. However, it doesn't explicitly handle errors, so it's recommended to implement try-catch blocks when using these methods in other parts of the application.
+
+## Note on API Usage
+
+This module requires an Anthropic API key to be set in the environment variable `CLAUDE_KEY`. Ensure this is properly set before using the CodeGenerator functions.

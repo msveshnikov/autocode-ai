@@ -2,89 +2,162 @@
 
 ## Overview
 
-`CodeAnalyzer.js` is a module that provides functionality for analyzing and improving code quality within a project. It offers methods for running lint checks, fixing lint errors, and optimizing the project structure. This module integrates with ESLint for code quality checks and uses the Anthropic AI API for automated code fixes and project structure optimization suggestions.
+`CodeAnalyzer.js` is a core module in the project that provides various code analysis and optimization functionalities. It leverages ESLint for linting, uses the Anthropic AI API for advanced code analysis and suggestions, and integrates with other project modules like `FileManager` and `CodeGenerator`.
 
-## Dependencies
+This module is responsible for:
 
--   `chalk`: For colorful console output
--   `child_process`: To execute shell commands
--   `util`: For promisifying the `exec` function
--   `@anthropic-ai/sdk`: To interact with the Anthropic AI API
--   `./config.js`: For configuration settings
--   `./fileManager.js`: For file read/write operations
+-   Running lint checks
+-   Fixing lint errors
+-   Optimizing project structure
+-   Analyzing code quality
+-   Detecting missing dependencies
+-   Creating missing files
 
-## Methods
+## Functions
 
-### `runLintChecks(filePath)`
+### runLintChecks(filePath)
 
-Runs ESLint on a specified file to check for code quality issues.
+Runs ESLint on the specified file.
 
-#### Parameters
+**Parameters:**
 
--   `filePath` (string): The path to the file to be linted
+-   `filePath` (string): Path to the file to be linted
 
-#### Returns
+**Returns:**
 
--   Promise<string>: A promise that resolves with the lint output (warnings or errors) or rejects with an error message
+-   Promise<string>: ESLint output (warnings or errors)
 
-#### Usage Example
+**Example:**
 
 ```javascript
 const lintOutput = await CodeAnalyzer.runLintChecks("./src/index.js");
-console.log(lintOutput);
 ```
 
-### `fixLintErrors(filePath, lintOutput, projectStructure)`
+### fixLintErrors(filePath, lintOutput, projectStructure)
 
-Attempts to automatically fix lint errors in a file using the Anthropic AI API.
+Attempts to fix lint errors in the specified file using AI assistance.
 
-#### Parameters
+**Parameters:**
 
--   `filePath` (string): The path to the file with lint errors
--   `lintOutput` (string): The output from the ESLint check
--   `projectStructure` (object): The structure of the project
+-   `filePath` (string): Path to the file with lint errors
+-   `lintOutput` (string): ESLint output containing errors
+-   `projectStructure` (object): Current project structure
 
-#### Returns
-
--   Promise<void>
-
-#### Usage Example
+**Example:**
 
 ```javascript
-const lintOutput = await CodeAnalyzer.runLintChecks("./src/index.js");
 await CodeAnalyzer.fixLintErrors("./src/index.js", lintOutput, projectStructure);
 ```
 
-### `optimizeProjectStructure(projectStructure)`
+### optimizeProjectStructure(projectStructure)
 
-Analyzes the current project structure and provides optimization suggestions using the Anthropic AI API.
+Provides suggestions for optimizing the project structure using AI analysis.
 
-#### Parameters
+**Parameters:**
 
--   `projectStructure` (object): The current structure of the project
+-   `projectStructure` (object): Current project structure
 
-#### Returns
-
--   Promise<void>
-
-#### Usage Example
+**Example:**
 
 ```javascript
 await CodeAnalyzer.optimizeProjectStructure(projectStructure);
 ```
 
-## Role in the Project
+### analyzeCodeQuality(filePath)
 
-`CodeAnalyzer.js` plays a crucial role in maintaining and improving code quality within the project. It works alongside other modules like `fileManager.js` and `config.js` to provide a comprehensive code analysis and optimization solution. This module is particularly useful for:
+Analyzes the code quality of a specific file and provides improvement suggestions.
 
-1. Identifying code quality issues through lint checks
-2. Automatically fixing common code style and quality problems
-3. Providing insights on how to improve the overall project structure
+**Parameters:**
 
-By leveraging AI capabilities, it offers intelligent suggestions for code improvements and project organization, which can significantly enhance the development process and code maintainability.
+-   `filePath` (string): Path to the file to be analyzed
 
-## Notes
+**Example:**
 
--   Ensure that ESLint is properly configured for your project before using the `runLintChecks` method.
--   The `fixLintErrors` and `optimizeProjectStructure` methods rely on the Anthropic AI API, so make sure you have a valid API key set in the environment variables.
--   Always review the AI-suggested changes before applying them to your codebase.
+```javascript
+await CodeAnalyzer.analyzeCodeQuality("./src/index.js");
+```
+
+### detectMissingDependencies(projectStructure)
+
+Detects missing dependencies and files in the project.
+
+**Parameters:**
+
+-   `projectStructure` (object): Current project structure
+
+**Example:**
+
+```javascript
+await CodeAnalyzer.detectMissingDependencies(projectStructure);
+```
+
+### analyzeDependencies(projectStructure)
+
+Analyzes dependencies across all files in the project.
+
+**Parameters:**
+
+-   `projectStructure` (object): Current project structure
+
+**Returns:**
+
+-   Promise<object>: Dependency graph of the project
+
+**Example:**
+
+```javascript
+const dependenciesGraph = await CodeAnalyzer.analyzeDependencies(projectStructure);
+```
+
+### extractDependencies(content)
+
+Extracts import statements from file content.
+
+**Parameters:**
+
+-   `content` (string): File content
+
+**Returns:**
+
+-   Array<string>: List of extracted dependencies
+
+**Example:**
+
+```javascript
+const dependencies = CodeAnalyzer.extractDependencies(fileContent);
+```
+
+### addNewFile(filePath)
+
+Creates a new file at the specified path.
+
+**Parameters:**
+
+-   `filePath` (string): Path where the new file should be created
+
+**Example:**
+
+```javascript
+await CodeAnalyzer.addNewFile("./src/newModule.js");
+```
+
+### createMissingFiles(lintOutput, projectStructure)
+
+Creates missing files detected from lint errors, with user confirmation.
+
+**Parameters:**
+
+-   `lintOutput` (string): ESLint output containing errors
+-   `projectStructure` (object): Current project structure
+
+**Example:**
+
+```javascript
+await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
+```
+
+## Usage in the Project
+
+`CodeAnalyzer.js` plays a crucial role in maintaining code quality and project structure. It is likely used by other modules like `index.js` or `userInterface.js` to provide code analysis features to the user. The module interacts closely with `FileManager.js` for file operations and `CodeGenerator.js` for generating content for new files.
+
+The AI-powered analysis features make this module particularly powerful for providing intelligent suggestions and automating code improvements.
