@@ -107,25 +107,24 @@ Provide the suggestions in a structured format.
         console.log(chalk.green(`📊 Code quality analysis for ${filePath}:`));
         console.log(response.content[0].text);
     },
-
     async detectMissingDependencies(projectStructure) {
         console.log(chalk.cyan("🔍 Detecting missing dependencies..."));
         const prompt = `
-Analyze the following project structure and detect any missing dependencies or files:
-
-${JSON.stringify(projectStructure)}
-
-Dependencies graph:
-
-${JSON.stringify(await this.analyzeDependencies(projectStructure))}
-
-Please identify:
-1. Missing npm packages based on import statements
-2. Missing files that are referenced but not present in the project structure
-3. Potential circular dependencies
-
-Provide the results in a structured format.
-`;
+    Analyze the following project structure and detect any missing dependencies or files:
+    
+    ${JSON.stringify(projectStructure, null, 2)}
+    
+    Dependencies graph:
+    
+    ${JSON.stringify(await this.analyzeDependencies(projectStructure), null, 2)}
+    
+    Please identify:
+    1. Missing npm packages based on import statements
+    2. Missing files that are referenced but not present in the project structure
+    3. Potential circular dependencies
+    
+    Provide the results in a structured format.
+    `;
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
@@ -137,14 +136,24 @@ Provide the results in a structured format.
     },
 
     async analyzeDependencies(projectStructure) {
-        const files = Object.keys(projectStructure);
         const dependencies = {};
-        for (const file of files) {
-            const content = await FileManager.read(file);
-            const fileDependencies = this.extractDependencies(content);
-            dependencies[file] = fileDependencies;
+        for (const [key, value] of Object.entries(projectStructure)) {
+            if (typeof value === "object" && value !== null) {
+                // It's a directory
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    if (subValue === null) {
+                        // It's a file
+                        const filePath = `${key}/${subKey}`;
+                        const content = await FileManager.read(filePath);
+                        dependencies[filePath] = this.extractDependencies(content);
+                    }
+                }
+            } else if (value === null) {
+                // It's a file in the root directory
+                const content = await FileManager.read(key);
+                dependencies[key] = this.extractDependencies(content);
+            }
         }
-
         return dependencies;
     },
 
