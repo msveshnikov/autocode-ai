@@ -2,6 +2,8 @@
 
 CodeCraftAI is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. CodeCraftAI was bootstrapped by itself from one simple prompt.
 
+![alt text](image.png)
+
 ## Features
 
 -   NodeJS-based console application

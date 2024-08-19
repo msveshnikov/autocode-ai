@@ -136,10 +136,10 @@ Provide the suggestions in a structured format.
         console.log(response.content[0].text);
 
         // Parse the structured results
-        const structuredResults = JSON.parse(response.content[0].text.match(/```json([\s\S]*?)```/)[1]);
+        const structuredResults = JSON.parse(response.content[0].text.match(/```json([\s\S]*?)```/)?.[1]);
 
         // Create missing files
-        await this.createMissingFiles(structuredResults.missingFiles);
+        await this.createMissingFiles(structuredResults?.missingFiles);
     },
 
     async analyzeDependencies(projectStructure) {
