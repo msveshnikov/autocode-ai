@@ -180,7 +180,7 @@ Provide the suggestions in a structured format.
         console.log(chalk.cyan("📁 Creating missing files..."));
         for (const filePath of missingFiles) {
             try {
-                this.addNewFile(filePath);
+                this.addNewFile(filePath.endsWith(".js") ? filePath : `${filePath}.js`);
             } catch (error) {
                 console.error(chalk.red(`❌ Error creating file ${filePath}: ${error.message}`));
             }
