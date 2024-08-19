@@ -24,8 +24,7 @@ const FileManager = {
     },
 
     async createSubfolders(filePath) {
-        const dir = path.dirname(filePath);
-        await fs.mkdir(dir, { recursive: true });
+        await fs.mkdir(path.dirname(filePath), { recursive: true });
     },
 
     async getFilesToProcess() {

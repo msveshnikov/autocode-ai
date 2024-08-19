@@ -166,7 +166,7 @@ Focus on:
 5. Improving overall code structure
 6. Ensuring consistency with the project structure
 
-Provide the optimized and refactored code without explanations.
+Return the optimized and refactored code ONLY!! without explanations or comments or md formatting.
 `;
 
         const response = await anthropic.messages.create({
