@@ -77,8 +77,10 @@ async function main() {
                 for (const file of selectedFiles) {
                     if (file.includes("package.json")) continue;
                     const lintOutput = await CodeAnalyzer.runLintChecks(file);
-                    await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
-                    await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
+                    if (lintOutput) {
+                        await CodeAnalyzer.fixLintErrors(file, lintOutput, projectStructure);
+                        await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
+                    }
                 }
                 break;
             }
