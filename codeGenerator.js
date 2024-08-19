@@ -21,7 +21,7 @@ ${currentCode || "No existing code"}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Do not include any explanations or comments in your response, just provide the code.
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const response = await anthropic.messages.create({
@@ -158,6 +158,7 @@ Focus on:
 4. Reducing code duplication
 5. Improving overall code structure
 6. Ensuring consistency with the project structure
+7. Reusing functionality from other modules
 
 Return the optimized and refactored code ONLY!! without explanations or comments or md formatting.
 `;
