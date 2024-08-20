@@ -44,34 +44,24 @@ async function main() {
         const { action } = await UserInterface.promptForAction();
 
         switch (action) {
-            case "🔧 Process files": {
-                const filesToProcess = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
-                await processFiles(selectedFiles, readme, projectStructure);
-                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
-                break;
-            }
-            case "➕ Add a new file": {
-                const { newFile } = await UserInterface.promptForNewFile();
-                if (newFile) {
-                    await CodeAnalyzer.addNewFile(path.join(process.cwd(), newFile));
-                }
-                break;
-            }
-            case "📝 Update README.md": {
+            case "📝 1. Brainstorm README.md": {
                 console.log(chalk.cyan("📝 Updating README.md with new design ideas and considerations..."));
                 const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
                 await FileManager.write(readmePath, updatedReadme);
                 readme = updatedReadme;
                 break;
             }
-            case "🔍 Optimize project structure":
-                await CodeAnalyzer.optimizeProjectStructure(projectStructure);
+            case "🔧 2. Generate code": {
+                const filesToProcess = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
+                await processFiles(selectedFiles, readme, projectStructure);
+                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
                 break;
-            case "🔍 Detect missing dependencies":
+            }
+            case "🔍 3. Detect missing dependencies":
                 await CodeAnalyzer.detectMissingDependencies(projectStructure);
                 break;
-            case "🚀 Run code quality checks": {
+            case "🚀 4. Run static code quality checks": {
                 const filesToCheck = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToCheck);
                 for (const file of selectedFiles) {
@@ -84,11 +74,7 @@ async function main() {
                 }
                 break;
             }
-            case "📚 Generate project documentation":
-                await DocumentationGenerator.generateProjectDocumentation(projectStructure);
-                break;
-
-            case "📚 Generate documentation": {
+            case "📚 5. Generate documentation": {
                 const filesToDocument = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToDocument);
                 for (const file of selectedFiles) {
@@ -97,7 +83,15 @@ async function main() {
                 }
                 break;
             }
-            case "💬 Chat interface": {
+            case "🔄 6. Optimize and refactor file": {
+                const filesToOptimize = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
+                for (const file of selectedFiles) {
+                    await CodeGenerator.optimizeAndRefactorFile(file, projectStructure);
+                }
+                break;
+            }
+            case "💬 7. Chat interface": {
                 let chatContinue = true;
                 while (chatContinue) {
                     const result = await UserInterface.chatInterface(readme, projectStructure);
@@ -106,19 +100,24 @@ async function main() {
                 }
                 break;
             }
-            case "🔄 Optimize and refactor file": {
-                const filesToOptimize = await FileManager.getFilesToProcess();
-                const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
-                for (const file of selectedFiles) {
-                    await CodeGenerator.optimizeAndRefactorFile(file, projectStructure);
-                }
+            case "📚 Generate project documentation":
+                await DocumentationGenerator.generateProjectDocumentation(projectStructure);
                 break;
-            }
             case "🤔 Analyze code quality": {
                 const filesToOptimize = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToOptimize);
                 for (const file of selectedFiles) {
                     await CodeAnalyzer.analyzeCodeQuality(file);
+                }
+                break;
+            }
+            case "🔍 Optimize project structure":
+                await CodeAnalyzer.optimizeProjectStructure(projectStructure);
+                break;
+            case "➕ Add new file": {
+                const { newFile } = await UserInterface.promptForNewFile();
+                if (newFile) {
+                    await CodeAnalyzer.addNewFile(path.join(process.cwd(), newFile));
                 }
                 break;
             }
