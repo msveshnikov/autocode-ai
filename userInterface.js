@@ -51,26 +51,44 @@ const UserInterface = {
         const { input } = await inquirer.prompt({
             type: "input",
             name: "input",
-            message: "Enter your request (or 'exit' to quit):",
+            message: "Enter your suggestion (or 'exit' to quit):",
         });
 
         if (input.toLowerCase() === "exit") {
             return { continue: false, updatedReadme: readme };
         }
 
+        const filesToProcess = await FileManager.getFilesToProcess();
+        const { selectedFile } = await inquirer.prompt({
+            type: "list",
+            name: "selectedFile",
+            message: "Select a file to process with your suggestion:",
+            choices: filesToProcess,
+        });
+
+        const filePath = path.join(process.cwd(), selectedFile);
+        const fileContent = await FileManager.read(filePath);
+
         const prompt = `
-You are CodeCraftAI, an automatic coding assistant. The user has made the following request:
-
-${input}
-
-Current README.md content:
-${readme}
-
-Project structure:
-${JSON.stringify(projectStructure, null, 2)}
-
-Please provide a response to help the user with their request. If it involves coding tasks, provide specific instructions or code snippets as needed. If the request implies a new feature or requirement, suggest an appropriate addition to the README.md file. Consider the current project structure when providing suggestions or solutions.
-`;
+    You are CodeCraftAI, an automatic coding assistant. The user has made the following suggestion:
+    
+    ${input}
+    
+    For the file: ${selectedFile}
+    
+    Current file content:
+    ${fileContent}
+    
+    README.md content:
+    ${readme}
+    
+    Project structure:
+    ${JSON.stringify(projectStructure, null, 2)}
+    
+    Please provide a response to help implement the user's suggestion in the selected file. 
+    Provide specific instructions or code snippets as needed. Consider the current project structure 
+    and README content when providing suggestions or solutions.
+    `;
 
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
@@ -80,18 +98,16 @@ Please provide a response to help the user with their request. If it involves co
 
         console.log(chalk.cyan("🤖 CodeCraftAI:"), response.content[0].text);
 
-        const { updateReadme } = await inquirer.prompt({
+        const { confirmChanges } = await inquirer.prompt({
             type: "confirm",
-            name: "updateReadme",
-            message: "Would you like to update the README.md with this new requirement?",
+            name: "confirmChanges",
+            message: "Would you like to apply these changes to the file?",
             default: false,
         });
 
-        if (updateReadme) {
-            const updatedReadme = `${readme}\n\n## New Requirement\n\n${input}`;
-            await FileManager.write(path.join(process.cwd(), "README.md"), updatedReadme);
-            console.log(chalk.green("✅ README.md has been updated with the new requirement."));
-            return { continue: true, updatedReadme };
+        if (confirmChanges) {
+            await FileManager.write(filePath, response.content[0].text);
+            console.log(chalk.green(`✅ ${selectedFile} has been updated with the suggested changes.`));
         }
 
         return { continue: true, updatedReadme: readme };
