@@ -28,9 +28,8 @@ const UserInterface = {
                 "🤔 9. Analyze code quality",
                 "🔍 10. Optimize project structure",
                 "➕ 11. Add new file",
-                "🌐 12. Handle multi-language project",
-                "🤖 13. Run AI Agents",
-                "🔒 14. Security analysis",
+                "🤖 12. Run AI Agents",
+                "🔒 13. Security analysis",
                 "🚪 Exit",
             ],
         });
