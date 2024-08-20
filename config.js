@@ -25,4 +25,27 @@ export const CONFIG = {
             packageManager: "nuget",
         },
     },
+    aiAgents: {
+        sqlMigrations: {
+            name: "SQL Migrations Agent",
+            description: "Writes database migrations and type files",
+        },
+        services: {
+            name: "Services Agent",
+            description: "Creates services that interact with the database and process data",
+        },
+        apiRoutes: {
+            name: "API Routes Agent",
+            description: "Handles input validation, auth checks, and service calls for HTTP requests",
+        },
+        tester: {
+            name: "Tester Agent",
+            description: "Writes integration tests for endpoints",
+        },
+        projectManager: {
+            name: "Project Manager Agent",
+            description:
+                "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
+        },
+    },
 };

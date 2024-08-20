@@ -2,103 +2,155 @@
 
 ## Overview
 
-`userInterface.js` is a core component of the CodeCraftAI project, responsible for handling user interactions and providing a command-line interface for various project-related tasks. It utilizes the `inquirer` library for prompting users, `chalk` for console styling, and the Anthropic API for AI-assisted interactions.
+`UserInterface.js` is a core component of the CodeCraftAI project, responsible for handling user interactions and coordinating various actions within the application. It provides a command-line interface for users to interact with different features of the project, such as code generation, analysis, documentation, and more.
 
-This module exports an object `UserInterface` with methods for different user interaction scenarios, including file processing, project management, and AI-assisted chat functionality.
+This module integrates with other components of the project, including:
 
-## Dependencies
+- FileManager
+- CodeAnalyzer
+- CodeGenerator
+- DocumentationGenerator
 
--   `inquirer`: For creating interactive command-line user interfaces
--   `chalk`: For styling console output
--   `@anthropic-ai/sdk`: For integrating with Anthropic's AI models
--   `./config.js`: For accessing project configuration
--   `./fileManager.js`: For file operations
--   `path`: For handling file paths
+It also utilizes external libraries like `inquirer` for user prompts and `chalk` for colorful console output.
 
-## Methods
+## Main Object: UserInterface
 
-### promptForAction()
+The `UserInterface` object contains methods for managing user interactions and executing various actions based on user input.
+
+### Methods
+
+#### promptForAction()
 
 Prompts the user to choose an action from a list of available options.
 
-**Returns**: Promise<Object> - An object containing the user's selected action.
+**Returns:** Promise<Object> - An object containing the selected action.
 
-**Usage Example**:
-
+**Usage Example:**
 ```javascript
 const { action } = await UserInterface.promptForAction();
 ```
 
-### promptForFiles(files)
+#### promptForFiles(files)
 
-Allows the user to select multiple files from a given list for processing.
+Prompts the user to select files from a given list for processing.
 
-**Parameters**:
+**Parameters:**
+- `files` (Array): List of file names to choose from.
 
--   `files` (Array): A list of file names to choose from.
+**Returns:** Promise<Object> - An object containing the selected files.
 
-**Returns**: Promise<Object> - An object containing the array of selected files.
-
-**Usage Example**:
-
+**Usage Example:**
 ```javascript
-const { selectedFiles } = await UserInterface.promptForFiles(["file1.js", "file2.js"]);
+const filesToProcess = await FileManager.getFilesToProcess();
+const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
 ```
 
-### promptForNewFile()
+#### promptForNewFile()
 
 Prompts the user to enter the name of a new file to create.
 
-**Returns**: Promise<Object> - An object containing the name of the new file.
+**Returns:** Promise<Object> - An object containing the new file name.
 
-**Usage Example**:
-
+**Usage Example:**
 ```javascript
 const { newFile } = await UserInterface.promptForNewFile();
 ```
 
-### chatInterface(readme, projectStructure)
+#### promptForLanguage()
 
-Provides an AI-assisted chat interface for user queries and project-related tasks.
+Prompts the user to select a programming language.
 
-**Parameters**:
+**Returns:** Promise<Object> - An object containing the selected language.
 
--   `readme` (String): The current content of the README.md file.
--   `projectStructure` (Object): The current structure of the project.
-
-**Returns**: Promise<Object> - An object containing:
-
--   `continue` (Boolean): Whether to continue the chat session.
--   `updatedReadme` (String): The potentially updated README content.
-
-**Usage Example**:
-
+**Usage Example:**
 ```javascript
-const { continue, updatedReadme } = await UserInterface.chatInterface(currentReadme, projectStructure);
+const { language } = await UserInterface.promptForLanguage();
 ```
 
-## Key Features
+#### chatInterface(readme, projectStructure)
 
-1. **Action Selection**: Offers a menu of project-related actions for the user to choose from.
-2. **File Management**: Allows selection of existing files and creation of new files.
-3. **AI-Assisted Chat**: Integrates with Anthropic's AI model to provide intelligent responses to user queries.
-4. **README Management**: Offers the option to update the project's README.md file based on chat interactions.
+Initiates an interactive chat interface for the user to provide suggestions and make changes to the project.
 
-## Integration with Project
+**Parameters:**
+- `readme` (String): Content of the README.md file.
+- `projectStructure` (Object): Current project structure.
 
-This module plays a central role in the CodeCraftAI project by:
+**Returns:** Promise<Object> - An object containing whether to continue the chat and the updated README content.
 
--   Providing the main user interface for interacting with various project features.
--   Integrating with `fileManager.js` for file operations.
--   Using `config.js` for accessing project-wide configurations.
--   Serving as a bridge between the user and the AI-assisted coding features.
+**Usage Example:**
+```javascript
+const result = await UserInterface.chatInterface(readme, projectStructure);
+```
 
-## Notes
+#### extractCodeSnippet(markdown)
 
--   The module uses environment variables for API key management (`process.env.CLAUDE_KEY`).
--   It's designed to be flexible and can be easily extended with additional user interaction features.
--   The chat interface is particularly powerful, allowing for dynamic project updates and AI-assisted development tasks.
+Extracts a code snippet from a markdown string.
 
----
+**Parameters:**
+- `markdown` (String): Markdown content containing a code snippet.
 
-This documentation provides a comprehensive overview of the `userInterface.js` file, its role in the CodeCraftAI project, and how to use its various methods. It should help developers understand the module's functionality and how to integrate it into the broader project workflow.
+**Returns:** String | null - The extracted code snippet or null if not found.
+
+#### runAIAgents(projectStructure)
+
+Runs various AI agents to perform tasks on the project.
+
+**Parameters:**
+- `projectStructure` (Object): Current project structure.
+
+**Usage Example:**
+```javascript
+await UserInterface.runAIAgents(projectStructure);
+```
+
+#### processFiles(files, readme, projectStructure)
+
+Processes selected files by generating or updating their content.
+
+**Parameters:**
+- `files` (Array): List of files to process.
+- `readme` (String): Content of the README.md file.
+- `projectStructure` (Object): Current project structure.
+
+**Usage Example:**
+```javascript
+await UserInterface.processFiles(selectedFiles, readme, projectStructure);
+```
+
+#### handleAction(action, readme, readmePath, projectStructure)
+
+Handles the execution of the selected action by the user.
+
+**Parameters:**
+- `action` (String): The selected action to perform.
+- `readme` (String): Content of the README.md file.
+- `readmePath` (String): Path to the README.md file.
+- `projectStructure` (Object): Current project structure.
+
+**Returns:** Boolean - Whether to continue execution or exit the application.
+
+**Usage Example:**
+```javascript
+const continueExecution = await UserInterface.handleAction(action, readme, readmePath, projectStructure);
+```
+
+## Usage in the Project
+
+The `UserInterface` module plays a central role in the CodeCraftAI project by:
+
+1. Providing a user-friendly interface for interacting with various features.
+2. Coordinating actions between different components of the project.
+3. Managing the flow of the application based on user choices.
+4. Facilitating file selection, code generation, and project modifications.
+
+It is likely used in the main execution flow of the application, possibly in the `index.js` file, to drive the overall functionality of the CodeCraftAI tool.
+
+## Dependencies
+
+- `inquirer`: For creating interactive command-line user interfaces.
+- `chalk`: For styling console output with colors.
+- `@anthropic-ai/sdk`: For interacting with the Anthropic AI API.
+- `path`: For handling file paths.
+- Other project modules: `FileManager`, `CodeAnalyzer`, `CodeGenerator`, `DocumentationGenerator`.
+
+This module is essential for providing a seamless and interactive experience for users of the CodeCraftAI project, allowing them to leverage AI-powered code generation, analysis, and documentation features through a simple command-line interface.

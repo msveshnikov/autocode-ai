@@ -203,7 +203,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 return language;
             }
         }
-        return "javascript"; // Default to JavaScript if no match is found
+        return "javascript";
     },
 
     async generateDependencyFile(language, projectStructure) {
@@ -245,6 +245,58 @@ Return the content of the ${dependencyFileName} file ONLY!! without explanations
         const dependencyFileContent = response.content[0].text;
         await FileManager.write(dependencyFileName, dependencyFileContent);
         console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
+    },
+
+    async generateAIAgentCode(agentType, projectStructure) {
+        console.log(chalk.cyan(`🤖 Generating AI agent code for ${agentType}...`));
+
+        const prompt = `
+Please generate code for the ${agentType} AI agent based on the project structure and features described in the README.md. The agent should be able to perform its specific tasks as outlined in the README.
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the agent's functionality. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for the ${agentType} AI agent ONLY!! without explanations or comments or md formatting.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        const agentCode = response.content[0].text;
+        const fileName = `${agentType.toLowerCase().replace(/\s+/g, "")}Agent.js`;
+        await FileManager.write(fileName, agentCode);
+        console.log(chalk.green(`✅ Generated ${fileName}`));
+    },
+
+    async generateWorkflowCode(projectStructure) {
+        console.log(chalk.cyan(`🔄 Generating AI agent workflow code...`));
+
+        const prompt = `
+Please generate code for managing the workflow and interactions between AI agents based on the project structure and features described in the README.md. The workflow should orchestrate the actions of different AI agents and ensure smooth communication between them.
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the workflow. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for the AI agent workflow ONLY!! without explanations or comments or md formatting.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        const workflowCode = response.content[0].text;
+        const fileName = "aiWorkflow.js";
+        await FileManager.write(fileName, workflowCode);
+        console.log(chalk.green(`✅ Generated ${fileName}`));
     },
 };
 

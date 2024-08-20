@@ -23,6 +23,8 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Support for multiple programming languages (JavaScript, Python, C#)
 -   Language-specific linting and formatting
 -   Customizable configuration for different programming languages
+-   AI-driven code optimization suggestions
+-   Multi-language project handling
 
 ## Installation
 
@@ -69,13 +71,34 @@ CodeCraftAI currently supports the following programming languages:
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
+## AI Agents
+
+CodeCraftAI now incorporates a system of AI agents to streamline the development process:
+
+-   SQL Migrations Agent: Writes database migrations and type files
+-   Services Agent: Creates services that interact with the database and process data
+-   API Routes Agent: Handles input validation, auth checks, and service calls for HTTP requests
+-   Tester Agent: Writes integration tests for endpoints
+-   Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
+
+These agents work together to create a seamless development experience, allowing for faster feature implementation and easier code review processes.
+
 ## Future Enhancements
 
 -   Implement language-specific modules for better code organization
 -   Add support for more programming languages
 -   Enhance multi-language project handling
--   Implement AI-driven code optimization suggestions
 -   Integrate with popular version control systems
 -   Develop a plugin system for extending functionality
 -   Create a web-based interface for easier project management
 -   Implement real-time collaboration features for team projects
+-   Expand AI agent capabilities and inter-agent communication
+-   Develop a visual workflow designer for AI agent interactions
+-   Implement natural language processing for more intuitive feature requests
+-   Create a machine learning model to improve code generation based on user feedback
+-   Integrate with popular IDEs and code editors for seamless workflow
+-   Develop a code review AI agent to provide automated code quality feedback
+-   Implement a performance optimization agent to suggest and apply performance improvements
+-   Create a security analysis agent to identify and address potential vulnerabilities
+-   Develop a documentation agent to generate and maintain comprehensive project documentation
+-   Implement a deployment agent to automate the process of deploying applications to various environments

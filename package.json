@@ -15,7 +15,8 @@
         "ai",
         "code generation",
         "automation",
-        "project bootstrap"
+        "project bootstrap",
+        "multi-language"
     ],
     "author": "Max Sveshnikov",
     "license": "MIT",

@@ -270,6 +270,146 @@ Provide the suggestions in a structured format.
             }
         }
     },
+
+    async suggestRefactoring(filePath, projectStructure) {
+        console.log(chalk.cyan(`🔍 Suggesting refactoring for ${filePath}...`));
+        const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        const prompt = `
+Analyze the following ${language} code and suggest refactoring opportunities:
+
+${fileContent}
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please consider:
+1. Improving code organization and structure
+2. Enhancing modularity and reusability
+3. Optimizing performance
+4. Applying design patterns where appropriate
+5. Improving naming conventions and code clarity
+
+Provide detailed refactoring suggestions in a structured format.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        console.log(chalk.green(`📊 Refactoring suggestions for ${filePath}:`));
+        console.log(response.content[0].text);
+    },
+
+    async analyzePerformance(filePath) {
+        console.log(chalk.cyan(`🚀 Analyzing performance for ${filePath}...`));
+        const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        const prompt = `
+Analyze the following ${language} code for performance optimizations:
+
+${fileContent}
+
+Please consider:
+1. Algorithmic complexity
+2. Memory usage
+3. I/O operations
+4. Asynchronous operations (if applicable)
+5. ${language}-specific performance best practices
+
+Provide detailed performance optimization suggestions in a structured format.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        console.log(chalk.green(`📊 Performance analysis for ${filePath}:`));
+        console.log(response.content[0].text);
+    },
+
+    async checkSecurityVulnerabilities(filePath) {
+        console.log(chalk.cyan(`🔒 Checking security vulnerabilities for ${filePath}...`));
+        const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        const prompt = `
+Analyze the following ${language} code for potential security vulnerabilities:
+
+${fileContent}
+
+Please consider:
+1. Input validation and sanitization
+2. Authentication and authorization issues
+3. Data exposure risks
+4. Cross-site scripting (XSS) vulnerabilities
+5. SQL injection risks (if applicable)
+6. ${language}-specific security best practices
+
+Provide detailed security vulnerability analysis and suggestions in a structured format.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        console.log(chalk.green(`📊 Security vulnerability analysis for ${filePath}:`));
+        console.log(response.content[0].text);
+    },
+
+    async generateUnitTests(filePath, projectStructure) {
+        console.log(chalk.cyan(`🧪 Generating unit tests for ${filePath}...`));
+        const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        const prompt = `
+Generate unit tests for the following ${language} code:
+
+${fileContent}
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Please consider:
+1. Testing all public functions and methods
+2. Covering edge cases and error scenarios
+3. Mocking external dependencies
+4. Achieving high code coverage
+5. Following ${language}-specific testing best practices
+
+Provide the generated unit tests in a structured format, ready to be saved in a separate test file.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        const testFilePath = filePath.replace(/\.js$/, ".test.js");
+        await FileManager.write(testFilePath, response.content[0].text);
+        console.log(chalk.green(`✅ Unit tests generated and saved to ${testFilePath}`));
+    },
 };
 
 export default CodeAnalyzer;
