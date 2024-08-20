@@ -20,6 +20,9 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 -   Intelligent code analysis and refactoring suggestions
 -   Automated documentation generation
 -   User-friendly command-line interface
+-   Support for multiple programming languages (JavaScript, Python, C#)
+-   Language-specific linting and formatting
+-   Customizable configuration for different programming languages
 
 ## Installation
 
@@ -39,7 +42,7 @@ npx codecraft-ai
 
 ## How It Works
 
-CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory.
+CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory. It can now generate code for different languages based on the project requirements and applies language-specific linting and formatting.
 
 ## Requirements
 
@@ -50,8 +53,29 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 -   `codeAnalyzer.js`: Analyzes existing code for quality and improvement opportunities
 -   `codeGenerator.js`: Generates new code based on instructions and API responses
--   `config.js`: Manages configuration settings for the application
+-   `config.js`: Manages configuration settings for the application, including language-specific configs
 -   `documentationGenerator.js`: Automatically generates documentation for the project
 -   `fileManager.js`: Handles file operations and project structure management
 -   `index.js`: Main entry point of the application
 -   `userInterface.js`: Manages user interactions and command-line interface
+
+## Supported Languages
+
+CodeCraftAI currently supports the following programming languages:
+
+-   JavaScript (including TypeScript)
+-   Python
+-   C#
+
+Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
+
+## Future Enhancements
+
+-   Implement language-specific modules for better code organization
+-   Add support for more programming languages
+-   Enhance multi-language project handling
+-   Implement AI-driven code optimization suggestions
+-   Integrate with popular version control systems
+-   Develop a plugin system for extending functionality
+-   Create a web-based interface for easier project management
+-   Implement real-time collaboration features for team projects

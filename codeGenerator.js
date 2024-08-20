@@ -9,6 +9,10 @@ const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
 const CodeGenerator = {
     async generate(readme, currentCode, fileName, projectStructure) {
+        const fileExtension = path.extname(fileName);
+        const language = this.getLanguageFromExtension(fileExtension);
+        const languageConfig = CONFIG.languageConfigs[language];
+
         const prompt = `
 You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
 
@@ -21,7 +25,13 @@ ${currentCode || "No existing code"}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
+Language: ${language}
+File extension: ${fileExtension}
+Linter: ${languageConfig.linter}
+Formatter: ${languageConfig.formatter}
+Package manager: ${languageConfig.packageManager}
+
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const response = await anthropic.messages.create({
@@ -44,7 +54,7 @@ ${readme}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Do not include any explanations or comments in your response, just provide the updated README.md content.
+Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Include information about multi-language support and any new features or changes. Do not include any explanations or comments in your response, just provide the updated README.md content.
 `;
 
         const response = await anthropic.messages.create({
@@ -60,15 +70,17 @@ Please update the README.md file with new design ideas and considerations. Ensur
     async splitLargeFile(filePath, content, projectStructure) {
         console.log(chalk.yellow(`📂 File ${filePath} exceeds ${CONFIG.maxFileLines} lines. Splitting...`));
 
+        const fileExtension = path.extname(filePath);
+        const language = this.getLanguageFromExtension(fileExtension);
+
         const prompt = `
-The file ${filePath} exceeds ${
-            CONFIG.maxFileLines
-        } lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
+The file ${filePath} exceeds ${CONFIG.maxFileLines} lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
 
 1. Identify logical components or functionalities that can be separated.
 2. Suggest new file names for the extracted parts.
 3. Provide the content for each new file, including the updated content for the original file.
 4. Ensure that the split maintains the overall functionality and doesn't break any dependencies.
+5. Use appropriate language-specific conventions for ${language}.
 
 Current file content:
 ${content}
@@ -143,6 +155,10 @@ Please provide your suggestions in the following Markdown format:
     async optimizeAndRefactorFile(filePath, projectStructure) {
         console.log(chalk.cyan(`🔄 Optimizing and refactoring ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = this.getLanguageFromExtension(fileExtension);
+        const languageConfig = CONFIG.languageConfigs[language];
+
         const prompt = `
 Please optimize and refactor the following code from ${filePath}:
 
@@ -150,6 +166,12 @@ ${fileContent}
 
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
+
+Language: ${language}
+File extension: ${fileExtension}
+Linter: ${languageConfig.linter}
+Formatter: ${languageConfig.formatter}
+Package manager: ${languageConfig.packageManager}
 
 Focus on:
 1. Improving code efficiency
@@ -159,6 +181,7 @@ Focus on:
 5. Improving overall code structure
 6. Ensuring consistency with the project structure
 7. Reusing functionality from other modules
+8. Following best practices and conventions for ${language}
 
 Return the optimized and refactored code ONLY!! without explanations or comments or md formatting.
 `;
@@ -172,6 +195,56 @@ Return the optimized and refactored code ONLY!! without explanations or comments
         const optimizedCode = response.content[0].text;
         await FileManager.write(filePath, optimizedCode);
         console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
+    },
+
+    getLanguageFromExtension(fileExtension) {
+        for (const [language, config] of Object.entries(CONFIG.languageConfigs)) {
+            if (config.fileExtensions.includes(fileExtension)) {
+                return language;
+            }
+        }
+        return "javascript"; // Default to JavaScript if no match is found
+    },
+
+    async generateDependencyFile(language, projectStructure) {
+        const languageConfig = CONFIG.languageConfigs[language];
+        let dependencyFileName;
+
+        switch (languageConfig.packageManager) {
+            case "npm":
+                dependencyFileName = "package.json";
+                break;
+            case "pip":
+                dependencyFileName = "requirements.txt";
+                break;
+            case "nuget":
+                dependencyFileName = "ProjectName.csproj";
+                break;
+            default:
+                throw new Error(`Unsupported package manager: ${languageConfig.packageManager}`);
+        }
+
+        console.log(chalk.cyan(`📦 Generating ${dependencyFileName} for ${language}...`));
+
+        const prompt = `
+Please generate a ${dependencyFileName} file for a ${language} project with the following structure:
+
+${JSON.stringify(projectStructure, null, 2)}
+
+Include all necessary dependencies based on the project structure and features described in the README.md. Ensure the file is properly formatted and follows best practices for ${language} projects.
+
+Return the content of the ${dependencyFileName} file ONLY!! without explanations or comments or md formatting.
+`;
+
+        const response = await anthropic.messages.create({
+            model: CONFIG.anthropicModel,
+            max_tokens: CONFIG.maxTokens,
+            messages: [{ role: "user", content: prompt }],
+        });
+
+        const dependencyFileContent = response.content[0].text;
+        await FileManager.write(dependencyFileName, dependencyFileContent);
+        console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
     },
 };
 

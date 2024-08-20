@@ -14,14 +14,25 @@ const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 const CodeAnalyzer = {
     async runLintChecks(filePath) {
         console.log(chalk.cyan(`🔍 Running code quality checks for ${filePath}...`));
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        if (!language) {
+            console.log(chalk.yellow(`⚠️ No linter configured for file extension: ${fileExtension}`));
+            return "";
+        }
+
+        const linter = CONFIG.languageConfigs[language].linter;
         try {
-            const { stdout, stderr } = await execAsync(`npx eslint ${filePath}`, { encoding: "utf8" });
-            if (stdout) console.log(chalk.yellow(`⚠️ ESLint warnings:\n${stdout}`));
-            if (stderr) console.error(chalk.red(`❌ ESLint errors:\n${stderr}`));
-            if (!stdout && !stderr) console.log(chalk.green(`✅ ESLint passed for ${filePath}`));
+            const { stdout, stderr } = await execAsync(`npx ${linter} ${filePath}`, { encoding: "utf8" });
+            if (stdout) console.log(chalk.yellow(`⚠️ ${linter} warnings:\n${stdout}`));
+            if (stderr) console.error(chalk.red(`❌ ${linter} errors:\n${stderr}`));
+            if (!stdout && !stderr) console.log(chalk.green(`✅ ${linter} passed for ${filePath}`));
             return stdout || stderr;
         } catch (error) {
-            console.error(chalk.red(`❌ Error running ESLint: ${error.message}`));
+            console.error(chalk.red(`❌ Error running ${linter}: ${error.message}`));
             return error.stdout || error.stderr || error.message;
         }
     },
@@ -29,8 +40,13 @@ const CodeAnalyzer = {
     async fixLintErrors(filePath, lintOutput, projectStructure) {
         console.log(chalk.yellow(`🔧 Attempting to fix lint errors for ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
         const prompt = `
-Please fix the following ESLint errors in the file ${filePath}:
+Please fix the following linter errors in the ${language} file ${filePath}:
 
 ${lintOutput}
 
@@ -40,7 +56,7 @@ ${fileContent}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please provide the corrected code that addresses all the ESLint errors. Consider the project structure when making changes. Do not include any explanations or comments in your response, just provide the code.
+Please provide the corrected code that addresses all the linter errors. Consider the project structure when making changes. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const response = await anthropic.messages.create({
@@ -83,8 +99,13 @@ Provide the suggestions in a structured format.
     async analyzeCodeQuality(filePath) {
         console.log(chalk.cyan(`🔍 Analyzing code quality for ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
+        const fileExtension = path.extname(filePath);
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
         const prompt = `
-Analyze the following code for quality and provide improvement suggestions:
+Analyze the following ${language} code for quality and provide improvement suggestions:
 
 ${fileContent}
 
@@ -94,6 +115,7 @@ Please consider:
 3. Potential performance improvements
 4. Error handling and edge cases
 5. Security considerations
+6. ${language}-specific best practices
 
 Provide the suggestions in a structured format.
 `;
@@ -120,7 +142,7 @@ Provide the suggestions in a structured format.
     ${JSON.stringify(await this.analyzeDependencies(projectStructure), null, 2)}
     
     Please identify:
-    1. Missing npm packages based on import statements
+    1. Missing packages based on import statements for each supported language
     2. Missing files that are referenced but not present in the project structure
     3. Potential circular dependencies
     
@@ -135,10 +157,8 @@ Provide the suggestions in a structured format.
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
 
-        // Parse the structured results
         const structuredResults = JSON.parse(response.content[0].text.match(/```json([\s\S]*?)```/)?.[1]);
 
-        // Create missing files
         await this.createMissingFiles(structuredResults?.missingFiles);
     },
 
@@ -146,25 +166,39 @@ Provide the suggestions in a structured format.
         const dependencies = {};
         for (const [key, value] of Object.entries(projectStructure)) {
             if (typeof value === "object" && value !== null) {
-                // It's a directory
                 for (const [subKey, subValue] of Object.entries(value)) {
                     if (subValue === null) {
-                        // It's a file
                         const filePath = `${key}/${subKey}`;
                         const content = await FileManager.read(filePath);
-                        dependencies[filePath] = this.extractDependencies(content);
+                        dependencies[filePath] = this.extractDependencies(content, path.extname(filePath));
                     }
                 }
             } else if (value === null) {
-                // It's a file in the root directory
                 const content = await FileManager.read(key);
-                dependencies[key] = this.extractDependencies(content);
+                dependencies[key] = this.extractDependencies(content, path.extname(key));
             }
         }
         return dependencies;
     },
 
-    extractDependencies(content) {
+    extractDependencies(content, fileExtension) {
+        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
+            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
+        );
+
+        switch (language) {
+            case "javascript":
+                return this.extractJavaScriptDependencies(content);
+            case "python":
+                return this.extractPythonDependencies(content);
+            case "csharp":
+                return this.extractCSharpDependencies(content);
+            default:
+                return [];
+        }
+    },
+
+    extractJavaScriptDependencies(content) {
         const importRegex =
             /(?:import\s+(?:\*\s+as\s+\w+\s+from\s+['"](.+?)['"]|{\s*[\w\s,]+\s*}\s+from\s+['"](.+?)['"]|\w+\s+from\s+['"](.+?)['"])|lazy\(\s*\(\)\s*=>\s*import\(['"](.+?)['"]\)\s*\))/g;
         const dependencies = [];
@@ -176,11 +210,32 @@ Provide the suggestions in a structured format.
         return dependencies;
     },
 
+    extractPythonDependencies(content) {
+        const importRegex = /(?:from\s+(\S+)\s+import|\bimport\s+(\S+))/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            const dependency = match[1] || match[2];
+            dependencies.push(dependency.split(".")[0]);
+        }
+        return [...new Set(dependencies)];
+    },
+
+    extractCSharpDependencies(content) {
+        const usingRegex = /using\s+([^;]+);/g;
+        const dependencies = [];
+        let match;
+        while ((match = usingRegex.exec(content)) !== null) {
+            dependencies.push(match[1].trim());
+        }
+        return dependencies;
+    },
+
     async createMissingFiles(missingFiles) {
         console.log(chalk.cyan("📁 Creating missing files..."));
         for (const filePath of missingFiles) {
             try {
-                this.addNewFile(filePath.endsWith(".js") ? filePath : `${filePath}.js`);
+                await this.addNewFile(filePath);
             } catch (error) {
                 console.error(chalk.red(`❌ Error creating file ${filePath}: ${error.message}`));
             }
