@@ -98,19 +98,34 @@ const UserInterface = {
 
         console.log(chalk.cyan("🤖 CodeCraftAI:"), response.content[0].text);
 
-        const { confirmChanges } = await inquirer.prompt({
-            type: "confirm",
-            name: "confirmChanges",
-            message: "Would you like to apply these changes to the file?",
-            default: false,
-        });
+        const codeSnippet = this.extractCodeSnippet(response.content[0].text);
 
-        if (confirmChanges) {
-            await FileManager.write(filePath, response.content[0].text);
-            console.log(chalk.green(`✅ ${selectedFile} has been updated with the suggested changes.`));
+        if (codeSnippet) {
+            console.log(chalk.yellow("Extracted code snippet:"));
+            console.log(chalk.yellow(codeSnippet));
+
+            const { confirmChanges } = await inquirer.prompt({
+                type: "confirm",
+                name: "confirmChanges",
+                message: "Would you like to apply these changes to the file?",
+                default: false,
+            });
+
+            if (confirmChanges) {
+                await FileManager.write(filePath, codeSnippet);
+                console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
+            }
+        } else {
+            console.log(chalk.red("No code snippet found in the response."));
         }
 
         return { continue: true, updatedReadme: readme };
+    },
+
+    extractCodeSnippet(markdown) {
+        const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)```/;
+        const match = markdown.match(codeBlockRegex);
+        return match ? match[1].trim() : null;
     },
 };
 
