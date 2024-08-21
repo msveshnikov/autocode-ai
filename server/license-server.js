@@ -1,14 +1,14 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { v4: uuidv4 } = require("uuid");
+import express from "express";
+import { json } from "body-parser";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 const port = process.env.PORT || 3000;
 const secretKey = process.env.JWT_SECRET || "your-secret-key";
 
-app.use(bodyParser.json());
+app.use(json());
 
 const users = [];
 const licenses = {};
@@ -67,4 +67,4 @@ app.listen(port, () => {
     console.log(`License server running on port ${port}`);
 });
 
-module.exports = app;
+export default app;

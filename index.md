@@ -1,116 +1,94 @@
-# index.js Documentation
+# AutoCode - index.js Documentation
 
 ## Overview
 
-`index.js` serves as the entry point for the AutoCode application. It orchestrates the main workflow of the program, handling user interactions, file operations, and coordinating between different modules of the project.
-
-This file is responsible for:
-1. Initializing the application
-2. Checking for necessary environment variables
-3. Reading the project's README file
-4. Managing the main execution loop
-5. Handling user actions
-6. Error management
+This file serves as the entry point for the AutoCode application. It orchestrates the main functionality of the tool, including license validation, README file processing, and user interaction for various actions related to code generation and analysis.
 
 ## Dependencies
 
 - `path`: Node.js built-in module for handling file paths
-- `chalk`: External library for terminal string styling
+- `chalk`: External library for colorful console output
 - `FileManager`: Custom module for file operations
 - `UserInterface`: Custom module for handling user interactions
+- `LicenseManager`: Custom module for license management
 
-## Main Function
+## Main Functions
+
+### `checkLicense()`
+
+Validates the user's license for using the AutoCode tool.
+
+**Returns:**
+- `Promise<boolean>`: Resolves to `true` if the license is valid, `false` otherwise.
+
+**Usage:**
+```javascript
+if (await checkLicense()) {
+    // Proceed with application logic
+} else {
+    // Handle invalid license scenario
+}
+```
 
 ### `main()`
 
-The primary function that runs the application.
+The main function that drives the application's workflow.
 
-#### Description
-
-This asynchronous function performs the following tasks:
+**Workflow:**
 1. Displays a welcome message
 2. Checks for the presence of the `CLAUDE_KEY` environment variable
-3. Reads the project's README.md file
-4. Enters a loop to continually prompt for and handle user actions
-5. Retrieves the project structure before each action
+3. Validates the user's license
+4. Reads the project's README.md file
+5. Enters a loop to continuously prompt for and handle user actions
+6. Exits when the user chooses to quit or the license becomes invalid
 
-#### Return Value
-
-This function doesn't return a value but manages the application's flow.
-
-## Helper Functions
-
-### `FileManager.read(path)`
-
-Reads the content of a file at the specified path.
-
-#### Parameters
-
-- `path` (string): The file path to read from
-
-#### Return Value
-
-- (Promise<string|null>): The content of the file or null if the file cannot be read
-
-### `FileManager.getProjectStructure()`
-
-Retrieves the current project structure.
-
-#### Return Value
-
-- (Promise<object>): An object representing the project's file and directory structure
-
-### `UserInterface.promptForAction()`
-
-Prompts the user to choose an action.
-
-#### Return Value
-
-- (Promise<object>): An object containing the user's chosen action
-
-### `UserInterface.handleAction(action, readme, readmePath, projectStructure)`
-
-Handles the user's chosen action.
-
-#### Parameters
-
-- `action` (string): The action chosen by the user
-- `readme` (string): The content of the README file
-- `readmePath` (string): The path to the README file
-- `projectStructure` (object): The current project structure
-
-#### Return Value
-
-- (boolean): Whether to continue execution of the main loop
-
-## Error Handling
-
-The main function is wrapped in a try-catch block to handle any uncaught errors. Errors are logged to the console in red using the `chalk` library.
-
-## Usage Example
-
+**Usage:**
 ```javascript
-#!/usr/bin/env node
-
-import path from "path";
-import chalk from "chalk";
-
-import FileManager from "./fileManager.js";
-import UserInterface from "./userInterface.js";
-
-async function main() {
-    // ... (main function implementation)
-}
-
 main().catch((error) => {
     console.error(chalk.red("❌ An error occurred:"), error.message);
 });
 ```
 
+## Error Handling
+
+The application uses a top-level error handler to catch and display any unhandled errors that occur during execution.
+
+## Environment Variables
+
+- `CLAUDE_KEY`: Required for the application to function. Its specific use is not detailed in this file but is likely related to API authentication for code generation or analysis services.
+
+## Project Structure Integration
+
+This file interacts with several other modules in the project:
+
+- `fileManager.js`: Used for reading files and getting the project structure
+- `userInterface.js`: Handles user input and action processing
+- `licenseManager.js`: Manages license validation
+
+The `main()` function utilizes these modules to provide a cohesive user experience for code analysis, generation, and documentation tasks.
+
+## Usage
+
+To run the AutoCode application:
+
+1. Ensure all dependencies are installed
+2. Set the `CLAUDE_KEY` environment variable
+3. Execute the script:
+
+```bash
+node index.js
+```
+
+or if configured as an executable:
+
+```bash
+./index.js
+```
+
 ## Notes
 
-- The application requires the `CLAUDE_KEY` environment variable to be set.
-- The project structure is important for this file's operation, as it interacts with other modules like `fileManager.js` and `userInterface.js`.
-- The main loop continues until the user chooses to exit or an error occurs.
+- The application runs in a loop, allowing multiple actions to be performed in a single session
+- License validation is performed at the start and before each action to ensure continuous compliance
+- The project structure is re-evaluated before each action, allowing for real-time updates to be reflected in the tool's operations
 
-This file plays a crucial role in tying together the various components of the AutoCode project, managing the overall flow of the application, and ensuring proper error handling and user interaction.
+This entry point file sets up the foundation for a CLI tool that likely assists developers with various code-related tasks, leveraging AI capabilities (as suggested by the `CLAUDE_KEY` requirement) and providing an interactive interface for project management and code operations.

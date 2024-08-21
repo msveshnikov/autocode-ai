@@ -27,6 +27,7 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   AI-powered agents for specialized tasks
 -   Landing page generator for project showcasing
 -   Pricing tiers with license management
+-   Cross-platform compatibility (Windows, macOS, Linux)
 
 ## Installation
 
@@ -52,6 +53,7 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 
 -   Node.js (version 20.0.0 or higher)
 -   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
+-   Use async/await, ES6 modules, and fetch (no axios please)
 
 ## Project Structure
 
@@ -63,6 +65,8 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 -   `index.js`: Main entry point of the application
 -   `userInterface.js`: Manages user interactions and command-line interface
 -   `landing.html`: Template for generating project landing pages
+-   `licenseManager.js`: Handles license management and validation
+-   `server/license-server.js`: Express.js server for license management
 
 ## Supported Languages
 
@@ -71,6 +75,12 @@ AutoCode currently supports the following programming languages:
 -   JavaScript (including TypeScript)
 -   Python
 -   C#
+-   Java
+-   Ruby
+-   Go
+-   Rust
+-   PHP
+-   Swift
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
@@ -85,8 +95,11 @@ AutoCode incorporates a system of AI agents to streamline the development proces
 -   Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
 -   Landing Page Agent: Generates a visually appealing landing page for the project
 -   Reddit Promotion Agent: Manages Reddit promotions using the /u/AutoCode community
-
-These agents work together to create a seamless development experience, allowing for faster feature implementation and easier code review processes.
+-   Code Review Agent: Provides automated code quality feedback and suggestions
+-   DevOps Agent: Configures CI/CD pipelines and manages deployment processes
+-   Security Agent: Performs security audits and suggests vulnerability fixes
+-   Performance Agent: Analyzes code for performance bottlenecks and optimizations
+-   Internationalization Agent: Implements multi-language support in projects
 
 ## Landing Page Generator
 
@@ -97,6 +110,7 @@ AutoCode includes a landing page generator to showcase your project:
 -   Incorporates console-style imagery for a "matrix" theme
 -   Highlights key features and project information
 -   Customizable content based on your README.md and project structure
+-   Integrates with popular analytics tools for visitor tracking
 
 ## Pricing and License Management
 
@@ -118,6 +132,15 @@ AutoCode offers flexible pricing tiers to suit different needs:
 -   10 devices
 -   Priority support
 
+### Enterprise
+
+-   Custom pricing
+-   Unlimited requests
+-   All features + custom integrations
+-   Unlimited devices
+-   Dedicated support team
+-   On-premises deployment option
+
 License management is handled through an Express.js server with `/login`, `/register`, and `/check` license methods.
 
 ## Future Enhancements
@@ -125,8 +148,15 @@ License management is handled through an Express.js server with `/login`, `/regi
 -   Expand AI agent capabilities and inter-agent communication
 -   Develop a visual workflow designer for AI agent interactions
 -   Integrate with popular IDEs and code editors for seamless workflow
--   Develop a code review AI agent to provide automated code quality feedback
 -   Create a plugin system for extending AutoCode's functionality
 -   Develop a web-based interface for managing AutoCode projects
 -   Create a visual component library generator for front-end projects
 -   Implement a cross-platform desktop application for enhanced user experience
+-   Add support for more programming languages and frameworks
+-   Implement machine learning models for code optimization and bug prediction
+-   Create a marketplace for custom AI agents and plugins
+-   Develop a natural language processing feature for converting user stories to code
+
+## Support
+
+For support, please visit our [community forum](https://forum.autocode.one) or contact our support team at support@autocode.one.
