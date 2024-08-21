@@ -7,6 +7,7 @@ import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import path from "path";
+import ora from "ora";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -102,14 +103,21 @@ const UserInterface = {
     Please generate or update the ${selectedFile} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
     `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Processing AI request...").start();
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
+            spinner.succeed("AI request completed");
 
-        await FileManager.write(filePath, response.content[0].text);
-        console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
+            await FileManager.write(filePath, response.content[0].text);
+            console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
+        } catch (error) {
+            spinner.fail("AI request failed");
+            console.error(chalk.red(`Error: ${error.message}`));
+        }
 
         return { continue: true, updatedReadme: readme };
     },
@@ -134,11 +142,18 @@ const UserInterface = {
             const filePath = path.join(process.cwd(), file);
             console.log(chalk.cyan(`🔧 Processing ${file}...`));
             const currentContent = await FileManager.read(filePath);
-            const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
-            await FileManager.write(filePath, generatedContent);
+            const spinner = ora("Generating content...").start();
+            try {
+                const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
+                spinner.succeed("Content generated");
+                await FileManager.write(filePath, generatedContent);
 
-            if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
-                await CodeGenerator.splitLargeFile(filePath, generatedContent, projectStructure);
+                if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
+                    await CodeGenerator.splitLargeFile(filePath, generatedContent, projectStructure);
+                }
+            } catch (error) {
+                spinner.fail("Content generation failed");
+                console.error(chalk.red(`Error processing ${file}: ${error.message}`));
             }
         }
     },
@@ -147,9 +162,16 @@ const UserInterface = {
         switch (action) {
             case "📝 1. Brainstorm README.md": {
                 console.log(chalk.cyan("📝 Updating README.md with new design ideas and considerations..."));
-                const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
-                await FileManager.write(readmePath, updatedReadme);
-                readme = updatedReadme;
+                const spinner = ora("Generating updated README...").start();
+                try {
+                    const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure);
+                    spinner.succeed("README updated");
+                    await FileManager.write(readmePath, updatedReadme);
+                    readme = updatedReadme;
+                } catch (error) {
+                    spinner.fail("README update failed");
+                    console.error(chalk.red(`Error: ${error.message}`));
+                }
                 break;
             }
             case "🔧 2. Generate code": {

@@ -4,6 +4,7 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import path from "path";
 import FileManager from "./fileManager.js";
+import ora from "ora";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -34,14 +35,22 @@ Package manager: ${languageConfig.packageManager}
 Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Generating code...").start();
 
-        return response.content[0].text;
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Code generated successfully");
+            return response.content[0].text;
+        } catch (error) {
+            spinner.fail("Error generating code");
+            throw error;
+        }
     },
 
     async updateReadme(readme, projectStructure) {
@@ -57,14 +66,22 @@ ${JSON.stringify(projectStructure, null, 2)}
 Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Include information about multi-language support and any new features or changes. Do not include any explanations or comments in your response, just provide the updated README.md content.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Updating README...").start();
 
-        return response.content[0].text;
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("README updated successfully");
+            return response.content[0].text;
+        } catch (error) {
+            spinner.fail("Error updating README");
+            throw error;
+        }
     },
 
     async splitLargeFile(filePath, content, projectStructure) {
@@ -74,7 +91,9 @@ Please update the README.md file with new design ideas and considerations. Ensur
         const language = this.getLanguageFromExtension(fileExtension);
 
         const prompt = `
-The file ${filePath} exceeds ${CONFIG.maxFileLines} lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
+The file ${filePath} exceeds ${
+            CONFIG.maxFileLines
+        } lines. Please suggest how to split this file into smaller, more manageable parts. Consider the following:
 
 1. Identify logical components or functionalities that can be separated.
 2. Suggest new file names for the extracted parts.
@@ -102,29 +121,38 @@ Please provide your suggestions in the following Markdown format:
 ... (repeat for all new files)
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Generating file split suggestion...").start();
 
-        const splitSuggestion = response.content[0].text;
-        console.log(chalk.cyan("📋 File splitting suggestion:"));
-        console.log(splitSuggestion);
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
 
-        const { confirmSplit } = await inquirer.prompt({
-            type: "confirm",
-            name: "confirmSplit",
-            message: "Do you want to proceed with the suggested file split?",
-            default: true,
-        });
+            spinner.succeed("File split suggestion generated");
 
-        if (confirmSplit) {
-            const files = this.parseSplitSuggestion(splitSuggestion);
-            await this.saveFiles(filePath, files);
-            console.log(chalk.green("✅ File split completed."));
-        } else {
-            console.log(chalk.yellow("⏹️ File split cancelled."));
+            const splitSuggestion = response.content[0].text;
+            console.log(chalk.cyan("📋 File splitting suggestion:"));
+            console.log(splitSuggestion);
+
+            const { confirmSplit } = await inquirer.prompt({
+                type: "confirm",
+                name: "confirmSplit",
+                message: "Do you want to proceed with the suggested file split?",
+                default: true,
+            });
+
+            if (confirmSplit) {
+                const files = this.parseSplitSuggestion(splitSuggestion);
+                await this.saveFiles(filePath, files);
+                console.log(chalk.green("✅ File split completed."));
+            } else {
+                console.log(chalk.yellow("⏹️ File split cancelled."));
+            }
+        } catch (error) {
+            spinner.fail("Error generating file split suggestion");
+            throw error;
         }
     },
 
@@ -186,15 +214,24 @@ Focus on:
 Return the optimized and refactored code ONLY!! without explanations or comments or md formatting.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Optimizing and refactoring...").start();
 
-        const optimizedCode = response.content[0].text;
-        await FileManager.write(filePath, optimizedCode);
-        console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Optimization and refactoring completed");
+
+            const optimizedCode = response.content[0].text;
+            await FileManager.write(filePath, optimizedCode);
+            console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
+        } catch (error) {
+            spinner.fail("Error optimizing and refactoring");
+            throw error;
+        }
     },
 
     getLanguageFromExtension(fileExtension) {
@@ -236,15 +273,24 @@ Include all necessary dependencies based on the project structure and features d
 Return the content of the ${dependencyFileName} file ONLY!! without explanations or comments or md formatting.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora(`Generating ${dependencyFileName}...`).start();
 
-        const dependencyFileContent = response.content[0].text;
-        await FileManager.write(dependencyFileName, dependencyFileContent);
-        console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed(`${dependencyFileName} generated successfully`);
+
+            const dependencyFileContent = response.content[0].text;
+            await FileManager.write(dependencyFileName, dependencyFileContent);
+            console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
+        } catch (error) {
+            spinner.fail(`Error generating ${dependencyFileName}`);
+            throw error;
+        }
     },
 
     async generateAIAgentCode(agentType, projectStructure) {
@@ -261,16 +307,25 @@ Ensure the code is complete, functional, and follows best practices for JavaScri
 Return the generated code for the ${agentType} AI agent ONLY!! without explanations or comments or md formatting.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora(`Generating ${agentType} AI agent code...`).start();
 
-        const agentCode = response.content[0].text;
-        const fileName = `${agentType.toLowerCase().replace(/\s+/g, "")}Agent.js`;
-        await FileManager.write(fileName, agentCode);
-        console.log(chalk.green(`✅ Generated ${fileName}`));
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed(`${agentType} AI agent code generated successfully`);
+
+            const agentCode = response.content[0].text;
+            const fileName = `${agentType.toLowerCase().replace(/\s+/g, "")}Agent.js`;
+            await FileManager.write(fileName, agentCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail(`Error generating ${agentType} AI agent code`);
+            throw error;
+        }
     },
 
     async generateWorkflowCode(projectStructure) {
@@ -287,16 +342,25 @@ Ensure the code is complete, functional, and follows best practices for JavaScri
 Return the generated code for the AI agent workflow ONLY!! without explanations or comments or md formatting.
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Generating AI agent workflow code...").start();
 
-        const workflowCode = response.content[0].text;
-        const fileName = "aiWorkflow.js";
-        await FileManager.write(fileName, workflowCode);
-        console.log(chalk.green(`✅ Generated ${fileName}`));
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("AI agent workflow code generated successfully");
+
+            const workflowCode = response.content[0].text;
+            const fileName = "aiWorkflow.js";
+            await FileManager.write(fileName, workflowCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail("Error generating AI agent workflow code");
+            throw error;
+        }
     },
 };
 
