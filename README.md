@@ -26,6 +26,7 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Multi-language project handling
 -   AI-powered agents for specialized tasks
 -   Landing page generator for project showcasing
+-   Pricing tiers with license management
 
 ## Installation
 
@@ -89,13 +90,35 @@ These agents work together to create a seamless development experience, allowing
 
 ## Landing Page Generator
 
-AutoCode now includes a landing page generator to showcase your project:
+AutoCode includes a landing page generator to showcase your project:
 
 -   Automatically creates a responsive, mobile-friendly landing page
 -   Uses a sleek design with deep blue and cyan gradients on a black background
 -   Incorporates console-style imagery for a "matrix" theme
 -   Highlights key features and project information
 -   Customizable content based on your README.md and project structure
+
+## Pricing and License Management
+
+AutoCode offers flexible pricing tiers to suit different needs:
+
+### Free Tier
+
+-   $0/month
+-   10 requests/day
+-   Basic features
+-   3 devices
+-   Community support
+
+### Premium
+
+-   $10/month
+-   Unlimited requests
+-   All features
+-   10 devices
+-   Priority support
+
+License management is handled through an Express.js server with `/login`, `/register`, and `/check` license methods.
 
 ## Future Enhancements
 
@@ -106,11 +129,4 @@ AutoCode now includes a landing page generator to showcase your project:
 -   Create a plugin system for extending AutoCode's functionality
 -   Develop a web-based interface for managing AutoCode projects
 -   Create a visual component library generator for front-end projects
-
-## Contributing
-
-We welcome contributions to AutoCode! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get started.
-
-## License
-
-AutoCode is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+-   Implement a cross-platform desktop application for enhanced user experience
