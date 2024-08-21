@@ -1,4 +1,4 @@
-# CodeCraftAI Project Documentation
+# AutoCode Project Documentation
 
 ## Table of Contents
 
@@ -13,13 +13,13 @@
 
 ## Project Overview
 
-CodeCraftAI is an innovative automatic coding tool designed to bootstrap and incrementally develop software projects using the Claude 3.5 Sonnet API. It transforms README.md instructions into a fully functional software project, supporting multiple programming languages and providing a suite of development tools and AI-powered assistants.
+AutoCode is an innovative automatic coding tool designed to bootstrap and incrementally develop software projects using the Claude 3.5 Sonnet API. It transforms README.md instructions into a fully functional software project, supporting multiple programming languages and providing a suite of development tools and AI-powered assistants.
 
-The project aims to streamline the software development process by automating various tasks such as code generation, documentation, testing, and optimization. CodeCraftAI is designed to be flexible, extensible, and capable of handling complex project structures across different programming languages.
+The project aims to streamline the software development process by automating various tasks such as code generation, documentation, testing, and optimization. AutoCode is designed to be flexible, extensible, and capable of handling complex project structures across different programming languages.
 
 ## Architecture
 
-CodeCraftAI is built as a Node.js-based console application with a modular architecture. The main components of the system are:
+AutoCode is built as a Node.js-based console application with a modular architecture. The main components of the system are:
 
 1. **Entry Point (index.js)**: The main script that initializes the application and manages the overall flow.
 
@@ -72,7 +72,7 @@ CodeCraftAI is built as a Node.js-based console application with a modular archi
 
 ## Installation
 
-No installation is required. CodeCraftAI can be run directly using npx. However, you need to have Node.js (version 20.0.0 or higher) installed on your system.
+No installation is required. AutoCode can be run directly using npx. However, you need to have Node.js (version 20.0.0 or higher) installed on your system.
 
 ## Usage Instructions
 
@@ -83,7 +83,7 @@ No installation is required. CodeCraftAI can be run directly using npx. However,
 3. Run the following command:
 
     ```
-    npx codecraft-ai
+    npx autocode-ai
     ```
 
 4. Follow the prompts in the command-line interface to perform various actions:
@@ -102,11 +102,11 @@ No installation is required. CodeCraftAI can be run directly using npx. However,
     - Run AI agents for specialized tasks
     - Perform security analysis
 
-5. CodeCraftAI will guide you through each process, providing feedback and requesting confirmations when necessary.
+5. AutoCode will guide you through each process, providing feedback and requesting confirmations when necessary.
 
 ## AI Agents
 
-CodeCraftAI incorporates a system of AI agents to streamline specific development tasks:
+AutoCode incorporates a system of AI agents to streamline specific development tasks:
 
 1. **SQL Migrations Agent**: Writes database migrations and type files.
 2. **Services Agent**: Creates services that interact with the database and process data.
@@ -118,7 +118,7 @@ These agents can be invoked through the main user interface to automate complex 
 
 ## Future Enhancements
 
-CodeCraftAI has a roadmap for future improvements, including:
+AutoCode has a roadmap for future improvements, including:
 
 -   Implementing language-specific modules for better code organization
 -   Adding support for more programming languages
@@ -138,4 +138,4 @@ CodeCraftAI has a roadmap for future improvements, including:
 -   Developing a documentation agent to generate and maintain comprehensive project documentation
 -   Implementing a deployment agent to automate the process of deploying applications to various environments
 
-These enhancements aim to make CodeCraftAI an even more powerful and versatile tool for software development, catering to a wide range of project types and development workflows.
+These enhancements aim to make AutoCode an even more powerful and versatile tool for software development, catering to a wide range of project types and development workflows.

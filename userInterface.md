@@ -2,7 +2,7 @@
 
 ## Overview
 
-`UserInterface.js` is a core component of the CodeCraftAI project, responsible for handling user interactions and coordinating various actions within the application. It provides a command-line interface for users to interact with different features of the project, such as code generation, analysis, documentation, and more.
+`UserInterface.js` is a core component of the AutoCode project, responsible for handling user interactions and coordinating various actions within the application. It provides a command-line interface for users to interact with different features of the project, such as code generation, analysis, documentation, and more.
 
 This module integrates with other components of the project, including:
 
@@ -136,14 +136,14 @@ const continueExecution = await UserInterface.handleAction(action, readme, readm
 
 ## Usage in the Project
 
-The `UserInterface` module plays a central role in the CodeCraftAI project by:
+The `UserInterface` module plays a central role in the AutoCode project by:
 
 1. Providing a user-friendly interface for interacting with various features.
 2. Coordinating actions between different components of the project.
 3. Managing the flow of the application based on user choices.
 4. Facilitating file selection, code generation, and project modifications.
 
-It is likely used in the main execution flow of the application, possibly in the `index.js` file, to drive the overall functionality of the CodeCraftAI tool.
+It is likely used in the main execution flow of the application, possibly in the `index.js` file, to drive the overall functionality of the AutoCode tool.
 
 ## Dependencies
 
@@ -153,4 +153,4 @@ It is likely used in the main execution flow of the application, possibly in the
 - `path`: For handling file paths.
 - Other project modules: `FileManager`, `CodeAnalyzer`, `CodeGenerator`, `DocumentationGenerator`.
 
-This module is essential for providing a seamless and interactive experience for users of the CodeCraftAI project, allowing them to leverage AI-powered code generation, analysis, and documentation features through a simple command-line interface.
+This module is essential for providing a seamless and interactive experience for users of the AutoCode project, allowing them to leverage AI-powered code generation, analysis, and documentation features through a simple command-line interface.

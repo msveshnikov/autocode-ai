@@ -1,6 +1,6 @@
-# CodeCraftAI
+# AutoCode
 
-CodeCraftAI is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. CodeCraftAI was bootstrapped by itself from one simple prompt.
+AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt.
 
 ![alt text](image.png)
 
@@ -27,7 +27,7 @@ CodeCraftAI is an innovative automatic coding tool designed to bootstrap any sof
 
 ## Installation
 
-No installation is required. CodeCraftAI can be run directly using npx.
+No installation is required. AutoCode can be run directly using npx.
 
 ## Usage
 
@@ -36,14 +36,14 @@ No installation is required. CodeCraftAI can be run directly using npx.
 3. Run the following command:
 
 ```
-npx codecraft-ai
+npx autocode-ai
 ```
 
 4. Follow the prompts and watch as your project comes to life!
 
 ## How It Works
 
-CodeCraftAI reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. CodeCraftAI then saves the generated code back to your project directory. It can now generate code for different languages based on the project requirements and applies language-specific linting and formatting.
+AutoCode reads your README.md file and your sources and sends the instructions to the Claude 3.5 Sonnet API. The API interprets the instructions and generates the necessary code structure, files, and content. AutoCode then saves the generated code back to your project directory. It can now generate code for different languages based on the project requirements and applies language-specific linting and formatting.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ CodeCraftAI reads your README.md file and your sources and sends the instruction
 
 ## Supported Languages
 
-CodeCraftAI currently supports the following programming languages:
+AutoCode currently supports the following programming languages:
 
 -   JavaScript (including TypeScript)
 -   Python
@@ -72,7 +72,7 @@ Each language has its own configuration for file extensions, recommended linter,
 
 ## AI Agents
 
-CodeCraftAI now incorporates a system of AI agents to streamline the development process:
+AutoCode now incorporates a system of AI agents to streamline the development process:
 
 -   SQL Migrations Agent: Writes database migrations and type files
 -   Services Agent: Creates services that interact with the database and process data

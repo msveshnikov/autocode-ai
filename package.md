@@ -1,14 +1,14 @@
-# CodeCraft AI - Project Documentation
+# AutoCode AI - Project Documentation
 
 ## Overview
 
-CodeCraft AI is an innovative automatic coding tool that generates projects from README.md files using the Claude 3.5 Sonnet API. This document provides details about the project configuration as defined in the `package.json` file.
+AutoCode AI is an innovative automatic coding tool that generates projects from README.md files using the Claude 3.5 Sonnet API. This document provides details about the project configuration as defined in the `package.json` file.
 
 ## Project Configuration
 
 ### Basic Information
 
-- **Name**: codecraft-ai
+- **Name**: autocode-ai
 - **Version**: 0.7.0
 - **Description**: An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API
 - **Main File**: index.js
@@ -20,11 +20,11 @@ The project can be run as a command-line tool:
 
 ```json
 "bin": {
-    "codecraft-ai": "./index.js"
+    "autocode-ai": "./index.js"
 }
 ```
 
-This allows users to run the tool using the command `codecraft-ai` in their terminal after installation.
+This allows users to run the tool using the command `autocode-ai` in their terminal after installation.
 
 ### Scripts
 
@@ -76,11 +76,11 @@ To use this project:
 1. Ensure you have Node.js version 20.0.0 or higher installed.
 2. Clone the repository or install the package via npm:
    ```
-   npm install -g codecraft-ai
+   npm install -g autocode-ai
    ```
 3. Run the tool using:
    ```
-   codecraft-ai
+   autocode-ai
    ```
 
 For development:

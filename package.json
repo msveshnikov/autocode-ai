@@ -1,11 +1,11 @@
 {
-    "name": "codecraft-ai",
+    "name": "autocode-ai",
     "version": "0.7.0",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
     "bin": {
-        "codecraft-ai": "./index.js"
+        "autocode-ai": "./index.js"
     },
     "scripts": {
         "start": "node index.js",

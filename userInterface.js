@@ -84,7 +84,7 @@ const UserInterface = {
         const fileContent = await FileManager.read(filePath);
 
         const prompt = `
-    You are CodeCraftAI, an automatic coding assistant. The user has made the following suggestion:
+    You are AutoCode, an automatic coding assistant. The user has made the following suggestion:
     
     ${input}
     
@@ -110,7 +110,7 @@ const UserInterface = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        console.log(chalk.cyan("🤖 CodeCraftAI:"), response.content[0].text);
+        console.log(chalk.cyan("🤖 AutoCode:"), response.content[0].text);
 
         const codeSnippet = this.extractCodeSnippet(response.content[0].text);
 
@@ -178,7 +178,7 @@ const UserInterface = {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
                 await this.processFiles(selectedFiles, readme, projectStructure);
-                console.log(chalk.green("\n✅ CodeCraftAI has successfully generated/updated your project files."));
+                console.log(chalk.green("\n✅ AutoCode has successfully generated/updated your project files."));
                 break;
             }
             case "🔍 3. Detect missing dependencies":
@@ -257,7 +257,7 @@ const UserInterface = {
                 }
                 break;
             case "🚪 Exit":
-                console.log(chalk.yellow("👋 Thanks for using CodeCraftAI. See you next time!"));
+                console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
                 continueExecution = false;
                 break;
         }

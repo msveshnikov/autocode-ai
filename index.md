@@ -2,7 +2,7 @@
 
 ## Overview
 
-`index.js` serves as the entry point for the CodeCraftAI application. It orchestrates the main workflow of the program, handling user interactions, file operations, and coordinating between different modules of the project.
+`index.js` serves as the entry point for the AutoCode application. It orchestrates the main workflow of the program, handling user interactions, file operations, and coordinating between different modules of the project.
 
 This file is responsible for:
 1. Initializing the application
@@ -113,4 +113,4 @@ main().catch((error) => {
 - The project structure is important for this file's operation, as it interacts with other modules like `fileManager.js` and `userInterface.js`.
 - The main loop continues until the user chooses to exit or an error occurs.
 
-This file plays a crucial role in tying together the various components of the CodeCraftAI project, managing the overall flow of the application, and ensuring proper error handling and user interaction.
+This file plays a crucial role in tying together the various components of the AutoCode project, managing the overall flow of the application, and ensuring proper error handling and user interaction.

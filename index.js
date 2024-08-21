@@ -7,7 +7,7 @@ import FileManager from "./fileManager.js";
 import UserInterface from "./userInterface.js";
 
 async function main() {
-    console.log(chalk.blue("👋 Welcome to CodeCraftAI!"));
+    console.log(chalk.blue("👋 Welcome to AutoCode!"));
     if (!process.env.CLAUDE_KEY) {
         console.log(chalk.red("Please set up CLAUDE_KEY variable"));
         return;

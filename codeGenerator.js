@@ -14,7 +14,7 @@ const CodeGenerator = {
         const languageConfig = CONFIG.languageConfigs[language];
 
         const prompt = `
-You are CodeCraftAI, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
+You are AutoCode, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
 
 README.md content:
 ${readme}
@@ -46,7 +46,7 @@ Please generate or update the ${fileName} file to implement the features describ
 
     async updateReadme(readme, projectStructure) {
         const prompt = `
-You are CodeCraftAI, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content and project structure.
+You are AutoCode, an automatic coding tool. Your task is to update the README.md file with new design ideas and considerations based on the current content and project structure.
 
 Current README.md content:
 ${readme}
