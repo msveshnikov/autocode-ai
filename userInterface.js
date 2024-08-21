@@ -99,9 +99,7 @@ const UserInterface = {
     Project structure:
     ${JSON.stringify(projectStructure, null, 2)}
     
-    Please provide a response to help implement the user's suggestion in the selected file. 
-    Provide specific instructions or code snippets as needed. Consider the current project structure 
-    and README content when providing suggestions or solutions.
+    Please generate or update the ${selectedFile} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
     `;
 
         const response = await anthropic.messages.create({
@@ -110,28 +108,8 @@ const UserInterface = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        console.log(chalk.cyan("🤖 AutoCode:"), response.content[0].text);
-
-        const codeSnippet = this.extractCodeSnippet(response.content[0].text);
-
-        if (codeSnippet) {
-            console.log(chalk.yellow("Extracted code snippet:"));
-            console.log(chalk.yellow(codeSnippet));
-
-            const { confirmChanges } = await inquirer.prompt({
-                type: "confirm",
-                name: "confirmChanges",
-                message: "Would you like to apply these changes to the file?",
-                default: false,
-            });
-
-            if (confirmChanges) {
-                await FileManager.write(filePath, codeSnippet);
-                console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
-            }
-        } else {
-            console.log(chalk.red("No code snippet found in the response."));
-        }
+        await FileManager.write(filePath, response.content[0].text);
+        console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
 
         return { continue: true, updatedReadme: readme };
     },

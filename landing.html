@@ -30,6 +30,9 @@
             header {
                 background-color: rgba(0, 0, 0, 0.8);
                 padding: 1rem 0;
+                position: fixed;
+                width: 100%;
+                z-index: 1000;
             }
 
             nav ul {
@@ -37,6 +40,11 @@
                 padding: 0;
                 display: flex;
                 justify-content: space-around;
+                flex-wrap: wrap;
+            }
+
+            nav ul li {
+                margin: 0.5rem;
             }
 
             nav ul li a {
@@ -98,7 +106,7 @@
 
             .features {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 2rem;
                 margin: 4rem 0;
             }
@@ -167,16 +175,6 @@
                 margin-top: 4rem;
             }
 
-            @media (max-width: 768px) {
-                .hero h1 {
-                    font-size: 3rem;
-                }
-
-                .features {
-                    grid-template-columns: 1fr;
-                }
-            }
-
             .how-it-works {
                 background-color: rgba(0, 0, 0, 0.6);
                 padding: 2rem;
@@ -207,6 +205,7 @@
                 justify-content: center;
                 gap: 2rem;
                 margin: 4rem 0;
+                flex-wrap: wrap;
             }
 
             .pricing-plan {
@@ -217,6 +216,7 @@
                 transition: all 0.3s;
                 text-align: center;
                 flex: 1;
+                min-width: 250px;
                 max-width: 300px;
             }
 
@@ -252,9 +252,21 @@
             }
 
             @media (max-width: 768px) {
+                .hero h1 {
+                    font-size: 3rem;
+                }
+
+                .features {
+                    grid-template-columns: 1fr;
+                }
+
                 .pricing-plans {
                     flex-direction: column;
                     align-items: center;
+                }
+
+                .pricing-plan {
+                    width: 100%;
                 }
             }
         </style>
