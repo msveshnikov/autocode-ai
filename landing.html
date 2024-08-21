@@ -176,6 +176,31 @@
                     grid-template-columns: 1fr;
                 }
             }
+
+            .how-it-works {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            }
+
+            .how-it-works ol {
+                margin-left: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .how-it-works pre {
+                background-color: rgba(0, 0, 0, 0.8);
+                padding: 1rem;
+                border-radius: 5px;
+                overflow-x: auto;
+                margin-bottom: 1rem;
+            }
+
+            .how-it-works code {
+                color: var(--secondary-color);
+                font-family: "Courier New", monospace;
+            }
         </style>
     </head>
     <body>
@@ -183,6 +208,7 @@
             <nav class="container">
                 <ul>
                     <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
                 </ul>
@@ -229,7 +255,23 @@
                     </div>
                 </div>
             </section>
-
+            <section id="how-it-works" class="container">
+                <h2>How It Works</h2>
+                <div class="how-it-works">
+                    <p>Getting started with AutoCode is simple:</p>
+                    <ol>
+                        <li>Create a CLAUDE_KEY environment variable with your API key.</li>
+                        <li>Navigate to your project folder in the terminal.</li>
+                        <li>Run the following command:</li>
+                    </ol>
+                    <pre><code>npx autocode-ai</code></pre>
+                    <p>
+                        AutoCode will then read your README.md file and existing source code, interpret the instructions
+                        using the Claude 3.5 Sonnet API, and generate the necessary code structure, files, and content.
+                        It's that easy!
+                    </p>
+                </div>
+            </section>
             <section id="ai-agents" class="container ai-agents">
                 <h2>AI Agents</h2>
                 <div class="agent">

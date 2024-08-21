@@ -83,6 +83,7 @@ AutoCode incorporates a system of AI agents to streamline the development proces
 -   Tester Agent: Writes integration tests for endpoints
 -   Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
 -   Landing Page Agent: Generates a visually appealing landing page for the project
+-   Reddit Promotion Agent: Manages Reddit promotions using the /u/AutoCode community
 
 These agents work together to create a seamless development experience, allowing for faster feature implementation and easier code review processes.
 
