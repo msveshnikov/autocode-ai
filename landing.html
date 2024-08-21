@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AutoCode - Automatic Coding Tool</title>
+        <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --background-color: #ecf0f1;
+                --text-color: #333;
+            }
+
+            body {
+                font-family: "Arial", sans-serif;
+                line-height: 1.6;
+                color: var(--text-color);
+                margin: 0;
+                padding: 0;
+                background-color: var(--background-color);
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            header {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 1rem 0;
+            }
+
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            nav ul li a {
+                color: white;
+                text-decoration: none;
+            }
+
+            .hero {
+                background-image: url("image.png");
+                background-size: cover;
+                background-position: center;
+                height: 500px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                color: white;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            .cta-button {
+                display: inline-block;
+                background-color: var(--secondary-color);
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                transition: background-color 0.3s;
+            }
+
+            .cta-button:hover {
+                background-color: #2980b9;
+            }
+
+            .features {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                margin: 2rem 0;
+            }
+
+            .feature {
+                flex-basis: calc(33.333% - 20px);
+                background-color: white;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .testimonials {
+                background-color: var(--primary-color);
+                color: white;
+                padding: 2rem 0;
+            }
+
+            .testimonial {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .pricing {
+                display: flex;
+                justify-content: space-around;
+                margin: 2rem 0;
+            }
+
+            .plan {
+                background-color: white;
+                padding: 2rem;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            footer {
+                background-color: var(--primary-color);
+                color: white;
+                text-align: center;
+                padding: 1rem 0;
+                margin-top: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="container">
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <h1>AutoCode</h1>
+                    <p>An innovative automatic coding tool designed to bootstrap any software project incrementally</p>
+                    <a href="#" class="cta-button">Get Started</a>
+                </div>
+            </section>
+
+            <section id="features" class="container">
+                <h2>Features</h2>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Automatic Code Generation</h3>
+                        <p>Generate code based on README.md instructions using Claude 3.5 Sonnet API</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Multi-Language Support</h3>
+                        <p>Support for JavaScript, Python, and C# with language-specific linting and formatting</p>
+                    </div>
+                    <div class="feature">
+                        <h3>AI Agents</h3>
+                        <p>Specialized AI agents for database migrations, services, API routes, and testing</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Incremental Building</h3>
+                        <p>
+                            Build your project incrementally with intelligent code analysis and refactoring suggestions
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <h3>Automated Documentation</h3>
+                        <p>Generate comprehensive documentation for your project automatically</p>
+                    </div>
+                    <div class="feature">
+                        <h3>User-Friendly Interface</h3>
+                        <p>Easy-to-use command-line interface for seamless project management</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="testimonials" class="testimonials">
+                <div class="container">
+                    <h2>What Our Users Say</h2>
+                    <div class="testimonial">
+                        <p>
+                            "AutoCode has revolutionized our development process. We've cut our project bootstrap time
+                            in half!"
+                        </p>
+                        <cite>- John Doe, Senior Developer</cite>
+                    </div>
+                    <div class="testimonial">
+                        <p>
+                            "The AI agents are incredibly helpful. It's like having a team of experts working alongside
+                            you."
+                        </p>
+                        <cite>- Jane Smith, Tech Lead</cite>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pricing" class="container">
+                <h2>Pricing Plans</h2>
+                <div class="pricing">
+                    <div class="plan">
+                        <h3>Free</h3>
+                        <p>Basic features for small projects</p>
+                        <ul>
+                            <li>Automatic code generation</li>
+                            <li>Single language support</li>
+                            <li>Basic AI agent assistance</li>
+                        </ul>
+                        <a href="#" class="cta-button">Get Started</a>
+                    </div>
+                    <div class="plan">
+                        <h3>Pro</h3>
+                        <p>$10/month</p>
+                        <ul>
+                            <li>All Free features</li>
+                            <li>Multi-language support</li>
+                            <li>Advanced AI agents</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#" class="cta-button">Upgrade to Pro</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 AutoCode. All rights reserved.</p>
+        </footer>
+
+        <script>
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute("href")).scrollIntoView({
+                        behavior: "smooth",
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

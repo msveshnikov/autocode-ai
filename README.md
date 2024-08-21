@@ -88,3 +88,8 @@ These agents work together to create a seamless development experience, allowing
 -   Develop a visual workflow designer for AI agent interactions
 -   Integrate with popular IDEs and code editors for seamless workflow
 -   Develop a code review AI agent to provide automated code quality feedback
+
+## Branding for landing page
+
+-   Use deeper blue and cyan gradiant on black background + console images (matrix theme)
+-   Landing should be mobile friendly
