@@ -65,10 +65,10 @@ const UserInterface = {
         const { input } = await inquirer.prompt({
             type: "input",
             name: "input",
-            message: "Enter your suggestion (or 'exit' to quit):",
+            message: "Enter your suggestion (or 'Enter' to quit):",
         });
 
-        if (input.toLowerCase() === "exit") {
+        if (input.toLowerCase() === "") {
             return { continue: false, updatedReadme: readme };
         }
 

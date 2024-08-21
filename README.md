@@ -24,6 +24,8 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Language-specific linting and formatting
 -   Customizable configuration for different programming languages
 -   Multi-language project handling
+-   AI-powered agents for specialized tasks
+-   Landing page generator for project showcasing
 
 ## Installation
 
@@ -59,6 +61,7 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 -   `fileManager.js`: Handles file operations and project structure management
 -   `index.js`: Main entry point of the application
 -   `userInterface.js`: Manages user interactions and command-line interface
+-   `landing.html`: Template for generating project landing pages
 
 ## Supported Languages
 
@@ -72,15 +75,26 @@ Each language has its own configuration for file extensions, recommended linter,
 
 ## AI Agents
 
-AutoCode now incorporates a system of AI agents to streamline the development process:
+AutoCode incorporates a system of AI agents to streamline the development process:
 
 -   SQL Migrations Agent: Writes database migrations and type files
 -   Services Agent: Creates services that interact with the database and process data
 -   API Routes Agent: Handles input validation, auth checks, and service calls for HTTP requests
 -   Tester Agent: Writes integration tests for endpoints
 -   Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
+-   Landing Page Agent: Generates a visually appealing landing page for the project
 
 These agents work together to create a seamless development experience, allowing for faster feature implementation and easier code review processes.
+
+## Landing Page Generator
+
+AutoCode now includes a landing page generator to showcase your project:
+
+-   Automatically creates a responsive, mobile-friendly landing page
+-   Uses a sleek design with deep blue and cyan gradients on a black background
+-   Incorporates console-style imagery for a "matrix" theme
+-   Highlights key features and project information
+-   Customizable content based on your README.md and project structure
 
 ## Future Enhancements
 
@@ -88,8 +102,14 @@ These agents work together to create a seamless development experience, allowing
 -   Develop a visual workflow designer for AI agent interactions
 -   Integrate with popular IDEs and code editors for seamless workflow
 -   Develop a code review AI agent to provide automated code quality feedback
+-   Create a plugin system for extending AutoCode's functionality
+-   Develop a web-based interface for managing AutoCode projects
+-   Create a visual component library generator for front-end projects
 
-## Branding for landing page
+## Contributing
 
--   Use deeper blue and cyan gradiant on black background + console images (matrix theme)
--   Landing should be mobile friendly
+We welcome contributions to AutoCode! Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get started.
+
+## License
+
+AutoCode is released under the MIT License. See the [LICENSE](LICENSE) file for details.

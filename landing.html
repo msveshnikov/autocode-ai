@@ -6,19 +6,19 @@
         <title>AutoCode - Automatic Coding Tool</title>
         <style>
             :root {
-                --primary-color: #2c3e50;
-                --secondary-color: #3498db;
-                --background-color: #ecf0f1;
-                --text-color: #333;
+                --primary-color: #000000;
+                --secondary-color: #00ffff;
+                --accent-color: #0000ff;
+                --text-color: #ffffff;
             }
 
             body {
-                font-family: "Arial", sans-serif;
+                font-family: "Courier New", monospace;
                 line-height: 1.6;
                 color: var(--text-color);
                 margin: 0;
                 padding: 0;
-                background-color: var(--background-color);
+                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             }
 
             .container {
@@ -28,8 +28,7 @@
             }
 
             header {
-                background-color: var(--primary-color);
-                color: white;
+                background-color: rgba(0, 0, 0, 0.8);
                 padding: 1rem 0;
             }
 
@@ -41,89 +40,141 @@
             }
 
             nav ul li a {
-                color: white;
+                color: var(--secondary-color);
                 text-decoration: none;
+                font-weight: bold;
             }
 
             .hero {
-                background-image: url("image.png");
+                background-image: url("https://png.pngtree.com/thumb_back/fh260/back_pic/04/10/99/275819408746c91.jpg");
                 background-size: cover;
                 background-position: center;
-                height: 500px;
+                height: 100vh;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                color: white;
+                position: relative;
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 1;
             }
 
             .hero h1 {
-                font-size: 3rem;
+                font-size: 4rem;
                 margin-bottom: 1rem;
+                text-shadow: 0 0 10px var(--secondary-color);
             }
 
             .cta-button {
                 display: inline-block;
                 background-color: var(--secondary-color);
-                color: white;
-                padding: 10px 20px;
+                color: var(--primary-color);
+                padding: 15px 30px;
                 text-decoration: none;
                 border-radius: 5px;
                 font-weight: bold;
-                transition: background-color 0.3s;
+                transition: all 0.3s;
+                text-transform: uppercase;
             }
 
             .cta-button:hover {
-                background-color: #2980b9;
+                background-color: var(--accent-color);
+                color: var(--text-color);
+                box-shadow: 0 0 15px var(--secondary-color);
             }
 
             .features {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                margin: 2rem 0;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+                margin: 4rem 0;
             }
 
             .feature {
-                flex-basis: calc(33.333% - 20px);
-                background-color: white;
-                padding: 1rem;
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                transition: all 0.3s;
+            }
+
+            .feature:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+            }
+
+            .feature h3 {
+                color: var(--secondary-color);
                 margin-bottom: 1rem;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             }
 
             .testimonials {
-                background-color: var(--primary-color);
-                color: white;
-                padding: 2rem 0;
+                background-color: rgba(0, 0, 0, 0.8);
+                padding: 4rem 0;
             }
 
             .testimonial {
                 text-align: center;
-                margin-bottom: 2rem;
+                margin-bottom: 3rem;
             }
 
-            .pricing {
-                display: flex;
-                justify-content: space-around;
-                margin: 2rem 0;
+            .testimonial p {
+                font-style: italic;
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
             }
 
-            .plan {
-                background-color: white;
+            .testimonial cite {
+                color: var(--secondary-color);
+                font-weight: bold;
+            }
+
+            .ai-agents {
+                margin: 4rem 0;
+            }
+
+            .agent {
+                background-color: rgba(0, 0, 0, 0.6);
                 padding: 2rem;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                text-align: center;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            }
+
+            .agent h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
             }
 
             footer {
-                background-color: var(--primary-color);
-                color: white;
+                background-color: rgba(0, 0, 0, 0.8);
+                color: var(--text-color);
                 text-align: center;
-                padding: 1rem 0;
-                margin-top: 2rem;
+                padding: 2rem 0;
+                margin-top: 4rem;
+            }
+
+            @media (max-width: 768px) {
+                .hero h1 {
+                    font-size: 3rem;
+                }
+
+                .features {
+                    grid-template-columns: 1fr;
+                }
             }
         </style>
     </head>
@@ -132,15 +183,15 @@
             <nav class="container">
                 <ul>
                     <li><a href="#features">Features</a></li>
+                    <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
                 </ul>
             </nav>
         </header>
 
         <main>
             <section class="hero">
-                <div class="container">
+                <div class="hero-content">
                     <h1>AutoCode</h1>
                     <p>An innovative automatic coding tool designed to bootstrap any software project incrementally</p>
                     <a href="#" class="cta-button">Get Started</a>
@@ -159,10 +210,6 @@
                         <p>Support for JavaScript, Python, and C# with language-specific linting and formatting</p>
                     </div>
                     <div class="feature">
-                        <h3>AI Agents</h3>
-                        <p>Specialized AI agents for database migrations, services, API routes, and testing</p>
-                    </div>
-                    <div class="feature">
                         <h3>Incremental Building</h3>
                         <p>
                             Build your project incrementally with intelligent code analysis and refactoring suggestions
@@ -176,6 +223,40 @@
                         <h3>User-Friendly Interface</h3>
                         <p>Easy-to-use command-line interface for seamless project management</p>
                     </div>
+                    <div class="feature">
+                        <h3>Landing Page Generator</h3>
+                        <p>Create visually appealing landing pages to showcase your project</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-agents" class="container ai-agents">
+                <h2>AI Agents</h2>
+                <div class="agent">
+                    <h3>SQL Migrations Agent</h3>
+                    <p>Writes database migrations and type files</p>
+                </div>
+                <div class="agent">
+                    <h3>Services Agent</h3>
+                    <p>Creates services that interact with the database and process data</p>
+                </div>
+                <div class="agent">
+                    <h3>API Routes Agent</h3>
+                    <p>Handles input validation, auth checks, and service calls for HTTP requests</p>
+                </div>
+                <div class="agent">
+                    <h3>Tester Agent</h3>
+                    <p>Writes integration tests for endpoints</p>
+                </div>
+                <div class="agent">
+                    <h3>Project Manager Agent</h3>
+                    <p>
+                        Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
+                    </p>
+                </div>
+                <div class="agent">
+                    <h3>Landing Page Agent</h3>
+                    <p>Generates a visually appealing landing page for the project</p>
                 </div>
             </section>
 
@@ -198,33 +279,6 @@
                     </div>
                 </div>
             </section>
-
-            <section id="pricing" class="container">
-                <h2>Pricing Plans</h2>
-                <div class="pricing">
-                    <div class="plan">
-                        <h3>Free</h3>
-                        <p>Basic features for small projects</p>
-                        <ul>
-                            <li>Automatic code generation</li>
-                            <li>Single language support</li>
-                            <li>Basic AI agent assistance</li>
-                        </ul>
-                        <a href="#" class="cta-button">Get Started</a>
-                    </div>
-                    <div class="plan">
-                        <h3>Pro</h3>
-                        <p>$10/month</p>
-                        <ul>
-                            <li>All Free features</li>
-                            <li>Multi-language support</li>
-                            <li>Advanced AI agents</li>
-                            <li>Priority support</li>
-                        </ul>
-                        <a href="#" class="cta-button">Upgrade to Pro</a>
-                    </div>
-                </div>
-            </section>
         </main>
 
         <footer>
@@ -232,7 +286,6 @@
         </footer>
 
         <script>
-            // Smooth scrolling for navigation links
             document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
                 anchor.addEventListener("click", function (e) {
                     e.preventDefault();

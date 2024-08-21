@@ -47,5 +47,9 @@ export const CONFIG = {
             description:
                 "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
         },
+        redditPromotion: {
+            name: "Reddit Promotion Agent",
+            description: "Manages Reddit promotions using the /u/AutoCode community",
+        },
     },
 };
