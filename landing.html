@@ -201,6 +201,62 @@
                 color: var(--secondary-color);
                 font-family: "Courier New", monospace;
             }
+
+            .pricing-plans {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin: 4rem 0;
+            }
+
+            .pricing-plan {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                transition: all 0.3s;
+                text-align: center;
+                flex: 1;
+                max-width: 300px;
+            }
+
+            .pricing-plan:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+            }
+
+            .pricing-plan h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            .pricing-plan .price {
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+
+            .pricing-plan ul {
+                list-style-type: none;
+                padding: 0;
+                margin-bottom: 2rem;
+            }
+
+            .pricing-plan ul li {
+                margin-bottom: 0.5rem;
+            }
+
+            .pricing-plan.featured {
+                background-color: rgba(0, 255, 255, 0.1);
+                border: 2px solid var(--secondary-color);
+            }
+
+            @media (max-width: 768px) {
+                .pricing-plans {
+                    flex-direction: column;
+                    align-items: center;
+                }
+            }
         </style>
     </head>
     <body>
@@ -210,6 +266,7 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
                 </ul>
             </nav>
@@ -301,7 +358,31 @@
                     <p>Generates a visually appealing landing page for the project</p>
                 </div>
             </section>
-
+            <section id="pricing" class="container">
+                <h2>Pricing</h2>
+                <div class="pricing-plans">
+                    <div class="pricing-plan">
+                        <h3>Free Tier</h3>
+                        <p class="price">$0/month</p>
+                        <ul>
+                            <li>10 requests/day</li>
+                            <li>Basic features</li>
+                            <li>Community support</li>
+                        </ul>
+                        <a href="#" class="cta-button">Get Started</a>
+                    </div>
+                    <div class="pricing-plan featured">
+                        <h3>Premium</h3>
+                        <p class="price">$10/month</p>
+                        <ul>
+                            <li>Unlimited requests</li>
+                            <li>All features</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#" class="cta-button">Upgrade Now</a>
+                    </div>
+                </div>
+            </section>
             <section id="testimonials" class="testimonials">
                 <div class="container">
                     <h2>What Our Users Say</h2>
