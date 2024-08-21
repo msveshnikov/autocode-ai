@@ -152,6 +152,7 @@
 
             .ai-agents {
                 margin: 4rem 0;
+                text-align: center;
             }
 
             .agent {
@@ -160,6 +161,10 @@
                 border-radius: 10px;
                 margin-bottom: 2rem;
                 box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                display: inline-block;
+                width: calc(33.33% - 2rem);
+                margin: 1rem;
+                vertical-align: top;
             }
 
             .agent h3 {
@@ -268,6 +273,10 @@
                 .pricing-plan {
                     width: 100%;
                 }
+
+                .agent {
+                    width: calc(100% - 2rem);
+                }
             }
         </style>
     </head>
@@ -302,7 +311,7 @@
                     </div>
                     <div class="feature">
                         <h3>Multi-Language Support</h3>
-                        <p>Support for JavaScript, Python, and C# with language-specific linting and formatting</p>
+                        <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, and Swift</p>
                     </div>
                     <div class="feature">
                         <h3>Incremental Building</h3>
@@ -369,6 +378,30 @@
                     <h3>Landing Page Agent</h3>
                     <p>Generates a visually appealing landing page for the project</p>
                 </div>
+                <div class="agent">
+                    <h3>Reddit Promotion Agent</h3>
+                    <p>Manages Reddit promotions using the /u/AutoCode community</p>
+                </div>
+                <div class="agent">
+                    <h3>Code Review Agent</h3>
+                    <p>Provides automated code quality feedback and suggestions</p>
+                </div>
+                <div class="agent">
+                    <h3>DevOps Agent</h3>
+                    <p>Configures CI/CD pipelines and manages deployment processes</p>
+                </div>
+                <div class="agent">
+                    <h3>Security Agent</h3>
+                    <p>Performs security audits and suggests vulnerability fixes</p>
+                </div>
+                <div class="agent">
+                    <h3>Performance Agent</h3>
+                    <p>Analyzes code for performance bottlenecks and optimizations</p>
+                </div>
+                <div class="agent">
+                    <h3>Internationalization Agent</h3>
+                    <p>Implements multi-language support in projects</p>
+                </div>
             </section>
             <section id="pricing" class="container">
                 <h2>Pricing</h2>
@@ -394,6 +427,18 @@
                             <li>Priority support</li>
                         </ul>
                         <a href="#" class="cta-button">Upgrade Now</a>
+                    </div>
+                    <div class="pricing-plan">
+                        <h3>Enterprise</h3>
+                        <p class="price">Custom</p>
+                        <ul>
+                            <li>Unlimited requests</li>
+                            <li>All features + custom integrations</li>
+                            <li>Unlimited devices</li>
+                            <li>Dedicated support team</li>
+                            <li>On-premises deployment option</li>
+                        </ul>
+                        <a href="#" class="cta-button">Contact Us</a>
                     </div>
                 </div>
             </section>
