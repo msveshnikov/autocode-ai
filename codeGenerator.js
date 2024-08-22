@@ -9,13 +9,13 @@ import ora from "ora";
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
 const CodeGenerator = {
-    async generate(readme, currentCode, fileName, projectStructure) {
+    async generate(readme, currentCode, fileName, projectStructure, allFileContents) {
         const fileExtension = path.extname(fileName);
         const language = this.getLanguageFromExtension(fileExtension);
         const languageConfig = CONFIG.languageConfigs[language];
 
         const prompt = `
-You are AutoCode, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), and the project structure.
+You are AutoCode, an automatic coding tool. Your task is to generate or update the ${fileName} file based on the README.md instructions, the current ${fileName} content (if any), the project structure, and the content of all other files.
 
 README.md content:
 ${readme}
@@ -26,13 +26,19 @@ ${currentCode || "No existing code"}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
+Content of other selected files:
+${Object.entries(allFileContents)
+    .filter(([key]) => key !== fileName)
+    .map(([key, value]) => `${key}:\n\`\`\`\n${value}\n\`\`\``)
+    .join("\n\n")}
+
 Language: ${language}
 File extension: ${fileExtension}
 Linter: ${languageConfig.linter}
 Formatter: ${languageConfig.formatter}
 Package manager: ${languageConfig.packageManager}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure and the content of other selected files when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const spinner = ora("Generating code...").start();

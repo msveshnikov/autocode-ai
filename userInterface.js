@@ -58,7 +58,7 @@ const UserInterface = {
             type: "list",
             name: "language",
             message: "Select the programming language:",
-            choices: ["JavaScript", "Python", "C#"],
+            choices: ["JavaScript", "Python", "C#", "Java", "Ruby", "Go", "Rust", "PHP", "Swift"],
         });
     },
 
@@ -135,16 +135,35 @@ const UserInterface = {
         await CodeGenerator.runAPIRoutesAgent(projectStructure);
         await CodeGenerator.runTesterAgent(projectStructure);
         await CodeGenerator.runProjectManagerAgent(projectStructure);
+        await CodeGenerator.runLandingPageAgent(projectStructure);
+        await CodeGenerator.runRedditPromotionAgent(projectStructure);
+        await CodeGenerator.runCodeReviewAgent(projectStructure);
+        await CodeGenerator.runDevOpsAgent(projectStructure);
+        await CodeGenerator.runSecurityAgent(projectStructure);
+        await CodeGenerator.runPerformanceAgent(projectStructure);
+        await CodeGenerator.runInternationalizationAgent(projectStructure);
     },
 
     async processFiles(files, readme, projectStructure) {
+        const allFileContents = {};
+        for (const file of files) {
+            const filePath = path.join(process.cwd(), file);
+            allFileContents[file] = await FileManager.read(filePath);
+        }
+
         for (const file of files) {
             const filePath = path.join(process.cwd(), file);
             console.log(chalk.cyan(`🔧 Processing ${file}...`));
-            const currentContent = await FileManager.read(filePath);
+            const currentContent = allFileContents[file];
             const spinner = ora("Generating content...").start();
             try {
-                const generatedContent = await CodeGenerator.generate(readme, currentContent, file, projectStructure);
+                const generatedContent = await CodeGenerator.generate(
+                    readme,
+                    currentContent,
+                    file,
+                    projectStructure,
+                    allFileContents
+                );
                 spinner.succeed("Content generated");
                 await FileManager.write(filePath, generatedContent);
 
@@ -157,6 +176,7 @@ const UserInterface = {
             }
         }
     },
+
     async handleAction(action, readme, readmePath, projectStructure) {
         let continueExecution = true;
         switch (action) {
@@ -247,15 +267,14 @@ const UserInterface = {
             case "🤖 12. Run AI Agents":
                 await this.runAIAgents(projectStructure);
                 break;
-            case "🔒 13. Security analysis":
-                {
-                    const filesToAnalyze = await FileManager.getFilesToProcess();
-                    const { selectedFiles } = await UserInterface.promptForFiles(filesToAnalyze);
-                    for (const file of selectedFiles) {
-                        await CodeAnalyzer.checkSecurityVulnerabilities(file);
-                    }
+            case "🔒 13. Security analysis": {
+                const filesToAnalyze = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToAnalyze);
+                for (const file of selectedFiles) {
+                    await CodeAnalyzer.checkSecurityVulnerabilities(file);
                 }
                 break;
+            }
             case "🚪 Exit":
                 console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
                 continueExecution = false;
