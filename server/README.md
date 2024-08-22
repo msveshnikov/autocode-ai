@@ -6,6 +6,7 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 
 ## Features
 
+-   ES6, async/await, fetch
 -   User registration and login
 -   Google Sign-In integration
 -   Stripe integration for payment processing

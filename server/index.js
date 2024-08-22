@@ -1,8 +1,7 @@
 import express from "express";
-import { json } from "body-parser";
+// import { json } from "body-parser";
 import mongoose from "mongoose";
 import Stripe from "stripe";
-import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import licenseServer from "./license-server.js";
@@ -13,6 +12,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
+import User from "./models/user.js";
 
 dotenv.config();
 
@@ -24,17 +24,6 @@ const port = process.env.PORT || 3000;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-const UserSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-    tier: String,
-    stripeCustomerId: String,
-    googleId: String,
-});
-
-const User = mongoose.model("User", UserSchema);
 
 passport.use(
     new JwtStrategy(
@@ -83,7 +72,7 @@ passport.use(
     )
 );
 
-app.use(json());
+// app.use(json());
 app.use(passport.initialize());
 app.use("/license", licenseServer);
 app.set("view engine", "ejs");
@@ -95,8 +84,7 @@ app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);
 
 app.get("/", async (req, res) => {
-    const landingPage = await fs.readFile(path.join(__dirname, "landing.html"), "utf-8");
-    res.send(landingPage);
+    res.render("landing");
 });
 
 app.post("/webhook", async (req, res) => {
