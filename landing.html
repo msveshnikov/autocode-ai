@@ -251,6 +251,38 @@
                 border: 2px solid var(--secondary-color);
             }
 
+            .languages {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+                margin: 2rem 0;
+            }
+
+            .language {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 1rem;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+
+            .future-enhancements {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                margin-top: 4rem;
+            }
+
+            .future-enhancements ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .future-enhancements li {
+                margin-bottom: 0.5rem;
+            }
+
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
@@ -279,11 +311,9 @@
         <header>
             <nav class="container">
                 <ul>
-                    <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
                 </ul>
             </nav>
         </header>
@@ -399,6 +429,20 @@
                     <p>Implements multi-language support in projects</p>
                 </div>
             </section>
+            <section id="languages" class="container">
+                <h2>Supported Languages</h2>
+                <div class="languages">
+                    <div class="language">JavaScript</div>
+                    <div class="language">Python</div>
+                    <div class="language">C#</div>
+                    <div class="language">Java</div>
+                    <div class="language">Ruby</div>
+                    <div class="language">Go</div>
+                    <div class="language">Rust</div>
+                    <div class="language">PHP</div>
+                    <div class="language">Swift</div>
+                </div>
+            </section>
             <section id="pricing" class="container">
                 <h2>Pricing</h2>
                 <div class="pricing-plans">
@@ -438,7 +482,7 @@
                     </div>
                 </div>
             </section>
-            <section id="testimonials" class="testimonials">
+            <!-- <section id="testimonials" class="testimonials">
                 <div class="container">
                     <h2>What Our Users Say</h2>
                     <div class="testimonial">
@@ -456,11 +500,15 @@
                         <cite>- Jane Smith, Tech Lead</cite>
                     </div>
                 </div>
-            </section>
+            </section> -->
         </main>
 
         <footer>
             <p>&copy; 2024 AutoCode. All rights reserved.</p>
+            <p>
+                For support, visit our <a href="https://forum.autocode.one">community forum</a> or contact
+                support@autocode.one
+            </p>
         </footer>
 
         <script>
