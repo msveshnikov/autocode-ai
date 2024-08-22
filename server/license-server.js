@@ -79,7 +79,7 @@ app.post("/check", async (req, res) => {
             license.requestsToday = 0;
             license.lastReset = today;
         }
-        const maxRequests = tier === "Premium" ? Infinity : 10;
+        const maxRequests = tier === "Premium" ? Infinity : tier === "Free" ? 10 : Infinity;
         if (license.requestsToday >= maxRequests) {
             return res.status(403).json({ error: "Daily limit exceeded" });
         }

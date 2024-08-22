@@ -1,0 +1,155 @@
+# AutoCode Registration System
+
+## Project Overview
+
+AutoCode Registration System is a simple Express.js application designed to handle user registrations, process payments via Stripe, and manage user licenses using MongoDB. The system offers a tiered pricing model with Free, Premium, and Enterprise options, each providing different levels of access and features.
+
+## Features
+
+- User registration and login
+- Stripe integration for payment processing
+- License management with daily request limits
+- Tiered pricing model (Free, Premium, Enterprise)
+- MongoDB integration for data storage
+- Docker support for easy deployment
+
+## Architecture
+
+The project is built using a microservices architecture, with the following main components:
+
+1. **Web Server (index.js)**: Handles incoming HTTP requests, serves the landing page, and manages user registration and payment flow.
+2. **License Server (license-server.js)**: Manages user authentication, license checking, and request limit enforcement.
+3. **MongoDB**: Stores user and license data.
+4. **Stripe**: Handles payment processing and subscription management.
+
+### Module Interactions
+
+- The web server interacts with the license server to authenticate users and check license status.
+- Both servers communicate with MongoDB to store and retrieve user and license data.
+- The web server integrates with Stripe for payment processing and subscription management.
+
+## Installation and Setup
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-repo/autocode-registration.git
+   cd autocode-registration
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env` file in the project root and add the following variables:
+   ```
+   NODE_ENV=production
+   MONGODB_URI=mongodb://mongo:27017/autocode
+   JWT_SECRET=your-secret-key
+   STRIPE_SECRET_KEY=your-stripe-secret-key
+   STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+   ```
+
+4. Build and run the Docker containers:
+   ```
+   docker-compose up --build
+   ```
+
+## Usage
+
+### API Endpoints
+
+1. **Registration**: 
+   - Endpoint: `POST /register`
+   - Body: `{ "username": "user", "password": "pass", "tier": "Free" }`
+
+2. **Login**: 
+   - Endpoint: `POST /login`
+   - Body: `{ "username": "user", "password": "pass" }`
+
+3. **License Check**: 
+   - Endpoint: `POST /check`
+   - Headers: `Authorization: Bearer <token>`
+
+### Stripe Integration
+
+The system uses Stripe Checkout for payment processing. When a user registers for a paid tier, they are redirected to a Stripe Checkout page. Upon successful payment, Stripe sends a webhook to update the user's status in the database.
+
+## Project Structure
+
+```
+.
+├── docker-compose.yml
+├── Dockerfile
+├── index.js
+├── landing.html
+├── license-server.js
+└── package.json
+```
+
+- `docker-compose.yml`: Defines the Docker services for the application and MongoDB.
+- `Dockerfile`: Contains instructions for building the Docker image.
+- `index.js`: Main entry point for the web server.
+- `landing.html`: HTML template for the landing page.
+- `license-server.js`: Implements the license management logic.
+- `package.json`: Defines project dependencies and scripts.
+
+## Pricing Tiers
+
+1. **Free Tier**
+   - $0/month
+   - 10 requests/day
+   - Basic features
+   - 3 devices
+   - Community support
+
+2. **Premium**
+   - $10/month
+   - Unlimited requests
+   - All features
+   - 10 devices
+   - Priority support
+
+3. **Enterprise**
+   - Custom pricing
+   - Unlimited requests
+   - All features + custom integrations
+   - Unlimited devices
+   - Dedicated support team
+   - On-premises deployment option
+
+## Security Considerations
+
+- User passwords are hashed using bcrypt before storage.
+- JWT tokens are used for authentication.
+- HTTPS should be implemented in production to secure data in transit.
+- Ensure proper MongoDB security measures are in place.
+- Keep Stripe API keys and webhook secrets secure.
+
+## Scaling Considerations
+
+- Implement a load balancer for horizontal scaling of web and license servers.
+- Consider using a managed MongoDB service for easier scaling and maintenance.
+- Implement caching mechanisms to reduce database load.
+- Use a message queue for asynchronous processing of non-critical tasks.
+
+## Future Improvements
+
+1. Implement user profile management.
+2. Add admin dashboard for managing users and subscriptions.
+3. Integrate email notifications for important events.
+4. Implement more sophisticated rate limiting and request tracking.
+5. Add comprehensive logging and monitoring.
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Create a new Pull Request
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.

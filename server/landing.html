@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCode - AI-Powered Software Development</title>
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #00ffff;
+            --accent-color: #0000ff;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: "Courier New", monospace;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0.5rem;
+        }
+
+        nav ul li a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .hero {
+            background-image: url("https://png.pngtree.com/thumb_back/fh260/back_pic/04/10/99/275819408746c91.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--secondary-color);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            box-shadow: 0 0 15px var(--secondary-color);
+        }
+
+        .pricing-plans {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 4rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pricing-plan {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s;
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+        }
+
+        .pricing-plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .pricing-plan h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-plan .price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-plan ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-plan ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-plan.featured {
+            background-color: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--secondary-color);
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: var(--text-color);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .pricing-plans {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-plan {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <ul>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>AutoCode</h1>
+                <p>AI-Powered Software Development</p>
+                <a href="/register" class="cta-button">Get Started</a>
+            </div>
+        </section>
+
+        <section id="pricing" class="container">
+            <h2>Pricing</h2>
+            <div class="pricing-plans">
+                <div class="pricing-plan">
+                    <h3>Free Tier</h3>
+                    <p class="price">$0/month</p>
+                    <ul>
+                        <li>10 requests/day</li>
+                        <li>Basic features</li>
+                        <li>3 devices</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="/register?plan=free" class="cta-button">Get Started</a>
+                </div>
+                <div class="pricing-plan featured">
+                    <h3>Premium</h3>
+                    <p class="price">$10/month</p>
+                    <ul>
+                        <li>Unlimited requests</li>
+                        <li>All features</li>
+                        <li>10 devices</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="/register?plan=premium" class="cta-button">Upgrade Now</a>
+                </div>
+                <div class="pricing-plan">
+                    <h3>Enterprise</h3>
+                    <p class="price">Custom</p>
+                    <ul>
+                        <li>Unlimited requests</li>
+                        <li>All features + custom integrations</li>
+                        <li>Unlimited devices</li>
+                        <li>Dedicated support team</li>
+                        <li>On-premises deployment option</li>
+                    </ul>
+                    <a href="/register?plan=enterprise" class="cta-button">Contact Us</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AutoCode. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -149,12 +149,6 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login`, `/register`, and `/check` license methods.
 
-## Context Management
-
--   Add files or directories to context in the terminal
--   Keep context updated automatically
--   Maintain precise control over what's included in the AI's context
-
 ## Long-Running Agents
 
 -   Use long-running agents to plan out and implement tasks that are too large for ChatGPT or IDE-based tools
