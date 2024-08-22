@@ -5,7 +5,6 @@ import Stripe from "stripe";
 import path from "path";
 import { fileURLToPath } from "url";
 import licenseServer from "./license-server.js";
-import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
@@ -13,6 +12,7 @@ import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import User from "./models/user.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
