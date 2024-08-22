@@ -54,7 +54,7 @@ The project is built using a microservices architecture, with the following main
     ```
     NODE_ENV=production
     MONGODB_URI=mongodb://mongo:27017/autocode
-    JWT_SECRET=your-secret-key
+    JWT_TOKEN=your-secret-key
     STRIPE_SECRET_KEY=your-stripe-secret-key
     STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
     GOOGLE_CLIENT_ID=your-google-client-id

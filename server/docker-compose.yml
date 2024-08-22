@@ -8,7 +8,7 @@ services:
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongo:27017/autocode
-      - JWT_SECRET=${JWT_SECRET}
+      - JWT_TOKEN=${JWT_TOKEN}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}

@@ -1,5 +1,4 @@
 import express from "express";
-// import { json } from "body-parser";
 import mongoose from "mongoose";
 import Stripe from "stripe";
 import path from "path";
@@ -29,7 +28,7 @@ passport.use(
     new JwtStrategy(
         {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: process.env.JWT_SECRET,
+            secretOrKey: process.env.JWT_TOKEN,
         },
         async (jwtPayload, done) => {
             try {
@@ -72,7 +71,7 @@ passport.use(
     )
 );
 
-// app.use(json());
+app.use(express.json());
 app.use(passport.initialize());
 app.use("/license", licenseServer);
 app.set("view engine", "ejs");
@@ -87,7 +86,7 @@ app.get("/", async (req, res) => {
     res.render("landing");
 });
 
-app.post("/webhook", async (req, res) => {
+app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const sig = req.headers["stripe-signature"];
     let event;
 
