@@ -1,5 +1,5 @@
 export const CONFIG = {
-    licenseServerUrl: "https:/autocode.one/api",
+    licenseServerUrl: "https://autocode.one/api",
     excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
     excludedDirs: [".git", "node_modules"],
     excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
@@ -25,6 +25,42 @@ export const CONFIG = {
             formatter: "dotnet-format",
             packageManager: "nuget",
         },
+        java: {
+            fileExtensions: [".java"],
+            linter: "checkstyle",
+            formatter: "google-java-format",
+            packageManager: "maven",
+        },
+        ruby: {
+            fileExtensions: [".rb"],
+            linter: "rubocop",
+            formatter: "rubocop",
+            packageManager: "bundler",
+        },
+        go: {
+            fileExtensions: [".go"],
+            linter: "golangci-lint",
+            formatter: "gofmt",
+            packageManager: "go mod",
+        },
+        rust: {
+            fileExtensions: [".rs"],
+            linter: "clippy",
+            formatter: "rustfmt",
+            packageManager: "cargo",
+        },
+        php: {
+            fileExtensions: [".php"],
+            linter: "php-cs-fixer",
+            formatter: "php-cs-fixer",
+            packageManager: "composer",
+        },
+        swift: {
+            fileExtensions: [".swift"],
+            linter: "swiftlint",
+            formatter: "swiftformat",
+            packageManager: "swift package manager",
+        },
     },
     aiAgents: {
         sqlMigrations: {
@@ -48,9 +84,80 @@ export const CONFIG = {
             description:
                 "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
         },
+        landingPage: {
+            name: "Landing Page Agent",
+            description: "Generates a visually appealing landing page for the project",
+        },
         redditPromotion: {
             name: "Reddit Promotion Agent",
             description: "Manages Reddit promotions using the /u/AutoCode community",
         },
+        codeReview: {
+            name: "Code Review Agent",
+            description: "Provides automated code quality feedback and suggestions",
+        },
+        devOps: {
+            name: "DevOps Agent",
+            description: "Configures CI/CD pipelines and manages deployment processes",
+        },
+        security: {
+            name: "Security Agent",
+            description: "Performs security audits and suggests vulnerability fixes",
+        },
+        performance: {
+            name: "Performance Agent",
+            description: "Analyzes code for performance bottlenecks and optimizations",
+        },
+        internationalization: {
+            name: "Internationalization Agent",
+            description: "Implements multi-language support in projects",
+        },
+    },
+    pricingTiers: {
+        free: {
+            name: "Free Tier",
+            price: 0,
+            requestsPerDay: 10,
+            features: ["Basic features"],
+            devices: 3,
+            support: "Community support",
+        },
+        premium: {
+            name: "Premium",
+            price: 10,
+            requestsPerDay: Infinity,
+            features: ["All features"],
+            devices: 10,
+            support: "Priority support",
+        },
+        enterprise: {
+            name: "Enterprise",
+            price: "Custom",
+            requestsPerDay: Infinity,
+            features: ["All features", "Custom integrations"],
+            devices: Infinity,
+            support: "Dedicated support team",
+            onPremises: true,
+        },
+    },
+    landingPage: {
+        templatePath: "landing.html",
+        theme: {
+            primaryColor: "#00FFFF",
+            secondaryColor: "#000080",
+            backgroundColor: "#000000",
+        },
+    },
+    contextManagement: {
+        autoUpdate: true,
+        maxContextSize: 200000,
+    },
+    sandbox: {
+        enabled: true,
+        versionControl: "git",
+    },
+    syntaxChecking: {
+        autoFix: true,
+        supportedLanguages: 30,
     },
 };

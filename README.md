@@ -2,7 +2,7 @@
 
 AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt.
 
-![alt text](image.png)
+![AutoCode Logo](image.png)
 
 ## Features
 
@@ -20,7 +20,7 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Intelligent code analysis and refactoring suggestions
 -   Automated documentation generation
 -   User-friendly command-line interface
--   Support for multiple programming languages (JavaScript, Python, C#)
+-   Support for multiple programming languages
 -   Language-specific linting and formatting
 -   Customizable configuration for different programming languages
 -   Multi-language project handling
@@ -28,6 +28,12 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Landing page generator for project showcasing
 -   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
+-   Context management system
+-   Long-running AI agents
+-   Review and revise workflow
+-   Syntax checking and auto-fixing
+-   Version-controlled sandbox for AI-generated code
+-   Iterative development alongside AI
 
 ## Installation
 
@@ -143,20 +149,44 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login`, `/register`, and `/check` license methods.
 
+## Context Management
+
+-   Add files or directories to context in the terminal
+-   Keep context updated automatically
+-   Maintain precise control over what's included in the AI's context
+
+## Long-Running Agents
+
+-   Use long-running agents to plan out and implement tasks that are too large for ChatGPT or IDE-based tools
+-   Agents can work on complex, multi-step tasks while maintaining context
+
+## Review and Revise
+
+-   Proposed changes are accumulated in a version-controlled sandbox
+-   Review and iterate before applying changes to your actual project
+-   Easily revert or modify AI-generated code
+
+## Automatic Syntax Checking
+
+-   Auto-fix syntax in 30+ languages
+-   Attempts to fix other common issues like missing imports, variable declarations, and function implementations
+
 ## Future Enhancements
 
 -   Expand AI agent capabilities and inter-agent communication
--   Develop a visual workflow designer for AI agent interactions
 -   Integrate with popular IDEs and code editors for seamless workflow
--   Create a plugin system for extending AutoCode's functionality
 -   Develop a web-based interface for managing AutoCode projects
--   Create a visual component library generator for front-end projects
 -   Implement a cross-platform desktop application for enhanced user experience
 -   Add support for more programming languages and frameworks
--   Implement machine learning models for code optimization and bug prediction
 -   Create a marketplace for custom AI agents and plugins
 -   Develop a natural language processing feature for converting user stories to code
+-   Create a collaborative mode for team-based AI-assisted development
+-   Develop a code migration assistant for updating legacy codebases
 
 ## Support
 
 For support, please visit our [community forum](https://forum.autocode.one) or contact our support team at support@autocode.one.
+
+---
+
+AutoCode: Robust LLM-driven development for serious projects. Build entire features and apps with a sustainable, git-inspired workflow. Find the sweet spot between AI autonomy and developer control.
