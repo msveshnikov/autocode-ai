@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login - AutoCode</title>
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .login-container {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                width: 300px;
+            }
+            h1 {
+                text-align: center;
+                color: #00ffff;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                border: 1px solid #00ffff;
+                background-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+                border-radius: 4px;
+            }
+            button {
+                background-color: #00ffff;
+                color: #000000;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+            }
+            .google-login {
+                margin-top: 1rem;
+                background-color: #4285f4;
+                color: #ffffff;
+            }
+            .google-login:hover {
+                background-color: #357ae8;
+            }
+            .error-message {
+                color: #ff0000;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Login</h1>
+            <% if (locals.error) { %>
+            <p class="error-message"><%= error %></p>
+            <% } %>
+            <form id="loginForm">
+                <input type="text" id="username" name="username" placeholder="Username" required />
+                <input type="password" id="password" name="password" placeholder="Password" required />
+                <button type="submit">Login</button>
+            </form>
+            <button class="google-login" onclick="window.location.href='/auth/google'">Login with Google</button>
+        </div>
+        <script>
+            document.getElementById("loginForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                try {
+                    const response = await fetch("/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ username, password }),
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem("token", data.token);
+                        window.location.href = "/profile";
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.error || "Login failed");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        </script>
+    </body>
+</html>

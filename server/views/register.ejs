@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Register - AutoCode</title>
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            .container {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                width: 100%;
+                max-width: 400px;
+            }
+            h1 {
+                text-align: center;
+                color: #00ffff;
+                margin-bottom: 1.5rem;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            label {
+                margin-top: 1rem;
+                color: #00ffff;
+            }
+            input,
+            select {
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid #00ffff;
+                color: #ffffff;
+                border-radius: 4px;
+            }
+            button {
+                margin-top: 1.5rem;
+                padding: 0.75rem;
+                background-color: #00ffff;
+                color: #000000;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+            button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+                box-shadow: 0 0 15px #00ffff;
+            }
+            .google-signin {
+                margin-top: 1rem;
+                background-color: #4285f4;
+                color: #ffffff;
+            }
+            .google-signin:hover {
+                background-color: #357ae8;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Register for AutoCode</h1>
+            <form id="registerForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required />
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required />
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+
+                <label for="tier">Select Tier:</label>
+                <select id="tier" name="tier" required>
+                    <option value="Free">Free</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Enterprise">Enterprise</option>
+                </select>
+
+                <button type="submit">Register</button>
+            </form>
+            <button class="google-signin" onclick="window.location.href='/auth/google'">Sign in with Google</button>
+        </div>
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            const stripe = Stripe("<%= process.env.STRIPE_PUBLISHABLE_KEY %>");
+            const form = document.getElementById("registerForm");
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch("/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    const result = await response.json();
+
+                    if (result.sessionId) {
+                        stripe.redirectToCheckout({ sessionId: result.sessionId });
+                    } else if (result.token) {
+                        localStorage.setItem("token", result.token);
+                        window.location.href = "/profile";
+                    } else {
+                        alert("Registration successful! Please log in.");
+                        window.location.href = "/login";
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred during registration. Please try again.");
+                }
+            });
+        </script>
+    </body>
+</html>

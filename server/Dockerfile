@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "license-server.js"]
+CMD ["node", "index.js"]

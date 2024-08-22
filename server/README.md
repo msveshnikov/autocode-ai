@@ -2,26 +2,25 @@
 
 ## Project Overview
 
-AutoCode Registration System is a simple Express.js application designed to handle user registrations, process payments via Stripe, and manage user licenses using MongoDB. The system offers a tiered pricing model with Free, Premium, and Enterprise options, each providing different levels of access and features.
-
-# ADD
-
--   Pages for user profile management, login/register and payment using some Express template engibe.
+AutoCode Registration System is a comprehensive Express.js application designed to handle user registrations, process payments via Stripe, and manage user licenses using MongoDB. The system offers a tiered pricing model with Free, Premium, and Enterprise options, each providing different levels of access and features.
 
 ## Features
 
 -   User registration and login
+-   Google Sign-In integration
 -   Stripe integration for payment processing
 -   License management with daily request limits
 -   Tiered pricing model (Free, Premium, Enterprise)
 -   MongoDB integration for data storage
 -   Docker support for easy deployment
+-   User profile management
+-   Express template engine for dynamic page rendering
 
 ## Architecture
 
 The project is built using a microservices architecture, with the following main components:
 
-1. **Web Server (index.js)**: Handles incoming HTTP requests, serves the landing page, and manages user registration and payment flow.
+1. **Web Server (index.js)**: Handles incoming HTTP requests, serves dynamic pages, and manages user registration and payment flow.
 2. **License Server (license-server.js)**: Manages user authentication, license checking, and request limit enforcement.
 3. **MongoDB**: Stores user and license data.
 4. **Stripe**: Handles payment processing and subscription management.
@@ -31,6 +30,7 @@ The project is built using a microservices architecture, with the following main
 -   The web server interacts with the license server to authenticate users and check license status.
 -   Both servers communicate with MongoDB to store and retrieve user and license data.
 -   The web server integrates with Stripe for payment processing and subscription management.
+-   Google Sign-In API is used for alternative authentication.
 
 ## Installation and Setup
 
@@ -56,6 +56,8 @@ The project is built using a microservices architecture, with the following main
     JWT_SECRET=your-secret-key
     STRIPE_SECRET_KEY=your-stripe-secret-key
     STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+    GOOGLE_CLIENT_ID=your-google-client-id
+    GOOGLE_CLIENT_SECRET=your-google-client-secret
     ```
 
 4. Build and run the Docker containers:
@@ -77,9 +79,24 @@ The project is built using a microservices architecture, with the following main
     - Endpoint: `POST /login`
     - Body: `{ "username": "user", "password": "pass" }`
 
-3. **License Check**:
+3. **Google Sign-In**:
+
+    - Endpoint: `GET /auth/google`
+
+4. **License Check**:
+
     - Endpoint: `POST /check`
     - Headers: `Authorization: Bearer <token>`
+
+5. **User Profile**:
+
+    - Endpoint: `GET /profile`
+    - Headers: `Authorization: Bearer <token>`
+
+6. **Update Profile**:
+    - Endpoint: `PUT /profile`
+    - Headers: `Authorization: Bearer <token>`
+    - Body: `{ "name": "New Name", "email": "new@email.com" }`
 
 ### Stripe Integration
 
@@ -92,17 +109,28 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 ├── docker-compose.yml
 ├── Dockerfile
 ├── index.js
-├── landing.html
 ├── license-server.js
+├── views/
+│   ├── landing.ejs
+│   ├── login.ejs
+│   ├── register.ejs
+│   ├── profile.ejs
+│   └── payment.ejs
+├── public/
+│   ├── css/
+│   └── js/
+├── routes/
+│   ├── auth.js
+│   ├── profile.js
+│   └── payment.js
+├── middleware/
+│   └── auth.js
+├── models/
+│   └── user.js
+├── config/
+│   └── passport.js
 └── package.json
 ```
-
--   `docker-compose.yml`: Defines the Docker services for the application and MongoDB.
--   `Dockerfile`: Contains instructions for building the Docker image.
--   `index.js`: Main entry point for the web server.
--   `landing.html`: HTML template for the landing page.
--   `license-server.js`: Implements the license management logic.
--   `package.json`: Defines project dependencies and scripts.
 
 ## Pricing Tiers
 
@@ -130,18 +158,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-## Security Considerations
-
--   User passwords are hashed using bcrypt before storage.
--   JWT tokens are used for authentication.
--   HTTPS should be implemented in production to secure data in transit.
--   Ensure proper MongoDB security measures are in place.
--   Keep Stripe API keys and webhook secrets secure.
-
-## Future Improvements
-
-1. Implement user profile management.
-2. Add admin dashboard for managing users and subscriptions.
-3. Integrate email notifications for important events (registration, payment).
-4. Implement more sophisticated rate limiting and request tracking.
-5. Add comprehensive logging and monitoring.

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Profile - AutoCode</title>
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            h1 {
+                color: #00ffff;
+                text-align: center;
+            }
+            .profile-info {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 20px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+            .profile-info p {
+                margin: 10px 0;
+            }
+            .edit-form {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 20px;
+                border-radius: 10px;
+            }
+            .edit-form input {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid #00ffff;
+                color: #ffffff;
+            }
+            .edit-form button {
+                background-color: #00ffff;
+                color: #000000;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .edit-form button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+            }
+            .upgrade-button {
+                display: inline-block;
+                background-color: #00ffff;
+                color: #000000;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+            .upgrade-button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>User Profile</h1>
+            <div class="profile-info">
+                <p><strong>Username:</strong> <%= user.username %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Tier:</strong> <%= user.tier %></p>
+                <% if (user.tier === 'Free') { %>
+                    <a href="/payment/upgrade" class="upgrade-button">Upgrade to Premium</a>
+                <% } %>
+            </div>
+            <div class="edit-form">
+                <h2>Edit Profile</h2>
+                <form id="updateProfileForm">
+                    <input type="text" id="name" placeholder="Name" value="<%= user.username %>" />
+                    <input type="email" id="email" placeholder="Email" value="<%= user.email %>" />
+                    <button type="submit">Update Profile</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                try {
+                    const response = await fetch("/profile", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify({ name, email }),
+                    });
+                    if (response.ok) {
+                        alert("Profile updated successfully");
+                        location.reload();
+                    } else {
+                        alert("Failed to update profile");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred while updating the profile");
+                }
+            });
+        </script>
+    </body>
+</html>

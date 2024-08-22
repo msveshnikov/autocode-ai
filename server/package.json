@@ -1,25 +1,33 @@
 {
     "name": "autocode-registration",
     "version": "1.0.0",
-    "description": "Simple Express JS app to accept user registrations from landing page, pay via Stripe and save user and license data to Mongo",
+    "description": "Express.js application for user registration, payment processing, and license management",
     "main": "index.js",
     "type": "module",
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon index.js"
+        "dev": "nodemon index.js",
+        "lint": "eslint ."
     },
     "dependencies": {
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
+        "dotenv": "^16.4.5",
+        "ejs": "^3.1.9",
         "express": "^4.19.2",
+        "express-session": "^1.18.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.5.3",
+        "passport": "^0.7.0",
+        "passport-google-oauth20": "^2.0.0",
+        "passport-jwt": "^4.0.1",
+        "passport-local": "^1.0.0",
         "stripe": "^16.8.0",
         "uuid": "^10.0.0"
     },
     "devDependencies": {
-        "eslint": "^9.9.0",
-        "nodemon": "^3.1.4"
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0"
     },
     "engines": {
         "node": ">=20.0.0"
