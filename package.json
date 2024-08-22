@@ -9,7 +9,8 @@
     },
     "scripts": {
         "start": "node index.js",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "obfuscate": "javascript-obfuscator . --output ./dist --exclude node_modules,server,dist"
     },
     "keywords": [
         "ai",
@@ -33,6 +34,7 @@
         "@eslint/js": "^9.9.0",
         "eslint": "^8.57.0",
         "eslint-config-standard": "^17.1.0",
-        "globals": "^15.9.0"
+        "globals": "^15.9.0",
+        "javascript-obfuscator": "^4.1.1"
     }
 }
