@@ -1,7 +1,7 @@
 import { CONFIG } from "./config.js";
 
 const serverUrl = CONFIG.licenseServerUrl;
-let currentLicense = null;
+let currentToken = null;
 
 const LicenseManager = {
     async login(username, password) {
@@ -15,7 +15,7 @@ const LicenseManager = {
             });
             if (!response.ok) throw new Error("Login failed");
             const data = await response.json();
-            currentLicense = data.license;
+            currentToken = data.token;
             return true;
         } catch (error) {
             console.error("Login failed:", error.message);
@@ -34,7 +34,7 @@ const LicenseManager = {
             });
             if (!response.ok) throw new Error("Registration failed");
             const data = await response.json();
-            currentLicense = data.license;
+            currentToken = data.token;
             return true;
         } catch (error) {
             console.error("Registration failed:", error.message);
@@ -43,58 +43,46 @@ const LicenseManager = {
     },
 
     async checkLicense() {
-        return true;
-        // if (!currentLicense) {
-        //     return false;
-        // }
+        if (!currentToken) {
+            return true;
+        }
 
-        // try {
-        //     const response = await fetch(`${serverUrl}/check`, {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({ license: currentLicense }),
-        //     });
-        //     if (!response.ok) throw new Error("License check failed");
-        //     const data = await response.json();
-        //     return data.valid;
-        // } catch (error) {
-        //     console.error("License check failed:", error.message);
-        //     return false;
-        // }
+        try {
+            const response = await fetch(`${serverUrl}/check`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${currentToken}`,
+                },
+            });
+            if (!response.ok) throw new Error("License check failed");
+            const data = await response.json();
+            return data.valid;
+        } catch (error) {
+            console.error("License check failed:", error.message);
+            return false;
+        }
     },
 
     getLicenseTier() {
-        if (!currentLicense) {
+        if (!currentToken) {
             return "Free";
         }
-        return currentLicense.tier;
+        const decodedToken = JSON.parse(atob(currentToken.split(".")[1]));
+        return decodedToken.tier;
     },
 
     getRemainingRequests() {
-        if (!currentLicense) {
-            return 10; // Free tier default
+        if (!currentToken) {
+            return CONFIG.pricingTiers.free.requestsPerDay;
         }
-        return currentLicense.tier === "Premium" ? Infinity : currentLicense.remainingRequests;
+        const decodedToken = JSON.parse(atob(currentToken.split(".")[1]));
+        return decodedToken.tier === "Premium" ? Infinity : CONFIG.pricingTiers.free.requestsPerDay;
     },
 
     async decrementRequests() {
-        if (currentLicense && currentLicense.tier !== "Premium") {
-            try {
-                const response = await fetch(`${serverUrl}/decrement`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ license: currentLicense }),
-                });
-                if (!response.ok) throw new Error("Failed to decrement requests");
-                const data = await response.json();
-                currentLicense = data.license;
-            } catch (error) {
-                console.error("Failed to decrement requests:", error.message);
-            }
+        if (currentToken) {
+            await this.checkLicense();
         }
     },
 };
