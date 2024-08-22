@@ -1,7 +1,10 @@
 import { CONFIG } from "./config.js";
+import fs from "fs/promises";
+import path from "path";
 
 const serverUrl = CONFIG.licenseServerUrl;
 let currentToken = null;
+const tokenFile = path.join(process.cwd(), ".autocode_token");
 
 const LicenseManager = {
     async login(username, password) {
@@ -16,6 +19,7 @@ const LicenseManager = {
             if (!response.ok) throw new Error("Login failed");
             const data = await response.json();
             currentToken = data.token;
+            await this.saveToken(currentToken);
             return true;
         } catch (error) {
             console.error("Login failed:", error.message);
@@ -35,6 +39,7 @@ const LicenseManager = {
             if (!response.ok) throw new Error("Registration failed");
             const data = await response.json();
             currentToken = data.token;
+            await this.saveToken(currentToken);
             return true;
         } catch (error) {
             console.error("Registration failed:", error.message);
@@ -43,6 +48,10 @@ const LicenseManager = {
     },
 
     async checkLicense() {
+        if (!currentToken) {
+            await this.loadToken();
+        }
+
         if (!currentToken) {
             return true;
         }
@@ -83,6 +92,27 @@ const LicenseManager = {
     async decrementRequests() {
         if (currentToken) {
             await this.checkLicense();
+        }
+    },
+
+    async saveToken(token) {
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 14);
+        const tokenData = JSON.stringify({ token, expirationDate });
+        await fs.writeFile(tokenFile, tokenData, "utf8");
+    },
+
+    async loadToken() {
+        try {
+            const tokenData = await fs.readFile(tokenFile, "utf8");
+            const { token, expirationDate } = JSON.parse(tokenData);
+            if (new Date(expirationDate) > new Date()) {
+                currentToken = token;
+            } else {
+                await fs.unlink(tokenFile);
+            }
+        } catch (error) {
+            //  console.error("Failed to load token:", error.message);
         }
     },
 };
