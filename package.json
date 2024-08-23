@@ -1,6 +1,6 @@
 {
     "name": "autocode-ai",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -27,11 +27,9 @@
     "dependencies": {
         "@anthropic-ai/sdk": "^0.27.0",
         "chalk": "^5.3.0",
-        "express-rate-limit": "^7.4.0",
         "helmet": "^7.1.0",
         "ignore": "^5.3.2",
         "inquirer": "^10.1.8",
-        "morgan": "^1.10.0",
         "ora": "^8.0.1"
     },
     "devDependencies": {

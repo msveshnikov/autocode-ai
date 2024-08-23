@@ -157,9 +157,14 @@ Provide the suggestions in a structured format.
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
 
-        const structuredResults = JSON.parse(response.content[0].text.match(/```json([\s\S]*?)```/)?.[1]);
-
-        await this.createMissingFiles(structuredResults?.missingFiles);
+        try {
+            const structuredResults = JSON.parse(response.content?.[0]?.text?.match(/```json([\s\S]*?)```/)?.[1]);
+            if (structuredResults) {
+                await this.createMissingFiles(structuredResults?.missingFiles);
+            }
+        } catch {
+            /* empty */
+        }
     },
 
     async analyzeDependencies(projectStructure) {
@@ -193,6 +198,18 @@ Provide the suggestions in a structured format.
                 return this.extractPythonDependencies(content);
             case "csharp":
                 return this.extractCSharpDependencies(content);
+            case "java":
+                return this.extractJavaDependencies(content);
+            case "ruby":
+                return this.extractRubyDependencies(content);
+            case "go":
+                return this.extractGoDependencies(content);
+            case "rust":
+                return this.extractRustDependencies(content);
+            case "php":
+                return this.extractPHPDependencies(content);
+            case "swift":
+                return this.extractSwiftDependencies(content);
             default:
                 return [];
         }
@@ -227,6 +244,72 @@ Provide the suggestions in a structured format.
         let match;
         while ((match = usingRegex.exec(content)) !== null) {
             dependencies.push(match[1].trim());
+        }
+        return dependencies;
+    },
+
+    extractJavaDependencies(content) {
+        const importRegex = /import\s+([^;]+);/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            dependencies.push(match[1].trim().split(".")[0]);
+        }
+        return [...new Set(dependencies)];
+    },
+
+    extractRubyDependencies(content) {
+        const requireRegex = /(?:require|require_relative)\s+['"]([^'"]+)['"]/g;
+        const dependencies = [];
+        let match;
+        while ((match = requireRegex.exec(content)) !== null) {
+            dependencies.push(match[1]);
+        }
+        return dependencies;
+    },
+
+    extractGoDependencies(content) {
+        const importRegex = /import\s+(?:\(\s*|\s*)([^)]+)(?:\s*\)|\s*)/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            const imports = match[1].split("\n");
+            for (const imp of imports) {
+                const trimmed = imp.trim();
+                if (trimmed) {
+                    dependencies.push(trimmed.split(/\s+/)[0].replace(/"/g, ""));
+                }
+            }
+        }
+        return dependencies;
+    },
+
+    extractRustDependencies(content) {
+        const useRegex = /use\s+([^:;]+)(?:::.*)?;/g;
+        const dependencies = [];
+        let match;
+        while ((match = useRegex.exec(content)) !== null) {
+            dependencies.push(match[1]);
+        }
+        return [...new Set(dependencies)];
+    },
+
+    extractPHPDependencies(content) {
+        const useRegex = /use\s+([^;]+);/g;
+        const dependencies = [];
+        let match;
+        while ((match = useRegex.exec(content)) !== null) {
+            dependencies.push(match[1].split("\\")[0]);
+        }
+        return [...new Set(dependencies)];
+    },
+
+    extractSwiftDependencies(content) {
+        const importRegex = /import\s+(\w+)/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            dependencies.push(match[1]);
         }
         return dependencies;
     },
