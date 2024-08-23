@@ -96,11 +96,16 @@
         <div class="container">
             <h1>User Profile</h1>
             <div class="profile-info">
-                <p><strong>Email:</strong> <%= user.email %></p>
+                  <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Tier:</strong> <%= user.tier %></p>
-                <% if (user.tier === 'Free') { %>
-                <a href="/payment/create-checkout-session" class="upgrade-button">Upgrade to Premium</a>
-                <% } %>
+            </div>
+
+            <div class="edit-form">
+                <h2>Edit Profile</h2>
+                <form id="updateProfileForm">
+                    <input type="email" id="email" name="email" value="<%= user.email %>" required />
+                    <button type="submit">Update Profile</button>
+                </form>
             </div>
 
             <div class="license-usage">
@@ -110,20 +115,25 @@
                     <div class="progress" id="usageProgress"></div>
                 </div>
             </div>
+
             <div class="subscription-info">
                 <h2>Subscription Information</h2>
                 <p>Current Tier: <span id="currentTier"></span></p>
                 <p>Subscription Status: <span id="subscriptionStatus"></span></p>
-                <% if (user.tier !== 'Free') { %>
+                <% if (user.tier === 'Free') { %>
+                <a href="/payment/create-checkout-session" class="upgrade-button">Upgrade to Premium</a>
+                <% } else if (user.tier === 'Premium') { %>
                 <button id="cancelSubscription" class="cancel-subscription">Cancel Subscription</button>
                 <% } %>
             </div>
+
             <div class="device-info">
                 <h2>Device Information</h2>
                 <p>Devices: <span id="deviceCount"></span> / <span id="deviceLimit"></span></p>
                 <ul id="deviceList" class="device-list"></ul>
             </div>
         </div>
+
         <script>
             document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
