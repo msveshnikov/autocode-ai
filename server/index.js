@@ -107,6 +107,14 @@ app.get("/", async (req, res) => {
     res.render("landing");
 });
 
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
 app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const sig = req.headers["stripe-signature"];
     let event;

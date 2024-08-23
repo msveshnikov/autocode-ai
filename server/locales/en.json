@@ -1,126 +1,130 @@
 {
-    "common": {
-        "appName": "AutoCode Registration System",
-        "welcome": "Welcome",
-        "login": "Login",
-        "register": "Register",
-        "logout": "Logout",
-        "profile": "Profile",
-        "save": "Save",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "back": "Back",
-        "next": "Next",
-        "loading": "Loading...",
-        "success": "Success",
-        "error": "Error"
-    },
-    "landing": {
-        "title": "AutoCode Registration System",
-        "description": "A comprehensive solution for user registration and license management",
-        "features": "Features",
-        "pricing": "Pricing",
-        "register": "Register",
-        "login": "Login"
-    },
-    "auth": {
-        "username": "Username",
-        "password": "Password",
-        "email": "Email",
-        "loginButton": "Log In",
-        "registerButton": "Sign Up",
-        "googleSignIn": "Sign in with Google",
-        "forgotPassword": "Forgot Password?",
-        "alreadyHaveAccount": "Already have an account?",
-        "dontHaveAccount": "Don't have an account?"
-    },
-    "profile": {
-        "title": "User Profile",
-        "name": "Name",
-        "email": "Email",
-        "tier": "Current Tier",
-        "devices": "Connected Devices",
-        "updateProfile": "Update Profile",
-        "changePassword": "Change Password",
-        "language": "Language",
-        "requestsLeft": "Requests Left"
-    },
-    "pricing": {
-        "title": "Pricing Tiers",
-        "free": {
-            "name": "Free Tier",
-            "price": "$0/month",
-            "requests": "10 requests/day",
-            "features": "Basic features",
-            "devices": "3 devices",
-            "support": "Community support"
-        },
-        "premium": {
-            "name": "Premium",
-            "price": "$10/month",
-            "requests": "Unlimited requests",
-            "features": "All features",
-            "devices": "10 devices",
-            "support": "Priority support"
-        },
-        "enterprise": {
-            "name": "Enterprise",
-            "price": "Custom pricing",
-            "requests": "Unlimited requests",
-            "features": "All features + custom integrations",
-            "devices": "Unlimited devices",
-            "support": "Dedicated support team",
-            "deployment": "On-premises deployment option"
-        },
-        "selectPlan": "Select Plan",
-        "upgrade": "Upgrade",
-        "downgrade": "Downgrade",
-        "currentPlan": "Current Plan"
-    },
-    "payment": {
-        "processPayment": "Process Payment",
-        "paymentSuccess": "Payment Successful",
-        "paymentError": "Payment Error",
-        "thankYou": "Thank you for your purchase!",
-        "orderSummary": "Order Summary",
-        "total": "Total",
-        "cardDetails": "Card Details",
-        "cardNumber": "Card Number",
-        "expiryDate": "Expiry Date",
-        "cvv": "CVV",
-        "processingPayment": "Processing payment...",
-        "successMessage": "Payment successful! Your plan has been updated.",
-        "errorMessage": "Payment error. Please try again."
-    },
-    "license": {
-        "checkLicense": "Check License",
-        "licenseValid": "License Valid",
-        "licenseInvalid": "License Invalid",
-        "requestsRemaining": "Requests Remaining",
-        "unlimitedRequests": "Unlimited Requests"
-    },
-    "errors": {
-        "invalidCredentials": "Invalid username or password",
-        "registrationFailed": "Registration failed",
-        "loginFailed": "Login failed",
-        "profileUpdateFailed": "Failed to update profile",
-        "paymentFailed": "Payment processing failed",
-        "licenseCheckFailed": "License check failed",
-        "userNotFound": "User not found",
-        "emailAlreadyExists": "Email already in use",
-        "usernameAlreadyExists": "Username already in use",
-        "passwordMismatch": "Passwords do not match",
-        "serverError": "Server error. Please try again later."
-    },
-    "notifications": {
-        "welcomeEmail": "Welcome to AutoCode Registration System!",
-        "passwordReset": "Your password has been reset",
-        "tierUpgrade": "Your account has been upgraded",
-        "lowRequestsWarning": "You are running low on daily requests"
-    },
-    "success": {
-        "registration": "Registration successful. Please log in.",
-        "profileUpdate": "Profile updated successfully",
-        "passwordChange": "Password changed successfully"
-    }
+	"common": {
+		"appName": "AutoCode Registration System",
+		"welcome": "Welcome",
+		"login": "Login",
+		"register": "Register",
+		"logout": "Logout",
+		"profile": "Profile",
+		"save": "Save",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"back": "Back",
+		"next": "Next",
+		"loading": "Loading...",
+		"success": "Success",
+		"error": "Error"
+	},
+	"landing": {
+		"title": "AutoCode Registration System",
+		"description": "A comprehensive solution for user registration and license management",
+		"features": "Features",
+		"pricing": "Pricing",
+		"register": "Register",
+		"login": "Login"
+	},
+	"auth": {
+		"username": "Username",
+		"password": "Password",
+		"email": "Email",
+		"loginButton": "Log In",
+		"registerButton": "Sign Up",
+		"googleSignIn": "Sign in with Google",
+		"forgotPassword": "Forgot Password?",
+		"alreadyHaveAccount": "Already have an account?",
+		"dontHaveAccount": "Don't have an account?"
+	},
+	"profile": {
+		"title": "User Profile",
+		"name": "Name",
+		"email": "Email",
+		"tier": "Current Tier",
+		"devices": "Connected Devices",
+		"updateProfile": "Update Profile",
+		"changePassword": "Change Password",
+		"language": "Language",
+		"requestsLeft": "Requests Left"
+	},
+	"pricing": {
+		"title": "Pricing Tiers",
+		"free": {
+			"name": "Free Tier",
+			"price": "$0/month",
+			"requests": "10 requests/day",
+			"features": "Basic features",
+			"devices": "3 devices",
+			"support": "Community support"
+		},
+		"premium": {
+			"name": "Premium",
+			"price": "$10/month",
+			"requests": "Unlimited requests",
+			"features": "All features",
+			"devices": "10 devices",
+			"support": "Priority support"
+		},
+		"enterprise": {
+			"name": "Enterprise",
+			"price": "Custom pricing",
+			"requests": "Unlimited requests",
+			"features": "All features + custom integrations",
+			"devices": "Unlimited devices",
+			"support": "Dedicated support team",
+			"deployment": "On-premises deployment option"
+		},
+		"selectPlan": "Select Plan",
+		"upgrade": "Upgrade",
+		"downgrade": "Downgrade",
+		"currentPlan": "Current Plan"
+	},
+	"payment": {
+		"processPayment": "Process Payment",
+		"paymentSuccess": "Payment Successful",
+		"paymentError": "Payment Error",
+		"thankYou": "Thank you for your purchase!",
+		"orderSummary": "Order Summary",
+		"total": "Total",
+		"cardDetails": "Card Details",
+		"cardNumber": "Card Number",
+		"expiryDate": "Expiry Date",
+		"cvv": "CVV",
+		"processingPayment": "Processing payment...",
+		"successMessage": "Payment successful! Your plan has been updated.",
+		"errorMessage": "Payment error. Please try again."
+	},
+	"license": {
+		"checkLicense": "Check License",
+		"licenseValid": "License Valid",
+		"licenseInvalid": "License Invalid",
+		"requestsRemaining": "Requests Remaining",
+		"unlimitedRequests": "Unlimited Requests"
+	},
+	"errors": {
+		"invalidCredentials": "Invalid username or password",
+		"registrationFailed": "Registration failed",
+		"loginFailed": "Login failed",
+		"profileUpdateFailed": "Failed to update profile",
+		"paymentFailed": "Payment processing failed",
+		"licenseCheckFailed": "License check failed",
+		"userNotFound": "User not found",
+		"emailAlreadyExists": "Email already in use",
+		"usernameAlreadyExists": "Username already in use",
+		"passwordMismatch": "Passwords do not match",
+		"serverError": "Server error. Please try again later."
+	},
+	"notifications": {
+		"welcomeEmail": "Welcome to AutoCode Registration System!",
+		"passwordReset": "Your password has been reset",
+		"tierUpgrade": "Your account has been upgraded",
+		"lowRequestsWarning": "You are running low on daily requests"
+	},
+	"success": {
+		"registration": "Registration successful. Please log in.",
+		"profileUpdate": "Profile updated successfully",
+		"passwordChange": "Password changed successfully"
+	},
+	"Login": "Login",
+	"Username": "Username",
+	"Password": "Password",
+	"Login with Google": "Login with Google"
 }
