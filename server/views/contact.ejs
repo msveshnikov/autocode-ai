@@ -4,7 +4,98 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Contact Us - AutoCode Registration System</title>
-        <link rel="stylesheet" href="/css/styles.css" />
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            header {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 1rem;
+            }
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+            }
+            nav ul li {
+                margin: 0 1rem;
+            }
+            nav ul li a {
+                color: #00ffff;
+                text-decoration: none;
+            }
+            nav ul li a.active {
+                font-weight: bold;
+            }
+            main {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem;
+            }
+            .contact-container {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                width: 100%;
+                max-width: 500px;
+            }
+            h1 {
+                text-align: center;
+                color: #00ffff;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            label {
+                color: #00ffff;
+                margin-bottom: 0.5rem;
+            }
+            input,
+            textarea {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                border: 1px solid #00ffff;
+                background-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+                border-radius: 4px;
+            }
+            textarea {
+                resize: vertical;
+                min-height: 100px;
+            }
+            button {
+                background-color: #00ffff;
+                color: #000000;
+                border: none;
+                padding: 0.5rem;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+            }
+            footer {
+                background-color: rgba(0, 0, 0, 0.6);
+                text-align: center;
+                padding: 1rem;
+                color: #00ffff;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -20,32 +111,51 @@
         </header>
 
         <main>
-            <h1>Contact Us</h1>
-            <form action="/contact" method="POST">
-                <div>
+            <div class="contact-container">
+                <h1>Contact Us</h1>
+                <form id="contactForm">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required />
-                </div>
-                <div>
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required />
-                </div>
-                <div>
                     <label for="subject">Subject:</label>
                     <input type="text" id="subject" name="subject" required />
-                </div>
-                <div>
                     <label for="message">Message:</label>
                     <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit">Send Message</button>
-            </form>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
         </main>
 
         <footer>
             <p>&copy; 2023 AutoCode Registration System. All rights reserved.</p>
         </footer>
 
-        <script src="/js/contact.js"></script>
+        <script>
+            document.getElementById("contactForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const formProps = Object.fromEntries(formData);
+                try {
+                    const response = await fetch("/contact", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(formProps),
+                    });
+                    if (response.ok) {
+                        alert("Message sent successfully!");
+                        e.target.reset();
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.error || "Failed to send message. Please try again.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        </script>
     </body>
 </html>
