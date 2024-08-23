@@ -159,3 +159,4 @@ coverage/
 
 # Documentation generated files
 docs/
+*.csv

@@ -36,10 +36,6 @@ const UserSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
-    name: {
-        type: String,
-        trim: true,
-    },
 });
 
 UserSchema.pre("save", async function (next) {
