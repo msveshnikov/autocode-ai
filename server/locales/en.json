@@ -8,9 +8,20 @@
         "profile": "Profile",
         "save": "Save",
         "cancel": "Cancel",
+        "confirm": "Confirm",
+        "back": "Back",
+        "next": "Next",
+        "loading": "Loading...",
         "success": "Success",
-        "error": "Error",
-        "loading": "Loading..."
+        "error": "Error"
+    },
+    "landing": {
+        "title": "AutoCode Registration System",
+        "description": "A comprehensive solution for user registration and license management",
+        "features": "Features",
+        "pricing": "Pricing",
+        "register": "Register",
+        "login": "Login"
     },
     "auth": {
         "username": "Username",
@@ -31,7 +42,8 @@
         "devices": "Connected Devices",
         "updateProfile": "Update Profile",
         "changePassword": "Change Password",
-        "language": "Language"
+        "language": "Language",
+        "requestsLeft": "Requests Left"
     },
     "pricing": {
         "title": "Pricing Tiers",
@@ -62,6 +74,7 @@
         },
         "selectPlan": "Select Plan",
         "upgrade": "Upgrade",
+        "downgrade": "Downgrade",
         "currentPlan": "Current Plan"
     },
     "payment": {
@@ -74,7 +87,10 @@
         "cardDetails": "Card Details",
         "cardNumber": "Card Number",
         "expiryDate": "Expiry Date",
-        "cvv": "CVV"
+        "cvv": "CVV",
+        "processingPayment": "Processing payment...",
+        "successMessage": "Payment successful! Your plan has been updated.",
+        "errorMessage": "Payment error. Please try again."
     },
     "license": {
         "checkLicense": "Check License",
@@ -89,12 +105,22 @@
         "loginFailed": "Login failed",
         "profileUpdateFailed": "Failed to update profile",
         "paymentFailed": "Payment processing failed",
-        "licenseCheckFailed": "License check failed"
+        "licenseCheckFailed": "License check failed",
+        "userNotFound": "User not found",
+        "emailAlreadyExists": "Email already in use",
+        "usernameAlreadyExists": "Username already in use",
+        "passwordMismatch": "Passwords do not match",
+        "serverError": "Server error. Please try again later."
     },
     "notifications": {
         "welcomeEmail": "Welcome to AutoCode Registration System!",
         "passwordReset": "Your password has been reset",
         "tierUpgrade": "Your account has been upgraded",
         "lowRequestsWarning": "You are running low on daily requests"
+    },
+    "success": {
+        "registration": "Registration successful. Please log in.",
+        "profileUpdate": "Profile updated successfully",
+        "passwordChange": "Password changed successfully"
     }
 }

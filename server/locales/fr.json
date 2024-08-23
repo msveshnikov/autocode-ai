@@ -1,0 +1,100 @@
+{
+    "common": {
+        "appName": "Système d'Enregistrement AutoCode",
+        "welcome": "Bienvenue",
+        "login": "Connexion",
+        "register": "S'inscrire",
+        "logout": "Déconnexion",
+        "profile": "Profil",
+        "save": "Enregistrer",
+        "cancel": "Annuler",
+        "success": "Succès",
+        "error": "Erreur",
+        "loading": "Chargement..."
+    },
+    "auth": {
+        "username": "Nom d'utilisateur",
+        "password": "Mot de passe",
+        "email": "E-mail",
+        "loginButton": "Se connecter",
+        "registerButton": "S'inscrire",
+        "googleSignIn": "Se connecter avec Google",
+        "forgotPassword": "Mot de passe oublié ?",
+        "alreadyHaveAccount": "Vous avez déjà un compte ?",
+        "dontHaveAccount": "Vous n'avez pas de compte ?"
+    },
+    "profile": {
+        "title": "Profil Utilisateur",
+        "name": "Nom",
+        "email": "E-mail",
+        "tier": "Niveau actuel",
+        "devices": "Appareils connectés",
+        "updateProfile": "Mettre à jour le profil",
+        "changePassword": "Changer le mot de passe",
+        "language": "Langue"
+    },
+    "pricing": {
+        "title": "Niveaux de prix",
+        "free": {
+            "name": "Niveau Gratuit",
+            "price": "0€/mois",
+            "requests": "10 requêtes/jour",
+            "features": "Fonctionnalités de base",
+            "devices": "3 appareils",
+            "support": "Support communautaire"
+        },
+        "premium": {
+            "name": "Premium",
+            "price": "10€/mois",
+            "requests": "Requêtes illimitées",
+            "features": "Toutes les fonctionnalités",
+            "devices": "10 appareils",
+            "support": "Support prioritaire"
+        },
+        "enterprise": {
+            "name": "Entreprise",
+            "price": "Prix personnalisé",
+            "requests": "Requêtes illimitées",
+            "features": "Toutes les fonctionnalités + intégrations personnalisées",
+            "devices": "Appareils illimités",
+            "support": "Équipe de support dédiée",
+            "deployment": "Option de déploiement sur site"
+        },
+        "selectPlan": "Sélectionner un plan",
+        "upgrade": "Mettre à niveau",
+        "currentPlan": "Plan actuel"
+    },
+    "payment": {
+        "processPayment": "Traiter le paiement",
+        "paymentSuccess": "Paiement réussi",
+        "paymentError": "Erreur de paiement",
+        "thankYou": "Merci pour votre achat !",
+        "orderSummary": "Résumé de la commande",
+        "total": "Total",
+        "cardDetails": "Détails de la carte",
+        "cardNumber": "Numéro de carte",
+        "expiryDate": "Date d'expiration",
+        "cvv": "CVV"
+    },
+    "license": {
+        "checkLicense": "Vérifier la licence",
+        "licenseValid": "Licence valide",
+        "licenseInvalid": "Licence invalide",
+        "requestsRemaining": "Requêtes restantes",
+        "unlimitedRequests": "Requêtes illimitées"
+    },
+    "errors": {
+        "invalidCredentials": "Nom d'utilisateur ou mot de passe invalide",
+        "registrationFailed": "L'inscription a échoué",
+        "loginFailed": "La connexion a échoué",
+        "profileUpdateFailed": "La mise à jour du profil a échoué",
+        "paymentFailed": "Le traitement du paiement a échoué",
+        "licenseCheckFailed": "La vérification de la licence a échoué"
+    },
+    "notifications": {
+        "welcomeEmail": "Bienvenue sur le Système d'Enregistrement AutoCode !",
+        "passwordReset": "Votre mot de passe a été réinitialisé",
+        "tierUpgrade": "Votre compte a été mis à niveau",
+        "lowRequestsWarning": "Vous avez presque atteint votre limite de requêtes quotidiennes"
+    }
+}

@@ -1,18 +1,23 @@
 {
-    "landing": {
-        "title": "Sistema de Registro AutoCode",
-        "description": "Una solución completa para el registro de usuarios y gestión de licencias",
-        "features": "Características",
-        "pricing": "Precios",
+    "common": {
+        "appName": "Sistema de Registro AutoCode",
+        "welcome": "Bienvenido",
+        "login": "Iniciar sesión",
         "register": "Registrarse",
-        "login": "Iniciar sesión"
+        "logout": "Cerrar sesión",
+        "profile": "Perfil",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "success": "Éxito",
+        "error": "Error",
+        "loading": "Cargando..."
     },
     "auth": {
         "username": "Nombre de usuario",
         "password": "Contraseña",
         "email": "Correo electrónico",
-        "login": "Iniciar sesión",
-        "register": "Registrarse",
+        "loginButton": "Iniciar sesión",
+        "registerButton": "Registrarse",
         "googleSignIn": "Iniciar sesión con Google",
         "forgotPassword": "¿Olvidaste tu contraseña?",
         "alreadyHaveAccount": "¿Ya tienes una cuenta?",
@@ -22,69 +27,74 @@
         "title": "Perfil de Usuario",
         "name": "Nombre",
         "email": "Correo electrónico",
-        "tier": "Plan",
-        "devices": "Dispositivos",
-        "requestsLeft": "Solicitudes restantes",
+        "tier": "Plan actual",
+        "devices": "Dispositivos conectados",
         "updateProfile": "Actualizar perfil",
         "changePassword": "Cambiar contraseña",
-        "logout": "Cerrar sesión"
+        "language": "Idioma"
     },
     "pricing": {
+        "title": "Planes de precios",
         "free": {
-            "name": "Gratis",
+            "name": "Plan Gratuito",
             "price": "$0/mes",
-            "features": ["10 solicitudes/día", "Características básicas", "3 dispositivos", "Soporte comunitario"]
+            "requests": "10 solicitudes/día",
+            "features": "Características básicas",
+            "devices": "3 dispositivos",
+            "support": "Soporte comunitario"
         },
         "premium": {
             "name": "Premium",
             "price": "$10/mes",
-            "features": [
-                "Solicitudes ilimitadas",
-                "Todas las características",
-                "10 dispositivos",
-                "Soporte prioritario"
-            ]
+            "requests": "Solicitudes ilimitadas",
+            "features": "Todas las características",
+            "devices": "10 dispositivos",
+            "support": "Soporte prioritario"
         },
         "enterprise": {
             "name": "Empresa",
             "price": "Precio personalizado",
-            "features": [
-                "Solicitudes ilimitadas",
-                "Todas las características + integraciones personalizadas",
-                "Dispositivos ilimitados",
-                "Equipo de soporte dedicado",
-                "Opción de implementación en sitio"
-            ]
-        }
+            "requests": "Solicitudes ilimitadas",
+            "features": "Todas las características + integraciones personalizadas",
+            "devices": "Dispositivos ilimitados",
+            "support": "Equipo de soporte dedicado",
+            "deployment": "Opción de implementación en sitio"
+        },
+        "selectPlan": "Seleccionar Plan",
+        "upgrade": "Mejorar",
+        "currentPlan": "Plan Actual"
     },
     "payment": {
-        "selectPlan": "Seleccionar plan",
-        "upgrade": "Mejorar plan",
-        "downgrade": "Bajar de plan",
-        "current": "Plan actual",
-        "processingPayment": "Procesando pago...",
-        "successMessage": "¡Pago exitoso! Tu plan ha sido actualizado.",
-        "errorMessage": "Error en el pago. Por favor, intenta de nuevo."
+        "processPayment": "Procesar Pago",
+        "paymentSuccess": "Pago Exitoso",
+        "paymentError": "Error en el Pago",
+        "thankYou": "¡Gracias por tu compra!",
+        "orderSummary": "Resumen del Pedido",
+        "total": "Total",
+        "cardDetails": "Detalles de la Tarjeta",
+        "cardNumber": "Número de Tarjeta",
+        "expiryDate": "Fecha de Vencimiento",
+        "cvv": "CVV"
+    },
+    "license": {
+        "checkLicense": "Verificar Licencia",
+        "licenseValid": "Licencia Válida",
+        "licenseInvalid": "Licencia Inválida",
+        "requestsRemaining": "Solicitudes Restantes",
+        "unlimitedRequests": "Solicitudes Ilimitadas"
     },
     "errors": {
-        "invalidCredentials": "Credenciales inválidas",
-        "userNotFound": "Usuario no encontrado",
-        "emailAlreadyExists": "El correo electrónico ya está en uso",
-        "usernameAlreadyExists": "El nombre de usuario ya está en uso",
-        "passwordMismatch": "Las contraseñas no coinciden",
-        "serverError": "Error del servidor. Por favor, intenta más tarde."
+        "invalidCredentials": "Nombre de usuario o contraseña inválidos",
+        "registrationFailed": "Fallo en el registro",
+        "loginFailed": "Fallo en el inicio de sesión",
+        "profileUpdateFailed": "Fallo al actualizar el perfil",
+        "paymentFailed": "Fallo en el procesamiento del pago",
+        "licenseCheckFailed": "Fallo en la verificación de la licencia"
     },
-    "success": {
-        "registration": "Registro exitoso. Por favor, inicia sesión.",
-        "profileUpdate": "Perfil actualizado correctamente",
-        "passwordChange": "Contraseña cambiada correctamente"
-    },
-    "common": {
-        "save": "Guardar",
-        "cancel": "Cancelar",
-        "confirm": "Confirmar",
-        "back": "Volver",
-        "next": "Siguiente",
-        "loading": "Cargando..."
+    "notifications": {
+        "welcomeEmail": "¡Bienvenido al Sistema de Registro AutoCode!",
+        "passwordReset": "Tu contraseña ha sido restablecida",
+        "tierUpgrade": "Tu cuenta ha sido mejorada",
+        "lowRequestsWarning": "Te estás quedando sin solicitudes diarias"
     }
 }

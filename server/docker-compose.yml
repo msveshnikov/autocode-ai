@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: extender777/autocode-backend
     ports:
       - "3000:3000"
     environment:
@@ -21,8 +21,6 @@ services:
     image: mongo:latest
     volumes:
       - mongo-data:/data/db
-    ports:
-      - "27017:27017"
 
 volumes:
   mongo-data:
