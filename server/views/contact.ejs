@@ -151,7 +151,7 @@
                 const formData = new FormData(e.target);
                 const formProps = Object.fromEntries(formData);
                 try {
-                    const response = await fetch("/contact", {
+                    const response = await fetch("/auth/contact", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",

@@ -54,6 +54,24 @@ router.get("/subscription", authenticateJWT, async (req, res) => {
     }
 });
 
+router.post("/subscription/cancel", authenticateJWT, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user.stripeSubscriptionId) {
+            await stripe.subscriptions.del(user.stripeSubscriptionId);
+            user.tier = "Free";
+            user.stripeSubscriptionId = null;
+            await user.save();
+            res.json({ success: true, message: "Subscription cancelled successfully" });
+        } else {
+            res.status(400).json({ error: "No active subscription found" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 router.get("/usage", authenticateJWT, checkUserTier, checkRequestLimit, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("dailyRequests lastRequestDate tier");

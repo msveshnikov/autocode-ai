@@ -31,9 +31,6 @@ const UserSchema = new mongoose.Schema({
     stripeSubscriptionId: {
         type: String,
     },
-    googleId: {
-        type: String,
-    },
     lastRequestDate: {
         type: Date,
         default: Date.now,

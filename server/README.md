@@ -168,8 +168,10 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 
 ## TODO
 
-1. **Contact Form**: A new contact form has been added to allow users to send inquiries or support requests directly from the application. Save inquires to DB
+1. **Contact Form**: A new contact form has been added to allow users to send inquiries or support requests directly from the application. Implement POST /contact and Save inquires to DB separtae collection
 
 2. After register or login, redirect to profile page wher euser can pay/cancel subscriptions, manage devices etc
 
-4. Save token for longer time (14 days)
+3. Get rid of Google login
+
+4. Fix /profile always return Unauthorized after signup or signin

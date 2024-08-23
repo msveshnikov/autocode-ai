@@ -63,14 +63,6 @@
                 color: #ffffff;
                 box-shadow: 0 0 15px #00ffff;
             }
-            .google-signin {
-                margin-top: 1rem;
-                background-color: #4285f4;
-                color: #ffffff;
-            }
-            .google-signin:hover {
-                background-color: #357ae8;
-            }
             .error-message {
                 color: #ff0000;
                 text-align: center;
@@ -98,10 +90,9 @@
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required />
-
+                <label for="tier">Tier:</label>
                 <button type="submit">Register</button>
             </form>
-            <button class="google-signin" onclick="window.location.href='/auth/google'">Sign in with Google</button>
             <div id="errorMessage" class="error-message"></div>
             <div class="login-link">
                 <a href="/login">Already have an account? Login here</a>

@@ -41,7 +41,7 @@ No installation is required. AutoCode can be run directly using npx.
 
 ## Usage
 
-1. Create CLAUDE_KEY environment variable
+1. Create CLAUDE_KEY environment variable (get your key here https://console.anthropic.com/settings/keys)
 2. Navigate to your project folder in the terminal.
 3. Run the following command:
 

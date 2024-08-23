@@ -11,7 +11,6 @@ import morgan from "morgan";
 import flash from "connect-flash";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import User from "./models/user.js";
 import authRoutes from "./routes/auth.js";
@@ -19,6 +18,7 @@ import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,33 +49,6 @@ passport.use(
                 return done(null, false);
             } catch (error) {
                 return done(error, false);
-            }
-        }
-    )
-);
-
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "/auth/google/callback",
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                let user = await User.findOne({ googleId: profile.id });
-                if (!user) {
-                    user = new User({
-                        googleId: profile.id,
-                        username: profile.displayName,
-                        email: profile.emails[0].value,
-                        tier: "Free",
-                    });
-                    await user.save();
-                }
-                return done(null, user);
-            } catch (error) {
-                return done(error, null);
             }
         }
     )
