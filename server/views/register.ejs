@@ -82,9 +82,6 @@
         <div class="container">
             <h1>Register for AutoCode</h1>
             <form id="registerForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required />
-
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required />
 
@@ -117,11 +114,12 @@
                     });
 
                     if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem("token", data.token);
-                        document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
+                        const result = await response.json();
+                        // localStorage.setItem("token", result.token);
+                        // document.cookie = `token=${result.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
+                        const result = await response.json();
                         errorMessage.textContent = result.error || "Registration failed. Please try again.";
                     }
                 } catch (error) {

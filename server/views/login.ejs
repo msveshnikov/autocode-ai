@@ -74,10 +74,11 @@
             <h1>Login</h1>
             <div id="error-message" class="error-message"></div>
             <form id="loginForm">
-                <input type="text" id="username" name="username" placeholder="Username" required />
+                <input type="email" id="email" name="email" placeholder="Email" required />
                 <input type="password" id="password" name="password" placeholder="Password" required />
                 <button type="submit">Login</button>
             </form>
+
             <div class="register-link">
                 <a href="/register">Don't have an account? Register here</a>
             </div>
@@ -85,7 +86,7 @@
         <script>
             document.getElementById("loginForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
-                const username = document.getElementById("username").value;
+                const email = document.getElementById("email").value;
                 const password = document.getElementById("password").value;
                 try {
                     const response = await fetch("/auth/login", {
@@ -93,12 +94,12 @@
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ username, password }),
+                        body: JSON.stringify({ email, password }),
                     });
                     if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem("token", data.token);
-                        document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
+                        // const data = await response.json();
+                        // localStorage.setItem("token", data.token);
+                        // document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
                         const errorData = await response.json();

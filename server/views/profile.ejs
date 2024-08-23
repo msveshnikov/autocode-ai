@@ -96,7 +96,6 @@
         <div class="container">
             <h1>User Profile</h1>
             <div class="profile-info">
-                <p><strong>Username:</strong> <%= user.username %></p>
                 <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Tier:</strong> <%= user.tier %></p>
                 <% if (user.tier === 'Free') { %>
@@ -106,7 +105,6 @@
             <div class="edit-form">
                 <h2>Edit Profile</h2>
                 <form id="updateProfileForm">
-                    <input type="text" id="name" placeholder="Name" value="<%= user.name || user.username %>" />
                     <input type="email" id="email" placeholder="Email" value="<%= user.email %>" />
                     <button type="submit">Update Profile</button>
                 </form>
@@ -135,16 +133,14 @@
         <script>
             document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
-                const name = document.getElementById("name").value;
                 const email = document.getElementById("email").value;
                 try {
                     const response = await fetch("/profile", {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
-                        body: JSON.stringify({ name, email }),
+                        body: JSON.stringify({ email }),
                     });
                     if (response.ok) {
                         alert("Profile updated successfully");
@@ -160,11 +156,7 @@
 
             async function fetchLicenseUsage() {
                 try {
-                    const response = await fetch("/profile/usage", {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    });
+                    const response = await fetch("/profile/usage");
                     if (response.ok) {
                         const data = await response.json();
                         document.getElementById("requestsToday").textContent = data.dailyRequests;
@@ -179,11 +171,7 @@
 
             async function fetchSubscriptionInfo() {
                 try {
-                    const response = await fetch("/profile/subscription", {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    });
+                    const response = await fetch("/profile/subscription");
                     if (response.ok) {
                         const data = await response.json();
                         document.getElementById("currentTier").textContent = data.tier;
@@ -198,11 +186,7 @@
 
             async function fetchDeviceInfo() {
                 try {
-                    const response = await fetch("/profile/devices", {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    });
+                    const response = await fetch("/profile/devices");
                     if (response.ok) {
                         const data = await response.json();
                         document.getElementById("deviceCount").textContent = data.devices.length;
@@ -225,9 +209,6 @@
                     try {
                         const response = await fetch("/profile/subscription/cancel", {
                             method: "POST",
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                            },
                         });
                         if (response.ok) {
                             alert("Subscription cancelled successfully");

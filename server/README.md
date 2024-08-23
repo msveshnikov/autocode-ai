@@ -178,6 +178,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 -   Added Grafana dashboards for real-time monitoring
 -   Implemented custom analytics dashboard for user behavior insights
 
-# TODO
-
--   get rid of user names, keep only email 
