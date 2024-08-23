@@ -8,12 +8,12 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, tier = "Free" } = req.body;
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             return res.status(400).json({ error: "Username or email already exists" });
         }
-        const user = new User({ username, email, password, tier: "Free" });
+        const user = new User({ username, email, password, tier });
         await user.save();
         const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "14d" });
         res.status(201).json({ token });

@@ -19,14 +19,12 @@ router.get("/", authenticateJWT, async (req, res) => {
 router.put("/", authenticateJWT, async (req, res) => {
     try {
         const { name, email } = req.body;
-        const user = await User.findById(req.user.id);
-
-        if (name) user.name = name;
-        if (email) user.email = email;
-
-        await user.save();
-
-        res.json({ success: true, message: "Profile updated successfully" });
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            { $set: { name, email } },
+            { new: true, runValidators: true }
+        );
+        res.json({ success: true, message: "Profile updated successfully", user });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error" });
@@ -113,8 +111,10 @@ router.post("/devices", authenticateJWT, async (req, res) => {
         const { deviceId } = req.body;
         const user = await User.findById(req.user.id);
 
-        user.addDevice(deviceId);
-        await user.save();
+        if (!user.devices.includes(deviceId)) {
+            user.devices.push(deviceId);
+            await user.save();
+        }
 
         res.json({ success: true, message: "Device added successfully" });
     } catch (error) {
@@ -128,7 +128,7 @@ router.delete("/devices/:deviceId", authenticateJWT, async (req, res) => {
         const { deviceId } = req.params;
         const user = await User.findById(req.user.id);
 
-        user.removeDevice(deviceId);
+        user.devices = user.devices.filter((device) => device !== deviceId);
         await user.save();
 
         res.json({ success: true, message: "Device removed successfully" });
