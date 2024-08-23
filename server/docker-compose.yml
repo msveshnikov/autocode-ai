@@ -1,27 +1,31 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  app:
-    image: extender777/autocode-backend:arm64
-    ports:
-      - "6003:3000"
-    environment:
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/autocode
-      - JWT_TOKEN=${JWT_TOKEN}
-      - SESSION_SECRET=${SESSION_SECRET}
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-    depends_on:
-      - mongo
+    app:
+        image: extender777/autocode-backend:arm64
+        ports:
+            - "6003:3000"
+        environment:
+            - NODE_ENV=production
+            - MONGODB_URI=mongodb://mongo:27017/autocode
+            - JWT_TOKEN=${JWT_TOKEN}
+            - SESSION_SECRET=${SESSION_SECRET}
+            - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+            - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+            - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+            - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+            - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+        restart: unless-stopped
+        depends_on:
+            - mongo
 
-  mongo:
-    image: mongo:latest
-    volumes:
-      - mongo-data:/data/db
+    mongo:
+        image: mongo:latest
+        restart: unless-stopped
+        logging:
+            driver: none
+        volumes:
+            - mongo-data:/data/db
 
 volumes:
-  mongo-data:
+    mongo-data:
