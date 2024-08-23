@@ -132,6 +132,7 @@ Provide the suggestions in a structured format.
 
     async detectMissingDependencies(projectStructure) {
         console.log(chalk.cyan("🔍 Detecting missing dependencies..."));
+        const packageContent = await this.getPackageFileContent(projectStructure);
         const prompt = `
     Analyze the following project structure and detect any missing dependencies or files:
     
@@ -141,10 +142,15 @@ Provide the suggestions in a structured format.
     
     ${JSON.stringify(await this.analyzeDependencies(projectStructure), null, 2)}
     
+    Package file content:
+    ${packageContent}
+    
     Please identify:
     1. Missing packages based on import statements for each supported language
     2. Missing files that are referenced but not present in the project structure
     3. Potential circular dependencies
+    4. Dependencies listed in the package file but not used in the project
+    5. Dependencies used in the project but not listed in the package file
     
     Provide the results in a structured format.
     `;
@@ -165,6 +171,29 @@ Provide the suggestions in a structured format.
         } catch {
             /* empty */
         }
+    },
+
+    async getPackageFileContent(projectStructure) {
+        const packageFiles = [
+            "package.json",
+            "*.csproj",
+            "pom.xml",
+            "build.gradle",
+            "Gemfile",
+            "go.mod",
+            "Cargo.toml",
+            "composer.json",
+            "Package.swift",
+        ];
+
+        for (const file of packageFiles) {
+            const matchingFile = Object.keys(projectStructure).find((key) => key.match(new RegExp(file)));
+            if (matchingFile) {
+                return await FileManager.read(matchingFile);
+            }
+        }
+
+        return "No package file found";
     },
 
     async analyzeDependencies(projectStructure) {

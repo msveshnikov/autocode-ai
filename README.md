@@ -154,29 +154,7 @@ License management is handled through an Express.js server with `/login` and `/c
 -   Use long-running agents to plan out and implement tasks that are too large for ChatGPT or IDE-based tools
 -   Agents can work on complex, multi-step tasks while maintaining context
 
-## Review and Revise
-
--   Proposed changes are accumulated in a version-controlled sandbox
--   Review and iterate before applying changes to your actual project
--   Easily revert or modify AI-generated code
-
 ## Automatic Syntax Checking
 
 -   Auto-fix syntax in 30+ languages
 -   Attempts to fix other common issues like missing imports, variable declarations, and function implementations
-
-## Future Enhancements
-
--   Expand AI agent capabilities and inter-agent communication
--   Integrate with popular IDEs and code editors for seamless workflow
--   Develop a web-based interface for managing AutoCode projects
--   Implement a cross-platform desktop application for enhanced user experience
--   Add support for more programming languages and frameworks
--   Create a marketplace for custom AI agents and plugins
--   Develop a natural language processing feature for converting user stories to code
--   Create a collaborative mode for team-based AI-assisted development
--   Develop a code migration assistant for updating legacy codebases
-
-## TODO
-
--   send package.json content (or other package file for c#, java, etc) to Missing Dependencies checker
