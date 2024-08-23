@@ -95,6 +95,18 @@
                 padding: 1rem;
                 color: #00ffff;
             }
+            .success-message {
+                color: #00ff00;
+                text-align: center;
+                margin-top: 1rem;
+                display: none;
+            }
+            .error-message {
+                color: #ff0000;
+                text-align: center;
+                margin-top: 1rem;
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -124,6 +136,8 @@
                     <textarea id="message" name="message" required></textarea>
                     <button type="submit">Send Message</button>
                 </form>
+                <div id="successMessage" class="success-message">Message sent successfully!</div>
+                <div id="errorMessage" class="error-message"></div>
             </div>
         </main>
 
@@ -145,15 +159,21 @@
                         body: JSON.stringify(formProps),
                     });
                     if (response.ok) {
-                        alert("Message sent successfully!");
+                        document.getElementById("successMessage").style.display = "block";
+                        document.getElementById("errorMessage").style.display = "none";
                         e.target.reset();
                     } else {
                         const errorData = await response.json();
-                        alert(errorData.error || "Failed to send message. Please try again.");
+                        document.getElementById("errorMessage").textContent =
+                            errorData.error || "Failed to send message. Please try again.";
+                        document.getElementById("errorMessage").style.display = "block";
+                        document.getElementById("successMessage").style.display = "none";
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    alert("An error occurred. Please try again.");
+                    document.getElementById("errorMessage").textContent = "An error occurred. Please try again.";
+                    document.getElementById("errorMessage").style.display = "block";
+                    document.getElementById("successMessage").style.display = "none";
                 }
             });
         </script>

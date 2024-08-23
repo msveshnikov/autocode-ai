@@ -20,6 +20,7 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 -   Responsive design for mobile and desktop
 -   Real-time license usage tracking
 -   Automated email notifications
+-   Contact form for user inquiries
 
 ## Architecture
 
@@ -104,6 +105,10 @@ The project is built using a microservices architecture, with the following main
     - Headers: `Authorization: Bearer <token>`
     - Body: `{ "name": "New Name", "email": "new@email.com" }`
 
+7. **Contact Form**:
+    - Endpoint: `POST /contact`
+    - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
+
 ### Stripe Integration
 
 The system uses Stripe Checkout for payment processing. When a user registers for a paid tier, they are redirected to a Stripe Checkout page. Upon successful payment, Stripe sends a webhook to update the user's status in the database.
@@ -122,10 +127,8 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 │   ├── register.ejs
 │   ├── profile.ejs
 │   ├── success.ejs
-│   └── cancel.ejs
-├── public/
-│   ├── css/
-│   └── js/
+│   ├── cancel.ejs
+│   └── contact.ejs
 ├── routes/
 │   ├── auth.js
 │   ├── profile.js
@@ -134,8 +137,6 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 │   └── auth.js
 ├── models/
 │   └── user.js
-├── config/
-│   └── passport.js
 └── package.json
 ```
 
@@ -167,5 +168,8 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 
 ## TODO
 
--   Fix User validation failed: password: Path `password` is required.
--   Always register with Free tier first, user can upgrade later
+1. **Contact Form**: A new contact form has been added to allow users to send inquiries or support requests directly from the application. Save inquires to DB
+
+2. After register or login, redirect to profile page wher euser can pay/cancel subscriptions, manage devices etc
+
+4. Save token for longer time (14 days)

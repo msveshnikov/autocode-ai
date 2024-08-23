@@ -35,7 +35,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
     lastRequestDate: {
-        type: String,
+        type: Date,
+        default: Date.now,
     },
     dailyRequests: {
         type: Number,
@@ -74,9 +75,9 @@ UserSchema.methods.updateTier = function (newTier) {
 };
 
 UserSchema.methods.resetDailyRequests = function () {
-    const today = new Date().toISOString().split("T")[0];
-    if (this.lastRequestDate !== today) {
-        this.lastRequestDate = today;
+    const today = new Date().setHours(0, 0, 0, 0);
+    if (this.lastRequestDate.setHours(0, 0, 0, 0) < today) {
+        this.lastRequestDate = new Date();
         this.dailyRequests = 0;
     }
 };

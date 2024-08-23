@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
         }
         const user = new User({ username, email, password, tier: "Free" });
         await user.save();
-        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "14d" });
         res.status(201).json({ token });
     } catch (error) {
         res.status(500).json({ error: "Error registering user" });
@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: "Invalid credentials" });
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: "14d" });
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: "Error logging in" });
@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_TOKEN, { expiresIn: "1h" });
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_TOKEN, { expiresIn: "14d" });
     res.redirect(`/profile?token=${token}`);
 });
 

@@ -15,7 +15,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
+                min-height: 100vh;
             }
             .container {
                 text-align: center;
@@ -23,6 +23,8 @@
                 padding: 2rem;
                 border-radius: 10px;
                 box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                max-width: 600px;
+                width: 90%;
             }
             h1 {
                 color: #00ffff;
@@ -40,6 +42,7 @@
                 border-radius: 5px;
                 font-weight: bold;
                 transition: all 0.3s;
+                margin: 10px;
             }
             .button:hover {
                 background-color: #0000ff;
@@ -53,28 +56,30 @@
             <h1>Payment Successful!</h1>
             <p>Thank you for upgrading your AutoCode subscription.</p>
             <p>Your account has been updated with the new features.</p>
+            <p>Here's what you can do next:</p>
             <a href="/profile" class="button">Go to Your Profile</a>
+            <a href="/" class="button">Return to Homepage</a>
         </div>
         <script>
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             if (token) {
-                fetch('/profile', {
+                fetch("/profile", {
                     headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch profile');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Profile updated:', data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Failed to fetch profile");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log("Profile updated:", data);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
             }
         </script>
     </body>

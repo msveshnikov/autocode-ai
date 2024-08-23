@@ -80,7 +80,7 @@ export const checkDeviceLimit = async (req, res, next) => {
 
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
 
-        if (user.devices >= deviceLimit) {
+        if (user.devices.length >= deviceLimit) {
             return res.status(403).json({ error: "Device limit reached" });
         }
 

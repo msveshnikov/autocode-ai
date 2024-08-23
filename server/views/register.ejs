@@ -76,6 +76,14 @@
                 text-align: center;
                 margin-top: 1rem;
             }
+            .login-link {
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .login-link a {
+                color: #00ffff;
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
@@ -91,15 +99,13 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required />
 
-                <label for="tier">Select Tier:</label>
-                <select id="tier" name="tier" required>
-                    <option value="Free">Free</option>
-                </select>
-
                 <button type="submit">Register</button>
             </form>
             <button class="google-signin" onclick="window.location.href='/auth/google'">Sign in with Google</button>
             <div id="errorMessage" class="error-message"></div>
+            <div class="login-link">
+                <a href="/login">Already have an account? Login here</a>
+            </div>
         </div>
 
         <script>

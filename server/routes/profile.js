@@ -77,13 +77,43 @@ router.get("/devices", authenticateJWT, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("devices tier");
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
-        const remainingDevices = Math.max(0, deviceLimit - user.devices);
+        const remainingDevices = Math.max(0, deviceLimit - user.devices.length);
 
         res.json({
             devices: user.devices,
             deviceLimit,
             remainingDevices,
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+router.post("/devices", authenticateJWT, async (req, res) => {
+    try {
+        const { deviceId } = req.body;
+        const user = await User.findById(req.user.id);
+
+        user.addDevice(deviceId);
+        await user.save();
+
+        res.json({ success: true, message: "Device added successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+router.delete("/devices/:deviceId", authenticateJWT, async (req, res) => {
+    try {
+        const { deviceId } = req.params;
+        const user = await User.findById(req.user.id);
+
+        user.removeDevice(deviceId);
+        await user.save();
+
+        res.json({ success: true, message: "Device removed successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error" });
