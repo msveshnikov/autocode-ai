@@ -147,7 +147,7 @@ AutoCode offers flexible pricing tiers to suit different needs:
 -   Dedicated support team
 -   On-premises deployment option
 
-License management is handled through an Express.js server with `/login`, `/register`, and `/check` license methods.
+License management is handled through an Express.js server with `/login` and `/check` license methods.
 
 ## Long-Running Agents
 
@@ -176,3 +176,7 @@ License management is handled through an Express.js server with `/login`, `/regi
 -   Develop a natural language processing feature for converting user stories to code
 -   Create a collaborative mode for team-based AI-assisted development
 -   Develop a code migration assistant for updating legacy codebases
+
+## TODO
+
+-   send package.json content (or other package file for c#, java, etc) to Missing Dependencies checker

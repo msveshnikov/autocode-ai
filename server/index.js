@@ -15,6 +15,9 @@ import dotenv from "dotenv";
 import i18n from "i18n";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -81,6 +84,11 @@ passport.use(
     )
 );
 
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -98,6 +106,13 @@ app.use("/license", licenseServer);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan("combined"));
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+});
+app.use(limiter);
 
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
@@ -117,6 +132,28 @@ app.get("/register", (req, res) => {
 
 app.get("/contact", (req, res) => {
     res.render("contact");
+});
+
+app.post(
+    "/login",
+    passport.authenticate("local", {
+        successRedirect: "/profile",
+        failureRedirect: "/login",
+        failureFlash: true,
+    })
+);
+
+app.post("/register", async (req, res) => {
+    try {
+        const { username, email, password, tier } = req.body;
+        const user = new User({ username, email, tier });
+        await User.register(user, password);
+        passport.authenticate("local")(req, res, () => {
+            res.redirect("/profile");
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
 app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {

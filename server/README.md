@@ -7,6 +7,7 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 ## Features
 
 -   ES6, async/await, fetch
+-   Morgan for logging
 -   User registration and login
 -   Google Sign-In integration
 -   Stripe integration for payment processing
@@ -172,3 +173,7 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 ## Multi-language Support
 
 The application supports multiple languages using the i18n library. Language files are stored in the `locales` directory. Users can switch between languages in their profile settings.
+
+## TODO
+
+-   Fix User.register is not a function in /register
