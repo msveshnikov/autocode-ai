@@ -1,6 +1,6 @@
 {
     "name": "autocode-ai",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -20,7 +20,7 @@
         "multi-language"
     ],
     "author": "Max Sveshnikov",
-    "license": "MIT",
+    "license": "Commercial",
     "engines": {
         "node": ">=20.0.0"
     },
