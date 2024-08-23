@@ -1,11 +1,12 @@
 import express from "express";
-import passport from "passport";
 import User from "../models/user.js";
 import Stripe from "stripe";
+import { authenticateJWT, checkUserTier, checkRequestLimit } from "../middleware/auth.js";
 
 const router = express.Router();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/", authenticateJWT, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
         res.render("profile", { user });
@@ -15,12 +16,12 @@ router.get("/", passport.authenticate("jwt", { session: false }), async (req, re
     }
 });
 
-router.put("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.put("/", authenticateJWT, async (req, res) => {
     try {
         const { name, email } = req.body;
         const user = await User.findById(req.user.id);
 
-        if (name) user.username = name;
+        if (name) user.name = name;
         if (email) user.email = email;
 
         await user.save();
@@ -32,13 +33,13 @@ router.put("/", passport.authenticate("jwt", { session: false }), async (req, re
     }
 });
 
-router.get("/subscription", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/subscription", authenticateJWT, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("tier stripeCustomerId");
         let subscription = null;
 
         if (user.stripeCustomerId) {
-            const subscriptions = await Stripe.subscriptions.list({
+            const subscriptions = await stripe.subscriptions.list({
                 customer: user.stripeCustomerId,
                 status: "active",
                 limit: 1,
@@ -53,7 +54,7 @@ router.get("/subscription", passport.authenticate("jwt", { session: false }), as
     }
 });
 
-router.get("/usage", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/usage", authenticateJWT, checkUserTier, checkRequestLimit, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("dailyRequests lastRequestDate tier");
         const requestLimit = user.tier === "Free" ? 10 : Infinity;
@@ -72,11 +73,11 @@ router.get("/usage", passport.authenticate("jwt", { session: false }), async (re
     }
 });
 
-router.get("/devices", passport.authenticate("jwt", { session: false }), async (req, res) => {
+router.get("/devices", authenticateJWT, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("devices tier");
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
-        const remainingDevices = Math.max(0, deviceLimit - user.devices.length);
+        const remainingDevices = Math.max(0, deviceLimit - user.devices);
 
         res.json({
             devices: user.devices,

@@ -136,10 +136,6 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 │   └── user.js
 ├── config/
 │   └── passport.js
-├── locales/
-│   ├── en.json
-│   ├── es.json
-│   └── fr.json
 └── package.json
 ```
 
@@ -172,3 +168,4 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 ## TODO
 
 -   Fix User validation failed: password: Path `password` is required.
+-   Always register with Free tier first, user can upgrade later

@@ -29,7 +29,7 @@ export const checkUserTier = async (req, res, next) => {
 
         req.userTier = user.tier;
         next();
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -57,20 +57,16 @@ export const checkRequestLimit = async (req, res, next) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        const today = new Date().toISOString().split("T")[0];
-        if (user.lastRequestDate !== today) {
-            user.lastRequestDate = today;
-            user.dailyRequests = 0;
-        }
+        user.resetDailyRequests();
 
-        if (user.tier === "Free" && user.dailyRequests >= 10) {
+        if (!user.canMakeRequest()) {
             return res.status(429).json({ error: "Daily request limit exceeded" });
         }
 
-        user.dailyRequests += 1;
+        user.incrementDailyRequests();
         await user.save();
         next();
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -84,12 +80,12 @@ export const checkDeviceLimit = async (req, res, next) => {
 
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
 
-        if (user.devices.length >= deviceLimit) {
+        if (user.devices >= deviceLimit) {
             return res.status(403).json({ error: "Device limit reached" });
         }
 
         next();
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };

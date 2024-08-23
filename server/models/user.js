@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
     stripeCustomerId: {
         type: String,
     },
+    stripeSubscriptionId: {
+        type: String,
+    },
     googleId: {
         type: String,
     },
@@ -39,16 +42,12 @@ const UserSchema = new mongoose.Schema({
         default: 0,
     },
     devices: {
-        type: Number,
-        default: 3,
+        type: [String],
+        default: [],
     },
     name: {
         type: String,
         trim: true,
-    },
-    language: {
-        type: String,
-        default: "en",
     },
 });
 
@@ -66,9 +65,11 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 UserSchema.methods.updateTier = function (newTier) {
     this.tier = newTier;
     if (newTier === "Premium") {
-        this.devices = 10;
+        this.devices = this.devices.slice(0, 10);
     } else if (newTier === "Enterprise") {
-        this.devices = Infinity;
+        // No limit for Enterprise users
+    } else {
+        this.devices = this.devices.slice(0, 3);
     }
 };
 
@@ -86,6 +87,19 @@ UserSchema.methods.incrementDailyRequests = function () {
 
 UserSchema.methods.canMakeRequest = function () {
     return this.tier !== "Free" || this.dailyRequests < 10;
+};
+
+UserSchema.methods.addDevice = function (deviceId) {
+    if (!this.devices.includes(deviceId)) {
+        const limit = this.tier === "Free" ? 3 : this.tier === "Premium" ? 10 : Infinity;
+        if (this.devices.length < limit) {
+            this.devices.push(deviceId);
+        }
+    }
+};
+
+UserSchema.methods.removeDevice = function (deviceId) {
+    this.devices = this.devices.filter((id) => id !== deviceId);
 };
 
 UserSchema.plugin(passportLocalMongoose);

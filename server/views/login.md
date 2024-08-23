@@ -2,7 +2,7 @@
 
 ## Overview
 
-This file (`views/login.ejs`) contains the HTML, CSS, and JavaScript for the login page of the AutoCode application. It's an EJS (Embedded JavaScript) template that renders a responsive login form with options for traditional username/password login and Google OAuth login. The page also includes internationalization support and a language selector.
+This file (`views/login.ejs`) contains the HTML, CSS, and JavaScript for the login page of the AutoCode application. It's an EJS (Embedded JavaScript) template that renders a responsive login form with options for traditional username/password login and Google OAuth login
 
 ## File Structure
 
@@ -23,7 +23,6 @@ The template creates a centered login form with the following elements:
 -   Password input field
 -   Login button
 -   Google login button
--   Language selector
 
 ### Styling
 
@@ -34,16 +33,11 @@ The page uses inline CSS to create a futuristic, dark-themed interface with the 
 -   Glowing effects on inputs and buttons
 -   Responsive design for various screen sizes
 
-### Internationalization
-
-The template uses EJS tags (`<%= __('key') %>`) to support multiple languages. The actual translations are stored in JSON files in the `locales/` directory.
-
 ### Client-side JavaScript
 
 The template includes two main JavaScript functionalities:
 
 1. Form submission handling
-2. Language selection
 
 ## Key Components
 
@@ -67,20 +61,6 @@ This form captures the user's credentials and submits them asynchronously.
 
 This button redirects the user to the Google OAuth flow.
 
-### Language Selector
-
-```html
-<div class="language-selector">
-    <select id="languageSelect">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-    </select>
-</div>
-```
-
-This dropdown allows users to change the interface language.
-
 ## JavaScript Functionality
 
 ### Form Submission
@@ -100,23 +80,11 @@ This event listener handles the form submission:
     - On success: Stores the token and redirects to the profile page
     - On failure: Displays an error message
 
-### Language Selection
-
-```javascript
-document.getElementById("languageSelect").addEventListener("change", (e) => {
-    const lang = e.target.value;
-    window.location.href = `/login?lang=${lang}`;
-});
-```
-
-This event listener handles language changes by redirecting to the login page with a new language parameter.
-
 ## Usage in the Project
 
 This login view is likely rendered by a route handler in `routes/auth.js` when a user navigates to the login page. It integrates with:
 
 -   The authentication system (handling login requests)
--   The internationalization system (for language translations)
 -   The Google OAuth flow (for alternative login method)
 
 ## Security Considerations

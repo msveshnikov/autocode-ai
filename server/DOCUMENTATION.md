@@ -12,13 +12,12 @@
 8. [Stripe Integration](#stripe-integration)
 9. [Project Structure](#project-structure)
 10. [Pricing Tiers](#pricing-tiers)
-11. [Multi-language Support](#multi-language-support)
 
 ## Project Overview
 
 AutoCode Registration System is a comprehensive Express.js application designed to handle user registrations, process payments via Stripe, and manage user licenses using MongoDB. The system offers a tiered pricing model with Free, Premium, and Enterprise options, each providing different levels of access and features.
 
-The application is built using modern web technologies and follows best practices for scalability, security, and user experience. It leverages Docker for easy deployment and includes features such as Google Sign-In integration, multi-language support, and real-time license usage tracking.
+The application is built using modern web technologies and follows best practices for scalability, security, and user experience. It leverages Docker for easy deployment and includes features such as Google Sign-In integration and real-time license usage tracking.
 
 ## Features
 

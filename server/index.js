@@ -3,25 +3,24 @@ import mongoose from "mongoose";
 import Stripe from "stripe";
 import path from "path";
 import { fileURLToPath } from "url";
-import licenseServer from "./license-server.js";
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import authRoutes from "./routes/auth.js";
-import profileRoutes from "./routes/profile.js";
-import paymentRoutes from "./routes/payment.js";
-import User from "./models/user.js";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import flash from "connect-flash";
-import LocalStrategy from "passport-local";
-
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import User from "./models/user.js";
+import authRoutes from "./routes/auth.js";
+import profileRoutes from "./routes/profile.js";
+import paymentRoutes from "./routes/payment.js";
+import licenseServer from "./license-server.js";
+import dotenv from "dotenv";
 dotenv.config();
- 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,7 +29,6 @@ const port = process.env.PORT || 3000;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(process.env.MONGODB_URI);
-
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -83,11 +81,7 @@ passport.use(
     )
 );
 
-app.use(
-    helmet({
-        contentSecurityPolicy: false,
-    })
-);
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -117,7 +111,7 @@ app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
     res.render("landing");
 });
 
@@ -131,28 +125,6 @@ app.get("/register", (req, res) => {
 
 app.get("/contact", (req, res) => {
     res.render("contact");
-});
-
-app.post(
-    "/login",
-    passport.authenticate("local", {
-        successRedirect: "/profile",
-        failureRedirect: "/login",
-        failureFlash: true,
-    })
-);
-
-app.post("/register", async (req, res) => {
-    try {
-        const { username, email, password, tier } = req.body;
-        const user = new User({ username, email, tier });
-        await User.register(user, password);
-        passport.authenticate("local")(req, res, () => {
-            res.redirect("/profile");
-        });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
 });
 
 app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {

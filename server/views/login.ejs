@@ -66,37 +66,30 @@
                 text-align: center;
                 margin-bottom: 1rem;
             }
-            .language-selector {
-                margin-top: 1rem;
+            .register-link {
                 text-align: center;
+                margin-top: 1rem;
             }
-            .language-selector select {
-                background-color: rgba(255, 255, 255, 0.1);
-                color: #ffffff;
-                border: 1px solid #00ffff;
-                padding: 0.3rem;
-                border-radius: 4px;
+            .register-link a {
+                color: #00ffff;
+                text-decoration: none;
             }
         </style>
     </head>
     <body>
         <div class="login-container">
-            <h1><%= __('Login') %></h1>
+            <h1>Login</h1>
             <% if (locals.error) { %>
             <p class="error-message"><%= error %></p>
             <% } %>
             <form id="loginForm">
-                <input type="text" id="username" name="username" placeholder="<%= __('Username') %>" required />
-                <input type="password" id="password" name="password" placeholder="<%= __('Password') %>" required />
-                <button type="submit"><%= __('Login') %></button>
+                <input type="text" id="username" name="username" placeholder="Username" required />
+                <input type="password" id="password" name="password" placeholder="Password" required />
+                <button type="submit">Login</button>
             </form>
-            <button class="google-login" onclick="window.location.href='/auth/google'"><%= __('Login with Google') %></button>
-            <div class="language-selector">
-                <select id="languageSelect">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                </select>
+            <button class="google-login" onclick="window.location.href='/auth/google'">Login with Google</button>
+            <div class="register-link">
+                <a href="/register">Don't have an account? Register here</a>
             </div>
         </div>
         <script>
@@ -105,7 +98,7 @@
                 const username = document.getElementById("username").value;
                 const password = document.getElementById("password").value;
                 try {
-                    const response = await fetch("/login", {
+                    const response = await fetch("/auth/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -124,11 +117,6 @@
                     console.error("Error:", error);
                     alert("An error occurred. Please try again.");
                 }
-            });
-
-            document.getElementById("languageSelect").addEventListener("change", (e) => {
-                const lang = e.target.value;
-                window.location.href = `/login?lang=${lang}`;
             });
         </script>
     </body>

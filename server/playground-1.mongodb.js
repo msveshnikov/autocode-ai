@@ -1,43 +1,127 @@
 /* global use, db */
-// MongoDB Playground
-// To disable this template go to Settings | MongoDB | Use Default Template For Playground.
-// Make sure you are connected to enable completions and to be able to run a playground.
-// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
-// The result of the last command run in a playground is shown on the results panel.
-// By default the first 20 documents will be returned with a cursor.
-// Use 'console.log()' to print to the debug output.
-// For more documentation on playgrounds please refer to
-// https://www.mongodb.com/docs/mongodb-vscode/playgrounds/
 
 // Select the database to use.
-use('autocode');
+// MongoDB Playground
+use("autocode");
 
-// Insert a few documents into the sales collection.
-db.getCollection('sales').insertMany([
-  { 'item': 'abc', 'price': 10, 'quantity': 2, 'date': new Date('2014-03-01T08:00:00Z') },
-  { 'item': 'jkl', 'price': 20, 'quantity': 1, 'date': new Date('2014-03-01T09:00:00Z') },
-  { 'item': 'xyz', 'price': 5, 'quantity': 10, 'date': new Date('2014-03-15T09:00:00Z') },
-  { 'item': 'xyz', 'price': 5, 'quantity': 20, 'date': new Date('2014-04-04T11:21:39.736Z') },
-  { 'item': 'abc', 'price': 10, 'quantity': 10, 'date': new Date('2014-04-04T21:23:13.331Z') },
-  { 'item': 'def', 'price': 7.5, 'quantity': 5, 'date': new Date('2015-06-04T05:08:13Z') },
-  { 'item': 'def', 'price': 7.5, 'quantity': 10, 'date': new Date('2015-09-10T08:43:00Z') },
-  { 'item': 'abc', 'price': 10, 'quantity': 5, 'date': new Date('2016-02-06T20:20:13Z') },
+// Create users collection with schema validation
+db.createCollection("users", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["username", "email", "password", "tier"],
+            properties: {
+                username: {
+                    bsonType: "string",
+                    description: "must be a string and is required",
+                },
+                email: {
+                    bsonType: "string",
+                    pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+                    description: "must be a valid email address and is required",
+                },
+                password: {
+                    bsonType: "string",
+                    description: "must be a string and is required",
+                },
+                tier: {
+                    enum: ["Free", "Premium", "Enterprise"],
+                    description: "can only be one of the enum values and is required",
+                },
+                stripeCustomerId: {
+                    bsonType: "string",
+                    description: "must be a string if the field exists",
+                },
+                googleId: {
+                    bsonType: "string",
+                    description: "must be a string if the field exists",
+                },
+                lastRequestDate: {
+                    bsonType: "string",
+                    description: "must be a string if the field exists",
+                },
+                dailyRequests: {
+                    bsonType: "int",
+                    minimum: 0,
+                    description: "must be a non-negative integer",
+                },
+                devices: {
+                    bsonType: "int",
+                    minimum: 0,
+                    description: "must be a non-negative integer",
+                },
+                name: {
+                    bsonType: "string",
+                    description: "must be a string if the field exists",
+                },
+            },
+        },
+    },
+});
+
+// Create index for username and email
+db.users.createIndex({ username: 1 }, { unique: true });
+db.users.createIndex({ email: 1 }, { unique: true });
+
+// Insert sample users
+db.users.insertMany([
+    {
+        username: "user1",
+        email: "user1@example.com",
+        password: "$2b$10$1234567890123456789012",
+        tier: "Free",
+        dailyRequests: 0,
+        devices: 1,
+    },
+    {
+        username: "user2",
+        email: "user2@example.com",
+        password: "$2b$10$2345678901234567890123",
+        tier: "Premium",
+        stripeCustomerId: "cus_123456789",
+        dailyRequests: 0,
+        devices: 5,
+    },
+    {
+        username: "user3",
+        email: "user3@example.com",
+        password: "$2b$10$3456789012345678901234",
+        tier: "Enterprise",
+        stripeCustomerId: "cus_987654321",
+        dailyRequests: 0,
+        devices: 15,
+    },
 ]);
 
-// Run a find command to view items sold on April 4th, 2014.
-const salesOnApril4th = db.getCollection('sales').find({
-  date: { $gte: new Date('2014-04-04'), $lt: new Date('2014-04-05') }
-}).count();
+// Create function to reset daily requests
+db.system.js.save({
+    _id: "resetDailyRequests",
+    value: function () {
+        const today = new Date().toISOString().split("T")[0];
+        db.users.updateMany(
+            { lastRequestDate: { $ne: today } },
+            { $set: { lastRequestDate: today, dailyRequests: 0 } }
+        );
+    },
+});
 
-// Print a message to the output window.
-console.log(`${salesOnApril4th} sales occurred in 2014.`);
+// Start the scheduled task
+db.eval("scheduledResetDailyRequests()");
 
-// Here we run an aggregation and open a cursor to the results.
-// Use '.toArray()' to exhaust the cursor to return the whole result set.
-// You can use '.hasNext()/.next()' to iterate through the cursor page by page.
-db.getCollection('sales').aggregate([
-  // Find all of the sales that occurred in 2014.
-  { $match: { date: { $gte: new Date('2014-01-01'), $lt: new Date('2015-01-01') } } },
-  // Group the total sales for each product.
-  { $group: { _id: '$item', totalSaleAmount: { $sum: { $multiply: [ '$price', '$quantity' ] } } } }
+// Sample query to get user information
+db.users.find({ tier: "Premium" }, { username: 1, email: 1, tier: 1, dailyRequests: 1, devices: 1 });
+
+// Sample aggregation to get usage statistics
+db.users.aggregate([
+    {
+        $group: {
+            _id: "$tier",
+            userCount: { $sum: 1 },
+            totalRequests: { $sum: "$dailyRequests" },
+            avgDevices: { $avg: "$devices" },
+        },
+    },
+    {
+        $sort: { userCount: -1 },
+    },
 ]);

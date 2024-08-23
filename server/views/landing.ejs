@@ -163,20 +163,6 @@
                 margin-top: 4rem;
             }
 
-            .language-selector {
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-            }
-
-            .language-selector select {
-                background-color: var(--primary-color);
-                color: var(--text-color);
-                border: 1px solid var(--secondary-color);
-                padding: 0.5rem;
-                border-radius: 4px;
-            }
-
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
@@ -255,22 +241,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2024 AutoCode Registration System. All rights reserved.</p>
+            <p>&copy; 2024 MaxSoft. All rights reserved.</p>
         </footer>
-
-        <div class="language-selector">
-            <select id="languageSelect">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-            </select>
-        </div>
-
-        <script>
-            document.getElementById("languageSelect").addEventListener("change", function () {
-                const selectedLanguage = this.value;
-                window.location.href = `/?lang=${selectedLanguage}`;
-            });
-        </script>
     </body>
 </html>

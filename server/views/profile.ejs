@@ -18,20 +18,29 @@
                 margin: 0 auto;
                 padding: 20px;
             }
-            h1, h2 {
+            h1,
+            h2 {
                 color: #00ffff;
                 text-align: center;
             }
-            .profile-info, .edit-form, .license-usage {
+            .profile-info,
+            .edit-form,
+            .license-usage,
+            .subscription-info,
+            .device-info {
                 background-color: rgba(0, 0, 0, 0.6);
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 20px;
             }
-            .profile-info p, .license-usage p {
+            .profile-info p,
+            .license-usage p,
+            .subscription-info p,
+            .device-info p {
                 margin: 10px 0;
             }
-            .edit-form input, .edit-form select {
+            .edit-form input,
+            .edit-form select {
                 width: 100%;
                 padding: 10px;
                 margin-bottom: 10px;
@@ -39,7 +48,9 @@
                 border: 1px solid #00ffff;
                 color: #ffffff;
             }
-            .edit-form button, .upgrade-button {
+            .edit-form button,
+            .upgrade-button,
+            .cancel-subscription {
                 background-color: #00ffff;
                 color: #000000;
                 padding: 10px 20px;
@@ -48,11 +59,14 @@
                 cursor: pointer;
                 font-weight: bold;
             }
-            .edit-form button:hover, .upgrade-button:hover {
+            .edit-form button:hover,
+            .upgrade-button:hover,
+            .cancel-subscription:hover {
                 background-color: #0000ff;
                 color: #ffffff;
             }
-            .upgrade-button {
+            .upgrade-button,
+            .cancel-subscription {
                 display: inline-block;
                 text-decoration: none;
                 margin-top: 20px;
@@ -79,7 +93,7 @@
                 <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Tier:</strong> <%= user.tier %></p>
                 <% if (user.tier === 'Free') { %>
-                    <a href="/payment/upgrade" class="upgrade-button">Upgrade to Premium</a>
+                <a href="/payment/create-checkout-session" class="upgrade-button">Upgrade to Premium</a>
                 <% } %>
             </div>
             <div class="edit-form">
@@ -87,11 +101,7 @@
                 <form id="updateProfileForm">
                     <input type="text" id="name" placeholder="Name" value="<%= user.username %>" />
                     <input type="email" id="email" placeholder="Email" value="<%= user.email %>" />
-                    <select id="language">
-                        <option value="en" <%= user.language === 'en' ? 'selected' : '' %>>English</option>
-                        <option value="es" <%= user.language === 'es' ? 'selected' : '' %>>Español</option>
-                        <option value="fr" <%= user.language === 'fr' ? 'selected' : '' %>>Français</option>
-                    </select>
+
                     <button type="submit">Update Profile</button>
                 </form>
             </div>
@@ -102,13 +112,24 @@
                     <div class="progress" id="usageProgress"></div>
                 </div>
             </div>
+            <div class="subscription-info">
+                <h2>Subscription Information</h2>
+                <p>Current Tier: <span id="currentTier"></span></p>
+                <p>Subscription Status: <span id="subscriptionStatus"></span></p>
+                <% if (user.tier !== 'Free') { %>
+                <button id="cancelSubscription" class="cancel-subscription">Cancel Subscription</button>
+                <% } %>
+            </div>
+            <div class="device-info">
+                <h2>Device Information</h2>
+                <p>Devices: <span id="deviceCount"></span> / <span id="deviceLimit"></span></p>
+            </div>
         </div>
         <script>
             document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
                 const name = document.getElementById("name").value;
                 const email = document.getElementById("email").value;
-                const language = document.getElementById("language").value;
                 try {
                     const response = await fetch("/profile", {
                         method: "PUT",
@@ -116,7 +137,7 @@
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
-                        body: JSON.stringify({ name, email, language }),
+                        body: JSON.stringify({ name, email }),
                     });
                     if (response.ok) {
                         alert("Profile updated successfully");
@@ -132,16 +153,16 @@
 
             async function fetchLicenseUsage() {
                 try {
-                    const response = await fetch("/license/usage", {
+                    const response = await fetch("/profile/usage", {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        document.getElementById("requestsToday").textContent = data.requestsToday;
-                        document.getElementById("dailyLimit").textContent = data.dailyLimit;
-                        const usagePercentage = (data.requestsToday / data.dailyLimit) * 100;
+                        document.getElementById("requestsToday").textContent = data.dailyRequests;
+                        document.getElementById("dailyLimit").textContent = data.requestLimit;
+                        const usagePercentage = (data.dailyRequests / data.requestLimit) * 100;
                         document.getElementById("usageProgress").style.width = `${usagePercentage}%`;
                     }
                 } catch (error) {
@@ -149,7 +170,67 @@
                 }
             }
 
+            async function fetchSubscriptionInfo() {
+                try {
+                    const response = await fetch("/profile/subscription", {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        document.getElementById("currentTier").textContent = data.tier;
+                        document.getElementById("subscriptionStatus").textContent = data.subscription
+                            ? "Active"
+                            : "Inactive";
+                    }
+                } catch (error) {
+                    console.error("Error fetching subscription info:", error);
+                }
+            }
+
+            async function fetchDeviceInfo() {
+                try {
+                    const response = await fetch("/profile/devices", {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        document.getElementById("deviceCount").textContent = data.devices.length;
+                        document.getElementById("deviceLimit").textContent = data.deviceLimit;
+                    }
+                } catch (error) {
+                    console.error("Error fetching device info:", error);
+                }
+            }
+
+            document.getElementById("cancelSubscription")?.addEventListener("click", async () => {
+                if (confirm("Are you sure you want to cancel your subscription?")) {
+                    try {
+                        const response = await fetch("/payment/cancel-subscription", {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        });
+                        if (response.ok) {
+                            alert("Subscription cancelled successfully");
+                            location.reload();
+                        } else {
+                            alert("Failed to cancel subscription");
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        alert("An error occurred while cancelling the subscription");
+                    }
+                }
+            });
+
             fetchLicenseUsage();
+            fetchSubscriptionInfo();
+            fetchDeviceInfo();
             setInterval(fetchLicenseUsage, 60000);
         </script>
     </body>
