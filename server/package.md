@@ -24,7 +24,6 @@ The project uses several key dependencies:
 
 -   **Express.js**: Web application framework
 -   **Mongoose**: MongoDB object modeling tool
--   **Passport.js**: Authentication middleware (with strategies for local, JWT, and Google OAuth)
 -   **Stripe**: Payment processing
 -   **bcrypt**: Password hashing
 -   **jsonwebtoken**: JWT implementation

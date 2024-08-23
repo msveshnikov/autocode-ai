@@ -2,132 +2,150 @@
 
 ## Overview
 
-This file (`routes/auth.js`) handles authentication routes for the application. It provides functionality for user registration, login, and Google OAuth authentication. The router is part of an Express.js application and interacts with the User model to manage user data.
+This file (`routes/auth.js`) contains the authentication-related routes for the application. It handles user registration, login, logout, token verification, and contact inquiries. The routes use Express.js for routing, JWT for token-based authentication, and interact with the User and Inquiry models.
 
 ## Dependencies
 
--   express: Web application framework
--   bcrypt: Password hashing library
--   jsonwebtoken (jwt): JSON Web Token implementation
--   passport: Authentication middleware for Node.js
--   passport-google-oauth20: Google OAuth 2.0 authentication strategy for Passport
--   User model (from ../models/user.js): Mongoose model for user data
+- express
+- jsonwebtoken
+- User model (from `../models/user.js`)
+- Inquiry model (from `../models/inquiry.js`)
+- Authentication middleware (from `../middleware/auth.js`)
 
 ## Routes
 
-### POST /register
+### 1. User Registration
+
+**Endpoint:** `POST /register`
 
 Registers a new user in the system.
 
-#### Parameters (request body)
+**Parameters:**
+- `username` (string): User's chosen username
+- `email` (string): User's email address
+- `password` (string): User's password
+- `tier` (string, optional): User's subscription tier (default: "Free")
 
--   username: String
--   email: String
--   password: String
--   tier: String
+**Returns:**
+- 201 Status: JSON object containing a JWT token
+- 400 Status: Error message if username or email already exists
+- 500 Status: Error message if registration fails
 
-#### Returns
-
--   201 Status: JSON object containing a JWT token
--   400 Status: Error message if username or email already exists
--   500 Status: Error message if registration fails
-
-#### Usage Example
-
+**Example:**
 ```javascript
-fetch("/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        username: "newuser",
-        email: "newuser@example.com",
-        password: "password123",
-        tier: "Free",
-    }),
+fetch('/register', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username: 'newuser', email: 'user@example.com', password: 'password123' })
 })
-    .then((response) => response.json())
-    .then((data) => console.log(data.token));
 ```
 
-### POST /login
+### 2. User Login
+
+**Endpoint:** `POST /login`
 
 Authenticates a user and provides a JWT token.
 
-#### Parameters (request body)
+**Parameters:**
+- `username` (string): User's username
+- `password` (string): User's password
 
--   username: String
--   password: String
+**Returns:**
+- 200 Status: JSON object containing a JWT token
+- 401 Status: Error message for invalid credentials
+- 500 Status: Error message if login fails
 
-#### Returns
-
--   200 Status: JSON object containing a JWT token
--   401 Status: Error message for invalid credentials
--   500 Status: Error message if login fails
-
-#### Usage Example
-
+**Example:**
 ```javascript
-fetch("/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-        username: "existinguser",
-        password: "password123",
-    }),
+fetch('/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username: 'existinguser', password: 'password123' })
 })
-    .then((response) => response.json())
-    .then((data) => console.log(data.token));
 ```
 
-### GET /google
+### 3. User Logout
 
-Initiates Google OAuth authentication.
+**Endpoint:** `POST /logout`
 
-#### Usage
+Logs out the authenticated user.
 
-Redirect the user to this route to start Google OAuth flow.
+**Middleware:**
+- `authCookie`: Verifies the authentication token
 
-### GET /google/callback
+**Returns:**
+- 200 Status: Success message
 
-Callback route for Google OAuth authentication.
+**Example:**
+```javascript
+fetch('/logout', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer <token>' }
+})
+```
 
-#### Returns
+### 4. Token Verification
 
-Redirects to '/profile' with a JWT token as a query parameter upon successful authentication.
+**Endpoint:** `GET /check`
 
-## Passport Google Strategy
+Verifies the user's token and returns user information.
 
-The file configures Passport to use Google OAuth 2.0 strategy for authentication.
+**Middleware:**
+- `authCookie`: Verifies the authentication token
+- `checkUserTier`: Checks the user's subscription tier
+- `checkRequestLimit`: Verifies if the user has exceeded their request limit
 
-### Configuration
+**Returns:**
+- 200 Status: JSON object with token validity, user info, and tier
+- 401 Status: Unauthorized if token is invalid
 
--   clientID: Obtained from Google Developer Console
--   clientSecret: Obtained from Google Developer Console
--   callbackURL: '/auth/google/callback'
+**Example:**
+```javascript
+fetch('/check', {
+  method: 'GET',
+  headers: { 'Authorization': 'Bearer <token>' }
+})
+```
 
-### Functionality
+### 5. Contact Inquiry
 
-1. Checks if a user with the given Google ID exists in the database
-2. If not, creates a new user with information from the Google profile
-3. Returns the user object to Passport
+**Endpoint:** `POST /contact`
+
+Submits a contact inquiry.
+
+**Parameters:**
+- `name` (string): Inquirer's name
+- `email` (string): Inquirer's email
+- `subject` (string): Inquiry subject
+- `message` (string): Inquiry message
+
+**Returns:**
+- 201 Status: Success message
+- 500 Status: Error message if submission fails
+
+**Example:**
+```javascript
+fetch('/contact', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: 'John Doe',
+    email: 'john@example.com',
+    subject: 'Question',
+    message: 'I have a question about your service.'
+  })
+})
+```
+
+## Error Handling
+
+All routes include try-catch blocks to handle potential errors. In case of an error, an appropriate HTTP status code and error message are sent in the response.
 
 ## Project Context
 
-This file is crucial for the authentication system of the application. It works in conjunction with:
+This file is part of the authentication system in the project. It works in conjunction with:
+- User and Inquiry models in the `models` directory
+- Authentication middleware in the `middleware` directory
+- Other route files in the `routes` directory
 
--   `models/user.js`: Defines the User schema and model
--   `middleware/auth.js`: Likely contains middleware for protecting routes
--   `views/login.ejs` and `views/register.ejs`: Frontend views for authentication
--   `routes/profile.js`: Handles user profile-related routes
-
-The authentication system supports both local (username/password) and Google OAuth strategies, providing flexibility for user registration and login.
-
-## Security Considerations
-
--   Passwords are hashed using bcrypt before storage
--   JWT tokens are used for maintaining user sessions
--   Google OAuth is implemented for secure third-party authentication
-
-## Note
-
-Ensure that environment variables (`JWT_TOKEN`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`) are properly set for the application to function correctly.
+The routes defined here are likely to be used by the frontend views (in the `views` directory) for user authentication and interaction.

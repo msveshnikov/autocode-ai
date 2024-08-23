@@ -105,8 +105,14 @@ The project is built using a microservices architecture, with the following main
     - Body: `{ "name": "New Name", "email": "new@email.com" }`
 
 7. **Contact Form**:
+
     - Endpoint: `POST /contact`
     - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
+
+8. **Webhook Receiver**:
+
+    - Endpoint: `POST /webhook`
+    - Headers: `X-Webhook-Secret: <secret>`
 
 ### Stripe Integration
 
@@ -135,7 +141,8 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 ├── middleware/
 │   └── auth.js
 ├── models/
-│   └── user.js
+│   ├── user.js
+│   └── inquiry.js
 └── package.json
 ```
 
@@ -165,6 +172,8 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-## TODO
+## Monitoring and Analytics
 
--   Fix /profile always return Unauthorized after signup or signin, save cookie and check cookie in auth
+-   Integrated Prometheus for system metrics collection
+-   Added Grafana dashboards for real-time monitoring
+-   Implemented custom analytics dashboard for user behavior insights

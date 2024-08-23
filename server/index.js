@@ -9,9 +9,6 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import flash from "connect-flash";
-// import passport from "passport";
-// import { Strategy as LocalStrategy } from "passport-local";
-// import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import User from "./models/user.js";
 import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
@@ -30,30 +27,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(process.env.MONGODB_URI);
 
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
-// passport.use(
-//     new JwtStrategy(
-//         {
-//             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//             secretOrKey: process.env.JWT_TOKEN,
-//         },
-//         async (jwtPayload, done) => {
-//             try {
-//                 const user = await User.findById(jwtPayload.id);
-//                 if (user) {
-//                     return done(null, user);
-//                 }
-//                 return done(null, false);
-//             } catch (error) {
-//                 return done(error, false);
-//             }
-//         }
-//     )
-// );
-
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -65,8 +38,7 @@ app.use(
         saveUninitialized: false,
     })
 );
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 app.use("/license", licenseServer);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

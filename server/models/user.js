@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import passportLocalMongoose from "passport-local-mongoose";
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -99,8 +98,6 @@ UserSchema.methods.addDevice = function (deviceId) {
 UserSchema.methods.removeDevice = function (deviceId) {
     this.devices = this.devices.filter((id) => id !== deviceId);
 };
-
-UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("User", UserSchema);
 

@@ -1,154 +1,155 @@
-# Profile Router Documentation
+# Profile Routes Documentation
 
 ## Overview
 
-This file (`routes/profile.js`) defines the router for handling user profile-related operations in the application. It includes routes for viewing and updating user profiles, managing subscriptions, checking usage limits, and retrieving device information. The router uses Express.js and implements authentication using Passport.js with JWT strategy.
+This file (`routes/profile.js`) defines the routes related to user profiles in the application. It handles various profile-related operations such as viewing and updating profiles, managing subscriptions, tracking usage, and managing devices. The routes utilize Express.js for handling HTTP requests and interact with the User model and Stripe API for payment-related functionalities.
 
 ## Dependencies
 
--   express
--   passport
--   User model (from "../models/user.js")
--   Stripe
+- express
+- User model (from `../models/user.js`)
+- Stripe
+- Authentication middleware (from `../middleware/auth.js`)
 
 ## Routes
 
-### 1. Get User Profile
+### GET /
 
-**Endpoint:** GET "/"
+Retrieves and displays the user's profile.
 
-**Authentication:** Required (JWT)
-
-**Description:** Retrieves the user's profile information and renders the profile page.
-
-**Implementation:**
-
-```javascript
-router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    // ... (implementation details)
-});
-```
+**Middleware:** `authCookie`
 
 **Response:**
+- Renders the "profile" view with user data (excluding password)
 
--   Renders the "profile" view with user data (excluding password)
--   On error: 500 status with JSON error message
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
 
-### 2. Update User Profile
+### PUT /
 
-**Endpoint:** PUT "/"
+Updates the user's profile information.
 
-**Authentication:** Required (JWT)
-
-**Description:** Updates the user's name and/or email in the database.
+**Middleware:** `authCookie`
 
 **Request Body:**
-
--   `name` (optional): New username
--   `email` (optional): New email address
-
-**Implementation:**
-
-```javascript
-router.put("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    // ... (implementation details)
-});
-```
+- `name`: User's new name
+- `email`: User's new email
 
 **Response:**
+- JSON object with success message and updated user data
 
--   Success: JSON object with success message
--   Error: 500 status with JSON error message
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
 
-### 3. Get Subscription Information
+### GET /subscription
 
-**Endpoint:** GET "/subscription"
+Retrieves the user's subscription information.
 
-**Authentication:** Required (JWT)
-
-**Description:** Retrieves the user's subscription tier and Stripe subscription details.
-
-**Implementation:**
-
-```javascript
-router.get("/subscription", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    // ... (implementation details)
-});
-```
+**Middleware:** `authCookie`
 
 **Response:**
+- JSON object containing user's tier and active Stripe subscription (if any)
 
--   JSON object containing user's tier and Stripe subscription data
--   Error: 500 status with JSON error message
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
 
-### 4. Get Usage Information
+### POST /subscription/cancel
 
-**Endpoint:** GET "/usage"
+Cancels the user's active subscription.
 
-**Authentication:** Required (JWT)
-
-**Description:** Retrieves the user's daily request usage, tier, and remaining requests.
-
-**Implementation:**
-
-```javascript
-router.get("/usage", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    // ... (implementation details)
-});
-```
+**Middleware:** `authCookie`
 
 **Response:**
+- JSON object with success message if subscription is cancelled
 
--   JSON object with daily requests, last request date, tier, request limit, and remaining requests
--   Error: 500 status with JSON error message
+**Error Handling:**
+- Returns a 400 status if no active subscription is found
+- Returns a 500 status with a "Server error" message on other failures
 
-### 5. Get Device Information
+### GET /usage
 
-**Endpoint:** GET "/devices"
+Retrieves the user's API usage information.
 
-**Authentication:** Required (JWT)
-
-**Description:** Retrieves the user's registered devices, device limit, and remaining device slots.
-
-**Implementation:**
-
-```javascript
-router.get("/devices", passport.authenticate("jwt", { session: false }), async (req, res) => {
-    // ... (implementation details)
-});
-```
+**Middleware:** `authCookie`, `checkUserTier`, `checkRequestLimit`
 
 **Response:**
+- JSON object containing daily requests, last request date, tier, request limit, and remaining requests
 
--   JSON object with devices array, device limit, and remaining devices
--   Error: 500 status with JSON error message
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
 
-## Usage Example
+### GET /devices
 
-To use this router in the main application:
+Retrieves the user's registered devices.
+
+**Middleware:** `authCookie`
+
+**Response:**
+- JSON object containing devices, device limit, and remaining devices
+
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
+
+### POST /devices
+
+Adds a new device to the user's account.
+
+**Middleware:** `authCookie`
+
+**Request Body:**
+- `deviceId`: ID of the device to add
+
+**Response:**
+- JSON object with success message
+
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
+
+### DELETE /devices/:deviceId
+
+Removes a device from the user's account.
+
+**Middleware:** `authCookie`
+
+**Parameters:**
+- `deviceId`: ID of the device to remove
+
+**Response:**
+- JSON object with success message
+
+**Error Handling:**
+- Returns a 500 status with a "Server error" message on failure
+
+## Usage Examples
 
 ```javascript
-import express from "express";
-import profileRouter from "./routes/profile.js";
+// Get user profile
+GET /profile
 
-const app = express();
+// Update user profile
+PUT /profile
+Body: { "name": "John Doe", "email": "john@example.com" }
 
-// ... other middleware and configurations
+// Get subscription info
+GET /profile/subscription
 
-app.use("/profile", profileRouter);
+// Cancel subscription
+POST /profile/subscription/cancel
 
-// ... other route configurations
+// Get usage info
+GET /profile/usage
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+// Get devices
+GET /profile/devices
+
+// Add a device
+POST /profile/devices
+Body: { "deviceId": "device123" }
+
+// Remove a device
+DELETE /profile/devices/device123
 ```
 
 ## Project Context
 
-This profile router is part of a larger project that appears to be a license server or subscription-based service. It interacts with other components such as:
-
--   User model (`models/user.js`) for database operations
--   Authentication middleware (likely in `middleware/auth.js`)
--   Views for rendering pages (`views/profile.ejs`)
--   Localization files for internationalization (`locales/`)
-
-The router handles crucial user-centric operations, integrating with Stripe for subscription management and implementing tiered access control for features like daily request limits and device management.
+This file is part of the `routes` directory in the project structure. It specifically handles profile-related routes and integrates with other components such as the User model, authentication middleware, and Stripe for payments. The routes defined here are likely to be used by the front-end views (e.g., `profile.ejs`) to display and manage user profile information.

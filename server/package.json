@@ -1,6 +1,6 @@
 {
     "name": "autocode-registration",
-    "version": "1.0.0",
+    "version": "0.8.1",
     "description": "Express.js application for user registration, payment processing, and license management",
     "main": "index.js",
     "type": "module",
@@ -23,11 +23,6 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.5.3",
         "morgan": "^1.10.0",
-        "passport": "^0.7.0",
-        "passport-google-oauth20": "^2.0.0",
-        "passport-jwt": "^4.0.1",
-        "passport-local": "^1.0.0",
-        "passport-local-mongoose": "^8.0.0",
         "stripe": "^16.8.0",
         "uuid": "^10.0.0"
     },

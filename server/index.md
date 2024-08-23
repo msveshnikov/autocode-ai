@@ -2,133 +2,94 @@
 
 ## Overview
 
-This file serves as the main entry point for a web application built with Express.js. It sets up the server, configures middleware, initializes authentication strategies, and defines the main routes. The application integrates various features including internationalization, payment processing with Stripe, and user authentication using Google OAuth and JWT.
+This file serves as the main entry point for a Node.js Express application. It sets up the server, configures middleware, defines routes, and handles various functionalities including authentication, payment processing, and user management.
 
 ## Dependencies
 
 - express: Web application framework
 - mongoose: MongoDB object modeling tool
 - Stripe: Payment processing library
-- passport: Authentication middleware for Node.js
-- dotenv: Environment variable management
-- Other utility libraries (path, url, cookie-parser, express-session)
+- path, url: Node.js built-in modules for file and URL operations
+- cookie-parser: Middleware for parsing cookies
+- express-session: Session middleware for Express
+- helmet: Security middleware to set various HTTP headers
+- express-rate-limit: Rate limiting middleware
+- morgan: HTTP request logger middleware
+- connect-flash: Flash message middleware
+- dotenv: Module to load environment variables from a .env file
 
 ## Configuration
 
-### Environment Variables
+1. Environment variables are loaded using `dotenv.config()`.
+2. Express application is initialized.
+3. MongoDB connection is established using the `MONGODB_URI` environment variable.
+4. Various middleware are set up for security, parsing, session management, and logging.
+5. View engine is set to EJS and static files are served from the 'public' directory.
+6. Rate limiting is configured to allow 100 requests per 15 minutes.
 
-The application uses the following environment variables:
+## Routes
 
-- PORT: Server port (default: 3000)
-- MONGODB_URI: MongoDB connection string
-- STRIPE_SECRET_KEY: Stripe API secret key
-- JWT_TOKEN: Secret for JWT authentication
-- GOOGLE_CLIENT_ID: Google OAuth client ID
-- GOOGLE_CLIENT_SECRET: Google OAuth client secret
-- SESSION_SECRET: Secret for express-session
-- STRIPE_WEBHOOK_SECRET: Secret for Stripe webhooks
+The application defines several routes:
 
-### Database
+- `/auth`: Authentication routes (defined in `./routes/auth.js`)
+- `/profile`: User profile routes (defined in `./routes/profile.js`)
+- `/payment`: Payment-related routes (defined in `./routes/payment.js`)
+- `/`: Renders the landing page
+- `/login`: Renders the login page
+- `/register`: Renders the registration page
+- `/contact`: Renders the contact page
+- `/webhook`: Handles Stripe webhook events
 
-MongoDB is used as the database, connected via mongoose.
+## Stripe Webhook Handler
 
-### Authentication
+The `/webhook` route handles Stripe webhook events, specifically the `checkout.session.completed` event. When a checkout is completed:
 
-Two authentication strategies are implemented:
-1. JWT (JSON Web Token) for API authentication
-2. Google OAuth for user login
+1. It verifies the webhook signature.
+2. Retrieves the user associated with the checkout session.
+3. Updates the user's tier to "Premium" and saves the Stripe customer ID.
 
-## Main Components
+## Server Startup
 
-### Express Application Setup
-
-```javascript
-const app = express();
-const port = process.env.PORT || 3000;
-```
-
-### Middleware Configuration
-
-Various middleware are set up, including:
-- Body parsing
-- Cookie parsing
-- Session management
-- Passport initialization
-- Static file serving
-
-### Route Definitions
-
-The application defines several route groups:
-- `/auth`: Authentication routes
-- `/profile`: User profile routes
-- `/payment`: Payment processing routes
-- `/license`: License server routes
-
-### Stripe Webhook Handler
-
-A webhook handler is set up to process Stripe events, particularly for handling successful checkout sessions.
-
-## Key Functions
-
-### Passport Strategy Setup
-
-#### JWT Strategy
-
-```javascript
-passport.use(new JwtStrategy(
-    {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: process.env.JWT_TOKEN,
-    },
-    async (jwtPayload, done) => {
-        // Strategy implementation
-    }
-));
-```
-
-#### Google Strategy
-
-```javascript
-passport.use(new GoogleStrategy(
-    {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-        // Strategy implementation
-    }
-));
-```
-
-### Stripe Webhook Handler
-
-```javascript
-app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    // Webhook handling logic
-});
-```
+The server listens on the port specified by the `PORT` environment variable or defaults to 3000.
 
 ## Usage
 
 To start the server:
 
 ```javascript
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+node index.js
 ```
 
 ## Project Structure Integration
 
-This file (`index.js`) acts as the central configuration and setup file for the entire application. It integrates with:
+This file integrates various components of the project:
 
-- Route files in the `routes` directory
-- View templates in the `views` directory
-- Database models in the `models` directory
-- Localization files in the `locales` directory
-- The `license-server.js` file for license-related functionality
+- Models: Imports the User model from `./models/user.js`
+- Routes: Imports and uses route modules from the `./routes` directory
+- Views: Sets up EJS as the view engine and specifies the views directory
+- Middleware: Applies custom middleware like `licenseServer` from `./license-server.js`
 
-## Conclusion
+## Environment Variables
 
-This file sets up a comprehensive web application with authentication, internationalization, and payment processing capabilities. It serves as the core of the application, integrating various components and setting up the necessary configurations for the server to function.
+The following environment variables should be set:
+
+- `PORT`: Server port number
+- `MONGODB_URI`: MongoDB connection string
+- `STRIPE_SECRET_KEY`: Stripe API secret key
+- `STRIPE_WEBHOOK_SECRET`: Stripe webhook secret for verifying webhook events
+- `SESSION_SECRET`: Secret for Express session middleware
+
+## Security Features
+
+- Uses Helmet for setting security headers
+- Implements rate limiting to prevent abuse
+- Uses HTTPS-only cookies (when in production)
+- Parses raw body for Stripe webhooks to ensure integrity
+
+## Error Handling
+
+Basic error handling is implemented for the Stripe webhook. More comprehensive error handling should be added for production use.
+
+## Exports
+
+The Express `app` instance is exported as the default export, allowing it to be imported and used in other parts of the application or for testing purposes.
