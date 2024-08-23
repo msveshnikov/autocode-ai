@@ -12,6 +12,9 @@ import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import User from "./models/user.js";
 import dotenv from "dotenv";
+import i18n from "i18n";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 dotenv.config();
 
@@ -23,6 +26,13 @@ const port = process.env.PORT || 3000;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(process.env.MONGODB_URI);
+
+i18n.configure({
+    locales: ["en", "es", "fr"],
+    directory: path.join(__dirname, "locales"),
+    defaultLocale: "en",
+    cookie: "lang",
+});
 
 passport.use(
     new JwtStrategy(
@@ -72,7 +82,18 @@ passport.use(
 );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(i18n.init);
 app.use("/license", licenseServer);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

@@ -71,6 +71,11 @@
             .google-signin:hover {
                 background-color: #357ae8;
             }
+            .error-message {
+                color: #ff0000;
+                text-align: center;
+                margin-top: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -96,12 +101,15 @@
                 <button type="submit">Register</button>
             </form>
             <button class="google-signin" onclick="window.location.href='/auth/google'">Sign in with Google</button>
+            <div id="errorMessage" class="error-message"></div>
         </div>
 
         <script src="https://js.stripe.com/v3/"></script>
         <script>
             const stripe = Stripe("<%= process.env.STRIPE_PUBLISHABLE_KEY %>");
             const form = document.getElementById("registerForm");
+            const errorMessage = document.getElementById("errorMessage");
+
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
                 const formData = new FormData(form);
@@ -118,18 +126,22 @@
 
                     const result = await response.json();
 
-                    if (result.sessionId) {
-                        stripe.redirectToCheckout({ sessionId: result.sessionId });
-                    } else if (result.token) {
-                        localStorage.setItem("token", result.token);
-                        window.location.href = "/profile";
+                    if (response.ok) {
+                        if (result.sessionId) {
+                            stripe.redirectToCheckout({ sessionId: result.sessionId });
+                        } else if (result.token) {
+                            localStorage.setItem("token", result.token);
+                            window.location.href = "/profile";
+                        } else {
+                            alert("Registration successful! Please log in.");
+                            window.location.href = "/login";
+                        }
                     } else {
-                        alert("Registration successful! Please log in.");
-                        window.location.href = "/login";
+                        errorMessage.textContent = result.error || "Registration failed. Please try again.";
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    alert("An error occurred during registration. Please try again.");
+                    errorMessage.textContent = "An error occurred during registration. Please try again.";
                 }
             });
         </script>

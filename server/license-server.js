@@ -105,7 +105,7 @@ router.get("/tier-info", authenticateToken, async (req, res) => {
         }
 
         res.json(tierInfo);
-    } catch  {
+    } catch {
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -122,7 +122,7 @@ router.put("/update-tier", authenticateToken, async (req, res) => {
         await user.save();
 
         res.json({ message: "Tier updated successfully", tier: user.tier });
-    } catch  {
+    } catch {
         res.status(500).json({ error: "Internal server error" });
     }
 });

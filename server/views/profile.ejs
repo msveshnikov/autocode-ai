@@ -18,25 +18,20 @@
                 margin: 0 auto;
                 padding: 20px;
             }
-            h1 {
+            h1, h2 {
                 color: #00ffff;
                 text-align: center;
             }
-            .profile-info {
+            .profile-info, .edit-form, .license-usage {
                 background-color: rgba(0, 0, 0, 0.6);
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 20px;
             }
-            .profile-info p {
+            .profile-info p, .license-usage p {
                 margin: 10px 0;
             }
-            .edit-form {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 20px;
-                border-radius: 10px;
-            }
-            .edit-form input {
+            .edit-form input, .edit-form select {
                 width: 100%;
                 padding: 10px;
                 margin-bottom: 10px;
@@ -44,31 +39,35 @@
                 border: 1px solid #00ffff;
                 color: #ffffff;
             }
-            .edit-form button {
+            .edit-form button, .upgrade-button {
                 background-color: #00ffff;
                 color: #000000;
                 padding: 10px 20px;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
+                font-weight: bold;
             }
-            .edit-form button:hover {
+            .edit-form button:hover, .upgrade-button:hover {
                 background-color: #0000ff;
                 color: #ffffff;
             }
             .upgrade-button {
                 display: inline-block;
-                background-color: #00ffff;
-                color: #000000;
-                padding: 10px 20px;
                 text-decoration: none;
-                border-radius: 5px;
-                font-weight: bold;
                 margin-top: 20px;
             }
-            .upgrade-button:hover {
-                background-color: #0000ff;
-                color: #ffffff;
+            .progress-bar {
+                width: 100%;
+                background-color: #ddd;
+                border-radius: 5px;
+            }
+            .progress {
+                width: 0%;
+                height: 20px;
+                background-color: #00ffff;
+                border-radius: 5px;
+                transition: width 0.5s ease-in-out;
             }
         </style>
     </head>
@@ -88,8 +87,20 @@
                 <form id="updateProfileForm">
                     <input type="text" id="name" placeholder="Name" value="<%= user.username %>" />
                     <input type="email" id="email" placeholder="Email" value="<%= user.email %>" />
+                    <select id="language">
+                        <option value="en" <%= user.language === 'en' ? 'selected' : '' %>>English</option>
+                        <option value="es" <%= user.language === 'es' ? 'selected' : '' %>>Español</option>
+                        <option value="fr" <%= user.language === 'fr' ? 'selected' : '' %>>Français</option>
+                    </select>
                     <button type="submit">Update Profile</button>
                 </form>
+            </div>
+            <div class="license-usage">
+                <h2>License Usage</h2>
+                <p>Requests today: <span id="requestsToday"></span> / <span id="dailyLimit"></span></p>
+                <div class="progress-bar">
+                    <div class="progress" id="usageProgress"></div>
+                </div>
             </div>
         </div>
         <script>
@@ -97,6 +108,7 @@
                 e.preventDefault();
                 const name = document.getElementById("name").value;
                 const email = document.getElementById("email").value;
+                const language = document.getElementById("language").value;
                 try {
                     const response = await fetch("/profile", {
                         method: "PUT",
@@ -104,7 +116,7 @@
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
-                        body: JSON.stringify({ name, email }),
+                        body: JSON.stringify({ name, email, language }),
                     });
                     if (response.ok) {
                         alert("Profile updated successfully");
@@ -117,6 +129,28 @@
                     alert("An error occurred while updating the profile");
                 }
             });
+
+            async function fetchLicenseUsage() {
+                try {
+                    const response = await fetch("/license/usage", {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        document.getElementById("requestsToday").textContent = data.requestsToday;
+                        document.getElementById("dailyLimit").textContent = data.dailyLimit;
+                        const usagePercentage = (data.requestsToday / data.dailyLimit) * 100;
+                        document.getElementById("usageProgress").style.width = `${usagePercentage}%`;
+                    }
+                } catch (error) {
+                    console.error("Error fetching license usage:", error);
+                }
+            }
+
+            fetchLicenseUsage();
+            setInterval(fetchLicenseUsage, 60000);
         </script>
     </body>
 </html>
