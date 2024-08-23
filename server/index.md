@@ -10,7 +10,6 @@ This file serves as the main entry point for a web application built with Expres
 - mongoose: MongoDB object modeling tool
 - Stripe: Payment processing library
 - passport: Authentication middleware for Node.js
-- i18n: Internationalization library
 - dotenv: Environment variable management
 - Other utility libraries (path, url, cookie-parser, express-session)
 
@@ -28,10 +27,6 @@ The application uses the following environment variables:
 - GOOGLE_CLIENT_SECRET: Google OAuth client secret
 - SESSION_SECRET: Secret for express-session
 - STRIPE_WEBHOOK_SECRET: Secret for Stripe webhooks
-
-### Internationalization
-
-The app supports multiple languages (English, Spanish, French) using the i18n library.
 
 ### Database
 

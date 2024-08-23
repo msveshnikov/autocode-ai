@@ -17,7 +17,6 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 -   Docker support for easy deployment
 -   User profile management
 -   Express template engine for dynamic page rendering
--   Multi-language support
 -   Responsive design for mobile and desktop
 -   Real-time license usage tracking
 -   Automated email notifications
@@ -170,10 +169,6 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-## Multi-language Support
-
-The application supports multiple languages using the i18n library. Language files are stored in the `locales` directory. Users can switch between languages in their profile settings.
-
 ## TODO
 
--   Fix User.register is not a function in /register
+-   Fix User validation failed: password: Path `password` is required.

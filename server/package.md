@@ -28,7 +28,6 @@ The project uses several key dependencies:
 -   **Stripe**: Payment processing
 -   **bcrypt**: Password hashing
 -   **jsonwebtoken**: JWT implementation
--   **i18n**: Internationalization library
 -   **ejs**: Templating engine
 
 ## Dev Dependencies
@@ -82,7 +81,6 @@ npm run lint
 
 -   The project uses ES modules (`"type": "module"`)
 -   Environment variables should be configured in a `.env` file (not included in the repository)
--   The application supports multiple languages (English, Spanish, French) through the `i18n` library and locale files
 
 ## Security Considerations
 

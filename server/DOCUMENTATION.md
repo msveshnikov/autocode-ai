@@ -32,7 +32,6 @@ The application is built using modern web technologies and follows best practice
 -   Docker support for easy deployment
 -   User profile management
 -   Express template engine (EJS) for dynamic page rendering
--   Multi-language support (i18n)
 -   Responsive design for mobile and desktop
 -   Real-time license usage tracking
 -   Automated email notifications (to be implemented)
@@ -57,7 +56,6 @@ The application uses Express.js as the web framework, Passport.js for authentica
 -   Both servers communicate with MongoDB to store and retrieve user and license data.
 -   The web server integrates with Stripe for payment processing and subscription management, handling webhooks for payment status updates.
 -   Google Sign-In API is used as an alternative authentication method, managed through Passport.js.
--   The i18n module is used throughout the application to provide multi-language support.
 
 ## Installation and Setup
 
@@ -209,15 +207,6 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-## Multi-language Support
-
-The application supports multiple languages using the i18n library. Language files are stored in the `locales` directory. Users can switch between languages in their profile settings. Currently supported languages are:
-
--   English (en)
--   Spanish (es)
--   French (fr)
-
-To add more languages, create new JSON files in the `locales` directory and add the corresponding translations.
 
 ---
 
