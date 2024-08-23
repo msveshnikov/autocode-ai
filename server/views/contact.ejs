@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="<%= __('lang') %>">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= __('contact.title') %> | AutoCode</title>
+        <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            header {
+                background-color: rgba(0, 0, 0, 0.8);
+                padding: 1rem 0;
+            }
+            nav ul {
+                list-style-type: none;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            nav ul li {
+                margin: 0 1rem;
+            }
+            nav ul li a {
+                color: #00ffff;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            main {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem;
+            }
+            .contact-form {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                width: 100%;
+                max-width: 500px;
+            }
+            h1 {
+                text-align: center;
+                color: #00ffff;
+                margin-bottom: 1.5rem;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            label {
+                margin-top: 1rem;
+                color: #00ffff;
+            }
+            input,
+            textarea {
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid #00ffff;
+                color: #ffffff;
+                border-radius: 4px;
+            }
+            textarea {
+                resize: vertical;
+                min-height: 100px;
+            }
+            button {
+                margin-top: 1.5rem;
+                padding: 0.75rem;
+                background-color: #00ffff;
+                color: #000000;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+            button:hover {
+                background-color: #0000ff;
+                color: #ffffff;
+                box-shadow: 0 0 15px #00ffff;
+            }
+            footer {
+                background-color: rgba(0, 0, 0, 0.8);
+                color: #ffffff;
+                text-align: center;
+                padding: 1rem 0;
+                margin-top: auto;
+            }
+            .language-selector {
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .language-selector a {
+                color: #00ffff;
+                text-decoration: none;
+                margin: 0 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/"><%= __('nav.home') %></a></li>
+                    <li><a href="/login"><%= __('nav.login') %></a></li>
+                    <li><a href="/register"><%= __('nav.register') %></a></li>
+                    <li><a href="/profile"><%= __('nav.profile') %></a></li>
+                    <li><a href="/contact" class="active"><%= __('nav.contact') %></a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div class="contact-form">
+                <h1><%= __('contact.heading') %></h1>
+                <form id="contactForm">
+                    <label for="name"><%= __('contact.name') %></label>
+                    <input type="text" id="name" name="name" required />
+
+                    <label for="email"><%= __('contact.email') %></label>
+                    <input type="email" id="email" name="email" required />
+
+                    <label for="subject"><%= __('contact.subject') %></label>
+                    <input type="text" id="subject" name="subject" required />
+
+                    <label for="message"><%= __('contact.message') %></label>
+                    <textarea id="message" name="message" required></textarea>
+
+                    <button type="submit"><%= __('contact.send') %></button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; <%= new Date().getFullYear() %> AutoCode Registration System</p>
+            <div class="language-selector">
+                <a href="/language/en">English</a> | <a href="/language/es">Español</a> |
+                <a href="/language/fr">Français</a>
+            </div>
+        </footer>
+
+        <script>
+            document.getElementById("contactForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch("/contact", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (response.ok) {
+                        alert("<%= __('contact.success') %>");
+                        e.target.reset();
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.error || "<%= __('contact.error') %>");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("<%= __('contact.error') %>");
+                }
+            });
+        </script>
+    </body>
+</html>

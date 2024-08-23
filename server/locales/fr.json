@@ -8,9 +8,20 @@
         "profile": "Profil",
         "save": "Enregistrer",
         "cancel": "Annuler",
+        "confirm": "Confirmer",
+        "back": "Retour",
+        "next": "Suivant",
+        "loading": "Chargement...",
         "success": "Succès",
-        "error": "Erreur",
-        "loading": "Chargement..."
+        "error": "Erreur"
+    },
+    "landing": {
+        "title": "Système d'Enregistrement AutoCode",
+        "description": "Une solution complète pour l'enregistrement des utilisateurs et la gestion des licences",
+        "features": "Fonctionnalités",
+        "pricing": "Tarifs",
+        "register": "S'inscrire",
+        "login": "Se connecter"
     },
     "auth": {
         "username": "Nom d'utilisateur",
@@ -31,7 +42,8 @@
         "devices": "Appareils connectés",
         "updateProfile": "Mettre à jour le profil",
         "changePassword": "Changer le mot de passe",
-        "language": "Langue"
+        "language": "Langue",
+        "requestsLeft": "Requêtes restantes"
     },
     "pricing": {
         "title": "Niveaux de prix",
@@ -62,6 +74,7 @@
         },
         "selectPlan": "Sélectionner un plan",
         "upgrade": "Mettre à niveau",
+        "downgrade": "Rétrograder",
         "currentPlan": "Plan actuel"
     },
     "payment": {
@@ -74,7 +87,10 @@
         "cardDetails": "Détails de la carte",
         "cardNumber": "Numéro de carte",
         "expiryDate": "Date d'expiration",
-        "cvv": "CVV"
+        "cvv": "CVV",
+        "processingPayment": "Traitement du paiement...",
+        "successMessage": "Paiement réussi ! Votre plan a été mis à jour.",
+        "errorMessage": "Erreur de paiement. Veuillez réessayer."
     },
     "license": {
         "checkLicense": "Vérifier la licence",
@@ -89,12 +105,66 @@
         "loginFailed": "La connexion a échoué",
         "profileUpdateFailed": "La mise à jour du profil a échoué",
         "paymentFailed": "Le traitement du paiement a échoué",
-        "licenseCheckFailed": "La vérification de la licence a échoué"
+        "licenseCheckFailed": "La vérification de la licence a échoué",
+        "userNotFound": "Utilisateur non trouvé",
+        "emailAlreadyExists": "Cet e-mail est déjà utilisé",
+        "usernameAlreadyExists": "Ce nom d'utilisateur est déjà pris",
+        "passwordMismatch": "Les mots de passe ne correspondent pas",
+        "serverError": "Erreur serveur. Veuillez réessayer plus tard."
     },
     "notifications": {
         "welcomeEmail": "Bienvenue sur le Système d'Enregistrement AutoCode !",
         "passwordReset": "Votre mot de passe a été réinitialisé",
         "tierUpgrade": "Votre compte a été mis à niveau",
         "lowRequestsWarning": "Vous avez presque atteint votre limite de requêtes quotidiennes"
+    },
+    "success": {
+        "registration": "Inscription réussie. Veuillez vous connecter.",
+        "profileUpdate": "Profil mis à jour avec succès",
+        "passwordChange": "Mot de passe changé avec succès"
+    },
+    "nav": {
+        "home": "Accueil",
+        "login": "Connexion",
+        "register": "S'inscrire",
+        "profile": "Profil",
+        "contact": "Contact",
+        "pricing": "Tarifs"
+    },
+    "contact": {
+        "title": "Contactez-nous",
+        "heading": "Envoyez-nous un message",
+        "name": "Nom",
+        "email": "E-mail",
+        "subject": "Sujet",
+        "message": "Message",
+        "send": "Envoyer",
+        "success": "Message envoyé avec succès",
+        "error": "Erreur lors de l'envoi du message"
+    },
+
+    "register": {
+        "title": "Inscription",
+        "heading": "Créer un compte",
+        "username": "Nom d'utilisateur",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "selectTier": "Sélectionnez un niveau",
+        "freeTier": "Gratuit",
+        "premiumTier": "Premium",
+        "enterpriseTier": "Entreprise",
+        "submit": "S'inscrire",
+        "googleSignIn": "S'inscrire avec Google",
+        "successMessage": "Inscription réussie. Veuillez vous connecter.",
+        "errorMessage": "L'inscription a échoué. Veuillez réessayer.",
+        "genericError": "Une erreur s'est produite. Veuillez réessayer plus tard."
+    },
+    "login": {
+        "title": "Connexion",
+        "heading": "Connectez-vous à votre compte",
+        "username": "Nom d'utilisateur",
+        "password": "Mot de passe",
+        "submit": "Se connecter",
+        "google": "Se connecter avec Google"
     }
 }

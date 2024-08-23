@@ -4,7 +4,7 @@ services:
   app:
     image: extender777/autocode-backend
     ports:
-      - "3000:3000"
+      - "6003:3000"
     environment:
       - NODE_ENV=production
       - MONGODB_URI=mongodb://mongo:27017/autocode

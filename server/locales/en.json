@@ -21,7 +21,12 @@
 		"features": "Features",
 		"pricing": "Pricing",
 		"register": "Register",
-		"login": "Login"
+		"login": "Login",
+		"hero": {
+			"title": "Streamline Your Registration Process",
+			"subtitle": "Powerful tools for user management and licensing",
+			"cta": "Get Started"
+		}
 	},
 	"auth": {
 		"username": "Username",
@@ -123,8 +128,70 @@
 		"profileUpdate": "Profile updated successfully",
 		"passwordChange": "Password changed successfully"
 	},
+	"nav": {
+		"home": "Home",
+		"login": "Login",
+		"register": "Register",
+		"profile": "Profile",
+		"contact": "Contact",
+		"pricing": "Pricing"
+	},
+	"contact": {
+		"title": "Contact Us",
+		"heading": "Get in Touch",
+		"name": "Name",
+		"email": "Email",
+		"subject": "Subject",
+		"message": "Message",
+		"send": "Send Message",
+		"success": "Your message has been sent successfully!",
+		"error": "There was an error sending your message. Please try again."
+	},
+	"register": {
+		"title": "Register",
+		"heading": "Create an Account",
+		"username": "Username",
+		"email": "Email",
+		"password": "Password",
+		"selectTier": "Select Tier",
+		"freeTier": "Free Tier",
+		"premiumTier": "Premium Tier",
+		"enterpriseTier": "Enterprise Tier",
+		"submit": "Register",
+		"googleSignIn": "Register with Google",
+		"successMessage": "Registration successful! Please check your email to verify your account.",
+		"errorMessage": "Registration failed. Please try again.",
+		"genericError": "An error occurred. Please try again later."
+	},
+	"login": {
+		"title": "Login",
+		"heading": "Welcome Back",
+		"username": "Username",
+		"password": "Password",
+		"submit": "Login",
+		"google": "Login with Google"
+	},
+	"footer": {
+		"copyright": "© 2023 AutoCode Registration System. All rights reserved."
+	},
+	"en": "en",
 	"Login": "Login",
 	"Username": "Username",
 	"Password": "Password",
-	"Login with Google": "Login with Google"
+	"Login with Google": "Login with Google",
+	"lang": "lang",
+	"contact.title": "contact.title",
+	"nav.home": "nav.home",
+	"nav.login": "nav.login",
+	"nav.register": "nav.register",
+	"nav.profile": "nav.profile",
+	"nav.contact": "nav.contact",
+	"contact.heading": "contact.heading",
+	"contact.name": "contact.name",
+	"contact.email": "contact.email",
+	"contact.subject": "contact.subject",
+	"contact.message": "contact.message",
+	"contact.send": "contact.send",
+	"contact.success": "contact.success",
+	"contact.error": "contact.error"
 }

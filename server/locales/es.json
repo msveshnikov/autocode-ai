@@ -8,10 +8,14 @@
         "profile": "Perfil",
         "save": "Guardar",
         "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "loading": "Cargando...",
         "success": "Éxito",
-        "error": "Error",
-        "loading": "Cargando..."
+        "error": "Error"
     },
+
     "auth": {
         "username": "Nombre de usuario",
         "password": "Contraseña",
@@ -31,13 +35,14 @@
         "devices": "Dispositivos conectados",
         "updateProfile": "Actualizar perfil",
         "changePassword": "Cambiar contraseña",
-        "language": "Idioma"
+        "language": "Idioma",
+        "requestsLeft": "Solicitudes restantes"
     },
     "pricing": {
         "title": "Planes de precios",
         "free": {
             "name": "Plan Gratuito",
-            "price": "$0/mes",
+            "price": "0€/mes",
             "requests": "10 solicitudes/día",
             "features": "Características básicas",
             "devices": "3 dispositivos",
@@ -45,7 +50,7 @@
         },
         "premium": {
             "name": "Premium",
-            "price": "$10/mes",
+            "price": "10€/mes",
             "requests": "Solicitudes ilimitadas",
             "features": "Todas las características",
             "devices": "10 dispositivos",
@@ -62,6 +67,7 @@
         },
         "selectPlan": "Seleccionar Plan",
         "upgrade": "Mejorar",
+        "downgrade": "Degradar",
         "currentPlan": "Plan Actual"
     },
     "payment": {
@@ -74,7 +80,10 @@
         "cardDetails": "Detalles de la Tarjeta",
         "cardNumber": "Número de Tarjeta",
         "expiryDate": "Fecha de Vencimiento",
-        "cvv": "CVV"
+        "cvv": "CVV",
+        "processingPayment": "Procesando pago...",
+        "successMessage": "¡Pago exitoso! Tu plan ha sido actualizado.",
+        "errorMessage": "Error en el pago. Por favor, inténtalo de nuevo."
     },
     "license": {
         "checkLicense": "Verificar Licencia",
@@ -89,12 +98,106 @@
         "loginFailed": "Fallo en el inicio de sesión",
         "profileUpdateFailed": "Fallo al actualizar el perfil",
         "paymentFailed": "Fallo en el procesamiento del pago",
-        "licenseCheckFailed": "Fallo en la verificación de la licencia"
+        "licenseCheckFailed": "Fallo en la verificación de la licencia",
+        "userNotFound": "Usuario no encontrado",
+        "emailAlreadyExists": "El correo electrónico ya está en uso",
+        "usernameAlreadyExists": "El nombre de usuario ya está en uso",
+        "passwordMismatch": "Las contraseñas no coinciden",
+        "serverError": "Error del servidor. Por favor, inténtalo más tarde."
     },
     "notifications": {
         "welcomeEmail": "¡Bienvenido al Sistema de Registro AutoCode!",
         "passwordReset": "Tu contraseña ha sido restablecida",
         "tierUpgrade": "Tu cuenta ha sido mejorada",
         "lowRequestsWarning": "Te estás quedando sin solicitudes diarias"
+    },
+    "success": {
+        "registration": "Registro exitoso. Por favor, inicia sesión.",
+        "profileUpdate": "Perfil actualizado exitosamente",
+        "passwordChange": "Contraseña cambiada exitosamente"
+    },
+    "nav": {
+        "home": "Inicio",
+        "login": "Iniciar sesión",
+        "register": "Registrarse",
+        "profile": "Perfil",
+        "contact": "Contacto",
+        "pricing": "Precios"
+    },
+    "contact": {
+        "title": "Contacto",
+        "heading": "Contáctanos",
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "subject": "Asunto",
+        "message": "Mensaje",
+        "send": "Enviar",
+        "success": "Mensaje enviado exitosamente",
+        "error": "Error al enviar el mensaje"
+    },
+    "landing": {
+        "hero": {
+            "title": "Sistema de Registro AutoCode",
+            "subtitle": "Gestión de usuarios y licencias simplificada",
+            "cta": "Comienza ahora"
+        },
+        "pricing": {
+            "title": "Planes y Precios",
+            "free": {
+                "title": "Gratuito",
+                "price": "0€/mes",
+                "feature1": "10 solicitudes/día",
+                "feature2": "Características básicas",
+                "feature3": "3 dispositivos",
+                "feature4": "Soporte comunitario",
+                "cta": "Empezar gratis"
+            },
+            "premium": {
+                "title": "Premium",
+                "price": "10€/mes",
+                "feature1": "Solicitudes ilimitadas",
+                "feature2": "Todas las características",
+                "feature3": "10 dispositivos",
+                "feature4": "Soporte prioritario",
+                "cta": "Elegir Premium"
+            },
+            "enterprise": {
+                "title": "Empresa",
+                "price": "Personalizado",
+                "feature1": "Solicitudes ilimitadas",
+                "feature2": "Características personalizadas",
+                "feature3": "Dispositivos ilimitados",
+                "feature4": "Soporte dedicado",
+                "feature5": "Implementación en sitio",
+                "cta": "Contactar ventas"
+            }
+        },
+        "footer": {
+            "copyright": "© 2023 AutoCode. Todos los derechos reservados."
+        }
+    },
+    "register": {
+        "title": "Registro",
+        "heading": "Crear una cuenta",
+        "username": "Nombre de usuario",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "selectTier": "Seleccionar plan",
+        "freeTier": "Gratuito",
+        "premiumTier": "Premium",
+        "enterpriseTier": "Empresa",
+        "submit": "Registrarse",
+        "googleSignIn": "Registrarse con Google",
+        "successMessage": "Registro exitoso. Por favor, inicia sesión.",
+        "errorMessage": "Error en el registro. Por favor, inténtalo de nuevo.",
+        "genericError": "Ocurrió un error. Por favor, inténtalo más tarde."
+    },
+    "login": {
+        "title": "Iniciar sesión",
+        "heading": "Acceder a tu cuenta",
+        "username": "Nombre de usuario",
+        "password": "Contraseña",
+        "submit": "Iniciar sesión",
+        "google": "Iniciar sesión con Google"
     }
 }
