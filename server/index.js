@@ -73,4 +73,8 @@ app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
+process.on("uncaughtException", (err, origin) => {
+    console.error(`Caught exception: ${err}`, `Exception origin: ${origin}`);
+});
+
 export default app;

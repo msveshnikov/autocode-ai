@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: extender777/autocode-backend
+    image: extender777/autocode-backend:arm64
     ports:
       - "6003:3000"
     environment:
