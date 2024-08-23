@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import passportLocalMongoose from "passport-local-mongoose";
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -45,6 +46,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    language: {
+        type: String,
+        default: "en",
+    },
 });
 
 UserSchema.pre("save", async function (next) {
@@ -82,6 +87,8 @@ UserSchema.methods.incrementDailyRequests = function () {
 UserSchema.methods.canMakeRequest = function () {
     return this.tier !== "Free" || this.dailyRequests < 10;
 };
+
+UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("User", UserSchema);
 

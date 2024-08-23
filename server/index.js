@@ -18,9 +18,11 @@ import session from "express-session";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
+import flash from "connect-flash";
+import LocalStrategy from "passport-local";
 
 dotenv.config();
-
+ 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,6 +38,10 @@ i18n.configure({
     defaultLocale: "en",
     cookie: "lang",
 });
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 passport.use(
     new JwtStrategy(
@@ -107,6 +113,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(morgan("combined"));
+app.use(flash());
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
