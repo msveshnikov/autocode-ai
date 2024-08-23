@@ -22,42 +22,51 @@
                 padding: 2rem;
                 border-radius: 10px;
                 box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                width: 300px;
+                width: 100%;
+                max-width: 400px;
             }
             h1 {
                 text-align: center;
                 color: #00ffff;
+                margin-bottom: 1.5rem;
             }
             form {
                 display: flex;
                 flex-direction: column;
             }
-            input {
-                margin-bottom: 1rem;
+            label {
+                margin-top: 1rem;
+                color: #00ffff;
+            }
+            input,
+            select {
                 padding: 0.5rem;
-                border: 1px solid #00ffff;
+                margin-top: 0.5rem;
                 background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid #00ffff;
                 color: #ffffff;
                 border-radius: 4px;
             }
             button {
+                margin-top: 1.5rem;
+                padding: 0.75rem;
                 background-color: #00ffff;
                 color: #000000;
                 border: none;
-                padding: 0.5rem;
                 border-radius: 4px;
                 cursor: pointer;
                 font-weight: bold;
-                margin-bottom: 1rem;
+                transition: all 0.3s;
             }
             button:hover {
                 background-color: #0000ff;
                 color: #ffffff;
+                box-shadow: 0 0 15px #00ffff;
             }
             .error-message {
                 color: #ff0000;
                 text-align: center;
-                margin-bottom: 1rem;
+                margin-top: 1rem;
             }
             .register-link {
                 text-align: center;
@@ -97,9 +106,6 @@
                         body: JSON.stringify({ email, password }),
                     });
                     if (response.ok) {
-                        // const data = await response.json();
-                        // localStorage.setItem("token", data.token);
-                        // document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
                         const errorData = await response.json();

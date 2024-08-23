@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AutoCode Registration System</title>
+        <title>AutoCode - AI-Powered Software Development</title>
         <style>
             :root {
                 --primary-color: #000000;
@@ -104,6 +104,81 @@
                 box-shadow: 0 0 15px var(--secondary-color);
             }
 
+            .features {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 2rem;
+                margin: 4rem 0;
+            }
+
+            .feature {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                transition: all 0.3s;
+            }
+
+            .feature:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
+            }
+
+            .feature h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            .agent {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                display: inline-block;
+                width: 40%;
+                margin: 1rem;
+                vertical-align: top;
+            }
+
+            .agent h3 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            footer {
+                background-color: rgba(0, 0, 0, 0.8);
+                color: var(--text-color);
+                text-align: center;
+                padding: 2rem 0;
+                margin-top: 4rem;
+            }
+
+            .how-it-works {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            }
+
+            .how-it-works ol {
+                margin-left: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .how-it-works pre {
+                background-color: rgba(0, 0, 0, 0.8);
+                padding: 1rem;
+                border-radius: 5px;
+                overflow-x: auto;
+                margin-bottom: 1rem;
+            }
+
+            .how-it-works code {
+                color: var(--secondary-color);
+                font-family: "Courier New", monospace;
+            }
+
             .pricing-plans {
                 display: flex;
                 justify-content: center;
@@ -155,17 +230,77 @@
                 border: 2px solid var(--secondary-color);
             }
 
-            footer {
-                background-color: rgba(0, 0, 0, 0.8);
-                color: var(--text-color);
-                text-align: center;
-                padding: 2rem 0;
+            .languages {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+                margin: 2rem 0;
+            }
+
+            .language {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 1rem;
+                border-radius: 5px;
+                font-weight: bold;
+            }
+
+            .future-enhancements {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
                 margin-top: 4rem;
+            }
+
+            .future-enhancements ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .future-enhancements li {
+                margin-bottom: 0.5rem;
+            }
+
+            .showcase {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                margin-top: 4rem;
+            }
+
+            .showcase h2 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            .showcase ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .showcase li {
+                margin-bottom: 1rem;
+            }
+
+            .showcase a {
+                color: var(--secondary-color);
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .showcase a:hover {
+                text-decoration: underline;
             }
 
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
+                }
+
+                .features {
+                    grid-template-columns: 1fr;
                 }
 
                 .pricing-plans {
@@ -176,6 +311,10 @@
                 .pricing-plan {
                     width: 100%;
                 }
+
+                .agent {
+                    width: 70%;
+                }
             }
         </style>
     </head>
@@ -183,9 +322,9 @@
         <header>
             <nav class="container">
                 <ul>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="/register">Register</a></li>
-                    <li><a href="/login">Login</a></li>
                 </ul>
             </nav>
         </header>
@@ -194,11 +333,135 @@
             <section class="hero">
                 <div class="hero-content">
                     <h1>AutoCode</h1>
-                    <p>AI-Powered Software Development</p>
-                    <a href="/register" class="cta-button">Get Started</a>
+                    <p>Build complex software with AI. An innovative, terminal-based AI coding engine.</p>
+                    <a href="/register?tier=Free" class="cta-button">Get Started</a>
                 </div>
             </section>
 
+            <section id="features" class="container">
+                <h2>Features</h2>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Automatic Code Generation</h3>
+                        <p>Generate code based on README.md instructions using Claude 3.5 Sonnet API</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Multi-Language Support</h3>
+                        <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, and Swift</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Incremental Building</h3>
+                        <p>
+                            Build your project incrementally with intelligent code analysis and refactoring suggestions
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <h3>Automated Documentation</h3>
+                        <p>Generate comprehensive documentation for your project automatically</p>
+                    </div>
+                    <div class="feature">
+                        <h3>User-Friendly Interface</h3>
+                        <p>Easy-to-use command-line interface for seamless project management</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Landing Page Generator</h3>
+                        <p>Create visually appealing landing pages to showcase your project</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Cross-Platform Support</h3>
+                        <p>AutoCode is compatible with Windows, macOS, and Linux operating systems.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="how-it-works" class="container">
+                <h2>How It Works</h2>
+                <div class="how-it-works">
+                    <p>Getting started with AutoCode is simple:</p>
+                    <ol>
+                        <li>Create a CLAUDE_KEY environment variable with your API key.</li>
+                        <li>Navigate to your project folder in the terminal.</li>
+                        <li>Run the following command:</li>
+                    </ol>
+                    <pre><code>npx autocode-ai</code></pre>
+                    <p>
+                        AutoCode will then read your README.md file and existing source code, interpret the instructions
+                        using the Claude 3.5 Sonnet API, and generate the necessary code structure, files, and content.
+                        It's that easy!
+                    </p>
+                </div>
+            </section>
+            <img
+                src="https://blog.mangatv.shop/autocode.png"
+                alt="AutoCode Logo"
+                style="display: block; margin: 2rem auto; max-width: 100%"
+            />
+            <section id="ai-agents" class="container ai-agents">
+                <h2>AI Agents</h2>
+                <div class="agent">
+                    <h3>SQL Migrations Agent</h3>
+                    <p>Writes database migrations and type files</p>
+                </div>
+                <div class="agent">
+                    <h3>Services Agent</h3>
+                    <p>Creates services that interact with the database and process data</p>
+                </div>
+                <div class="agent">
+                    <h3>API Routes Agent</h3>
+                    <p>Handles input validation, auth checks, and service calls for HTTP requests</p>
+                </div>
+                <div class="agent">
+                    <h3>Tester Agent</h3>
+                    <p>Writes integration tests for endpoints</p>
+                </div>
+                <div class="agent">
+                    <h3>Project Manager Agent</h3>
+                    <p>
+                        Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
+                    </p>
+                </div>
+                <div class="agent">
+                    <h3>Landing Page Agent</h3>
+                    <p>Generates a visually appealing landing page for the project</p>
+                </div>
+                <div class="agent">
+                    <h3>Reddit Promotion Agent</h3>
+                    <p>Manages Reddit promotions using the /u/AutoCode community</p>
+                </div>
+                <div class="agent">
+                    <h3>Code Review Agent</h3>
+                    <p>Provides automated code quality feedback and suggestions</p>
+                </div>
+                <div class="agent">
+                    <h3>DevOps Agent</h3>
+                    <p>Configures CI/CD pipelines and manages deployment processes</p>
+                </div>
+                <div class="agent">
+                    <h3>Security Agent</h3>
+                    <p>Performs security audits and suggests vulnerability fixes</p>
+                </div>
+                <div class="agent">
+                    <h3>Performance Agent</h3>
+                    <p>Analyzes code for performance bottlenecks and optimizations</p>
+                </div>
+                <div class="agent">
+                    <h3>Internationalization Agent</h3>
+                    <p>Implements multi-language support in projects</p>
+                </div>
+            </section>
+            <section id="languages" class="container">
+                <h2>Supported Languages</h2>
+                <div class="languages">
+                    <div class="language">JavaScript</div>
+                    <div class="language">Python</div>
+                    <div class="language">C#</div>
+                    <div class="language">Java</div>
+                    <div class="language">Ruby</div>
+                    <div class="language">Go</div>
+                    <div class="language">Rust</div>
+                    <div class="language">PHP</div>
+                    <div class="language">Swift</div>
+                </div>
+            </section>
             <section id="pricing" class="container">
                 <h2>Pricing</h2>
                 <div class="pricing-plans">
@@ -238,10 +501,44 @@
                     </div>
                 </div>
             </section>
+            <section id="showcase" class="container">
+                <h2>Showcase</h2>
+                <div class="showcase">
+                    <p>Check out these amazing projects created by AutoCode in just 20 minutes each:</p>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/msveshnikov/real-estate-autocode" target="_blank"
+                                >Real Estate Platform</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://github.com/msveshnikov/cooking-portal-autocode" target="_blank"
+                                >Cooking Portal</a
+                            >
+                        </li>
+                        <li>
+                            <a href="https://github.com/msveshnikov/twitter-clone-autocode" target="_blank"
+                                >Twitter Clone</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </main>
 
         <footer>
-            <p>&copy; 2024 AutoCode. All rights reserved.</p>
+            <p>&copy; 2024 MaxSoft. All rights reserved.</p>
         </footer>
+
+        <script>
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute("href")).scrollIntoView({
+                        behavior: "smooth",
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

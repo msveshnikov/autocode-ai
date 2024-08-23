@@ -80,7 +80,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Register for AutoCode</h1>
+            <h1>Register</h1>
             <form id="registerForm">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required />
@@ -114,9 +114,6 @@
                     });
 
                     if (response.ok) {
-                        const result = await response.json();
-                        // localStorage.setItem("token", result.token);
-                        // document.cookie = `token=${result.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
                         const result = await response.json();
