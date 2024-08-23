@@ -96,16 +96,8 @@
         <div class="container">
             <h1>User Profile</h1>
             <div class="profile-info">
-                  <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
                 <p><strong>Tier:</strong> <%= user.tier %></p>
-            </div>
-
-            <div class="edit-form">
-                <h2>Edit Profile</h2>
-                <form id="updateProfileForm">
-                    <input type="email" id="email" name="email" value="<%= user.email %>" required />
-                    <button type="submit">Update Profile</button>
-                </form>
             </div>
 
             <div class="license-usage">
@@ -135,29 +127,6 @@
         </div>
 
         <script>
-            document.getElementById("updateProfileForm").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const email = document.getElementById("email").value;
-                try {
-                    const response = await fetch("/profile", {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ email }),
-                    });
-                    if (response.ok) {
-                        alert("Profile updated successfully");
-                        location.reload();
-                    } else {
-                        alert("Failed to update profile");
-                    }
-                } catch (error) {
-                    console.error("Error:", error);
-                    alert("An error occurred while updating the profile");
-                }
-            });
-
             async function fetchLicenseUsage() {
                 try {
                     const response = await fetch("/profile/usage");
