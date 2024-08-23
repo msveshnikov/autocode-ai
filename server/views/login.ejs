@@ -98,6 +98,7 @@
                     if (response.ok) {
                         const data = await response.json();
                         localStorage.setItem("token", data.token);
+                        document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
                         const errorData = await response.json();

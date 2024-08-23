@@ -1,12 +1,10 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-export const authenticateJWT = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+export const authCookie = (req, res, next) => {
+    const token = req.cookies.token;
 
-    if (authHeader) {
-        const token = authHeader.split(" ")[1];
-
+    if (token) {
         jwt.verify(token, process.env.JWT_TOKEN, (err, user) => {
             if (err) {
                 return res.sendStatus(403);
@@ -91,7 +89,7 @@ export const checkDeviceLimit = async (req, res, next) => {
 };
 
 export default {
-    authenticateJWT,
+    authCookie: authCookie,
     checkUserTier,
     requirePremium,
     requireEnterprise,

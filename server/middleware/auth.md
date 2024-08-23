@@ -6,7 +6,7 @@ This file contains middleware functions for authentication, user tier verificati
 
 ## Functions
 
-### authenticateJWT(req, res, next)
+### authCookie(req, res, next)
 
 Authenticates requests using JSON Web Tokens (JWT).
 
@@ -23,7 +23,7 @@ Authenticates requests using JSON Web Tokens (JWT).
 
 #### Usage:
 ```javascript
-app.use(authenticateJWT);
+app.use(authCookie);
 ```
 
 ### checkUserTier(req, res, next)

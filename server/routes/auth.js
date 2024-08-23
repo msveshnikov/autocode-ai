@@ -2,7 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import Inquiry from "../models/inquiry.js";
-import { authenticateJWT } from "../middleware/auth.js";
+import { authCookie, checkUserTier, checkRequestLimit } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -36,12 +36,12 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.post("/logout", authenticateJWT, (req, res) => {
+router.post("/logout", authCookie, (req, res) => {
     res.json({ message: "Logged out successfully" });
 });
 
-router.get("/check", authenticateJWT, (req, res) => {
-    res.json({ message: "Token is valid", user: req.user });
+router.get("/check", authCookie, checkUserTier, checkRequestLimit, (req, res) => {
+    res.json({ message: "Token is valid", user: req.user, tier: req.userTier });
 });
 
 router.post("/contact", async (req, res) => {

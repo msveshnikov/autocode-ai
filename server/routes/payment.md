@@ -17,7 +17,7 @@ This file (`routes/payment.js`) contains the Express router for handling payment
 import express from "express";
 import Stripe from "stripe";
 import User from "../models/user.js";
-import { authenticateJWT, checkUserTier } from "../middleware/auth.js";
+import { authCookie, checkUserTier } from "../middleware/auth.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -31,7 +31,7 @@ The router is configured with necessary imports and initializes a Stripe instanc
 
 **Route:** `POST /create-checkout-session`
 
-**Middleware:** `authenticateJWT`
+**Middleware:** `authCookie`
 
 **Description:** Creates a Stripe checkout session for user subscription.
 
@@ -68,7 +68,7 @@ const data = await response.json();
 
 **Route:** `POST /cancel-subscription`
 
-**Middleware:** `authenticateJWT`, `checkUserTier`
+**Middleware:** `authCookie`, `checkUserTier`
 
 **Description:** Cancels the user's active subscription.
 

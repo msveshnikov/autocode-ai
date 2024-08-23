@@ -1,12 +1,12 @@
 import express from "express";
 import Stripe from "stripe";
 import User from "../models/user.js";
-import { authenticateJWT, checkUserTier } from "../middleware/auth.js";
+import { authCookie, checkUserTier } from "../middleware/auth.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-router.post("/create-checkout-session", authenticateJWT, async (req, res) => {
+router.post("/create-checkout-session", authCookie, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     const { tier } = req.body;
@@ -74,7 +74,7 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
   res.json({ received: true });
 });
 
-router.post("/cancel-subscription", authenticateJWT, checkUserTier, async (req, res) => {
+router.post("/cancel-subscription", authCookie, checkUserTier, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user.stripeSubscriptionId) {

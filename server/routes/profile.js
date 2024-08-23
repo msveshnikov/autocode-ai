@@ -1,12 +1,12 @@
 import express from "express";
 import User from "../models/user.js";
 import Stripe from "stripe";
-import { authenticateJWT, checkUserTier, checkRequestLimit } from "../middleware/auth.js";
+import { authCookie, checkUserTier, checkRequestLimit } from "../middleware/auth.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-router.get("/", authenticateJWT, async (req, res) => {
+router.get("/", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
         res.render("profile", { user });
@@ -16,7 +16,7 @@ router.get("/", authenticateJWT, async (req, res) => {
     }
 });
 
-router.put("/", authenticateJWT, async (req, res) => {
+router.put("/", authCookie, async (req, res) => {
     try {
         const { name, email } = req.body;
         const user = await User.findByIdAndUpdate(
@@ -31,7 +31,7 @@ router.put("/", authenticateJWT, async (req, res) => {
     }
 });
 
-router.get("/subscription", authenticateJWT, async (req, res) => {
+router.get("/subscription", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("tier stripeCustomerId");
         let subscription = null;
@@ -52,7 +52,7 @@ router.get("/subscription", authenticateJWT, async (req, res) => {
     }
 });
 
-router.post("/subscription/cancel", authenticateJWT, async (req, res) => {
+router.post("/subscription/cancel", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (user.stripeSubscriptionId) {
@@ -70,7 +70,7 @@ router.post("/subscription/cancel", authenticateJWT, async (req, res) => {
     }
 });
 
-router.get("/usage", authenticateJWT, checkUserTier, checkRequestLimit, async (req, res) => {
+router.get("/usage", authCookie, checkUserTier, checkRequestLimit, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("dailyRequests lastRequestDate tier");
         const requestLimit = user.tier === "Free" ? 10 : Infinity;
@@ -89,7 +89,7 @@ router.get("/usage", authenticateJWT, checkUserTier, checkRequestLimit, async (r
     }
 });
 
-router.get("/devices", authenticateJWT, async (req, res) => {
+router.get("/devices", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("devices tier");
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
@@ -106,7 +106,7 @@ router.get("/devices", authenticateJWT, async (req, res) => {
     }
 });
 
-router.post("/devices", authenticateJWT, async (req, res) => {
+router.post("/devices", authCookie, async (req, res) => {
     try {
         const { deviceId } = req.body;
         const user = await User.findById(req.user.id);
@@ -123,7 +123,7 @@ router.post("/devices", authenticateJWT, async (req, res) => {
     }
 });
 
-router.delete("/devices/:deviceId", authenticateJWT, async (req, res) => {
+router.delete("/devices/:deviceId", authCookie, async (req, res) => {
     try {
         const { deviceId } = req.params;
         const user = await User.findById(req.user.id);

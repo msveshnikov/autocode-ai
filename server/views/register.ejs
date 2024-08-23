@@ -90,7 +90,6 @@
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required />
-                <label for="tier">Tier:</label>
                 <button type="submit">Register</button>
             </form>
             <div id="errorMessage" class="error-message"></div>
@@ -121,6 +120,7 @@
 
                     if (response.ok) {
                         localStorage.setItem("token", result.token);
+                        document.cookie = `token=${data.token}; path=/; max-age=1209600; secure; samesite=strict`;
                         window.location.href = "/profile";
                     } else {
                         errorMessage.textContent = result.error || "Registration failed. Please try again.";
