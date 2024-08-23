@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import Stripe from "stripe";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
@@ -9,7 +8,6 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import flash from "connect-flash";
-import User from "./models/user.js";
 import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
@@ -23,7 +21,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -70,30 +67,6 @@ app.get("/register", (req, res) => {
 
 app.get("/contact", (req, res) => {
     res.render("contact");
-});
-
-app.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    const sig = req.headers["stripe-signature"];
-    let event;
-
-    try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    } catch (err) {
-        return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object;
-        const userId = session.client_reference_id;
-        const user = await User.findById(userId);
-        if (user) {
-            user.tier = "Premium";
-            user.stripeCustomerId = session.customer;
-            await user.save();
-        }
-    }
-
-    res.json({ received: true });
 });
 
 app.listen(port, () => {
