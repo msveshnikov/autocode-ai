@@ -150,6 +150,4 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
 
-# TODO
 
--   save daily requests for free users + date to file, together with .autocode_token, but not to current directory but to npm process directory

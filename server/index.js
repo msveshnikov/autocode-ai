@@ -38,7 +38,6 @@ app.use(
     })
 );
 
-app.use("/license", licenseServer);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -51,6 +50,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+app.use("/license", licenseServer);
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);

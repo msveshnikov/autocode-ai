@@ -169,3 +169,11 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 
 -   Make payment work, Cannot GET /payment/create-checkout-session , should open stripe page, then handle webhook and upgrade tier in user collection
 
+-   Track IP addresses of users (from req header) as devices and add them to devices list and check for exceeding tier limit (if any)
+
+export const getIpFromRequest = (req) => {
+    let ips = (req.headers["x-real-ip"] || req.headers["x-forwarded-for"] || req.connection.remoteAddress || "").split(
+        ","
+    );
+    return ips[0].trim();
+};

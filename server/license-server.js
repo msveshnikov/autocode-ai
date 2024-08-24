@@ -26,7 +26,7 @@ const checkRequestLimit = async (userId) => {
     if (!user) return false;
 
     const today = new Date().toISOString().split("T")[0];
-    if (user.lastRequestDate !== today) {
+    if (user.lastRequestDate.toISOString().split("T")[0] !== today) {
         user.lastRequestDate = today;
         user.dailyRequests = 0;
     }
@@ -44,7 +44,7 @@ router.post("/check", authenticateToken, async (req, res) => {
     try {
         const allowed = await checkRequestLimit(req.user.id);
         if (!allowed) {
-            return res.status(429).json({ error: "Daily request limit exceeded" });
+            return res.status(429).json({ error: "Daily request limit exceeded", suggestUpgrade: true });
         }
         res.json({ message: "Request allowed" });
     } catch (error) {

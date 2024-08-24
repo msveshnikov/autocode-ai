@@ -1,7 +1,7 @@
 import express from "express";
 import Stripe from "stripe";
 import User from "../models/user.js";
-import { authCookie, checkUserTier } from "../middleware/auth.js";
+import { authCookie } from "../middleware/auth.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -74,7 +74,7 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
     res.json({ received: true });
 });
 
-router.post("/cancel-subscription", authCookie, checkUserTier, async (req, res) => {
+router.post("/cancel-subscription", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (!user.stripeSubscriptionId) {

@@ -2,6 +2,8 @@ import { CONFIG } from "./config.js";
 import fs from "fs/promises";
 import path from "path";
 import os from "os";
+import chalk from "chalk";
+import UserInterface from "./userInterface.js";
 
 const serverUrl = CONFIG.licenseServerUrl;
 let currentToken = null;
@@ -9,14 +11,14 @@ const tokenFile = path.join(os.homedir(), ".autocode_token");
 const usageFile = path.join(os.homedir(), ".autocode_usage");
 
 const LicenseManager = {
-    async login(username, password) {
+    async login(email, password) {
         try {
             const response = await fetch(`${serverUrl}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
             if (!response.ok) throw new Error("Login failed");
             const data = await response.json();
@@ -35,7 +37,7 @@ const LicenseManager = {
         }
 
         if (!currentToken) {
-            return this.checkFreeTierLicense();
+            return this.checkLocalTrialLicense();
         }
 
         try {
@@ -46,24 +48,23 @@ const LicenseManager = {
                     Authorization: `Bearer ${currentToken}`,
                 },
             });
-            if (!response.ok) throw new Error("License check failed");
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    console.log(chalk.yellow("Your session has expired. Please login again."));
+                    await UserInterface.handleLogin();
+                    return this.checkLicense();
+                }
+                throw new Error("License check failed");
+            }
             const data = await response.json();
             return data.message === "Request allowed";
         } catch (error) {
-            console.error("License check failed:", error.message);
             return false;
         }
     },
 
-    async checkFreeTierLicense() {
+    async checkLocalTrialLicense() {
         const usage = await this.loadUsage();
-        const today = new Date().toISOString().split("T")[0];
-
-        if (usage.date !== today) {
-            usage.date = today;
-            usage.requests = 0;
-        }
-
         if (usage.requests >= CONFIG.pricingTiers.free.requestsPerDay) {
             return false;
         }
@@ -79,7 +80,7 @@ const LicenseManager = {
         }
 
         if (!currentToken) {
-            return "Free Tier";
+            return "Local Trial";
         }
 
         try {

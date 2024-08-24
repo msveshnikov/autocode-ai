@@ -6,6 +6,7 @@ import FileManager from "./fileManager.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
+import LicenseManager from "./licenseManager.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
@@ -39,6 +40,7 @@ const UserInterface = {
                 "🌐 17. Generate landing page",
                 "📊 18. Generate API documentation",
                 "🔄 19. Generate full project",
+                "🔑 20. Login",
                 "🚪 Exit",
             ],
         });
@@ -77,6 +79,21 @@ const UserInterface = {
             message: "Select the temperature for AI generation:",
             choices: CONFIG.temperatureOptions.map(String),
         });
+    },
+
+    async promptForLogin() {
+        return inquirer.prompt([
+            {
+                type: "input",
+                name: "email",
+                message: "Enter your email:",
+            },
+            {
+                type: "password",
+                name: "password",
+                message: "Enter your password:",
+            },
+        ]);
     },
 
     async chatInterface(readme, projectStructure) {
@@ -309,6 +326,9 @@ const UserInterface = {
             case "🔄 19. Generate full project":
                 await CodeGenerator.generateFullProject(readme, projectStructure);
                 break;
+            case "🔑 20. Login":
+                await this.handleLogin();
+                break;
             case "🚪 Exit":
                 console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
                 continueExecution = false;
@@ -334,6 +354,19 @@ const UserInterface = {
             JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
         );
         console.log(chalk.green(`Temperature set to ${temperature}`));
+    },
+
+    async handleLogin() {
+        console.log(chalk.cyan("Please visit https://autocode.work to register if you haven't already."));
+        const { email, password } = await this.promptForLogin();
+        const loggedIn = await LicenseManager.login(email, password);
+        if (loggedIn) {
+            console.log(chalk.green("Login successful!"));
+            return true;
+        } else {
+            console.log(chalk.red("Login failed. Please try again."));
+            return false;
+        }
     },
 };
 
