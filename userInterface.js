@@ -319,7 +319,7 @@ const UserInterface = {
 
     async getTemperature() {
         try {
-            const temperatureData = await fs.readFile(path.join(process.cwd(), "temperature.json"), "utf8");
+            const temperatureData = await fs.readFile(path.join(process.cwd(), ".temperature.json"), "utf8");
             const { temperature } = JSON.parse(temperatureData);
             return temperature || 0.7;
         } catch {
@@ -330,7 +330,7 @@ const UserInterface = {
     async setTemperature() {
         const { temperature } = await this.promptForTemperature();
         await FileManager.write(
-            path.join(os.homedir(), "temperature.json"),
+            path.join(os.homedir(), ".temperature.json"),
             JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
         );
         console.log(chalk.green(`Temperature set to ${temperature}`));
