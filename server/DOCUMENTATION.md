@@ -6,96 +6,117 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 
 ## Features
 
-- User registration and authentication (including Google Sign-In)
-- Tiered pricing model (Free, Premium, Enterprise)
-- Stripe integration for payment processing
-- License management with daily request limits
-- User profile management
-- Real-time license usage tracking
-- Automated email notifications
-- Contact form for user inquiries
-- Responsive design for mobile and desktop
-- Docker support for easy deployment
+-   User registration and authentication
+-   Tiered pricing model (Free, Premium, Enterprise)
+-   Stripe integration for payment processing
+-   License management with daily request limits
+-   MongoDB integration for data storage
+-   Docker support for easy deployment
+-   User profile management
+-   Express template engine (EJS) for dynamic page rendering
+-   Responsive design for mobile and desktop
+-   Real-time license usage tracking
+-   Contact form for user inquiries
+-   Security features: Helmet, rate limiting, CSRF protection
+-   Logging with Morgan
 
 ## Architecture
 
-The project follows a microservices architecture, consisting of the following main components:
+The project follows a modular architecture, with the main components being:
 
-1. **Web Server (index.js)**: Handles HTTP requests, serves dynamic pages, and manages user registration and payment flow.
+1. **Web Server (index.js)**: The entry point of the application, handling HTTP requests, routing, and middleware setup.
 2. **License Server (license-server.js)**: Manages user authentication, license checking, and request limit enforcement.
 3. **MongoDB**: Stores user and license data.
-4. **Stripe**: Handles payment processing and subscription management.
+4. **Stripe Integration**: Handles payment processing and subscription management.
 
 ### Module Interactions
 
-- The web server (index.js) interacts with the license server (license-server.js) to authenticate users and check license status.
-- Both servers communicate with MongoDB to store and retrieve user and license data.
-- The web server integrates with Stripe for payment processing and subscription management.
-- Google Sign-In API is used for alternative authentication.
+-   The web server (index.js) sets up the Express application and routes requests to appropriate handlers.
+-   Authentication routes (auth.js) handle user registration and login.
+-   Profile routes (profile.js) manage user profile information.
+-   Payment routes (payment.js) interact with Stripe for payment processing.
+-   The license server (license-server.js) checks user authentication and enforces request limits.
+-   All components interact with MongoDB to store and retrieve data.
 
 ## Installation and Setup
 
 1. Clone the repository:
-   ```
-   git clone https://github.com/your-repo/autocode-registration.git
-   cd autocode-registration
-   ```
+
+    ```
+    git clone https://github.com/your-repo/autocode-registration.git
+    cd autocode-registration
+    ```
 
 2. Install dependencies:
-   ```
-   npm install
-   ```
+
+    ```
+    npm install
+    ```
 
 3. Set up environment variables:
    Create a `.env` file in the project root and add the following variables:
-   ```
-   NODE_ENV=production
-   MONGODB_URI=mongodb://mongo:27017/autocode
-   JWT_TOKEN=your-secret-key
-   SESSION_SECRET=your-session-secret
-   STRIPE_SECRET_KEY=your-stripe-secret-key
-   STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
-   STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   ```
+
+    ```
+    NODE_ENV=production
+    MONGODB_URI=mongodb://mongo:27017/autocode
+    JWT_TOKEN=your-jwt-secret
+    SESSION_SECRET=your-session-secret
+    STRIPE_SECRET_KEY=your-stripe-secret-key
+    STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
+    STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+    GOOGLE_CLIENT_ID=your-google-client-id
+    GOOGLE_CLIENT_SECRET=your-google-client-secret
+    ```
 
 4. Build and run the Docker containers:
-   ```
-   docker-compose up --build
-   ```
+    ```
+    docker-compose up --build
+    ```
 
 ## Usage
 
 ### API Endpoints
 
 1. **Registration**:
-   - `POST /auth/register`
-   - Body: `{ "username": "user", "password": "pass", "email": "user@example.com", "tier": "Free" }`
+
+    - `POST /auth/register`
+    - Body: `{ "username": "user", "email": "user@example.com", "password": "password" }`
 
 2. **Login**:
-   - `POST /auth/login`
-   - Body: `{ "username": "user", "password": "pass" }`
 
-3. **Google Sign-In**:
-   - `GET /auth/google`
+    - `POST /auth/login`
+    - Body: `{ "username": "user", "password": "password" }`
 
-4. **License Check**:
-   - `POST /license/check`
-   - Headers: `Authorization: Bearer <token>`
+3. **License Check**:
 
-5. **User Profile**:
-   - `GET /profile`
-   - Headers: `Authorization: Bearer <token>`
+    - `POST /license/check`
+    - Headers: `Authorization: Bearer <token>`
 
-6. **Update Profile**:
-   - `PUT /profile`
-   - Headers: `Authorization: Bearer <token>`
-   - Body: `{ "name": "New Name", "email": "new@email.com" }`
+4. **User Profile**:
 
-7. **Contact Form**:
-   - `POST /contact`
-   - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
+    - `GET /profile`
+    - Headers: `Authorization: Bearer <token>`
+
+5. **Update Profile**:
+
+    - `PUT /profile`
+    - Headers: `Authorization: Bearer <token>`
+    - Body: `{ "name": "New Name", "email": "new@email.com" }`
+
+6. **Contact Form**:
+
+    - `POST /contact`
+    - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
+
+7. **Create Checkout Session**:
+
+    - `POST /payment/create-checkout-session`
+    - Headers: `Authorization: Bearer <token>`
+    - Body: `{ "priceId": "price_xxxxxxxxxxxxx" }`
+
+8. **Webhook Receiver**:
+    - `POST /payment/webhook`
+    - Headers: `Stripe-Signature: <signature>`
 
 ### Stripe Integration
 
@@ -109,6 +130,8 @@ The system uses Stripe Checkout for payment processing. When a user upgrades to 
 ├── Dockerfile
 ├── index.js
 ├── license-server.js
+├── config.js
+├── utils.js
 ├── views/
 │   ├── landing.ejs
 │   ├── login.ejs
@@ -132,54 +155,55 @@ The system uses Stripe Checkout for payment processing. When a user upgrades to 
 ## Pricing Tiers
 
 1. **Free Tier**
-   - $0/month
-   - 10 requests/day
-   - Basic features
-   - 3 devices
-   - Community support
+
+    - $0/month
+    - 100 requests/day
+    - Basic features
+    - 3 devices
+    - Community support
 
 2. **Premium**
-   - $10/month
-   - Unlimited requests
-   - All features
-   - 10 devices
-   - Priority support
+
+    - $10/month
+    - Unlimited requests
+    - All features
+    - 10 devices
+    - Priority support
 
 3. **Enterprise**
-   - Custom pricing
-   - Unlimited requests
-   - All features + custom integrations
-   - Unlimited devices
-   - Dedicated support team
-   - On-premises deployment option
+    - Custom pricing
+    - Unlimited requests
+    - All features + custom integrations
+    - Unlimited devices
+    - Dedicated support team
+    - On-premises deployment option
 
 ## Security Measures
 
-- Helmet.js for setting various HTTP headers
-- Rate limiting to prevent abuse
-- JWT for secure authentication
-- HTTPS enforcement in production
-- Input validation and sanitization
-- Secure password hashing with bcrypt
+-   JWT for authentication
+-   Helmet for setting various HTTP headers
+-   Rate limiting to prevent abuse
+-   CSRF protection
+-   Secure session management
+-   Input sanitization
 
 ## Logging and Monitoring
 
-- Morgan for HTTP request logging
-- Custom error handling middleware
-- Stripe webhook monitoring for payment events
+-   Morgan for HTTP request logging
+-   Error handling middleware for catching and logging errors
 
 ## Future Improvements
 
-- Implement email verification for new users
-- Add two-factor authentication option
-- Integrate a more robust analytics system
-- Implement a dashboard for license usage visualization
-- Add support for multiple payment providers
+-   Implement email verification for new registrations
+-   Add two-factor authentication option
+-   Integrate with additional payment providers
+-   Implement a more robust analytics system for usage tracking
+-   Create an admin dashboard for managing users and subscriptions
 
 ## Contributing
 
-Please read our CONTRIBUTING.md file for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+This project is licensed under the MIT License.

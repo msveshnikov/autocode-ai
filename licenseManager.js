@@ -65,7 +65,7 @@ const LicenseManager = {
 
     async checkLocalTrialLicense() {
         const usage = await this.loadUsage();
-        if (usage.requests >= CONFIG.pricingTiers.free.requestsPerDay) {
+        if (usage.requests >= 10) {
             return false;
         }
 

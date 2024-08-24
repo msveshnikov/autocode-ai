@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import { getIpFromRequest } from "../utils.js";
 
 export const authCookie = (req, res, next) => {
     const token = req.cookies.token;
@@ -27,8 +28,13 @@ export const checkDeviceLimit = async (req, res, next) => {
 
         const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
 
-        if (user.devices.length >= deviceLimit) {
-            return res.status(403).json({ error: "Device limit reached" });
+        const deviceIp = getIpFromRequest(req);
+        if (!user.devices.includes(deviceIp)) {
+            if (user.devices.length >= deviceLimit) {
+                return res.status(403).json({ error: "Device limit reached" });
+            }
+            user.addDevice(deviceIp);
+            await user.save();
         }
 
         next();

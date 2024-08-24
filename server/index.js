@@ -71,6 +71,14 @@ app.get("/contact", (req, res) => {
     res.render("contact");
 });
 
+app.get("/success", (req, res) => {
+    res.render("success");
+});
+
+app.get("/cancel", (req, res) => {
+    res.render("cancel");
+});
+
 app.use((req, res) => {
     res.status(404).render("404");
 });

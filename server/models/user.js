@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import { CONFIG } from "../config.js";
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -51,13 +52,6 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 
 UserSchema.methods.updateTier = function (newTier) {
     this.tier = newTier;
-    if (newTier === "Premium") {
-        this.devices = this.devices.slice(0, 10);
-    } else if (newTier === "Enterprise") {
-        // No limit for Enterprise users
-    } else {
-        this.devices = this.devices.slice(0, 3);
-    }
 };
 
 UserSchema.methods.resetDailyRequests = function () {
@@ -70,12 +64,13 @@ UserSchema.methods.resetDailyRequests = function () {
 
 UserSchema.methods.incrementDailyRequests = function () {
     this.dailyRequests += 1;
+    this.lastRequestDate = new Date();
 };
 
 UserSchema.methods.addDevice = function (deviceId) {
     if (!this.devices.includes(deviceId)) {
-        const limit = this.tier === "Free" ? 3 : this.tier === "Premium" ? 10 : Infinity;
-        if (this.devices.length < limit) {
+        const tierConfig = CONFIG.pricingTiers[this.tier.toLowerCase()];
+        if (tierConfig && this.devices.length < tierConfig.devices) {
             this.devices.push(deviceId);
         }
     }

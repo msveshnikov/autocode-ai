@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "./models/user.js";
 import dotenv from "dotenv";
 import { CONFIG } from "./config.js";
+import { checkDeviceLimit } from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ const checkRequestLimit = async (userId) => {
     return true;
 };
 
-router.post("/check", authenticateToken, async (req, res) => {
+router.post("/check", authenticateToken, checkDeviceLimit, async (req, res) => {
     try {
         const allowed = await checkRequestLimit(req.user.id);
         if (!allowed) {

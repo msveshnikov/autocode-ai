@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import Inquiry from "../models/inquiry.js";
 import { authCookie } from "../middleware/auth.js";
+import { getIpFromRequest } from "../utils.js";
 
 const router = express.Router();
 
@@ -42,6 +43,9 @@ router.post("/login", async (req, res) => {
             secure: true,
             sameSite: "strict",
         });
+        const ip = getIpFromRequest(req);
+        user.addDevice(ip);
+        await user.save();
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: "Error logging in" });
