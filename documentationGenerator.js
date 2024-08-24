@@ -210,41 +210,6 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
             console.error(chalk.red(`Error generating change log: ${error.message}`));
         }
     },
-
-    async generateUserManual() {
-        console.log(chalk.cyan("📘 Generating user manual..."));
-
-        const prompt = `
-Generate a comprehensive user manual for AutoCode, covering all menu options and features. Include:
-
-1. Introduction to AutoCode
-2. Installation and setup
-3. Detailed explanation of each menu option
-4. How to use different features
-5. Troubleshooting common issues
-6. Best practices for using AutoCode
-
-Format the user manual in Markdown, suitable for inclusion in a USER_MANUAL.md file.
-`;
-
-        const spinner = ora("Generating user manual...").start();
-
-        try {
-            const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
-
-            spinner.succeed("User manual generated");
-            await FileManager.write("USER_MANUAL.md", response.content[0].text);
-            console.log(chalk.green("✅ User manual generated"));
-        } catch (error) {
-            spinner.fail("User manual generation failed");
-            console.error(chalk.red(`Error generating user manual: ${error.message}`));
-        }
-    },
 };
 
 export default DocumentationGenerator;
