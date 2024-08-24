@@ -150,3 +150,6 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
 
+# TODO
+
+-   generate agents code based on description from CONFIG, not just name, and pass readme content as well

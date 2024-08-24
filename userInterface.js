@@ -36,6 +36,9 @@ const UserInterface = {
                 "🧪 14. Generate unit tests",
                 "🚀 15. Analyze performance",
                 "🌡️  16. Change temperature",
+                "🌐 17. Generate landing page",
+                "📊 18. Generate API documentation",
+                "🔄 19. Generate full project",
                 "🚪 Exit",
             ],
         });
@@ -63,7 +66,7 @@ const UserInterface = {
             type: "list",
             name: "language",
             message: "Select the programming language:",
-            choices: ["JavaScript", "Python", "C#", "Java", "Ruby", "Go", "Rust", "PHP", "Swift"],
+            choices: Object.keys(CONFIG.languageConfigs),
         });
     },
 
@@ -72,7 +75,7 @@ const UserInterface = {
             type: "list",
             name: "temperature",
             message: "Select the temperature for AI generation:",
-            choices: ["0", "0.5", "0.7", "1.0"],
+            choices: CONFIG.temperatureOptions.map(String),
         });
     },
 
@@ -137,26 +140,14 @@ const UserInterface = {
         return { continue: true, updatedReadme: readme };
     },
 
-    extractCodeSnippet(markdown) {
-        const codeBlockRegex = /```(?:javascript|js|python|py|csharp|cs)?\n([\s\S]*?)```/;
-        const match = markdown.match(codeBlockRegex);
-        return match ? match[1].trim() : null;
-    },
-
-    async runAIAgents(projectStructure) {
+    async runAIAgents(projectStructure, readme) {
         console.log(chalk.cyan("🤖 Running AI Agents..."));
-        await CodeGenerator.runSQLMigrationsAgent(projectStructure);
-        await CodeGenerator.runServicesAgent(projectStructure);
-        await CodeGenerator.runAPIRoutesAgent(projectStructure);
-        await CodeGenerator.runTesterAgent(projectStructure);
-        await CodeGenerator.runProjectManagerAgent(projectStructure);
-        await CodeGenerator.runLandingPageAgent(projectStructure);
-        await CodeGenerator.runRedditPromotionAgent(projectStructure);
-        await CodeGenerator.runCodeReviewAgent(projectStructure);
-        await CodeGenerator.runDevOpsAgent(projectStructure);
-        await CodeGenerator.runSecurityAgent(projectStructure);
-        await CodeGenerator.runPerformanceAgent(projectStructure);
-        await CodeGenerator.runInternationalizationAgent(projectStructure);
+        // eslint-disable-next-line no-unused-vars
+        for (const [agentKey, agentConfig] of Object.entries(CONFIG.aiAgents)) {
+            console.log(chalk.yellow(`Running ${agentConfig.name}...`));
+            await CodeGenerator[`run${agentConfig.name.replace(/\s+/g, "")}Agent`](projectStructure, readme);
+        }
+        console.log(chalk.green("✅ All AI Agents have completed their tasks."));
     },
 
     async processFiles(files, readme, projectStructure) {
@@ -280,7 +271,7 @@ const UserInterface = {
                 break;
             }
             case "🤖 12. Run AI Agents":
-                await this.runAIAgents(projectStructure);
+                await this.runAIAgents(projectStructure, readme);
                 break;
             case "🔒 13. Security analysis": {
                 const filesToAnalyze = await FileManager.getFilesToProcess();
@@ -308,6 +299,15 @@ const UserInterface = {
             }
             case "🌡️  16. Change temperature":
                 await this.setTemperature();
+                break;
+            case "🌐 17. Generate landing page":
+                await CodeGenerator.generateLandingPage(projectStructure);
+                break;
+            case "📊 18. Generate API documentation":
+                await DocumentationGenerator.generateAPIDocumentation(projectStructure);
+                break;
+            case "🔄 19. Generate full project":
+                await CodeGenerator.generateFullProject(readme, projectStructure);
                 break;
             case "🚪 Exit":
                 console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
@@ -343,7 +343,7 @@ const UserInterface = {
             return false;
         }
 
-        const remainingRequests = LicenseManager.getRemainingRequests();
+        const remainingRequests = await LicenseManager.getRemainingRequests();
         if (remainingRequests <= 0) {
             console.log(chalk.red("❌ You have reached your daily request limit."));
             return false;

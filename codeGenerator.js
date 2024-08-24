@@ -41,7 +41,7 @@ Linter: ${languageConfig.linter}
 Formatter: ${languageConfig.formatter}
 Package manager: ${languageConfig.packageManager}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure and the content of other selected files when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code. Don't use md formatting or code snippets. Just code text
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure and the content of other selected files when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const spinner = ora("Generating code...").start();
@@ -281,7 +281,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Include all necessary dependencies based on the project structure and features described in the README.md. Ensure the file is properly formatted and follows best practices for ${language} projects.
 
-Return the content of the ${dependencyFileName} file ONLY!! without explanations or comments or md formatting.
+Return the content of the ${dependencyFileName} file without explanations or comments.
 `;
 
         const spinner = ora(`Generating ${dependencyFileName}...`).start();
@@ -305,18 +305,25 @@ Return the content of the ${dependencyFileName} file ONLY!! without explanations
         }
     },
 
-    async generateAIAgentCode(agentType, projectStructure) {
+    async generateAIAgentCode(agentType, projectStructure, readme) {
         console.log(chalk.cyan(`🤖 Generating AI agent code for ${agentType}...`));
+
+        const agentConfig = CONFIG.aiAgents[agentType.toLowerCase().replace(/\s+/g, "")];
 
         const prompt = `
 Please generate code for the ${agentType} AI agent based on the project structure and features described in the README.md. The agent should be able to perform its specific tasks as outlined in the README.
+
+Agent description: ${agentConfig.description}
+
+README.md content:
+${readme}
 
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
 Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the agent's functionality. Reuse existing modules and avoid duplicating code.
 
-Return the generated code for the ${agentType} AI agent ONLY!! without explanations or comments or md formatting.
+Return the generated code for the ${agentType} AI agent without explanations or comments.
 `;
 
         const spinner = ora(`Generating ${agentType} AI agent code...`).start();
@@ -352,7 +359,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the workflow. Reuse existing modules and avoid duplicating code.
 
-Return the generated code for the AI agent workflow ONLY!! without explanations or comments or md formatting.
+Return the generated code for the AI agent workflow without explanations or comments.
 `;
 
         const spinner = ora("Generating AI agent workflow code...").start();
@@ -377,52 +384,14 @@ Return the generated code for the AI agent workflow ONLY!! without explanations 
         }
     },
 
-    async runSQLMigrationsAgent(projectStructure) {
-        await this.generateAIAgentCode("SQL Migrations", projectStructure);
-    },
+    async runAllAgents(projectStructure, readme) {
+        const agents = Object.keys(CONFIG.aiAgents);
 
-    async runServicesAgent(projectStructure) {
-        await this.generateAIAgentCode("Services", projectStructure);
-    },
+        for (const agent of agents) {
+            await this.generateAIAgentCode(agent, projectStructure, readme);
+        }
 
-    async runAPIRoutesAgent(projectStructure) {
-        await this.generateAIAgentCode("API Routes", projectStructure);
-    },
-
-    async runTesterAgent(projectStructure) {
-        await this.generateAIAgentCode("Tester", projectStructure);
-    },
-
-    async runProjectManagerAgent(projectStructure) {
-        await this.generateAIAgentCode("Project Manager", projectStructure);
-    },
-
-    async runLandingPageAgent(projectStructure) {
-        await this.generateAIAgentCode("Landing Page", projectStructure);
-    },
-
-    async runRedditPromotionAgent(projectStructure) {
-        await this.generateAIAgentCode("Reddit Promotion", projectStructure);
-    },
-
-    async runCodeReviewAgent(projectStructure) {
-        await this.generateAIAgentCode("Code Review", projectStructure);
-    },
-
-    async runDevOpsAgent(projectStructure) {
-        await this.generateAIAgentCode("DevOps", projectStructure);
-    },
-
-    async runSecurityAgent(projectStructure) {
-        await this.generateAIAgentCode("Security", projectStructure);
-    },
-
-    async runPerformanceAgent(projectStructure) {
-        await this.generateAIAgentCode("Performance", projectStructure);
-    },
-
-    async runInternationalizationAgent(projectStructure) {
-        await this.generateAIAgentCode("Internationalization", projectStructure);
+        await this.generateWorkflowCode(projectStructure);
     },
 
     async generateLandingPage(projectStructure) {
@@ -436,12 +405,11 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Use the following design guidelines:
 - Responsive and mobile-friendly design
-- Deep blue and cyan gradients on a black background
-- Console-style imagery for a "matrix" theme
 - Highlight key features and project information
 - Include sections for pricing tiers
+- Use a sleek design and creativity
 
-Return the generated HTML code for the landing page ONLY!! without explanations or comments or md formatting.
+Return the generated HTML code for the landing page without explanations or comments.
 `;
 
         const spinner = ora("Generating landing page...").start();
@@ -464,29 +432,6 @@ Return the generated HTML code for the landing page ONLY!! without explanations 
             spinner.fail("Error generating landing page");
             throw error;
         }
-    },
-
-    async runAllAgents(projectStructure) {
-        const agents = [
-            this.runSQLMigrationsAgent,
-            this.runServicesAgent,
-            this.runAPIRoutesAgent,
-            this.runTesterAgent,
-            this.runProjectManagerAgent,
-            this.runLandingPageAgent,
-            this.runRedditPromotionAgent,
-            this.runCodeReviewAgent,
-            this.runDevOpsAgent,
-            this.runSecurityAgent,
-            this.runPerformanceAgent,
-            this.runInternationalizationAgent,
-        ];
-
-        for (const agent of agents) {
-            await agent.call(this, projectStructure);
-        }
-
-        await this.generateWorkflowCode(projectStructure);
     },
 
     async generateFullProject(readme, projectStructure) {
@@ -516,7 +461,7 @@ Return the generated HTML code for the landing page ONLY!! without explanations 
             }
         }
 
-        await this.runAllAgents(projectStructure);
+        await this.runAllAgents(projectStructure, readme);
         await this.generateLandingPage(projectStructure);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
         await DocumentationGenerator.generateAPIDocumentation(projectStructure);
