@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>User Profile - AutoCode</title>
+        <script async src="https://js.stripe.com/v3/buy-button.js"></script>
         <style>
             body {
                 font-family: "Courier New", monospace;
@@ -113,7 +114,14 @@
                 <p>Current Tier: <span id="currentTier"></span></p>
                 <p>Subscription Status: <span id="subscriptionStatus"></span></p>
                 <% if (user.tier === 'Free') { %>
-                <a href="/payment/create-checkout-session" class="upgrade-button">Upgrade to Premium</a>
+                <!-- <a href="/payment/create-checkout-session?tier=Premium" class="upgrade-button">Upgrade to Premium</a> -->
+
+                <stripe-buy-button
+                    buy-button-id="buy_btn_1PrP3eAl2o8XNzrOyIyP1Tb2"
+                    publishable-key="pk_live_51Hak93Al2o8XNzrOZHYDp4iXIzeo9NTTurukel4y5OFDNxAkAQdVW2x5lnjejqooVXx2A72l92wChFdZ2T3oJapD00ZN4OHbRz"
+                >
+                </stripe-buy-button>
+
                 <% } else if (user.tier === 'Premium') { %>
                 <button id="cancelSubscription" class="cancel-subscription">Cancel Subscription</button>
                 <% } %>
@@ -180,7 +188,7 @@
             document.getElementById("cancelSubscription")?.addEventListener("click", async () => {
                 if (confirm("Are you sure you want to cancel your subscription?")) {
                     try {
-                        const response = await fetch("/profile/subscription/cancel", {
+                        const response = await fetch("/payment/cancel-subscription", {
                             method: "POST",
                         });
                         if (response.ok) {

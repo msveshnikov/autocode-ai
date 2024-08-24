@@ -6,11 +6,10 @@ import { authCookie } from "../middleware/auth.js";
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-router.post("/create-checkout-session", authCookie, async (req, res) => {
+router.get("/create-checkout-session", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
-        const { tier } = req.body;
-
+        const { tier } = req.params;
         let priceId;
         if (tier === "Premium") {
             priceId = process.env.STRIPE_PREMIUM_PRICE_ID;
@@ -91,41 +90,6 @@ router.post("/cancel-subscription", authCookie, async (req, res) => {
     } catch (error) {
         console.error("Error cancelling subscription:", error);
         res.status(500).json({ error: "Failed to cancel subscription" });
-    }
-});
-
-router.get("/pricing", async (req, res) => {
-    try {
-        const premiumPrice = await stripe.prices.retrieve(process.env.STRIPE_PREMIUM_PRICE_ID);
-
-        const pricing = {
-            free: {
-                name: "Free",
-                price: 0,
-                features: ["10 requests/day", "Basic features", "3 devices", "Community support"],
-            },
-            premium: {
-                name: "Premium",
-                price: premiumPrice.unit_amount / 100,
-                features: ["Unlimited requests", "All features", "10 devices", "Priority support"],
-            },
-            enterprise: {
-                name: "Enterprise",
-                price: "Custom",
-                features: [
-                    "Unlimited requests",
-                    "All features + custom integrations",
-                    "Unlimited devices",
-                    "Dedicated support team",
-                    "On-premises deployment option",
-                ],
-            },
-        };
-
-        res.json(pricing);
-    } catch (error) {
-        console.error("Error fetching pricing information:", error);
-        res.status(500).json({ error: "Failed to fetch pricing information" });
     }
 });
 
