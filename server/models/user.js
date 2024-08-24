@@ -72,10 +72,6 @@ UserSchema.methods.incrementDailyRequests = function () {
     this.dailyRequests += 1;
 };
 
-UserSchema.methods.canMakeRequest = function () {
-    return this.tier !== "Free" || this.dailyRequests < 10;
-};
-
 UserSchema.methods.addDevice = function (deviceId) {
     if (!this.devices.includes(deviceId)) {
         const limit = this.tier === "Free" ? 3 : this.tier === "Premium" ? 10 : Infinity;

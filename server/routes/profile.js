@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/user.js";
 import Stripe from "stripe";
 import { authCookie } from "../middleware/auth.js";
+import { CONFIG } from "./../config.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -55,7 +56,7 @@ router.post("/subscription/cancel", authCookie, async (req, res) => {
 router.get("/usage", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("dailyRequests lastRequestDate tier");
-        const requestLimit = user.tier === "Free" ? 10 : Infinity;
+        const requestLimit = CONFIG.pricingTiers[user.tier.toLowerCase()].requestsPerDay;
         const remainingRequests = Math.max(0, requestLimit - user.dailyRequests);
 
         res.json({
@@ -66,6 +67,7 @@ router.get("/usage", authCookie, async (req, res) => {
             remainingRequests,
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: "Server error" });
     }
 });

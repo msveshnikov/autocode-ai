@@ -116,9 +116,9 @@ export const CONFIG = {
     },
     pricingTiers: {
         free: {
-            name: "Free Tier",
+            name: "Free",
             price: 0,
-            requestsPerDay: 10,
+            requestsPerDay: 100,
             features: ["Basic features"],
             devices: 3,
             support: "Community support",

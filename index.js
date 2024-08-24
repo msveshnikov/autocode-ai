@@ -13,7 +13,7 @@ async function checkLicense() {
         const tier = await LicenseManager.getLicenseTier();
         if (tier === "Local Trial") {
             return await UserInterface.handleLogin();
-        } else if (tier === "Free Tier") {
+        } else if (tier === "Free") {
             console.log(chalk.yellow("You've reached the daily request limit for the Free Tier."));
         } else {
             console.log(chalk.red("Invalid or expired license. Please renew your subscription."));

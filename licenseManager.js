@@ -94,7 +94,7 @@ const LicenseManager = {
             return data.name;
         } catch (error) {
             console.error("Failed to get tier info:", error.message);
-            return "Free Tier";
+            return "Free";
         }
     },
 
