@@ -126,7 +126,7 @@ AutoCode offers flexible pricing tiers to suit different needs:
 ### Free Tier
 
 -   $0/month
--   10 requests/day
+-   100 requests/day
 -   Basic features
 -   3 devices
 -   Community support
