@@ -3,6 +3,7 @@ import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
+import UserInterface from "./userInterface.js";
 import ora from "ora";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
@@ -32,7 +33,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -68,7 +69,7 @@ Please provide a detailed project overview, architecture description, module int
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -117,7 +118,7 @@ Please provide comprehensive documentation for the unit tests above. Include an 
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -161,7 +162,7 @@ Format the documentation in Markdown, suitable for inclusion in a README or sepa
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -197,7 +198,7 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -207,6 +208,41 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
         } catch (error) {
             spinner.fail("Change log generation failed");
             console.error(chalk.red(`Error generating change log: ${error.message}`));
+        }
+    },
+
+    async generateUserManual() {
+        console.log(chalk.cyan("📘 Generating user manual..."));
+
+        const prompt = `
+Generate a comprehensive user manual for AutoCode, covering all menu options and features. Include:
+
+1. Introduction to AutoCode
+2. Installation and setup
+3. Detailed explanation of each menu option
+4. How to use different features
+5. Troubleshooting common issues
+6. Best practices for using AutoCode
+
+Format the user manual in Markdown, suitable for inclusion in a USER_MANUAL.md file.
+`;
+
+        const spinner = ora("Generating user manual...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: await UserInterface.getTemperature(),
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("User manual generated");
+            await FileManager.write("USER_MANUAL.md", response.content[0].text);
+            console.log(chalk.green("✅ User manual generated"));
+        } catch (error) {
+            spinner.fail("User manual generation failed");
+            console.error(chalk.red(`Error generating user manual: ${error.message}`));
         }
     },
 };

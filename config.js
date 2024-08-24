@@ -160,6 +160,6 @@ export const CONFIG = {
         autoFix: true,
         supportedLanguages: 30,
     },
-    temperatureOptions: [0, 0.5, 0.7],
+    temperatureOptions: [0, 0.5, 0.7, 1],
     tokenStoragePath: ".autocode_token",
 };

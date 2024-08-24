@@ -5,6 +5,9 @@ import inquirer from "inquirer";
 import path from "path";
 import FileManager from "./fileManager.js";
 import ora from "ora";
+import CodeAnalyzer from "./codeAnalyzer.js";
+import DocumentationGenerator from "./documentationGenerator.js";
+import UserInterface from "./userInterface.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -29,7 +32,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 Content of other selected files:
 ${Object.entries(allFileContents)
     .filter(([key]) => key !== fileName)
-    .map(([key, value]) => `${key}:\n\`\`\`\n${value}\n\`\`\``)
+    .map(([key, value]) => `${key}:\n${value}`)
     .join("\n\n")}
 
 Language: ${language}
@@ -47,7 +50,7 @@ Please generate or update the ${fileName} file to implement the features describ
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -78,7 +81,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -133,7 +136,7 @@ Please provide your suggestions in the following Markdown format:
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -227,7 +230,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -287,7 +290,7 @@ Return the content of the ${dependencyFileName} file ONLY!! without explanations
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -322,7 +325,7 @@ Return the generated code for the ${agentType} AI agent ONLY!! without explanati
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -358,7 +361,7 @@ Return the generated code for the AI agent workflow ONLY!! without explanations 
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -447,7 +450,7 @@ Return the generated HTML code for the landing page ONLY!! without explanations 
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -461,6 +464,64 @@ Return the generated HTML code for the landing page ONLY!! without explanations 
             spinner.fail("Error generating landing page");
             throw error;
         }
+    },
+
+    async runAllAgents(projectStructure) {
+        const agents = [
+            this.runSQLMigrationsAgent,
+            this.runServicesAgent,
+            this.runAPIRoutesAgent,
+            this.runTesterAgent,
+            this.runProjectManagerAgent,
+            this.runLandingPageAgent,
+            this.runRedditPromotionAgent,
+            this.runCodeReviewAgent,
+            this.runDevOpsAgent,
+            this.runSecurityAgent,
+            this.runPerformanceAgent,
+            this.runInternationalizationAgent,
+        ];
+
+        for (const agent of agents) {
+            await agent.call(this, projectStructure);
+        }
+
+        await this.generateWorkflowCode(projectStructure);
+    },
+
+    async generateFullProject(readme, projectStructure) {
+        console.log(chalk.cyan("🚀 Generating full project..."));
+
+        const languages = Object.keys(CONFIG.languageConfigs);
+
+        for (const language of languages) {
+            await this.generateDependencyFile(language, projectStructure);
+        }
+
+        const files = Object.keys(projectStructure);
+
+        for (const file of files) {
+            if (path.extname(file) === ".js") {
+                const content = await this.generate(readme, "", file, projectStructure, {});
+                await FileManager.write(file, content);
+                console.log(chalk.green(`✅ Generated ${file}`));
+
+                await CodeAnalyzer.runLintChecks(file);
+                await CodeAnalyzer.analyzeCodeQuality(file);
+                await CodeAnalyzer.analyzePerformance(file);
+                await CodeAnalyzer.checkSecurityVulnerabilities(file);
+                await CodeAnalyzer.generateUnitTests(file, projectStructure);
+
+                await DocumentationGenerator.generate(file, content, projectStructure);
+            }
+        }
+
+        await this.runAllAgents(projectStructure);
+        await this.generateLandingPage(projectStructure);
+        await DocumentationGenerator.generateProjectDocumentation(projectStructure);
+        await DocumentationGenerator.generateAPIDocumentation(projectStructure);
+
+        console.log(chalk.green("✅ Full project generated successfully"));
     },
 };
 

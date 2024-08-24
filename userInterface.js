@@ -9,6 +9,7 @@ import DocumentationGenerator from "./documentationGenerator.js";
 import LicenseManager from "./licenseManager.js";
 import path from "path";
 import ora from "ora";
+import fs from "fs/promises";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -71,7 +72,7 @@ const UserInterface = {
             type: "list",
             name: "temperature",
             message: "Select the temperature for AI generation:",
-            choices: ["0", "0.5", "0.7"],
+            choices: ["0", "0.5", "0.7", "1.0"],
         });
     },
 
@@ -121,7 +122,7 @@ const UserInterface = {
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: parseFloat(await this.getTemperature()),
+                temperature: await this.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("AI request completed");
@@ -318,10 +319,10 @@ const UserInterface = {
 
     async getTemperature() {
         try {
-            const temperatureData = await FileManager.read(path.join(process.cwd(), "temperature.json"));
+            const temperatureData = await fs.readFile(path.join(process.cwd(), "temperature.json"), "utf8");
             const { temperature } = JSON.parse(temperatureData);
             return temperature || 0.7;
-        } catch (error) {
+        } catch {
             return 0.7;
         }
     },

@@ -1,141 +1,170 @@
 # AutoCode Project Documentation
 
 ## Table of Contents
-
 1. [Project Overview](#project-overview)
 2. [Architecture](#architecture)
 3. [Module Interactions](#module-interactions)
-4. [Features](#features)
-5. [Installation](#installation)
-6. [Usage Instructions](#usage-instructions)
+4. [Installation](#installation)
+5. [Usage Instructions](#usage-instructions)
+6. [Features](#features)
 7. [AI Agents](#ai-agents)
-8. [Future Enhancements](#future-enhancements)
+8. [License Management](#license-management)
+9. [Server Component](#server-component)
 
 ## Project Overview
 
-AutoCode is an innovative automatic coding tool designed to bootstrap and incrementally develop software projects using the Claude 3.5 Sonnet API. It transforms README.md instructions into a fully functional software project, supporting multiple programming languages and providing a suite of development tools and AI-powered assistants.
+AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally. It transforms README.md instructions into a fully functional software project using the Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt, showcasing its capabilities in self-improvement and code generation.
 
-The project aims to streamline the software development process by automating various tasks such as code generation, documentation, testing, and optimization. AutoCode is designed to be flexible, extensible, and capable of handling complex project structures across different programming languages.
+The project aims to streamline the software development process by automating various aspects of coding, including code generation, optimization, documentation, and quality assurance. It supports multiple programming languages and incorporates AI-powered agents for specialized tasks.
 
 ## Architecture
 
-AutoCode is built as a Node.js-based console application with a modular architecture. The main components of the system are:
+AutoCode follows a modular architecture, with the main components organized as follows:
 
-1. **Entry Point (index.js)**: The main script that initializes the application and manages the overall flow.
+1. **Core Modules**:
+   - `index.js`: The main entry point of the application.
+   - `codeAnalyzer.js`: Analyzes existing code for quality and improvement opportunities.
+   - `codeGenerator.js`: Generates new code based on instructions and API responses.
+   - `config.js`: Manages configuration settings for the application.
+   - `documentationGenerator.js`: Automatically generates documentation for the project.
+   - `fileManager.js`: Handles file operations and project structure management.
+   - `licenseManager.js`: Manages license validation and usage tracking.
+   - `userInterface.js`: Manages user interactions and the command-line interface.
 
-2. **User Interface (userInterface.js)**: Handles user interactions and provides a command-line interface for various actions.
+2. **AI Agents**: Specialized modules for various tasks (e.g., SQL migrations, API routes, testing).
 
-3. **File Manager (fileManager.js)**: Manages file operations, project structure, and file system interactions.
+3. **Server Component**: A separate Express.js backend for license management and user authentication.
 
-4. **Code Generator (codeGenerator.js)**: Generates and updates code based on README.md instructions and AI responses.
-
-5. **Code Analyzer (codeAnalyzer.js)**: Performs code quality checks, linting, and suggests optimizations.
-
-6. **Documentation Generator (documentationGenerator.js)**: Automatically generates documentation for the project and individual files.
-
-7. **Configuration (config.js)**: Stores project-wide settings and language-specific configurations.
-
-8. **AI Integration**: Utilizes the Claude 3.5 Sonnet API for intelligent code generation and analysis.
+4. **Configuration**: Extensive configuration options in `config.js` for language-specific settings, AI model parameters, and pricing tiers.
 
 ## Module Interactions
 
-1. The `index.js` file initializes the application and starts the main loop, which prompts the user for actions using the `UserInterface` module.
-
-2. Based on user input, different modules are invoked:
-
-    - `CodeGenerator` creates or updates code files.
-    - `CodeAnalyzer` performs code quality checks and suggests improvements.
-    - `DocumentationGenerator` creates documentation for files and the overall project.
-    - `FileManager` handles all file system operations, including reading, writing, and managing the project structure.
-
-3. The `UserInterface` module orchestrates the interactions between different components and manages the flow of the application.
-
-4. The `CONFIG` object in `config.js` is used throughout the application to maintain consistent settings and language-specific configurations.
-
-5. AI integration is primarily handled by the `CodeGenerator` and `CodeAnalyzer` modules, which use the Claude 3.5 Sonnet API to generate code, analyze existing code, and provide intelligent suggestions.
-
-## Features
-
--   NodeJS-based console application
--   Automatic code generation based on README.md instructions
--   Multi-language support (JavaScript, Python, C#)
--   Incremental project building
--   Code quality checks and auto-fixing capabilities
--   Automated documentation generation
--   Intelligent code analysis and refactoring suggestions
--   Project structure optimization
--   Dependency management
--   Security vulnerability analysis
--   AI-powered chat interface for project modifications
--   Modular architecture for easy extensibility
--   AI agents for specialized tasks (e.g., SQL migrations, API routes, testing)
+1. `index.js` initializes the application and orchestrates the main workflow.
+2. `userInterface.js` handles user input and delegates tasks to other modules.
+3. `codeGenerator.js` and `codeAnalyzer.js` work together to generate, optimize, and analyze code.
+4. `fileManager.js` is used by various modules for reading and writing files.
+5. `documentationGenerator.js` creates documentation based on the generated code and project structure.
+6. `licenseManager.js` checks and manages user licenses throughout the application's execution.
+7. AI agents are invoked by `codeGenerator.js` for specialized tasks.
 
 ## Installation
 
-No installation is required. AutoCode can be run directly using npx. However, you need to have Node.js (version 20.0.0 or higher) installed on your system.
+AutoCode is designed to be run directly using `npx` without a separate installation step:
+
+1. Ensure you have Node.js version 20.0.0 or higher installed.
+2. Set up the `CLAUDE_KEY` environment variable with your Claude API key.
+3. Run AutoCode in your project directory using:
+   ```
+   npx autocode-ai
+   ```
 
 ## Usage Instructions
 
-1. Set up the CLAUDE_KEY environment variable with your Claude 3.5 Sonnet API key.
+1. Navigate to your project folder in the terminal.
+2. Run `npx autocode-ai`.
+3. Follow the prompts in the interactive menu to perform various actions:
+   - Brainstorm and update README.md
+   - Generate code for selected files
+   - Detect missing dependencies
+   - Run code quality checks
+   - Generate documentation
+   - Optimize and refactor code
+   - Use the chat interface for specific suggestions
+   - Run AI agents for specialized tasks
+   - Analyze code quality and security
+   - Generate unit tests
+   - Analyze performance
+   - Adjust AI temperature settings
 
-2. Navigate to your project folder in the terminal.
+## Features
 
-3. Run the following command:
-
-    ```
-    npx autocode-ai
-    ```
-
-4. Follow the prompts in the command-line interface to perform various actions:
-
-    - Brainstorm and update README.md
-    - Generate code for selected files
-    - Detect missing dependencies
-    - Run static code quality checks
-    - Generate documentation
-    - Optimize and refactor files
-    - Use the chat interface for project modifications
-    - Generate project-wide documentation
-    - Analyze code quality
-    - Optimize project structure
-    - Add new files
-    - Run AI agents for specialized tasks
-    - Perform security analysis
-
-5. AutoCode will guide you through each process, providing feedback and requesting confirmations when necessary.
+- NodeJS-based console application
+- Automatic code generation based on README.md instructions
+- Utilizes Claude 3.5 Sonnet API for intelligent code generation
+- Incremental project building
+- Creates and modifies source files in the current folder and subfolders
+- Self-updating README.md with new design ideas and considerations
+- Code quality checks and suggestions/auto fixes
+- Detects missing files/references and asks for user confirmation to create them
+- Adherence to DRY, KISS, and SRP principles
+- Automatic dependency management
+- Modular architecture for easy extensibility
+- Intelligent code analysis and refactoring suggestions
+- Automated documentation generation
+- User-friendly command-line interface
+- Support for multiple programming languages
+- Language-specific linting and formatting
+- Customizable configuration for different programming languages
+- Multi-language project handling
+- AI-powered agents for specialized tasks
+- Landing page generator for project showcasing
+- Pricing tiers with license management
+- Cross-platform compatibility (Windows, macOS, Linux)
+- Context management system
+- Long-running AI agents
+- Review and revise workflow
+- Syntax checking and auto-fixing
+- Version-controlled sandbox for AI-generated code
+- Iterative development alongside AI
 
 ## AI Agents
 
-AutoCode incorporates a system of AI agents to streamline specific development tasks:
+AutoCode incorporates various AI agents to handle specialized tasks:
 
-1. **SQL Migrations Agent**: Writes database migrations and type files.
-2. **Services Agent**: Creates services that interact with the database and process data.
-3. **API Routes Agent**: Handles input validation, auth checks, and service calls for HTTP requests.
-4. **Tester Agent**: Writes integration tests for endpoints.
-5. **Project Manager Agent**: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks.
+1. SQL Migrations Agent: Writes database migrations and type files
+2. Services Agent: Creates services that interact with the database and process data
+3. API Routes Agent: Handles input validation, auth checks, and service calls for HTTP requests
+4. Tester Agent: Writes integration tests for endpoints
+5. Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
+6. Landing Page Agent: Generates a visually appealing landing page for the project
+7. Reddit Promotion Agent: Manages Reddit promotions using the /u/AutoCode community
+8. Code Review Agent: Provides automated code quality feedback and suggestions
+9. DevOps Agent: Configures CI/CD pipelines and manages deployment processes
+10. Security Agent: Performs security audits and suggests vulnerability fixes
+11. Performance Agent: Analyzes code for performance bottlenecks and optimizations
+12. Internationalization Agent: Implements multi-language support in projects
 
-These agents can be invoked through the main user interface to automate complex tasks and ensure consistency across different parts of the project.
+## License Management
 
-## Future Enhancements
+AutoCode offers flexible pricing tiers:
 
-AutoCode has a roadmap for future improvements, including:
+1. Free Tier: 
+   - $0/month
+   - 10 requests/day
+   - Basic features
+   - 3 devices
+   - Community support
 
--   Implementing language-specific modules for better code organization
--   Adding support for more programming languages
--   Enhancing multi-language project handling
--   Integrating with popular version control systems
--   Developing a plugin system for extending functionality
--   Creating a web-based interface for easier project management
--   Implementing real-time collaboration features for team projects
--   Expanding AI agent capabilities and inter-agent communication
--   Developing a visual workflow designer for AI agent interactions
--   Implementing natural language processing for more intuitive feature requests
--   Creating a machine learning model to improve code generation based on user feedback
--   Integrating with popular IDEs and code editors for seamless workflow
--   Developing a code review AI agent to provide automated code quality feedback
--   Implementing a performance optimization agent to suggest and apply performance improvements
--   Creating a security analysis agent to identify and address potential vulnerabilities
--   Developing a documentation agent to generate and maintain comprehensive project documentation
--   Implementing a deployment agent to automate the process of deploying applications to various environments
+2. Premium:
+   - $10/month
+   - Unlimited requests
+   - All features
+   - 10 devices
+   - Priority support
 
-These enhancements aim to make AutoCode an even more powerful and versatile tool for software development, catering to a wide range of project types and development workflows.
+3. Enterprise:
+   - Custom pricing
+   - Unlimited requests
+   - All features + custom integrations
+   - Unlimited devices
+   - Dedicated support team
+   - On-premises deployment option
+
+The `licenseManager.js` module handles license validation and usage tracking, interacting with the server component for authentication and request management.
+
+## Server Component
+
+The server component is an Express.js backend that manages user authentication, license validation, and payment processing. Key features include:
+
+- User registration and login
+- License tier management
+- Payment processing integration
+- API endpoints for license checking and request tracking
+- MongoDB database for user and inquiry storage
+- Dockerized deployment for easy scalability
+
+The server component is designed to be deployed separately from the main AutoCode application, allowing for centralized license management and user authentication.
+
+---
+
+This documentation provides an overview of the AutoCode project, its architecture, and key features. For more detailed information on specific modules or functionalities, refer to the individual documentation files generated for each component.

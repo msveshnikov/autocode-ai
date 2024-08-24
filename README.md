@@ -150,7 +150,3 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
 
-## TODO
-
--   Use configured temperature everywehre, not just in userInterface
--   Write full user manual on menu options in md format
