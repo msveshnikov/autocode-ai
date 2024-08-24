@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
     stripeCustomerId: {
         type: String,
     },
+    subscriptionStatus: {
+        type: String,
+        default: "none",
+    },
     stripeSubscriptionId: {
         type: String,
     },

@@ -42,36 +42,41 @@ router.get("/create-checkout-session", authCookie, async (req, res) => {
 });
 
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
-    const sig = req.headers["stripe-signature"];
-
-    let event;
-
+    const signature = req.headers["stripe-signature"];
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        const event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+        console.log("✅ Success:", event.id);
+        switch (event.type) {
+            case "customer.subscription.updated":
+            case "customer.subscription.created":
+            case "customer.subscription.deleted": {
+                const subscription = event.data.object;
+                await handleSubscriptionUpdate(subscription);
+                break;
+            }
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+        res.send();
     } catch (err) {
-        console.error("Webhook signature verification failed:", err.message);
+        console.error(err);
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
-
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object;
-        const userId = session.client_reference_id;
-        const subscriptionId = session.subscription;
-
-        try {
-            const user = await User.findById(userId);
-            if (user) {
-                user.tier = session.amount_total === 1000 ? "Premium" : "Enterprise";
-                user.stripeSubscriptionId = subscriptionId;
-                await user.save();
-            }
-        } catch (error) {
-            console.error("Error updating user after successful payment:", error);
-        }
-    }
-
-    res.json({ received: true });
 });
+
+async function handleSubscriptionUpdate(subscription) {
+    console.log(subscription);
+    const customer = await stripe.customers.retrieve(subscription.customer);
+    let user = await User.findOne({ email: customer.email });
+    user.subscriptionStatus = subscription.status;
+    user.stripeSubscriptionId = subscription.id;
+    if (subscription.status === "active") {
+        user.tier = "Premium";
+    } else {
+        user.tier = "Free";
+    }
+    await user.save();
+}
 
 router.post("/cancel-subscription", authCookie, async (req, res) => {
     try {
@@ -79,13 +84,10 @@ router.post("/cancel-subscription", authCookie, async (req, res) => {
         if (!user.stripeSubscriptionId) {
             return res.status(400).json({ error: "No active subscription found" });
         }
-
-        await stripe.subscriptions.del(user.stripeSubscriptionId);
-
+        await stripe.subscriptions.cancel(user.stripeSubscriptionId);
         user.tier = "Free";
         user.stripeSubscriptionId = null;
         await user.save();
-
         res.json({ message: "Subscription cancelled successfully" });
     } catch (error) {
         console.error("Error cancelling subscription:", error);

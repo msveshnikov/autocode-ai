@@ -156,9 +156,7 @@
                     if (response.ok) {
                         const data = await response.json();
                         document.getElementById("currentTier").textContent = data.tier;
-                        document.getElementById("subscriptionStatus").textContent = data.subscription
-                            ? "Active"
-                            : "Inactive";
+                        document.getElementById("subscriptionStatus").textContent = data.subscriptionStatus;
                     }
                 } catch (error) {
                     console.error("Error fetching subscription info:", error);

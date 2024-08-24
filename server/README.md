@@ -86,23 +86,23 @@ The project is built using a microservices architecture, with the following main
     - Endpoint: `POST /check`
     - Headers: `Authorization: Bearer <token>`
 
-5. **User Profile**:
+4. **User Profile**:
 
     - Endpoint: `GET /profile`
     - Headers: `Authorization: Bearer <token>`
 
-6. **Update Profile**:
+5. **Update Profile**:
 
     - Endpoint: `PUT /profile`
     - Headers: `Authorization: Bearer <token>`
     - Body: `{ "name": "New Name", "email": "new@email.com" }`
 
-7. **Contact Form**:
+6. **Contact Form**:
 
     - Endpoint: `POST /contact`
     - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
 
-8. **Webhook Receiver**:
+7. **Webhook Receiver**:
 
     - Endpoint: `POST /webhook`
     - Headers: `X-Webhook-Secret: <secret>`
@@ -164,7 +164,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Unlimited devices
     - Dedicated support team
     - On-premises deployment option
-
-## TODO
-
--   Make payment work, Cannot GET /payment/create-checkout-session , should open stripe page, then handle webhook and upgrade tier in user collection

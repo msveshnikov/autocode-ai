@@ -46,6 +46,7 @@ router.get("/usage", authCookie, async (req, res) => {
             dailyRequests: user.dailyRequests,
             lastRequestDate: user.lastRequestDate,
             tier: user.tier,
+            subscriptionStatus: user.subscriptionStatus,
             requestLimit,
             remainingRequests,
         });
