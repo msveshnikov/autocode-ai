@@ -5,7 +5,7 @@ export const CONFIG = {
     excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
     anthropicModel: "claude-3-5-sonnet-20240620",
     maxTokens: 8192,
-    maxFileLines: 500,
+    maxFileLines: 700,
     languageConfigs: {
         javascript: {
             fileExtensions: [".js", ".jsx", ".ts", ".tsx"],

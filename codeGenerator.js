@@ -38,7 +38,7 @@ Linter: ${languageConfig.linter}
 Formatter: ${languageConfig.formatter}
 Package manager: ${languageConfig.packageManager}
 
-Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure and the content of other selected files when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code.
+Please generate or update the ${fileName} file to implement the features described in the README. Ensure the code is complete, functional, and follows best practices for ${language}. Consider the project structure and the content of other selected files when making changes or adding new features. Reuse functionality from other modules and avoid duplicating code. Do not include any explanations or comments in your response, just provide the code. Don't use md formatting or code snippets. Just code text
 `;
 
         const spinner = ora("Generating code...").start();
@@ -133,6 +133,7 @@ Please provide your suggestions in the following Markdown format:
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -226,6 +227,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -285,6 +287,7 @@ Return the content of the ${dependencyFileName} file ONLY!! without explanations
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -319,6 +322,7 @@ Return the generated code for the ${agentType} AI agent ONLY!! without explanati
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -354,6 +358,7 @@ Return the generated code for the AI agent workflow ONLY!! without explanations 
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
 

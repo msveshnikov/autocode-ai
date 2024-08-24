@@ -108,6 +108,7 @@ const UserInterface = {
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("AI request completed");

@@ -62,6 +62,7 @@ Please provide the corrected code that addresses all the linter errors. Consider
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -89,6 +90,7 @@ Provide the suggestions in a structured format.
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -123,6 +125,7 @@ Provide the suggestions in a structured format.
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -157,6 +160,7 @@ Provide the suggestions in a structured format.
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -383,42 +387,6 @@ Provide the suggestions in a structured format.
         }
     },
 
-    async suggestRefactoring(filePath, projectStructure) {
-        console.log(chalk.cyan(`🔍 Suggesting refactoring for ${filePath}...`));
-        const fileContent = await FileManager.read(filePath);
-        const fileExtension = path.extname(filePath);
-        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
-            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
-        );
-
-        const prompt = `
-Analyze the following ${language} code and suggest refactoring opportunities:
-
-${fileContent}
-
-Project structure:
-${JSON.stringify(projectStructure, null, 2)}
-
-Please consider:
-1. Improving code organization and structure
-2. Enhancing modularity and reusability
-3. Optimizing performance
-4. Applying design patterns where appropriate
-5. Improving naming conventions and code clarity
-
-Provide detailed refactoring suggestions in a structured format.
-`;
-
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            messages: [{ role: "user", content: prompt }],
-        });
-
-        console.log(chalk.green(`📊 Refactoring suggestions for ${filePath}:`));
-        console.log(response.content[0].text);
-    },
-
     async analyzePerformance(filePath) {
         console.log(chalk.cyan(`🚀 Analyzing performance for ${filePath}...`));
         const fileContent = await FileManager.read(filePath);
@@ -445,6 +413,7 @@ Provide detailed performance optimization suggestions in a structured format.
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -479,6 +448,7 @@ Provide detailed security vulnerability analysis and suggestions in a structured
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -515,6 +485,7 @@ Provide the generated unit tests in a structured format, ready to be saved in a 
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 

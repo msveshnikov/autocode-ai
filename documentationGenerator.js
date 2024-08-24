@@ -28,6 +28,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -55,6 +56,7 @@ Please provide a detailed project overview, architecture description, module int
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
             max_tokens: CONFIG.maxTokens,
+            temperature: 0.7,
             messages: [{ role: "user", content: prompt }],
         });
 

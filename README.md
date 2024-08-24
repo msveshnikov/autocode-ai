@@ -149,12 +149,8 @@ AutoCode offers flexible pricing tiers to suit different needs:
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
 
-## Long-Running Agents
+## TODO
 
--   Use long-running agents to plan out and implement tasks that are too large for ChatGPT or IDE-based tools
--   Agents can work on complex, multi-step tasks while maintaining context
-
-## Automatic Syntax Checking
-
--   Auto-fix syntax in 30+ languages
--   Attempts to fix other common issues like missing imports, variable declarations, and function implementations
+-   Add temperature selector to main menu (0, 0.5, 0.7), save to local disk near index.js, pass float not string to models
+-   Implement requests count in licenseManager and call API, in case >10 daily request login with user/pass and call licesne-server API, store cookie to local disk near index.js
+-   Add calls to CodeAnalyzer generateUnitTests() and analyzePerformance() from main menu in UserInterface (add p.14 and p.15 there)
