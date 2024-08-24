@@ -29,12 +29,14 @@ The project is built using a microservices architecture, with the following main
 2. **License Server (license-server.js)**: Manages user authentication, license checking, and request limit enforcement.
 3. **MongoDB**: Stores user and license data.
 4. **Stripe**: Handles payment processing and subscription management.
+5. **Redis**: Caches frequently accessed data and manages session storage.
 
 ### Module Interactions
 
 -   The web server interacts with the license server to authenticate users and check license status.
 -   Both servers communicate with MongoDB to store and retrieve user and license data.
 -   The web server integrates with Stripe for payment processing and subscription management.
+-   Redis is used for caching and session management across all services.
 
 ## Installation and Setup
 
@@ -74,12 +76,12 @@ The project is built using a microservices architecture, with the following main
 1. **Registration**:
 
     - Endpoint: `POST /register`
-    - Body: `{ "username": "user", "password": "pass"}`
+    - Body: `{ "email": "user@example.com", "password": "pass"}`
 
 2. **Login**:
 
     - Endpoint: `POST /login`
-    - Body: `{ "username": "user", "password": "pass" }`
+    - Body: `{ "email": "user@example.com", "password": "pass" }`
 
 3. **License Check**:
 
@@ -91,18 +93,12 @@ The project is built using a microservices architecture, with the following main
     - Endpoint: `GET /profile`
     - Headers: `Authorization: Bearer <token>`
 
-5. **Update Profile**:
-
-    - Endpoint: `PUT /profile`
-    - Headers: `Authorization: Bearer <token>`
-    - Body: `{ "name": "New Name", "email": "new@email.com" }`
-
-6. **Contact Form**:
+5. **Contact Form**:
 
     - Endpoint: `POST /contact`
     - Body: `{ "name": "User", "email": "user@example.com", "message": "Hello" }`
 
-7. **Webhook Receiver**:
+6. **Webhook Receiver**:
 
     - Endpoint: `POST /webhook`
     - Headers: `X-Webhook-Secret: <secret>`
@@ -119,14 +115,16 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 ├── Dockerfile
 ├── index.js
 ├── license-server.js
+├── config.js
+├── utils.js
 ├── views/
 │   ├── landing.ejs
 │   ├── login.ejs
 │   ├── register.ejs
 │   ├── profile.ejs
-│   ├── success.ejs
-│   ├── cancel.ejs
-│   └── contact.ejs
+│   ├── contact.ejs
+│   ├── 404.ejs
+│   └── 500.ejs
 ├── routes/
 │   ├── auth.js
 │   ├── profile.js
@@ -144,7 +142,7 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 1. **Free Tier**
 
     - $0/month
-    - 10 requests/day
+    - 100 requests/day
     - Basic features
     - 3 devices
     - Community support
