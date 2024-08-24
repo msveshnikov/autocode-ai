@@ -73,7 +73,7 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 -   `landing.html`: Template for generating project landing pages
 -   `licenseManager.js`: Handles license management and validation
 -   `server/index.js`: Express.js backend main point
--   `server/license-server.js`: Route  for license management
+-   `server/license-server.js`: Route for license management
 
 ## Supported Languages
 
@@ -149,7 +149,3 @@ AutoCode offers flexible pricing tiers to suit different needs:
 -   On-premises deployment option
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
-
-# TODO
-
--   generate agents code based on description from CONFIG, not just name, and pass readme content as well

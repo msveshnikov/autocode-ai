@@ -6,7 +6,6 @@ import FileManager from "./fileManager.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
-import LicenseManager from "./licenseManager.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
@@ -334,23 +333,6 @@ const UserInterface = {
             JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
         );
         console.log(chalk.green(`Temperature set to ${temperature}`));
-    },
-
-    async checkLicenseAndDecrement() {
-        const isValid = await LicenseManager.checkLicense();
-        if (!isValid) {
-            console.log(chalk.red("❌ Your license is not valid or has expired."));
-            return false;
-        }
-
-        const remainingRequests = await LicenseManager.getRemainingRequests();
-        if (remainingRequests <= 0) {
-            console.log(chalk.red("❌ You have reached your daily request limit."));
-            return false;
-        }
-
-        await LicenseManager.decrementRequests();
-        return true;
     },
 };
 

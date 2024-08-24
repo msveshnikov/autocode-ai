@@ -71,10 +71,6 @@ const LicenseManager = {
     },
 
     async getLicenseTier() {
-        if (!currentToken) {
-            return "Free";
-        }
-
         try {
             const response = await fetch(`${serverUrl}/license/tier-info`, {
                 headers: {
@@ -86,23 +82,7 @@ const LicenseManager = {
             return data.name;
         } catch (error) {
             console.error("Failed to get tier info:", error.message);
-            return "Free";
-        }
-    },
-
-    async getRemainingRequests() {
-        const tier = await this.getLicenseTier();
-        if (tier === "Free") {
-            return CONFIG.pricingTiers.free.requestsPerDay - dailyRequests;
-        }
-        return Infinity;
-    },
-
-    async decrementRequests() {
-        if (currentToken) {
-            await this.checkLicense();
-        } else {
-            this.checkFreeTierLicense();
+            return "Free Tier";
         }
     },
 

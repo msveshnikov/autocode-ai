@@ -23,10 +23,6 @@ async function main() {
         return;
     }
 
-    if (!(await checkLicense())) {
-        return;
-    }
-
     const readmePath = path.join(process.cwd(), "README.md");
     let readme = await FileManager.read(readmePath);
     if (!readme) {
@@ -42,8 +38,6 @@ async function main() {
         const projectStructure = await FileManager.getProjectStructure();
         const { action } = await UserInterface.promptForAction();
         continueExecution = await UserInterface.handleAction(action, readme, readmePath, projectStructure);
-
-        await LicenseManager.decrementRequests();
     }
 }
 
