@@ -1,12 +1,12 @@
 import { CONFIG } from "./config.js";
 import fs from "fs/promises";
 import path from "path";
+import os from "os";
 
 const serverUrl = CONFIG.licenseServerUrl;
 let currentToken = null;
-const tokenFile = path.join(process.cwd(), ".autocode_token");
-let dailyRequests = 0;
-let lastRequestDate = null;
+const tokenFile = path.join(os.homedir(), ".autocode_token");
+const usageFile = path.join(os.homedir(), ".autocode_usage");
 
 const LicenseManager = {
     async login(username, password) {
@@ -55,22 +55,33 @@ const LicenseManager = {
         }
     },
 
-    checkFreeTierLicense() {
+    async checkFreeTierLicense() {
+        const usage = await this.loadUsage();
         const today = new Date().toISOString().split("T")[0];
-        if (lastRequestDate !== today) {
-            dailyRequests = 0;
-            lastRequestDate = today;
+
+        if (usage.date !== today) {
+            usage.date = today;
+            usage.requests = 0;
         }
 
-        if (dailyRequests >= CONFIG.pricingTiers.free.requestsPerDay) {
+        if (usage.requests >= CONFIG.pricingTiers.free.requestsPerDay) {
             return false;
         }
 
-        dailyRequests++;
+        usage.requests++;
+        await this.saveUsage(usage);
         return true;
     },
 
     async getLicenseTier() {
+        if (!currentToken) {
+            await this.loadToken();
+        }
+
+        if (!currentToken) {
+            return "Free Tier";
+        }
+
         try {
             const response = await fetch(`${serverUrl}/license/tier-info`, {
                 headers: {
@@ -104,6 +115,19 @@ const LicenseManager = {
             }
         } catch (error) {
             // Token file doesn't exist or is invalid
+        }
+    },
+
+    async saveUsage(usage) {
+        await fs.writeFile(usageFile, JSON.stringify(usage), "utf8");
+    },
+
+    async loadUsage() {
+        try {
+            const data = await fs.readFile(usageFile, "utf8");
+            return JSON.parse(data);
+        } catch (error) {
+            return { date: "", requests: 0 };
         }
     },
 };

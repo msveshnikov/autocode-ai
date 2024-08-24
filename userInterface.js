@@ -9,6 +9,7 @@ import DocumentationGenerator from "./documentationGenerator.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
+import os from "os";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -329,7 +330,7 @@ const UserInterface = {
     async setTemperature() {
         const { temperature } = await this.promptForTemperature();
         await FileManager.write(
-            path.join(process.cwd(), "temperature.json"),
+            path.join(os.homedir(), "temperature.json"),
             JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
         );
         console.log(chalk.green(`Temperature set to ${temperature}`));
