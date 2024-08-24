@@ -34,6 +34,7 @@ const UserInterface = {
                 "🔒 13. Security analysis",
                 "🧪 14. Generate unit tests",
                 "🚀 15. Analyze performance",
+                "🌡️  16. Change temperature",
                 "🚪 Exit",
             ],
         });
@@ -304,6 +305,9 @@ const UserInterface = {
                 }
                 break;
             }
+            case "🌡️  16. Change temperature":
+                await this.setTemperature();
+                break;
             case "🚪 Exit":
                 console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
                 continueExecution = false;
@@ -316,15 +320,19 @@ const UserInterface = {
         try {
             const temperatureData = await FileManager.read(path.join(process.cwd(), "temperature.json"));
             const { temperature } = JSON.parse(temperatureData);
-            return temperature;
+            return temperature || 0.7;
         } catch (error) {
-            const { temperature } = await this.promptForTemperature();
-            await FileManager.write(
-                path.join(process.cwd(), "temperature.json"),
-                JSON.stringify({ temperature }, null, 2)
-            );
-            return temperature;
+            return 0.7;
         }
+    },
+
+    async setTemperature() {
+        const { temperature } = await this.promptForTemperature();
+        await FileManager.write(
+            path.join(process.cwd(), "temperature.json"),
+            JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
+        );
+        console.log(chalk.green(`Temperature set to ${temperature}`));
     },
 
     async checkLicenseAndDecrement() {

@@ -160,3 +160,4 @@ coverage/
 # Documentation generated files
 docs/
 *.csv
+temperature.json

@@ -152,7 +152,5 @@ License management is handled through an Express.js server with `/login` and `/c
 
 ## TODO
 
--   Add temperature selector to main menu (0, 0.5, 0.7), save to local disk near index.js, pass float not string to models
 -   Use configured temperature everywehre, not just in userInterface
-
 -   Write full user manual on menu options in md format
