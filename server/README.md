@@ -35,7 +35,6 @@ The project is built using a microservices architecture, with the following main
 -   The web server interacts with the license server to authenticate users and check license status.
 -   Both servers communicate with MongoDB to store and retrieve user and license data.
 -   The web server integrates with Stripe for payment processing and subscription management.
--   Google Sign-In API is used for alternative authentication.
 
 ## Installation and Setup
 
@@ -61,8 +60,6 @@ The project is built using a microservices architecture, with the following main
     JWT_TOKEN=your-secret-key
     STRIPE_SECRET_KEY=your-stripe-secret-key
     STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
-    GOOGLE_CLIENT_ID=your-google-client-id
-    GOOGLE_CLIENT_SECRET=your-google-client-secret
     ```
 
 4. Build and run the Docker containers:
@@ -77,18 +74,14 @@ The project is built using a microservices architecture, with the following main
 1. **Registration**:
 
     - Endpoint: `POST /register`
-    - Body: `{ "username": "user", "password": "pass", "tier": "Free" }`
+    - Body: `{ "username": "user", "password": "pass"}`
 
 2. **Login**:
 
     - Endpoint: `POST /login`
     - Body: `{ "username": "user", "password": "pass" }`
 
-3. **Google Sign-In**:
-
-    - Endpoint: `GET /auth/google`
-
-4. **License Check**:
+3. **License Check**:
 
     - Endpoint: `POST /check`
     - Headers: `Authorization: Bearer <token>`
@@ -172,9 +165,7 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-## Monitoring and Analytics
+## TODO
 
--   Integrated Prometheus for system metrics collection
--   Added Grafana dashboards for real-time monitoring
--   Implemented custom analytics dashboard for user behavior insights
+-   Make payment work, Cannot GET /payment/create-checkout-session , should open stripe page, then handle webhook and upgrade tier in user collection
 

@@ -6,6 +6,7 @@ import FileManager from "./fileManager.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
+import LicenseManager from "./licenseManager.js";
 import path from "path";
 import ora from "ora";
 
@@ -31,6 +32,8 @@ const UserInterface = {
                 "➕ 11. Add new file",
                 "🤖 12. Run AI Agents",
                 "🔒 13. Security analysis",
+                "🧪 14. Generate unit tests",
+                "🚀 15. Analyze performance",
                 "🚪 Exit",
             ],
         });
@@ -59,6 +62,15 @@ const UserInterface = {
             name: "language",
             message: "Select the programming language:",
             choices: ["JavaScript", "Python", "C#", "Java", "Ruby", "Go", "Rust", "PHP", "Swift"],
+        });
+    },
+
+    async promptForTemperature() {
+        return inquirer.prompt({
+            type: "list",
+            name: "temperature",
+            message: "Select the temperature for AI generation:",
+            choices: ["0", "0.5", "0.7"],
         });
     },
 
@@ -108,7 +120,7 @@ const UserInterface = {
             const response = await anthropic.messages.create({
                 model: CONFIG.anthropicModel,
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: parseFloat(await this.getTemperature()),
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("AI request completed");
@@ -276,12 +288,60 @@ const UserInterface = {
                 }
                 break;
             }
+            case "🧪 14. Generate unit tests": {
+                const filesToTest = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToTest);
+                for (const file of selectedFiles) {
+                    await CodeAnalyzer.generateUnitTests(file, projectStructure);
+                }
+                break;
+            }
+            case "🚀 15. Analyze performance": {
+                const filesToAnalyze = await FileManager.getFilesToProcess();
+                const { selectedFiles } = await UserInterface.promptForFiles(filesToAnalyze);
+                for (const file of selectedFiles) {
+                    await CodeAnalyzer.analyzePerformance(file);
+                }
+                break;
+            }
             case "🚪 Exit":
                 console.log(chalk.yellow("👋 Thanks for using AutoCode. See you next time!"));
                 continueExecution = false;
                 break;
         }
         return continueExecution;
+    },
+
+    async getTemperature() {
+        try {
+            const temperatureData = await FileManager.read(path.join(process.cwd(), "temperature.json"));
+            const { temperature } = JSON.parse(temperatureData);
+            return temperature;
+        } catch (error) {
+            const { temperature } = await this.promptForTemperature();
+            await FileManager.write(
+                path.join(process.cwd(), "temperature.json"),
+                JSON.stringify({ temperature }, null, 2)
+            );
+            return temperature;
+        }
+    },
+
+    async checkLicenseAndDecrement() {
+        const isValid = await LicenseManager.checkLicense();
+        if (!isValid) {
+            console.log(chalk.red("❌ Your license is not valid or has expired."));
+            return false;
+        }
+
+        const remainingRequests = LicenseManager.getRemainingRequests();
+        if (remainingRequests <= 0) {
+            console.log(chalk.red("❌ You have reached your daily request limit."));
+            return false;
+        }
+
+        await LicenseManager.decrementRequests();
+        return true;
     },
 };
 

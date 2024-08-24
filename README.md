@@ -72,7 +72,8 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 -   `userInterface.js`: Manages user interactions and command-line interface
 -   `landing.html`: Template for generating project landing pages
 -   `licenseManager.js`: Handles license management and validation
--   `server/license-server.js`: Express.js server for license management
+-   `server/index.js`: Express.js backend main point
+-   `server/license-server.js`: Route  for license management
 
 ## Supported Languages
 
@@ -152,5 +153,6 @@ License management is handled through an Express.js server with `/login` and `/c
 ## TODO
 
 -   Add temperature selector to main menu (0, 0.5, 0.7), save to local disk near index.js, pass float not string to models
--   Implement requests count in licenseManager and call API, in case >10 daily request login with user/pass and call licesne-server API, store cookie to local disk near index.js
--   Add calls to CodeAnalyzer generateUnitTests() and analyzePerformance() from main menu in UserInterface (add p.14 and p.15 there)
+-   Use configured temperature everywehre, not just in userInterface
+
+-   Write full user manual on menu options in md format

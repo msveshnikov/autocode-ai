@@ -5,11 +5,13 @@ import path from "path";
 const serverUrl = CONFIG.licenseServerUrl;
 let currentToken = null;
 const tokenFile = path.join(process.cwd(), ".autocode_token");
+let dailyRequests = 0;
+let lastRequestDate = null;
 
 const LicenseManager = {
     async login(username, password) {
         try {
-            const response = await fetch(`${serverUrl}/login`, {
+            const response = await fetch(`${serverUrl}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -27,37 +29,17 @@ const LicenseManager = {
         }
     },
 
-    async register(username, password, tier) {
-        try {
-            const response = await fetch(`${serverUrl}/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password, tier }),
-            });
-            if (!response.ok) throw new Error("Registration failed");
-            const data = await response.json();
-            currentToken = data.token;
-            await this.saveToken(currentToken);
-            return true;
-        } catch (error) {
-            console.error("Registration failed:", error.message);
-            return false;
-        }
-    },
-
     async checkLicense() {
         if (!currentToken) {
             await this.loadToken();
         }
 
         if (!currentToken) {
-            return true;
+            return this.checkFreeTierLicense();
         }
 
         try {
-            const response = await fetch(`${serverUrl}/check`, {
+            const response = await fetch(`${serverUrl}/license/check`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -66,32 +48,61 @@ const LicenseManager = {
             });
             if (!response.ok) throw new Error("License check failed");
             const data = await response.json();
-            return data.valid;
+            return data.message === "Request allowed";
         } catch (error) {
             console.error("License check failed:", error.message);
             return false;
         }
     },
 
-    getLicenseTier() {
+    checkFreeTierLicense() {
+        const today = new Date().toISOString().split("T")[0];
+        if (lastRequestDate !== today) {
+            dailyRequests = 0;
+            lastRequestDate = today;
+        }
+
+        if (dailyRequests >= CONFIG.pricingTiers.free.requestsPerDay) {
+            return false;
+        }
+
+        dailyRequests++;
+        return true;
+    },
+
+    async getLicenseTier() {
         if (!currentToken) {
             return "Free";
         }
-        const decodedToken = JSON.parse(atob(currentToken.split(".")[1]));
-        return decodedToken.tier;
+
+        try {
+            const response = await fetch(`${serverUrl}/license/tier-info`, {
+                headers: {
+                    Authorization: `Bearer ${currentToken}`,
+                },
+            });
+            if (!response.ok) throw new Error("Failed to get tier info");
+            const data = await response.json();
+            return data.name;
+        } catch (error) {
+            console.error("Failed to get tier info:", error.message);
+            return "Free";
+        }
     },
 
-    getRemainingRequests() {
-        if (!currentToken) {
-            return CONFIG.pricingTiers.free.requestsPerDay;
+    async getRemainingRequests() {
+        const tier = await this.getLicenseTier();
+        if (tier === "Free") {
+            return CONFIG.pricingTiers.free.requestsPerDay - dailyRequests;
         }
-        const decodedToken = JSON.parse(atob(currentToken.split(".")[1]));
-        return decodedToken.tier === "Premium" ? Infinity : CONFIG.pricingTiers.free.requestsPerDay;
+        return Infinity;
     },
 
     async decrementRequests() {
         if (currentToken) {
             await this.checkLicense();
+        } else {
+            this.checkFreeTierLicense();
         }
     },
 
@@ -112,7 +123,7 @@ const LicenseManager = {
                 await fs.unlink(tokenFile);
             }
         } catch (error) {
-            //  console.error("Failed to load token:", error.message);
+            // Token file doesn't exist or is invalid
         }
     },
 };

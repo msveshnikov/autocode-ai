@@ -373,6 +373,95 @@ Return the generated code for the AI agent workflow ONLY!! without explanations 
             throw error;
         }
     },
+
+    async runSQLMigrationsAgent(projectStructure) {
+        await this.generateAIAgentCode("SQL Migrations", projectStructure);
+    },
+
+    async runServicesAgent(projectStructure) {
+        await this.generateAIAgentCode("Services", projectStructure);
+    },
+
+    async runAPIRoutesAgent(projectStructure) {
+        await this.generateAIAgentCode("API Routes", projectStructure);
+    },
+
+    async runTesterAgent(projectStructure) {
+        await this.generateAIAgentCode("Tester", projectStructure);
+    },
+
+    async runProjectManagerAgent(projectStructure) {
+        await this.generateAIAgentCode("Project Manager", projectStructure);
+    },
+
+    async runLandingPageAgent(projectStructure) {
+        await this.generateAIAgentCode("Landing Page", projectStructure);
+    },
+
+    async runRedditPromotionAgent(projectStructure) {
+        await this.generateAIAgentCode("Reddit Promotion", projectStructure);
+    },
+
+    async runCodeReviewAgent(projectStructure) {
+        await this.generateAIAgentCode("Code Review", projectStructure);
+    },
+
+    async runDevOpsAgent(projectStructure) {
+        await this.generateAIAgentCode("DevOps", projectStructure);
+    },
+
+    async runSecurityAgent(projectStructure) {
+        await this.generateAIAgentCode("Security", projectStructure);
+    },
+
+    async runPerformanceAgent(projectStructure) {
+        await this.generateAIAgentCode("Performance", projectStructure);
+    },
+
+    async runInternationalizationAgent(projectStructure) {
+        await this.generateAIAgentCode("Internationalization", projectStructure);
+    },
+
+    async generateLandingPage(projectStructure) {
+        console.log(chalk.cyan("🌐 Generating landing page..."));
+
+        const prompt = `
+Please generate an HTML file for a landing page based on the project structure and features described in the README.md. The landing page should showcase the key features of the project and provide a visually appealing introduction.
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Use the following design guidelines:
+- Responsive and mobile-friendly design
+- Deep blue and cyan gradients on a black background
+- Console-style imagery for a "matrix" theme
+- Highlight key features and project information
+- Include sections for pricing tiers
+
+Return the generated HTML code for the landing page ONLY!! without explanations or comments or md formatting.
+`;
+
+        const spinner = ora("Generating landing page...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Landing page generated successfully");
+
+            const landingPageCode = response.content[0].text;
+            const fileName = "landing.html";
+            await FileManager.write(fileName, landingPageCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail("Error generating landing page");
+            throw error;
+        }
+    },
 };
 
 export default CodeGenerator;

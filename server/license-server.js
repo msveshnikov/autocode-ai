@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import User from "./models/user.js";
 import dotenv from "dotenv";
+import { CONFIG } from "./config.js";
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ const checkRequestLimit = async (userId) => {
         user.dailyRequests = 0;
     }
 
-    if (user.tier === "Free" && user.dailyRequests >= 10) {
+    if (user.tier === "Free" && user.dailyRequests >= CONFIG.pricingTiers.free.requestsPerDay) {
         return false;
     }
 
@@ -46,7 +47,7 @@ router.post("/check", authenticateToken, async (req, res) => {
             return res.status(429).json({ error: "Daily request limit exceeded" });
         }
         res.json({ message: "Request allowed" });
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -58,7 +59,7 @@ router.get("/user", authenticateToken, async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
         res.json(user);
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -70,59 +71,13 @@ router.get("/tier-info", authenticateToken, async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        let tierInfo;
-        switch (user.tier) {
-            case "Free":
-                tierInfo = {
-                    name: "Free",
-                    requestLimit: 10,
-                    features: ["Basic features"],
-                    devices: 3,
-                    support: "Community support",
-                };
-                break;
-            case "Premium":
-                tierInfo = {
-                    name: "Premium",
-                    requestLimit: "Unlimited",
-                    features: ["All features"],
-                    devices: 10,
-                    support: "Priority support",
-                };
-                break;
-            case "Enterprise":
-                tierInfo = {
-                    name: "Enterprise",
-                    requestLimit: "Unlimited",
-                    features: ["All features", "Custom integrations"],
-                    devices: "Unlimited",
-                    support: "Dedicated support team",
-                    deployment: "On-premises option available",
-                };
-                break;
-            default:
-                return res.status(400).json({ error: "Invalid tier" });
+        const tierInfo = CONFIG.pricingTiers[user.tier.toLowerCase()];
+        if (!tierInfo) {
+            return res.status(400).json({ error: "Invalid tier" });
         }
 
         res.json(tierInfo);
-    } catch {
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
-router.put("/update-tier", authenticateToken, async (req, res) => {
-    try {
-        const { tier } = req.body;
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        user.updateTier(tier);
-        await user.save();
-
-        res.json({ message: "Tier updated successfully", tier: user.tier });
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 });

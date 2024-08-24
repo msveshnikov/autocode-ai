@@ -7,6 +7,7 @@ import FileManager from "./fileManager.js";
 import CodeGenerator from "./codeGenerator.js";
 import path from "path";
 import inquirer from "inquirer";
+import ora from "ora";
 
 const execAsync = promisify(exec);
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
@@ -479,19 +480,28 @@ Please consider:
 4. Achieving high code coverage
 5. Following ${language}-specific testing best practices
 
-Provide the generated unit tests in a structured format, ready to be saved in a separate test file.
+Provide the generated unit tests in a text code format, ready to be saved in a separate test file. Do not include any explanations or comments in your response, just provide the code. Don't use md formatting or code snippets. Just code text
 `;
 
-        const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
-            max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
-            messages: [{ role: "user", content: prompt }],
-        });
+        const spinner = ora("Generating unit tests...").start();
 
-        const testFilePath = filePath.replace(/\.js$/, ".test.js");
-        await FileManager.write(testFilePath, response.content[0].text);
-        console.log(chalk.green(`✅ Unit tests generated and saved to ${testFilePath}`));
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: 0.7,
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Unit tests generated");
+
+            const testFilePath = filePath.replace(/\.js$/, ".test.js");
+            await FileManager.write(testFilePath, response.content[0].text);
+            console.log(chalk.green(`✅ Unit tests generated and saved to ${testFilePath}`));
+        } catch (error) {
+            spinner.fail("Error generating unit tests");
+            console.error(chalk.red(`Error: ${error.message}`));
+        }
     },
 };
 
