@@ -39,6 +39,9 @@ const UserInterface = {
                 "🌐 16. Generate landing page",
                 "📊 17. Generate API documentation",
                 "🔄 18. Generate full project",
+                "🕒 19. Handle long-running tasks",
+                "🏖️ 20. Generate sandbox environment",
+                "🔄 21. Generate iterative development workflow",
                 "🌡️ Change temperature",
                 "🔑 Login",
                 "🚪 Exit",
@@ -322,6 +325,15 @@ const UserInterface = {
                 break;
             case "🔄 18. Generate full project":
                 await CodeGenerator.generateFullProject(readme, projectStructure);
+                break;
+            case "🕒 19. Handle long-running tasks":
+                await CodeGenerator.handleLongRunningTasks(projectStructure);
+                break;
+            case "🏖️ 20. Generate sandbox environment":
+                await CodeGenerator.generateSandboxEnvironment(projectStructure);
+                break;
+            case "🔄 21. Generate iterative development workflow":
+                await CodeGenerator.generateIterativeDevelopmentWorkflow(projectStructure);
                 break;
             case "🌡️ Change temperature":
                 await this.setTemperature();

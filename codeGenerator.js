@@ -459,18 +459,17 @@ Return the generated HTML code for the landing page without explanations or comm
     async generateFullProject(readme, projectStructure) {
         console.log(chalk.cyan("🚀 Generating full project..."));
 
-        const languages = Object.keys(CONFIG.languageConfigs);
+        const { language } = await UserInterface.promptForLanguage();
+        await this.generateDependencyFile(language, projectStructure, readme);
 
-        for (const language of languages) {
-            await this.generateDependencyFile(language, projectStructure, readme);
-        }
-
-        const files = Object.keys(projectStructure);
+        const files = Object.keys(projectStructure).filter(
+            (file) => !file.includes(CONFIG.languageConfigs[language].dependencyFile)
+        );
 
         for (const file of files) {
             const fileExtension = path.extname(file);
-            const language = this.getLanguageFromExtension(fileExtension);
-            const languageConfig = CONFIG.languageConfigs[language];
+            const fileLanguage = this.getLanguageFromExtension(fileExtension);
+            const languageConfig = CONFIG.languageConfigs[fileLanguage];
 
             if (languageConfig) {
                 const content = await this.generate(readme, "", file, projectStructure, {});
@@ -487,7 +486,7 @@ Return the generated HTML code for the landing page without explanations or comm
             }
         }
 
-     //   await this.runAllAgents(projectStructure, readme);
+        //   await this.runAllAgents(projectStructure, readme);
         await this.generateLandingPage(projectStructure);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
         await DocumentationGenerator.generateAPIDocumentation(projectStructure);

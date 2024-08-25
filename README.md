@@ -152,4 +152,6 @@ License management is handled through an Express.js server with `/login` and `/c
 
 # TODO
 
--   in generateFullProject process all source types for any lang not just js
+-   in generateFullProject first to brainstorming (updateReadme)
+-   in generateFullProject exclude main dependency file from source loop
+-   fix Running SQL Migrations Agent... ❌ An error occurred: CodeGenerator[agentConfig.name.replace(...)] is not a function

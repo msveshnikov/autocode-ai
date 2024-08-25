@@ -162,3 +162,7 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Unlimited devices
     - Dedicated support team
     - On-premises deployment option
+
+# TODO
+
+-   add favicon
