@@ -13,8 +13,6 @@ services:
             - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
             - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
             - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
-            - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
-            - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
         restart: unless-stopped
         depends_on:
             - mongo

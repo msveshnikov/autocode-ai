@@ -327,15 +327,13 @@ Return the content of the ${dependencyFileName} file without explanations or com
         }
     },
 
-    async generateAIAgentCode(agentType, projectStructure, readme) {
+    async generateAIAgentCode(agentType, agentDescription, projectStructure, readme) {
         console.log(chalk.cyan(`🤖 Generating AI agent code for ${agentType}...`));
-
-        const agentConfig = CONFIG.aiAgents[agentType.toLowerCase().replace(/\s+/g, "")];
 
         const prompt = `
 Please generate code for the ${agentType} AI agent based on the project structure and features described in the README.md. The agent should be able to perform its specific tasks as outlined in the README.
 
-Agent description: ${agentConfig.description}
+Agent description: ${agentDescription}
 
 README.md content:
 ${readme}
@@ -404,16 +402,6 @@ Return the generated code for the AI agent workflow without explanations or comm
             spinner.fail("Error generating AI agent workflow code");
             throw error;
         }
-    },
-
-    async runAllAgents(projectStructure, readme) {
-        const agents = Object.keys(CONFIG.aiAgents);
-
-        for (const agent of agents) {
-            await this.generateAIAgentCode(agent, projectStructure, readme);
-        }
-
-        await this.generateWorkflowCode(projectStructure);
     },
 
     async generateLandingPage(projectStructure) {
@@ -486,7 +474,7 @@ Return the generated HTML code for the landing page without explanations or comm
             }
         }
 
-        //   await this.runAllAgents(projectStructure, readme);
+        await UserInterface.runAIAgents(projectStructure, readme);
         await this.generateLandingPage(projectStructure);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
         await DocumentationGenerator.generateAPIDocumentation(projectStructure);

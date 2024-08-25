@@ -164,8 +164,8 @@ const UserInterface = {
         console.log(chalk.cyan("🤖 Running AI Agents..."));
         // eslint-disable-next-line no-unused-vars
         for (const [agentKey, agentConfig] of Object.entries(CONFIG.aiAgents)) {
-            console.log(chalk.yellow(`Running ${agentConfig.name}...`));
-            await CodeGenerator[`run${agentConfig.name.replace(/\s+/g, "")}Agent`](projectStructure, readme);
+            console.log(chalk.yellow(`Generating ${agentConfig.name}...`));
+            await CodeGenerator.generateAIAgentCode(agentConfig.name, agentConfig.description, projectStructure, readme);
         }
         console.log(chalk.green("✅ All AI Agents have completed their tasks."));
     },
@@ -194,7 +194,15 @@ const UserInterface = {
                 await FileManager.write(filePath, generatedContent);
 
                 if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
-                    await CodeGenerator.splitLargeFile(filePath, generatedContent, projectStructure);
+                    const { confirm } = await inquirer.prompt({
+                        type: "confirm",
+                        name: "confirm",
+                        message: `The generated file ${file} is large. Do you want to split it?`,
+                        default: true,
+                    });
+                    if (confirm) {
+                        await CodeGenerator.splitLargeFile(filePath, generatedContent, projectStructure);
+                    }
                 }
             } catch (error) {
                 spinner.fail("Content generation failed");

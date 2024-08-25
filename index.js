@@ -30,15 +30,14 @@ async function main() {
         return;
     }
 
-    const readmePath = path.join(process.cwd(), "README.md");
-    let readme = await FileManager.read(readmePath);
-    if (!readme) {
-        console.error(chalk.red("❌ README.md not found or unable to read."));
-        return;
-    }
-
     let continueExecution = true;
     while (continueExecution) {
+        const readmePath = path.join(process.cwd(), "README.md");
+        let readme = await FileManager.read(readmePath);
+        if (!readme) {
+            console.error(chalk.red("❌ README.md not found or unable to read."));
+            return;
+        }
         if (!(await checkLicense())) {
             break;
         }

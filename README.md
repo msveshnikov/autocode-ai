@@ -88,24 +88,3 @@ AutoCode currently supports the following programming languages:
 -   Swift
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
-
-## AI Agents
-
-AutoCode incorporates a system of AI agents to streamline the development process:
-
--   SQL Migrations Agent: Writes database migrations and type files
--   Services Agent: Creates services that interact with the database and process data
--   API Routes Agent: Handles input validation, auth checks, and service calls for HTTP requests
--   Tester Agent: Writes integration tests for endpoints
--   Project Manager Agent: Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
--   Landing Page Agent: Generates a visually appealing landing page for the project
--   Reddit Promotion Agent: Manages Reddit promotions using the /u/AutoCode community
--   Code Review Agent: Provides automated code quality feedback and suggestions
--   DevOps Agent: Configures CI/CD pipelines and manages deployment processes
--   Security Agent: Performs security audits and suggests vulnerability fixes
--   Performance Agent: Analyzes code for performance bottlenecks and optimizations
--   Internationalization Agent: Implements multi-language support in projects
-
-# TODO
-
--   fix Running SQL Migrations Agent... ❌ An error occurred: CodeGenerator[agentConfig.name.replace(...)] is not a function
