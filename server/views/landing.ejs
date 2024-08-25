@@ -316,10 +316,19 @@
                 color: var(--secondary-color);
                 text-decoration: none;
                 font-weight: bold;
+                display: flex;
+                align-items: center;
             }
 
             .social-links a:hover {
                 text-decoration: underline;
+            }
+
+            .social-links img {
+                width: 24px;
+                height: 24px;
+                margin-right: 0.5rem;
+                filter: invert(1);
             }
 
             @media (max-width: 768px) {
@@ -450,10 +459,7 @@
                         Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
                     </p>
                 </div>
-                <div class="agent">
-                    <h3>Landing Page Agent</h3>
-                    <p>Generates a visually appealing landing page for the project</p>
-                </div>
+
                 <div class="agent">
                     <h3>Reddit Promotion Agent</h3>
                     <p>Manages Reddit promotions using the /u/AutoCode community</p>
@@ -559,10 +565,22 @@
 
         <footer>
             <div class="social-links">
-                <a href="https://twitter.com/MangaTVShop" target="_blank">Twitter</a>
-                <a href="https://github.com/msveshnikov" target="_blank">GitHub</a>
-                <a href="https://www.linkedin.com/in/max-sveshnikov-852248b4/" target="_blank">LinkedIn</a>
-                <a href="https://www.producthunt.com/@max_sveshnikov" target="_blank">ProductHunt</a>
+                <a href="https://twitter.com/MangaTVShop" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" />
+                 
+                </a>
+                <a href="https://github.com/msveshnikov" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
+                 
+                </a>
+                <a href="https://www.linkedin.com/in/max-sveshnikov-852248b4/" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" alt="LinkedIn" />
+                 
+                </a>
+                <a href="https://www.producthunt.com/@max_sveshnikov" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111589.png" alt="ProductHunt" />
+                 
+                </a>
             </div>
             <p>&copy; 2024 MaxSoft. All rights reserved.</p>
         </footer>
