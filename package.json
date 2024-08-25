@@ -11,7 +11,8 @@
         "start": "node index.js",
         "lint": "eslint .",
         "copy": "copy.cmd",
-        "obfuscate": "javascript-obfuscator . --output ./dist --exclude node_modules,server,dist,*.csv"
+        "obfuscate": "javascript-obfuscator . --output ./dist --exclude node_modules,server,dist,*.csv",
+        "publish": "npm publish ./dist"
     },
     "keywords": [
         "ai",

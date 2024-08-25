@@ -25,14 +25,12 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Customizable configuration for different programming languages
 -   Multi-language project handling
 -   AI-powered agents for specialized tasks
--   Landing page generator for project showcasing
 -   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
 -   Context management system
 -   Long-running AI agents
 -   Review and revise workflow
 -   Syntax checking and auto-fixing
--   Version-controlled sandbox for AI-generated code
 -   Iterative development alongside AI
 
 ## Installation
@@ -108,50 +106,6 @@ AutoCode incorporates a system of AI agents to streamline the development proces
 -   Performance Agent: Analyzes code for performance bottlenecks and optimizations
 -   Internationalization Agent: Implements multi-language support in projects
 
-## Landing Page Generator
-
-AutoCode includes a landing page generator to showcase your project:
-
--   Automatically creates a responsive, mobile-friendly landing page
--   Uses a sleek design with deep blue and cyan gradients on a black background
--   Incorporates console-style imagery for a "matrix" theme
--   Highlights key features and project information
--   Customizable content based on your README.md and project structure
--   Integrates with popular analytics tools for visitor tracking
-
-## Pricing and License Management
-
-AutoCode offers flexible pricing tiers to suit different needs:
-
-### Free Tier
-
--   $0/month
--   100 requests/day
--   Basic features
--   3 devices
--   Community support
-
-### Premium
-
--   $10/month
--   Unlimited requests
--   All features
--   10 devices
--   Priority support
-
-### Enterprise
-
--   Custom pricing
--   Unlimited requests
--   All features + custom integrations
--   Unlimited devices
--   Dedicated support team
--   On-premises deployment option
-
-License management is handled through an Express.js server with `/login` and `/check` license methods.
-
 # TODO
 
--   in generateFullProject first to brainstorming (updateReadme)
--   in generateFullProject exclude main dependency file from source loop
 -   fix Running SQL Migrations Agent... ❌ An error occurred: CodeGenerator[agentConfig.name.replace(...)] is not a function
