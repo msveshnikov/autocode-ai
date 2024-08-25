@@ -72,10 +72,6 @@ export const CONFIG = {
             name: "Services Agent",
             description: "Creates services that interact with the database and process data",
         },
-        apiRoutes: {
-            name: "API Routes Agent",
-            description: "Handles input validation, auth checks, and service calls for HTTP requests",
-        },
         tester: {
             name: "Tester Agent",
             description: "Writes integration tests for endpoints",
@@ -92,10 +88,6 @@ export const CONFIG = {
         redditPromotion: {
             name: "Reddit Promotion Agent",
             description: "Manages Reddit promotions using the /u/AutoCode community",
-        },
-        codeReview: {
-            name: "Code Review Agent",
-            description: "Provides automated code quality feedback and suggestions",
         },
         devOps: {
             name: "DevOps Agent",
