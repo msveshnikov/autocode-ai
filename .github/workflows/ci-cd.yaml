@@ -35,8 +35,8 @@ jobs:
               with:
                   context: ./server
                   push: true
-                  tags: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-                  platforms: linux/amd64,linux/arm64
+                  tags: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:arm64
+                  platforms: linux/arm64
 
     deploy:
         needs: build-and-push
@@ -49,6 +49,6 @@ jobs:
                   username: ${{ env.SSH_USER }}
                   key: ${{ env.SSH_KEY }}
                   script: |
-                      docker pull ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:amd64
+                      docker pull ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:arm64
                       docker-compose -f ~/autocode/docker-compose.yml down
                       docker-compose -f ~/autocode/docker-compose.yml up -d
