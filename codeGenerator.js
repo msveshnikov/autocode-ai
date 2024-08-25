@@ -343,7 +343,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the agent's functionality. Reuse existing modules and avoid duplicating code.
 
-Return the generated code for the ${agentType} AI agent without explanations or comments.
+Return the generated code for the ${agentType} AI agent without explanations or comments. No formatting, just code.
 `;
 
         const spinner = ora(`Generating ${agentType} AI agent code...`).start();
@@ -359,7 +359,7 @@ Return the generated code for the ${agentType} AI agent without explanations or 
             spinner.succeed(`${agentType} AI agent code generated successfully`);
 
             const agentCode = response.content[0].text;
-            const fileName = `${agentType.toLowerCase().replace(/\s+/g, "")}Agent.js`;
+            const fileName = `./agents/${agentType.replace(/\s+/g, "")}.js`;
             await FileManager.write(fileName, agentCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
         } catch (error) {
