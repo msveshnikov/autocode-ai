@@ -152,4 +152,4 @@ License management is handled through an Express.js server with `/login` and `/c
 
 # TODO
 
--   unsupported package manager maven
+-   in generateFullProject process all source types for any lang not just js

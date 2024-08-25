@@ -287,7 +287,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 dependencyFileName = "Package.swift";
                 break;
             default:
-                console.log(chalk.red, `Unsupported package manager: ${languageConfig.packageManager}`);
+                console.log(chalk.red(`Unsupported package manager: ${languageConfig.packageManager}`));
                 return;
         }
 
@@ -468,7 +468,11 @@ Return the generated HTML code for the landing page without explanations or comm
         const files = Object.keys(projectStructure);
 
         for (const file of files) {
-            if (path.extname(file) === ".js") {
+            const fileExtension = path.extname(file);
+            const language = this.getLanguageFromExtension(fileExtension);
+            const languageConfig = CONFIG.languageConfigs[language];
+
+            if (languageConfig) {
                 const content = await this.generate(readme, "", file, projectStructure, {});
                 await FileManager.write(file, content);
                 console.log(chalk.green(`✅ Generated ${file}`));
@@ -483,7 +487,7 @@ Return the generated HTML code for the landing page without explanations or comm
             }
         }
 
-        await this.runAllAgents(projectStructure, readme);
+     //   await this.runAllAgents(projectStructure, readme);
         await this.generateLandingPage(projectStructure);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
         await DocumentationGenerator.generateAPIDocumentation(projectStructure);
