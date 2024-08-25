@@ -1,0 +1,77 @@
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+env:
+    DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    BACKEND_IMAGE_NAME: allchat-backend
+    FRONTEND_IMAGE_NAME: allchat-frontend
+    SSH_HOST: ${{ secrets.SSH_HOST }}
+    SSH_USER: ${{ secrets.SSH_USER }}
+    SSH_KEY: ${{ secrets.SSH_KEY }}
+
+jobs:
+    build-and-push:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@master
+
+            - name: copy file via ssh
+              uses: garygrossgarten/github-action-scp@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USER }}
+                  privateKey: ${{ secrets.SSH_KEY }}
+                  local: "docker-compose.yml"
+                  remote: "allchat/docker-compose.yml"
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Log in to Docker Hub
+              uses: docker/login-action@master
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Build and Push Backend Image (arm64)
+              run: |
+                  docker buildx build \
+                  --platform linux/arm64/v8 \
+                  --output "type=image,push=true" \
+                  --tag ${{ env.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }} \
+                  ./server
+
+            - name: Build and Push Frontend Image (arm64)
+              run: |
+                  docker buildx build \
+                  --platform linux/arm64/v8 \
+                  --output "type=image,push=true" \
+                  --tag ${{ env.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }} \
+                  .
+
+    deploy:
+        needs: build-and-push
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Deploy to SSH Host
+              env:
+                  SSH_KEY: ${{ env.SSH_KEY }}
+              run: |
+                  mkdir -p ~/.ssh/
+                  echo "$SSH_KEY" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-keyscan -H ${{ env.SSH_HOST }} >> ~/.ssh/known_hosts
+                  ssh ${{ env.SSH_USER }}@${{ env.SSH_HOST }} '
+                    docker pull ${{ env.DOCKER_USERNAME }}/${{ env.BACKEND_IMAGE_NAME }}
+                    docker pull ${{ env.DOCKER_USERNAME }}/${{ env.FRONTEND_IMAGE_NAME }}
+                    cd allchat
+                    docker-compose down
+                    docker-compose up -d
+                  '

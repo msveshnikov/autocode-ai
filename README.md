@@ -151,3 +151,6 @@ AutoCode offers flexible pricing tiers to suit different needs:
 License management is handled through an Express.js server with `/login` and `/check` license methods.
 
 
+# TODO
+
+-   autodeploy using GotHub actions
