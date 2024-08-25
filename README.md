@@ -149,3 +149,7 @@ AutoCode offers flexible pricing tiers to suit different needs:
 -   On-premises deployment option
 
 License management is handled through an Express.js server with `/login` and `/check` license methods.
+
+# TODO
+
+-   unsupported package manager maven

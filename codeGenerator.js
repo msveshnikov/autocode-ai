@@ -254,7 +254,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
         return "javascript";
     },
 
-    async generateDependencyFile(language, projectStructure) {
+    async generateDependencyFile(language, projectStructure, readme) {
         const languageConfig = CONFIG.languageConfigs[language];
         let dependencyFileName;
 
@@ -268,8 +268,27 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             case "nuget":
                 dependencyFileName = "ProjectName.csproj";
                 break;
+            case "maven":
+                dependencyFileName = "pom.xml";
+                break;
+            case "bundler":
+                dependencyFileName = "Gemfile";
+                break;
+            case "go mod":
+                dependencyFileName = "go.mod";
+                break;
+            case "cargo":
+                dependencyFileName = "Cargo.toml";
+                break;
+            case "composer":
+                dependencyFileName = "composer.json";
+                break;
+            case "swift package manager":
+                dependencyFileName = "Package.swift";
+                break;
             default:
-                throw new Error(`Unsupported package manager: ${languageConfig.packageManager}`);
+                console.log(chalk.red, `Unsupported package manager: ${languageConfig.packageManager}`);
+                return;
         }
 
         console.log(chalk.cyan(`📦 Generating ${dependencyFileName} for ${language}...`));
@@ -278,6 +297,9 @@ Return the optimized and refactored code ONLY!! without explanations or comments
 Please generate a ${dependencyFileName} file for a ${language} project with the following structure:
 
 ${JSON.stringify(projectStructure, null, 2)}
+
+README.md content:
+${readme}
 
 Include all necessary dependencies based on the project structure and features described in the README.md. Ensure the file is properly formatted and follows best practices for ${language} projects.
 
@@ -440,7 +462,7 @@ Return the generated HTML code for the landing page without explanations or comm
         const languages = Object.keys(CONFIG.languageConfigs);
 
         for (const language of languages) {
-            await this.generateDependencyFile(language, projectStructure);
+            await this.generateDependencyFile(language, projectStructure, readme);
         }
 
         const files = Object.keys(projectStructure);
@@ -467,6 +489,132 @@ Return the generated HTML code for the landing page without explanations or comm
         await DocumentationGenerator.generateAPIDocumentation(projectStructure);
 
         console.log(chalk.green("✅ Full project generated successfully"));
+    },
+
+    async handleLongRunningTasks(projectStructure) {
+        console.log(chalk.cyan("🕒 Handling long-running tasks..."));
+
+        const prompt = `
+Please generate code for managing long-running AI agents based on the project structure. The code should handle:
+
+1. Context management
+2. Task scheduling
+3. Progress tracking
+4. Error handling and recovery
+5. Resource management
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the long-running task management. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for managing long-running tasks without explanations or comments.
+`;
+
+        const spinner = ora("Generating long-running task management code...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: await UserInterface.getTemperature(),
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Long-running task management code generated successfully");
+
+            const taskManagementCode = response.content[0].text;
+            const fileName = "longRunningTaskManager.js";
+            await FileManager.write(fileName, taskManagementCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail("Error generating long-running task management code");
+            throw error;
+        }
+    },
+
+    async generateSandboxEnvironment(projectStructure) {
+        console.log(chalk.cyan("🏖️ Generating sandbox environment..."));
+
+        const prompt = `
+Please generate code for a version-controlled sandbox environment for AI-generated code based on the project structure. The sandbox should:
+
+1. Create an isolated environment for testing AI-generated code
+2. Implement version control using Git
+3. Provide a mechanism for code review and approval
+4. Allow for easy rollback of changes
+5. Integrate with the main project workflow
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the sandbox environment. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for the sandbox environment without explanations or comments.
+`;
+
+        const spinner = ora("Generating sandbox environment code...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: await UserInterface.getTemperature(),
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Sandbox environment code generated successfully");
+
+            const sandboxCode = response.content[0].text;
+            const fileName = "sandboxEnvironment.js";
+            await FileManager.write(fileName, sandboxCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail("Error generating sandbox environment code");
+            throw error;
+        }
+    },
+
+    async generateIterativeDevelopmentWorkflow(projectStructure) {
+        console.log(chalk.cyan("🔄 Generating iterative development workflow..."));
+
+        const prompt = `
+Please generate code for an iterative development workflow that allows AI and human developers to work together seamlessly. The workflow should include:
+
+1. A mechanism for AI to propose changes and improvements
+2. A review process for human developers to assess AI-generated code
+3. Integration with version control systems
+4. Automated testing and validation of AI-generated code
+5. A feedback loop for continuous improvement of AI-generated code
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the iterative development workflow. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for the iterative development workflow without explanations or comments.
+`;
+
+        const spinner = ora("Generating iterative development workflow code...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: await UserInterface.getTemperature(),
+                messages: [{ role: "user", content: prompt }],
+            });
+
+            spinner.succeed("Iterative development workflow code generated successfully");
+
+            const workflowCode = response.content[0].text;
+            const fileName = "iterativeDevelopmentWorkflow.js";
+            await FileManager.write(fileName, workflowCode);
+            console.log(chalk.green(`✅ Generated ${fileName}`));
+        } catch (error) {
+            spinner.fail("Error generating iterative development workflow code");
+            throw error;
+        }
     },
 };
 
