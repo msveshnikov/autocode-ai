@@ -10,7 +10,7 @@ Subject to the terms and conditions of this License, AutoCode hereby grants you 
 
 ### Free Tier
 
--   Usage limited to 10 requests per day
+-   Usage limited to 100 requests per day
 -   Access to basic features only
 -   May be used on up to 3 devices
 -   Community support provided
