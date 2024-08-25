@@ -36,11 +36,11 @@ const UserInterface = {
                 "🔒 13. Security analysis",
                 "🧪 14. Generate unit tests",
                 "🚀 15. Analyze performance",
-                "🌡️  16. Change temperature",
-                "🌐 17. Generate landing page",
-                "📊 18. Generate API documentation",
-                "🔄 19. Generate full project",
-                "🔑 20. Login",
+                "🌐 16. Generate landing page",
+                "📊 17. Generate API documentation",
+                "🔄 18. Generate full project",
+                "🌡️ Change temperature",
+                "🔑 Login",
                 "🚪 Exit",
             ],
         });
@@ -314,19 +314,19 @@ const UserInterface = {
                 }
                 break;
             }
-            case "🌡️  16. Change temperature":
-                await this.setTemperature();
-                break;
-            case "🌐 17. Generate landing page":
+            case "🌐 16. Generate landing page":
                 await CodeGenerator.generateLandingPage(projectStructure);
                 break;
-            case "📊 18. Generate API documentation":
+            case "📊 17. Generate API documentation":
                 await DocumentationGenerator.generateAPIDocumentation(projectStructure);
                 break;
-            case "🔄 19. Generate full project":
+            case "🔄 18. Generate full project":
                 await CodeGenerator.generateFullProject(readme, projectStructure);
                 break;
-            case "🔑 20. Login":
+            case "🌡️ Change temperature":
+                await this.setTemperature();
+                break;
+            case "🔑 Login":
                 await this.handleLogin();
                 break;
             case "🚪 Exit":
