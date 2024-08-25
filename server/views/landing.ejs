@@ -325,6 +325,9 @@
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#pricing">Pricing</a></li>
+                    <% if (user) { %>
+                    <li><a href="/profile">Profile</a></li>
+                    <% } %>
                 </ul>
             </nav>
         </header>
@@ -378,9 +381,7 @@
                 <div class="how-it-works">
                     <p>Getting started with AutoCode is simple:</p>
                     <ol>
-                        <li>
-                            Create a CLAUDE_KEY environment variable with your API key.
-                        </li>
+                        <li>Create a CLAUDE_KEY environment variable with your API key.</li>
                         <li>Navigate to your project folder in the terminal.</li>
                         <li>Run the following command:</li>
                     </ol>

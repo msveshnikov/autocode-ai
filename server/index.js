@@ -56,7 +56,7 @@ app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);
 
 app.get("/", (req, res) => {
-    res.render("landing");
+    res.render("landing", { user: req.cookies.token });
 });
 
 app.get("/login", (req, res) => {
@@ -69,14 +69,6 @@ app.get("/register", (req, res) => {
 
 app.get("/contact", (req, res) => {
     res.render("contact");
-});
-
-app.get("/success", (req, res) => {
-    res.render("success");
-});
-
-app.get("/cancel", (req, res) => {
-    res.render("cancel");
 });
 
 app.use((req, res) => {
