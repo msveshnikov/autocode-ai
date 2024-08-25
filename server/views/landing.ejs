@@ -305,6 +305,23 @@
                 text-decoration: underline;
             }
 
+            .social-links {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .social-links a {
+                color: var(--secondary-color);
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            .social-links a:hover {
+                text-decoration: underline;
+            }
+
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
@@ -541,6 +558,12 @@
         </main>
 
         <footer>
+            <div class="social-links">
+                <a href="https://twitter.com/MangaTVShop" target="_blank">Twitter</a>
+                <a href="https://github.com/msveshnikov" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/max-sveshnikov-852248b4/" target="_blank">LinkedIn</a>
+                <a href="https://www.producthunt.com/@max_sveshnikov" target="_blank">ProductHunt</a>
+            </div>
             <p>&copy; 2024 MaxSoft. All rights reserved.</p>
         </footer>
 
