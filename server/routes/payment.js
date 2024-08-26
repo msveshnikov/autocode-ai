@@ -70,6 +70,7 @@ async function handleSubscriptionUpdate(subscription) {
     let user = await User.findOne({ email: customer.email });
     user.subscriptionStatus = subscription.status;
     user.stripeSubscriptionId = subscription.id;
+    user.stripeCustomerId = customer.id;
     if (subscription.status === "active") {
         user.tier = "Premium";
     } else {

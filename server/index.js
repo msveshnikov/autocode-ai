@@ -25,9 +25,15 @@ app.set("trust proxy", 1);
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGODB_URI);
-
+// Use JSON parser for all non-webhook routes
+app.use((req, res, next) => {
+    if (req.originalUrl === "/payment/webhook") {
+        next();
+    } else {
+        express.json()(req, res, next);
+    }
+});
 app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
