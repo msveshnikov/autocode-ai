@@ -68,10 +68,6 @@ export const CONFIG = {
             name: "SQL Migrations Agent",
             description: "Writes database migrations and type files",
         },
-        services: {
-            name: "Services Agent",
-            description: "Creates services that interact with the database and process data",
-        },
         tester: {
             name: "Tester Agent",
             description: "Writes integration tests for endpoints",
@@ -92,10 +88,6 @@ export const CONFIG = {
         devOps: {
             name: "DevOps Agent",
             description: "Configures CI/CD pipelines and manages deployment processes",
-        },
-        security: {
-            name: "Security Agent",
-            description: "Performs security audits and suggests vulnerability fixes",
         },
         performance: {
             name: "Performance Agent",
