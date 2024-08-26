@@ -99,7 +99,7 @@ const UserInterface = {
         ]);
     },
 
-    async chatInterface(readme, projectStructure) {
+    async chatInterface(projectStructure, readme) {
         const { input } = await inquirer.prompt({
             type: "input",
             name: "input",
@@ -165,7 +165,12 @@ const UserInterface = {
         // eslint-disable-next-line no-unused-vars
         for (const [agentKey, agentConfig] of Object.entries(CONFIG.aiAgents)) {
             console.log(chalk.yellow(`Generating ${agentConfig.name}...`));
-            await CodeGenerator.generateAIAgentCode(agentConfig.name, agentConfig.description, projectStructure, readme);
+            await CodeGenerator.generateAIAgentCode(
+                agentConfig.name,
+                agentConfig.description,
+                projectStructure,
+                readme
+            );
         }
         console.log(chalk.green("✅ All AI Agents have completed their tasks."));
     },
@@ -271,7 +276,7 @@ const UserInterface = {
             case "💬 7. Chat interface": {
                 let chatContinue = true;
                 while (chatContinue) {
-                    const result = await UserInterface.chatInterface(readme, projectStructure);
+                    const result = await UserInterface.chatInterface(projectStructure, readme);
                     chatContinue = result.continue;
                     readme = result.updatedReadme;
                 }
@@ -326,13 +331,13 @@ const UserInterface = {
                 break;
             }
             case "🌐 16. Generate landing page":
-                await CodeGenerator.generateLandingPage(projectStructure);
+                await CodeGenerator.generateLandingPage(projectStructure, readme);
                 break;
             case "📊 17. Generate API documentation":
-                await DocumentationGenerator.generateAPIDocumentation(projectStructure);
+                await DocumentationGenerator.generateAPIDocumentation(projectStructure, readme);
                 break;
             case "🔄 18. Generate full project":
-                await CodeGenerator.generateFullProject(readme, projectStructure);
+                await CodeGenerator.generateFullProject(projectStructure, readme);
                 break;
             case "🕒 19. Handle long-running tasks":
                 await CodeGenerator.handleLongRunningTasks(projectStructure);

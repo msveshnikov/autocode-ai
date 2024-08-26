@@ -131,7 +131,7 @@ Please provide comprehensive documentation for the unit tests above. Include an 
         }
     },
 
-    async generateAPIDocumentation(projectStructure) {
+    async generateAPIDocumentation(projectStructure, readme) {
         console.log(chalk.cyan("📚 Generating API documentation..."));
         const apiFiles = Object.keys(projectStructure).filter(
             (file) => file.includes("routes") || file.includes("controllers")
@@ -139,9 +139,13 @@ Please provide comprehensive documentation for the unit tests above. Include an 
         const apiContents = await Promise.all(apiFiles.map((file) => FileManager.read(file)));
 
         const prompt = `
-Generate comprehensive API documentation based on the following API-related files:
+Generate comprehensive API documentation based on README.md and the following API-related files:
 
 ${apiFiles.map((file, index) => `${file}:\n${apiContents[index]}`).join("\n\n")}
+
+
+README.md content:
+${readme}
 
 Please provide detailed documentation for each API endpoint, including:
 1. Endpoint URL

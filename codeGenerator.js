@@ -404,7 +404,7 @@ Return the generated code for the AI agent workflow without explanations or comm
         }
     },
 
-    async generateLandingPage(projectStructure) {
+    async generateLandingPage(projectStructure, readme) {
         console.log(chalk.cyan("🌐 Generating landing page..."));
 
         const prompt = `
@@ -412,6 +412,9 @@ Please generate an HTML file for a landing page based on the project structure a
 
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
+
+README.md content:
+${readme}
 
 Use the following design guidelines:
 - Responsive and mobile-friendly design
@@ -444,7 +447,7 @@ Return the generated HTML code for the landing page without explanations or comm
         }
     },
 
-    async generateFullProject(readme, projectStructure) {
+    async generateFullProject(projectStructure, readme) {
         console.log(chalk.cyan("🚀 Generating full project..."));
 
         const { language } = await UserInterface.promptForLanguage();
@@ -474,10 +477,11 @@ Return the generated HTML code for the landing page without explanations or comm
             }
         }
 
-        await UserInterface.runAIAgents(projectStructure, readme);
-        await this.generateLandingPage(projectStructure);
+        await this.createMissingSourceFile(projectStructure, readme);
+        // await UserInterface.runAIAgents(projectStructure, readme);
+        await this.generateLandingPage(projectStructure, readme);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
-        await DocumentationGenerator.generateAPIDocumentation(projectStructure);
+        // await DocumentationGenerator.generateAPIDocumentation(projectStructure, readme);
 
         console.log(chalk.green("✅ Full project generated successfully"));
     },
@@ -605,6 +609,57 @@ Return the generated code for the iterative development workflow without explana
         } catch (error) {
             spinner.fail("Error generating iterative development workflow code");
             throw error;
+        }
+    },
+
+    async createMissingSourceFile(projectStructure, readme) {
+        console.log(chalk.cyan("🔍 Checking for missing source files..."));
+
+        const sourceFiles = Object.keys(projectStructure).filter(
+            (file) => file.endsWith(".js") && !file.startsWith("server/") && file !== "index.js"
+        );
+
+        if (sourceFiles.length === 0) {
+            console.log(chalk.yellow("No source files found. Creating a new one..."));
+
+            const fileName = "app.js";
+            const prompt = `
+Please generate code for a new source file named ${fileName} based on the project structure and features described in the README.md. This file should serve as the main application logic for the project.
+
+README.md content:
+${readme}
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the main application logic. Reuse existing modules and avoid duplicating code.
+
+Return the generated code for ${fileName} without explanations or comments.
+`;
+
+            const spinner = ora(`Generating ${fileName}...`).start();
+
+            try {
+                const response = await anthropic.messages.create({
+                    model: CONFIG.anthropicModel,
+                    max_tokens: CONFIG.maxTokens,
+                    temperature: await UserInterface.getTemperature(),
+                    messages: [{ role: "user", content: prompt }],
+                });
+
+                spinner.succeed(`${fileName} generated successfully`);
+
+                const sourceFileContent = response.content[0].text;
+                await FileManager.write(fileName, sourceFileContent);
+                console.log(chalk.green(`✅ Generated ${fileName}`));
+
+                projectStructure[fileName] = null;
+            } catch (error) {
+                spinner.fail(`Error generating ${fileName}`);
+                throw error;
+            }
+        } else {
+            console.log(chalk.green("✅ Source files already exist. No need to create a new one."));
         }
     },
 };
