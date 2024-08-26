@@ -162,7 +162,7 @@
             async function fetchSubscriptionInfo() {
                 try {
                     const response = await fetch("/profile/subscription");
-                    if (response.ok) {
+                    if (response.ok) { 
                         const data = await response.json();
                         document.getElementById("currentTier").textContent = data.tier;
                         document.getElementById("subscriptionStatus").textContent = data.subscriptionStatus;

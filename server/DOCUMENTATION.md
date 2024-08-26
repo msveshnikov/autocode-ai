@@ -62,7 +62,6 @@ The project follows a modular architecture, with the main components being:
     JWT_TOKEN=your-jwt-secret
     SESSION_SECRET=your-session-secret
     STRIPE_SECRET_KEY=your-stripe-secret-key
-    STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
     STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
     GOOGLE_CLIENT_ID=your-google-client-id
     GOOGLE_CLIENT_SECRET=your-google-client-secret

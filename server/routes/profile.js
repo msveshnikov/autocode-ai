@@ -1,11 +1,9 @@
 import express from "express";
 import User from "../models/user.js";
-import Stripe from "stripe";
 import { authCookie } from "../middleware/auth.js";
 import { CONFIG } from "../config.js";
 
 const router = express.Router();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 router.get("/", authCookie, async (req, res) => {
     try {
@@ -18,19 +16,8 @@ router.get("/", authCookie, async (req, res) => {
 
 router.get("/subscription", authCookie, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select("tier stripeCustomerId");
-        let subscription = null;
-
-        if (user.stripeCustomerId) {
-            const subscriptions = await stripe.subscriptions.list({
-                customer: user.stripeCustomerId,
-                status: "active",
-                limit: 1,
-            });
-            subscription = subscriptions.data[0];
-        }
-
-        res.json({ tier: user.tier, subscription });
+        const user = await User.findById(req.user.id).select("tier subscriptionStatus");
+        res.json({ tier: user.tier, subscriptionStatus: user.subscriptionStatus });
     } catch (error) {
         res.status(500).json({ error: "Server error" });
     }
