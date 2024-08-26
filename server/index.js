@@ -13,7 +13,6 @@ import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);

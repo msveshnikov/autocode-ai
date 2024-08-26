@@ -100,6 +100,46 @@
             .device-list li {
                 margin-bottom: 5px;
             }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 500px;
+                border-radius: 10px;
+                text-align: center;
+            }
+            .modal-buttons {
+                margin-top: 20px;
+            }
+            .modal-buttons button {
+                margin: 0 10px;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            .confirm-button {
+                background-color: #ff0000;
+                color: #ffffff;
+            }
+            .cancel-button {
+                background-color: #cccccc;
+                color: #000000;
+            }
         </style>
     </head>
     <body>
@@ -123,14 +163,11 @@
                 <p>Current Tier: <span id="currentTier"></span></p>
                 <p>Subscription Status: <span id="subscriptionStatus"></span></p>
                 <% if (user.tier === 'Free') { %>
-                <!-- <a href="/payment/create-checkout-session?tier=Premium" class="upgrade-button">Upgrade to Premium</a> -->
-
                 <stripe-buy-button
                     buy-button-id="buy_btn_1PrP3eAl2o8XNzrOyIyP1Tb2"
                     publishable-key="pk_live_51Hak93Al2o8XNzrOZHYDp4iXIzeo9NTTurukel4y5OFDNxAkAQdVW2x5lnjejqooVXx2A72l92wChFdZ2T3oJapD00ZN4OHbRz"
                 >
                 </stripe-buy-button>
-
                 <% } else if (user.tier === 'Premium') { %>
                 <button id="cancelSubscription" class="cancel-subscription">Cancel Subscription</button>
                 <% } %>
@@ -140,6 +177,17 @@
                 <h2>Device Information</h2>
                 <p>Devices: <span id="deviceCount"></span> / <span id="deviceLimit"></span></p>
                 <ul id="deviceList" class="device-list"></ul>
+            </div>
+        </div>
+
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <h2>Confirm Cancellation</h2>
+                <p>Are you sure you want to cancel your subscription?</p>
+                <div class="modal-buttons">
+                    <button id="confirmCancel" class="confirm-button">Yes, Cancel</button>
+                    <button id="cancelAction" class="cancel-button">No, Keep Subscription</button>
+                </div>
             </div>
         </div>
 
@@ -162,7 +210,7 @@
             async function fetchSubscriptionInfo() {
                 try {
                     const response = await fetch("/profile/subscription");
-                    if (response.ok) { 
+                    if (response.ok) {
                         const data = await response.json();
                         document.getElementById("currentTier").textContent = data.tier;
                         document.getElementById("subscriptionStatus").textContent = data.subscriptionStatus;
@@ -192,24 +240,42 @@
                 }
             }
 
-            document.getElementById("cancelSubscription")?.addEventListener("click", async () => {
-                if (confirm("Are you sure you want to cancel your subscription?")) {
-                    try {
-                        const response = await fetch("/payment/cancel-subscription", {
-                            method: "POST",
-                        });
-                        if (response.ok) {
-                            alert("Subscription cancelled successfully");
-                            location.reload();
-                        } else {
-                            alert("Failed to cancel subscription");
-                        }
-                    } catch (error) {
-                        console.error("Error:", error);
-                        alert("An error occurred while cancelling the subscription");
+            const modal = document.getElementById("confirmationModal");
+            const cancelSubscriptionBtn = document.getElementById("cancelSubscription");
+            const confirmCancelBtn = document.getElementById("confirmCancel");
+            const cancelActionBtn = document.getElementById("cancelAction");
+
+            cancelSubscriptionBtn?.addEventListener("click", () => {
+                modal.style.display = "block";
+            });
+
+            cancelActionBtn.addEventListener("click", () => {
+                modal.style.display = "none";
+            });
+
+            confirmCancelBtn.addEventListener("click", async () => {
+                try {
+                    const response = await fetch("/payment/cancel-subscription", {
+                        method: "POST",
+                    });
+                    if (response.ok) {
+                        modal.style.display = "none";
+                        alert("Subscription cancelled successfully");
+                        location.reload();
+                    } else {
+                        throw new Error("Failed to cancel subscription");
                     }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("An error occurred while cancelling the subscription");
                 }
             });
+
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
 
             fetchLicenseUsage();
             fetchSubscriptionInfo();

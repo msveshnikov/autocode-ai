@@ -2,44 +2,11 @@ import express from "express";
 import Stripe from "stripe";
 import User from "../models/user.js";
 import { authCookie } from "../middleware/auth.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-router.get("/create-checkout-session", authCookie, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id);
-        const { tier } = req.params;
-        let priceId;
-        if (tier === "Premium") {
-            priceId = process.env.STRIPE_PREMIUM_PRICE_ID;
-        } else if (tier === "Enterprise") {
-            priceId = process.env.STRIPE_ENTERPRISE_PRICE_ID;
-        } else {
-            return res.status(400).json({ error: "Invalid tier selected" });
-        }
-
-        const session = await stripe.checkout.sessions.create({
-            customer_email: user.email,
-            client_reference_id: user.id,
-            payment_method_types: ["card"],
-            line_items: [
-                {
-                    price: priceId,
-                    quantity: 1,
-                },
-            ],
-            mode: "subscription",
-            success_url: `${process.env.BASE_URL}/success`,
-            cancel_url: `${process.env.BASE_URL}/cancel`,
-        });
-
-        res.json({ sessionId: session.id });
-    } catch (error) {
-        console.error("Error creating checkout session:", error);
-        res.status(500).json({ error: "Failed to create checkout session" });
-    }
-});
 
 router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
     const signature = req.headers["stripe-signature"];
@@ -88,6 +55,7 @@ router.post("/cancel-subscription", authCookie, async (req, res) => {
         await stripe.subscriptions.cancel(user.stripeSubscriptionId);
         user.tier = "Free";
         user.stripeSubscriptionId = null;
+        user.subscriptionStatus = "canceled";
         await user.save();
         res.json({ message: "Subscription cancelled successfully" });
     } catch (error) {
