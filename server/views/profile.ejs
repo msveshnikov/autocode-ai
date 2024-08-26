@@ -148,7 +148,7 @@
                 text-align: center;
             }
             .success-message {
-                background-color: #4CAF50;
+                background-color: #4caf50;
                 color: white;
             }
             .error-message {
@@ -201,7 +201,7 @@
                 <p>Are you sure you want to cancel your subscription?</p>
                 <div class="modal-buttons">
                     <button id="confirmCancel" class="confirm-button">Yes, Cancel</button>
-                    <button id="cancelAction" class="cancel-button">No, Keep Subscription</button>
+                    <button id="cancelAction" class="cancel-button">Close</button>
                 </div>
                 <div id="modalMessage"></div>
             </div>
@@ -277,7 +277,8 @@
                         method: "POST",
                     });
                     if (response.ok) {
-                        modalMessage.innerHTML = '<div class="success-message">Subscription cancelled successfully</div>';
+                        modalMessage.innerHTML =
+                            '<div class="success-message">Subscription cancelled successfully</div>';
                         setTimeout(() => {
                             modal.style.display = "none";
                             modalMessage.innerHTML = "";
@@ -288,7 +289,8 @@
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    modalMessage.innerHTML = '<div class="error-message">An error occurred while cancelling the subscription</div>';
+                    modalMessage.innerHTML =
+                        '<div class="error-message">An error occurred while cancelling the subscription</div>';
                 }
             });
 
