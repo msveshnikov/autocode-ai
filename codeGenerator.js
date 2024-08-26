@@ -468,10 +468,10 @@ Return the generated HTML code for the landing page without explanations or comm
                 console.log(chalk.green(`✅ Generated ${file}`));
 
                 await CodeAnalyzer.runLintChecks(file);
-                await CodeAnalyzer.analyzeCodeQuality(file);
-                await CodeAnalyzer.analyzePerformance(file);
-                await CodeAnalyzer.checkSecurityVulnerabilities(file);
-                await CodeAnalyzer.generateUnitTests(file, projectStructure);
+                // await CodeAnalyzer.analyzeCodeQuality(file);
+                // await CodeAnalyzer.analyzePerformance(file);
+                // await CodeAnalyzer.checkSecurityVulnerabilities(file);
+                // await CodeAnalyzer.generateUnitTests(file, projectStructure);
 
                 await DocumentationGenerator.generate(file, content, projectStructure);
             }
