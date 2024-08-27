@@ -17,7 +17,7 @@
                 align-items: center;
                 min-height: 100vh;
             }
-            .login-container {
+            .container {
                 background-color: rgba(0, 0, 0, 0.6);
                 padding: 2rem;
                 border-radius: 10px;
@@ -79,19 +79,19 @@
         </style>
     </head>
     <body>
-        <div class="login-container">
+        <div class="container">
             <h1>Login</h1>
-            <div id="error-message" class="error-message"></div>
             <form id="loginForm">
                 <input type="email" id="email" name="email" placeholder="Email" required />
                 <input type="password" id="password" name="password" placeholder="Password" required />
                 <button type="submit">Login</button>
             </form>
-
+            <div id="error-message" class="error-message"></div>
             <div class="register-link">
                 <a href="/register">Don't have an account? Register here</a>
             </div>
         </div>
+
         <script>
             document.getElementById("loginForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
