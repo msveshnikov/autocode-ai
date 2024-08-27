@@ -88,7 +88,3 @@ AutoCode currently supports the following programming languages:
 -   Swift
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
-
-# TODO
-
--   in generateFullProject create one source file if it is missing
