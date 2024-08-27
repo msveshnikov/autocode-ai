@@ -1,6 +1,6 @@
 {
     "name": "autocode-registration",
-    "version": "0.8.1",
+    "version": "1.0",
     "description": "Express.js application for user registration, payment processing, and license management",
     "main": "index.js",
     "type": "module",
@@ -12,19 +12,16 @@
     "dependencies": {
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
-        "connect-flash": "^0.1.1",
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.4.5",
         "ejs": "^3.1.9",
         "express": "^4.19.2",
         "express-rate-limit": "^7.4.0",
-        "express-session": "^1.18.0",
         "helmet": "^7.1.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.5.3",
         "morgan": "^1.10.0",
-        "stripe": "^16.8.0",
-        "uuid": "^10.0.0"
+        "stripe": "^16.8.0"
     },
     "devDependencies": {
         "eslint": "^8.57.0",

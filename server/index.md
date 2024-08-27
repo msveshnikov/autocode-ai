@@ -6,17 +6,15 @@ This file serves as the main entry point for a Node.js Express application. It s
 
 ## Dependencies
 
-- express: Web application framework
-- mongoose: MongoDB object modeling tool
-- Stripe: Payment processing library
-- path, url: Node.js built-in modules for file and URL operations
-- cookie-parser: Middleware for parsing cookies
-- express-session: Session middleware for Express
-- helmet: Security middleware to set various HTTP headers
-- express-rate-limit: Rate limiting middleware
-- morgan: HTTP request logger middleware
-- connect-flash: Flash message middleware
-- dotenv: Module to load environment variables from a .env file
+-   express: Web application framework
+-   mongoose: MongoDB object modeling tool
+-   Stripe: Payment processing library
+-   path, url: Node.js built-in modules for file and URL operations
+-   cookie-parser: Middleware for parsing cookies
+-   helmet: Security middleware to set various HTTP headers
+-   express-rate-limit: Rate limiting middleware
+-   morgan: HTTP request logger middleware
+-   dotenv: Module to load environment variables from a .env file
 
 ## Configuration
 
@@ -31,14 +29,14 @@ This file serves as the main entry point for a Node.js Express application. It s
 
 The application defines several routes:
 
-- `/auth`: Authentication routes (defined in `./routes/auth.js`)
-- `/profile`: User profile routes (defined in `./routes/profile.js`)
-- `/payment`: Payment-related routes (defined in `./routes/payment.js`)
-- `/`: Renders the landing page
-- `/login`: Renders the login page
-- `/register`: Renders the registration page
-- `/contact`: Renders the contact page
-- `/webhook`: Handles Stripe webhook events
+-   `/auth`: Authentication routes (defined in `./routes/auth.js`)
+-   `/profile`: User profile routes (defined in `./routes/profile.js`)
+-   `/payment`: Payment-related routes (defined in `./routes/payment.js`)
+-   `/`: Renders the landing page
+-   `/login`: Renders the login page
+-   `/register`: Renders the registration page
+-   `/contact`: Renders the contact page
+-   `/webhook`: Handles Stripe webhook events
 
 ## Stripe Webhook Handler
 
@@ -64,27 +62,27 @@ node index.js
 
 This file integrates various components of the project:
 
-- Models: Imports the User model from `./models/user.js`
-- Routes: Imports and uses route modules from the `./routes` directory
-- Views: Sets up EJS as the view engine and specifies the views directory
-- Middleware: Applies custom middleware like `licenseServer` from `./license-server.js`
+-   Models: Imports the User model from `./models/user.js`
+-   Routes: Imports and uses route modules from the `./routes` directory
+-   Views: Sets up EJS as the view engine and specifies the views directory
+-   Middleware: Applies custom middleware like `licenseServer` from `./license-server.js`
 
 ## Environment Variables
 
 The following environment variables should be set:
 
-- `PORT`: Server port number
-- `MONGODB_URI`: MongoDB connection string
-- `STRIPE_SECRET_KEY`: Stripe API secret key
-- `STRIPE_WEBHOOK_SECRET`: Stripe webhook secret for verifying webhook events
-- `SESSION_SECRET`: Secret for Express session middleware
+-   `PORT`: Server port number
+-   `MONGODB_URI`: MongoDB connection string
+-   `STRIPE_SECRET_KEY`: Stripe API secret key
+-   `STRIPE_WEBHOOK_SECRET`: Stripe webhook secret for verifying webhook events
+-   `SESSION_SECRET`: Secret for Express session middleware
 
 ## Security Features
 
-- Uses Helmet for setting security headers
-- Implements rate limiting to prevent abuse
-- Uses HTTPS-only cookies (when in production)
-- Parses raw body for Stripe webhooks to ensure integrity
+-   Uses Helmet for setting security headers
+-   Implements rate limiting to prevent abuse
+-   Uses HTTPS-only cookies (when in production)
+-   Parses raw body for Stripe webhooks to ensure integrity
 
 ## Error Handling
 

@@ -3,11 +3,11 @@
 // Select the database to use.
 use("autocode");
 
-db.getCollection("users").updateOne({ email: "msveshnikov@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus:"active",     stripeCustomerId:"cus_QjTq4Yu2EkO7OR", stripeSubscriptionId:"sub_221Ps0sMAl2o8XNzrO0vY64lky"} });
+db.getCollection("users").updateOne({ email: "msveshnikov@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus:"active",     stripeCustomerId:"cus_QjTq4Yu2EkwrwO7OR", stripeSubscriptionId:"sub_221Ps0sMAl2orw8XNzrO0vY64lky"} });
 
 
 // Create index for username and email
-db.users.createIndex({ username: 1 }, { unique: true });
+db.users.dropIndex({ username: 1 }, { unique: true });
 db.users.createIndex({ email: 1 }, { unique: true });
 
 // Insert sample users
