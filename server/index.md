@@ -11,7 +11,6 @@ This file serves as the main entry point for a Node.js Express application. It s
 -   Stripe: Payment processing library
 -   path, url: Node.js built-in modules for file and URL operations
 -   cookie-parser: Middleware for parsing cookies
--   helmet: Security middleware to set various HTTP headers
 -   express-rate-limit: Rate limiting middleware
 -   morgan: HTTP request logger middleware
 -   dotenv: Module to load environment variables from a .env file
@@ -75,11 +74,9 @@ The following environment variables should be set:
 -   `MONGODB_URI`: MongoDB connection string
 -   `STRIPE_SECRET_KEY`: Stripe API secret key
 -   `STRIPE_WEBHOOK_SECRET`: Stripe webhook secret for verifying webhook events
--   `SESSION_SECRET`: Secret for Express session middleware
 
 ## Security Features
 
--   Uses Helmet for setting security headers
 -   Implements rate limiting to prevent abuse
 -   Uses HTTPS-only cookies (when in production)
 -   Parses raw body for Stripe webhooks to ensure integrity

@@ -17,7 +17,7 @@ AutoCode Registration System is a comprehensive Express.js application designed 
 -   Responsive design for mobile and desktop
 -   Real-time license usage tracking
 -   Contact form for user inquiries
--   Security features: Helmet, rate limiting, CSRF protection
+-   Security features: rate limiting, CSRF protection
 -   Logging with Morgan
 
 ## Architecture
@@ -180,7 +180,6 @@ The system uses Stripe Checkout for payment processing. When a user upgrades to 
 ## Security Measures
 
 -   JWT for authentication
--   Helmet for setting various HTTP headers
 -   Rate limiting to prevent abuse
 -   CSRF protection
 -   Secure session management

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
-import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
@@ -30,7 +29,6 @@ app.use((req, res, next) => {
         express.json()(req, res, next);
     }
 });
-app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
