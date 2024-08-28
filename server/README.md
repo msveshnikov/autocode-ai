@@ -173,8 +173,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-# TODO
-
--   mention that API keys are not sent to server and the only user info collected is email nad IP address
--   IP address is used only for device count tracking
--   in terms mention pricing plans and free tier
