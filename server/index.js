@@ -64,6 +64,14 @@ app.get("/contact", (req, res) => {
     res.render("contact");
 });
 
+app.get("/privacy", (req, res) => {
+    res.render("privacy");
+});
+
+app.get("/terms", (req, res) => {
+    res.render("terms");
+});
+
 app.use((req, res) => {
     res.status(404).render("404");
 });

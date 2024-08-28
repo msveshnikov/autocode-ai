@@ -1,6 +1,18 @@
-# AutoCode Registration System
+# AutoCode 
 
-## Project Overview
+AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt.
+
+## Features
+
+-   NodeJS-based console application
+-   Automatic code generation based on README.md instructions
+-   Utilizes Claude 3.5 Sonnet API for intelligent code generation
+-   Incremental project building
+-   Creates and modifies source files in the current folder and subfolders
+-   Self-updating README.md with new design ideas and considerations
+-   Code quality checks and suggestions/auto fixes
+
+# AutoCode Registration System
 
 AutoCode Registration System is a comprehensive Express.js application designed to handle user registrations, process payments via Stripe, and manage user licenses using MongoDB. The system offers a tiered pricing model with Free, Premium, and Enterprise options, each providing different levels of access and features.
 
@@ -29,14 +41,12 @@ The project is built using a microservices architecture, with the following main
 2. **License Server (license-server.js)**: Manages user authentication, license checking, and request limit enforcement.
 3. **MongoDB**: Stores user and license data.
 4. **Stripe**: Handles payment processing and subscription management.
-5. **Redis**: Caches frequently accessed data and manages session storage.
 
 ### Module Interactions
 
 -   The web server interacts with the license server to authenticate users and check license status.
 -   Both servers communicate with MongoDB to store and retrieve user and license data.
 -   The web server integrates with Stripe for payment processing and subscription management.
--   Redis is used for caching and session management across all services.
 
 ## Installation and Setup
 
@@ -162,3 +172,11 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Unlimited devices
     - Dedicated support team
     - On-premises deployment option
+
+
+# TODO
+
+-   fix privacy and terms pages, use only AutoCode name for product, MaxSoft for (c) 2024
+-   mention that API keys are not sent to server and the only user info is email
+-   in terms mentiuon pricing plans
+-   proper design of terms and privacy similar to landing
