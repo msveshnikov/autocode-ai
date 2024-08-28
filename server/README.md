@@ -1,4 +1,4 @@
-# AutoCode 
+# AutoCode
 
 AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt.
 
@@ -173,10 +173,8 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-
 # TODO
 
--   fix privacy and terms pages, use only AutoCode name for product, MaxSoft for (c) 2024
--   mention that API keys are not sent to server and the only user info is email
--   in terms mentiuon pricing plans
--   proper design of terms and privacy similar to landing
+-   mention that API keys are not sent to server and the only user info collected is email nad IP address
+-   IP address is used only for device count tracking
+-   in terms mention pricing plans and free tier
