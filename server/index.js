@@ -10,6 +10,7 @@ import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,7 +22,7 @@ app.set("trust proxy", 1);
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGODB_URI);
-// Use JSON parser for all non-webhook routes
+
 app.use((req, res, next) => {
     if (req.originalUrl === "/payment/webhook") {
         next();
@@ -70,6 +71,14 @@ app.get("/privacy", (req, res) => {
 
 app.get("/terms", (req, res) => {
     res.render("terms");
+});
+
+app.get("/forgot-password", (req, res) => {
+    res.render("forgot");
+});
+
+app.get("/reset-password/:token", (req, res) => {
+    res.render("reset", { token: req.params.token });
 });
 
 app.use((req, res) => {

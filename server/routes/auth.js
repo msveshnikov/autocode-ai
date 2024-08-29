@@ -3,13 +3,27 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import Inquiry from "../models/inquiry.js";
 import { authCookie } from "../middleware/auth.js";
-import { getIpFromRequest } from "../utils.js";
+import {
+    getIpFromRequest,
+    validateEmail,
+    sanitizeInput,
+    generatePasswordResetToken,
+    sendPasswordResetEmail,
+    sendAutomatedEmail,
+} from "../utils.js";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const router = express.Router();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 router.post("/register", async (req, res) => {
     try {
         const { email, password, tier = "Free" } = req.body;
+        if (!validateEmail(email)) {
+            return res.status(400).json({ error: "Invalid email format" });
+        }
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: "Email already exists" });
@@ -25,7 +39,7 @@ router.post("/register", async (req, res) => {
         });
         res.status(201).json({ token });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ error: "Error registering user" });
     }
 });
@@ -49,6 +63,7 @@ router.post("/login", async (req, res) => {
         await user.save();
         res.json({ token });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: "Error logging in" });
     }
 });
@@ -61,11 +76,62 @@ router.post("/logout", authCookie, (req, res) => {
 router.post("/contact", async (req, res) => {
     try {
         const { name, email, subject, message } = req.body;
-        const inquiry = new Inquiry({ name, email, subject, message });
+        const sanitizedMessage = sanitizeInput(message);
+        const inquiry = new Inquiry({ name, email, subject, message: sanitizedMessage });
         await inquiry.save();
         res.status(201).json({ message: "Inquiry submitted successfully" });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: "Error submitting inquiry" });
+    }
+});
+
+router.post("/forgot-password", async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const resetToken = generatePasswordResetToken();
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+        await user.save();
+
+        const resetUrl = `${process.env.BASE_URL}/reset-password/${resetToken}`;
+        await sendPasswordResetEmail(user.email, resetUrl);
+        res.json({ message: "Password reset email sent" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error sending password reset email" });
+    }
+});
+
+router.post("/reset-password/:token", async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() },
+        });
+        if (!user) {
+            return res.status(400).json({ error: "Password reset token is invalid or has expired" });
+        }
+        user.password = password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        const templatePath = path.join(__dirname, "..", "templates", "reset.html");
+        const template = await fs.readFile(templatePath, "utf-8");
+        const html = template.replace("{{resetUrl}}", process.env.BASE_URL);
+        await sendAutomatedEmail(user.email, "Password Reset Successful", html);
+
+        res.json({ message: "Password has been reset" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error resetting password" });
     }
 });
 

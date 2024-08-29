@@ -41,6 +41,8 @@ const UserSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 });
 
 UserSchema.pre("save", async function (next) {
@@ -82,6 +84,18 @@ UserSchema.methods.addDevice = function (deviceId) {
 
 UserSchema.methods.removeDevice = function (deviceId) {
     this.devices = this.devices.filter((id) => id !== deviceId);
+};
+
+UserSchema.methods.generatePasswordResetToken = function () {
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    return resetToken;
+};
+
+UserSchema.methods.clearPasswordResetToken = function () {
+    this.resetPasswordToken = undefined;
+    this.resetPasswordExpires = undefined;
 };
 
 const User = mongoose.model("User", UserSchema);

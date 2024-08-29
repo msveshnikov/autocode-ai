@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Login - AutoCode</title>
+        <title>Forgot Password - AutoCode</title>
         <style>
             body {
                 font-family: "Courier New", monospace;
@@ -34,10 +34,6 @@
                 display: flex;
                 flex-direction: column;
             }
-            label {
-                margin-top: 1rem;
-                color: #00ffff;
-            }
             input {
                 padding: 0.5rem;
                 margin-top: 0.5rem;
@@ -62,18 +58,15 @@
                 color: #ffffff;
                 box-shadow: 0 0 15px #00ffff;
             }
-            .error-message {
-                color: #ff0000;
+            .message {
                 text-align: center;
                 margin-top: 1rem;
             }
-            .register-link,
-            .forgot-password-link {
+            .login-link {
                 text-align: center;
                 margin-top: 1rem;
             }
-            .register-link a,
-            .forgot-password-link a {
+            .login-link a {
                 color: #00ffff;
                 text-decoration: none;
             }
@@ -81,43 +74,41 @@
     </head>
     <body>
         <div class="container">
-            <h1>Login</h1>
-            <form id="loginForm">
-                <input type="email" id="email" name="email" placeholder="Email" required />
-                <input type="password" id="password" name="password" placeholder="Password" required />
-                <button type="submit">Login</button>
+            <h1>Forgot Password</h1>
+            <form id="forgotPasswordForm">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                <button type="submit">Reset Password</button>
             </form>
-            <div id="error-message" class="error-message"></div>
-            <div class="register-link">
-                <a href="/register">Don't have an account? Register here</a>
-            </div>
-            <div class="forgot-password-link">
-                <a href="/forgot-password">Forgot password?</a>
+            <div id="message" class="message"></div>
+            <div class="login-link">
+                <a href="/login">Back to Login</a>
             </div>
         </div>
 
         <script>
-            document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            document.getElementById("forgotPasswordForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
                 const email = document.getElementById("email").value;
-                const password = document.getElementById("password").value;
                 try {
-                    const response = await fetch("/auth/login", {
+                    const response = await fetch("/auth/forgot-password", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ email, password }),
+                        body: JSON.stringify({ email }),
                     });
+                    const data = await response.json();
                     if (response.ok) {
-                        window.location.href = "/profile";
+                        document.getElementById("message").textContent = data.message;
+                        document.getElementById("message").style.color = "#00ff00";
                     } else {
-                        const errorData = await response.json();
-                        document.getElementById("error-message").textContent = errorData.error || "Login failed";
+                        document.getElementById("message").textContent = data.error;
+                        document.getElementById("message").style.color = "#ff0000";
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    document.getElementById("error-message").textContent = "An error occurred. Please try again.";
+                    document.getElementById("message").textContent = "An error occurred. Please try again.";
+                    document.getElementById("message").style.color = "#ff0000";
                 }
             });
         </script>

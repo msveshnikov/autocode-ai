@@ -9,6 +9,8 @@ services:
             - NODE_ENV=production
             - MONGODB_URI=mongodb://mongo:27017/autocode
             - JWT_TOKEN=${JWT_TOKEN}
+            - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+            - EMAIL=${EMAIL}
             - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
             - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
         restart: unless-stopped
