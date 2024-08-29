@@ -28,8 +28,6 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
 -   Context management system
--   Long-running AI agents
--   Review and revise workflow
 -   Syntax checking and auto-fixing
 -   Iterative development alongside AI
 
