@@ -9,14 +9,9 @@ import {
     sanitizeInput,
     generatePasswordResetToken,
     sendPasswordResetEmail,
-    sendAutomatedEmail,
 } from "../utils.js";
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
 
 const router = express.Router();
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 router.post("/register", async (req, res) => {
     try {
@@ -98,7 +93,7 @@ router.post("/forgot-password", async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const resetUrl = `${process.env.BASE_URL}/reset-password/${resetToken}`;
+        const resetUrl = `https://autocode.work/reset-password/${resetToken}`;
         await sendPasswordResetEmail(user.email, resetUrl);
         res.json({ message: "Password reset email sent" });
     } catch (error) {
@@ -122,11 +117,6 @@ router.post("/reset-password/:token", async (req, res) => {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         await user.save();
-
-        const templatePath = path.join(__dirname, "..", "templates", "reset.html");
-        const template = await fs.readFile(templatePath, "utf-8");
-        const html = template.replace("{{resetUrl}}", process.env.BASE_URL);
-        await sendAutomatedEmail(user.email, "Password Reset Successful", html);
 
         res.json({ message: "Password has been reset" });
     } catch (error) {

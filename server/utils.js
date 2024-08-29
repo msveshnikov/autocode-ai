@@ -41,7 +41,7 @@ export const generatePasswordResetToken = () => {
     return crypto.randomBytes(20).toString("hex");
 };
 
-export const sendPasswordResetEmail = async (email, resetToken) => {
+export const sendPasswordResetEmail = async (email, resetUrl) => {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -50,7 +50,6 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
         },
     });
 
-    const resetUrl = `${process.env.BASE_URL}/reset-password/${resetToken}`;
     const templatePath = path.join(__dirname, "templates", "reset.html");
     let html = await fs.readFile(templatePath, "utf-8");
     html = html.replace("{{resetUrl}}", resetUrl);
@@ -59,25 +58,6 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
         from: process.env.EMAIL,
         to: email,
         subject: "Password Reset Request",
-        html,
-    };
-
-    await transporter.sendMail(mailOptions);
-};
-
-export const sendAutomatedEmail = async (to, subject, html) => {
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
-
-    const mailOptions = {
-        from: process.env.EMAIL,
-        to,
-        subject,
         html,
     };
 
