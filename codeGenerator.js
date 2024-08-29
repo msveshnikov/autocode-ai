@@ -497,7 +497,9 @@ Return the generated code for ${fileName} without explanations or comments.
 
         console.log(
             chalk.cyan(
-                `📊 Token Statistics: Input: ${inputTokens}, Output: ${outputTokens}, Cost: $${totalCost.toFixed(2)}`
+                `📊 Token Statistics: Input: ${inputTokens}, Output: ${outputTokens}, Cost: ${chalk.yellow(
+                    `$${totalCost.toFixed(2)}`
+                )}`
             )
         );
     },
