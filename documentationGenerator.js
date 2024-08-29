@@ -5,6 +5,7 @@ import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import UserInterface from "./userInterface.js";
 import ora from "ora";
+import CodeGenerator from "./codeGenerator.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -40,6 +41,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
             spinner.succeed("Documentation generated");
             await FileManager.write(docFilePath, response.content[0].text);
             console.log(chalk.green(`✅ Documentation generated for ${filePath}`));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Documentation generation failed");
             console.error(chalk.red(`Error generating documentation for ${filePath}: ${error.message}`));
@@ -76,6 +78,7 @@ Please provide a detailed project overview, architecture description, module int
             spinner.succeed("Project documentation generated");
             await FileManager.write("DOCUMENTATION.md", response.content[0].text);
             console.log(chalk.green("✅ Project documentation generated"));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Project documentation generation failed");
             console.error(chalk.red(`Error generating project documentation: ${error.message}`));
@@ -125,6 +128,7 @@ Please provide comprehensive documentation for the unit tests above. Include an 
             spinner.succeed("Unit test documentation generated");
             await FileManager.write(docFilePath, response.content[0].text);
             console.log(chalk.green(`✅ Unit test documentation generated for ${filePath}`));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Unit test documentation generation failed");
             console.error(chalk.red(`Error generating unit test documentation for ${filePath}: ${error.message}`));
@@ -173,6 +177,7 @@ Format the documentation in Markdown, suitable for inclusion in a README or sepa
             spinner.succeed("API documentation generated");
             await FileManager.write("API_DOCUMENTATION.md", response.content[0].text);
             console.log(chalk.green("✅ API documentation generated"));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("API documentation generation failed");
             console.error(chalk.red(`Error generating API documentation: ${error.message}`));
@@ -209,6 +214,7 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
             spinner.succeed("Change log generated");
             await FileManager.write("CHANGELOG.md", response.content[0].text);
             console.log(chalk.green("✅ Change log generated"));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Change log generation failed");
             console.error(chalk.red(`Error generating change log: ${error.message}`));

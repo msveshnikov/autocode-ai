@@ -90,4 +90,4 @@ AutoCode currently supports the following programming languages:
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
 # TODO
--   add token stats after each generation (input+outpiut+costs model costs $3 per million input tokens and $15 per million output tokens)
+-   write token stats after each generation in one line (input+outpiut+costs model costs $3 per million input tokens and $15 per million output tokens)

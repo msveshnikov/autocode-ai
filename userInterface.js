@@ -39,9 +39,6 @@ const UserInterface = {
                 "🌐 16. Generate landing page",
                 "📊 17. Generate API documentation",
                 "🔄 18. Generate full project",
-                // "🕒 19. Handle long-running tasks",
-                // "🏖️ 20. Generate sandbox environment",
-                // "🔄 21. Generate iterative development workflow",
                 "🌡️ Change temperature",
                 "🔑 Login",
                 "🚪 Exit",
@@ -152,6 +149,8 @@ const UserInterface = {
 
             await FileManager.write(filePath, response.content[0].text);
             console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
+
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("AI request failed");
             console.error(chalk.red(`Error: ${error.message}`));
@@ -338,15 +337,6 @@ const UserInterface = {
                 break;
             case "🔄 18. Generate full project":
                 await CodeGenerator.generateFullProject(projectStructure, readme);
-                break;
-            case "🕒 19. Handle long-running tasks":
-                await CodeGenerator.handleLongRunningTasks(projectStructure);
-                break;
-            case "🏖️ 20. Generate sandbox environment":
-                await CodeGenerator.generateSandboxEnvironment(projectStructure);
-                break;
-            case "🔄 21. Generate iterative development workflow":
-                await CodeGenerator.generateIterativeDevelopmentWorkflow(projectStructure);
                 break;
             case "🌡️ Change temperature":
                 await this.setTemperature();

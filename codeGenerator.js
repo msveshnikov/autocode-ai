@@ -55,7 +55,9 @@ Please generate or update the ${fileName} file to implement the features describ
             });
 
             spinner.succeed("Code generated successfully");
-            return response.content[0].text;
+            const generatedCode = response.content[0].text;
+            await this.calculateTokenStats(prompt.length, generatedCode.length);
+            return generatedCode;
         } catch (error) {
             spinner.fail("Error generating code");
             throw error;
@@ -86,7 +88,9 @@ Please update the README.md file with new design ideas and considerations. Ensur
             });
 
             spinner.succeed("README updated successfully");
-            return response.content[0].text;
+            const updatedReadme = response.content[0].text;
+            await this.calculateTokenStats(prompt.length, updatedReadme.length);
+            return updatedReadme;
         } catch (error) {
             spinner.fail("Error updating README");
             throw error;
@@ -160,6 +164,8 @@ Please provide your suggestions in the following Markdown format:
             } else {
                 console.log(chalk.yellow("⏹️ File split cancelled."));
             }
+
+            await this.calculateTokenStats(prompt.length, splitSuggestion.length);
         } catch (error) {
             spinner.fail("Error generating file split suggestion");
             throw error;
@@ -239,6 +245,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             const optimizedCode = response.content[0].text;
             await FileManager.write(filePath, optimizedCode);
             console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
+            await this.calculateTokenStats(prompt.length, optimizedCode.length);
         } catch (error) {
             spinner.fail("Error optimizing and refactoring");
             throw error;
@@ -321,6 +328,7 @@ Return the content of the ${dependencyFileName} file without explanations or com
             const dependencyFileContent = response.content[0].text;
             await FileManager.write(dependencyFileName, dependencyFileContent);
             console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
+            await this.calculateTokenStats(prompt.length, dependencyFileContent.length);
         } catch (error) {
             spinner.fail(`Error generating ${dependencyFileName}`);
             throw error;
@@ -362,6 +370,7 @@ Return the generated code for the ${agentType} AI agent without explanations or 
             const fileName = `./agents/${agentType.replace(/\s+/g, "")}.js`;
             await FileManager.write(fileName, agentCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
+            await this.calculateTokenStats(prompt.length, agentCode.length);
         } catch (error) {
             spinner.fail(`Error generating ${agentType} AI agent code`);
             throw error;
@@ -405,6 +414,7 @@ Return the generated HTML code for the landing page without explanations or comm
             const fileName = "landing.html";
             await FileManager.write(fileName, landingPageCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
+            await this.calculateTokenStats(prompt.length, landingPageCode.length);
         } catch (error) {
             spinner.fail("Error generating landing page");
             throw error;
@@ -432,20 +442,13 @@ Return the generated HTML code for the landing page without explanations or comm
                 console.log(chalk.green(`✅ Generated ${file}`));
 
                 await CodeAnalyzer.runLintChecks(file);
-                // await CodeAnalyzer.analyzeCodeQuality(file);
-                // await CodeAnalyzer.analyzePerformance(file);
-                // await CodeAnalyzer.checkSecurityVulnerabilities(file);
-                // await CodeAnalyzer.generateUnitTests(file, projectStructure);
-
                 await DocumentationGenerator.generate(file, content, projectStructure);
             }
         }
 
         await this.createMissingSourceFile(projectStructure, readme);
-        // await UserInterface.runAIAgents(projectStructure, readme);
         await this.generateLandingPage(projectStructure, readme);
         await DocumentationGenerator.generateProjectDocumentation(projectStructure);
-        // await DocumentationGenerator.generateAPIDocumentation(projectStructure, readme);
 
         console.log(chalk.green("✅ Full project generated successfully"));
     },
@@ -492,6 +495,7 @@ Return the generated code for ${fileName} without explanations or comments.
                 console.log(chalk.green(`✅ Generated ${fileName}`));
 
                 projectStructure[fileName] = null;
+                await this.calculateTokenStats(prompt.length, sourceFileContent.length);
             } catch (error) {
                 spinner.fail(`Error generating ${fileName}`);
                 throw error;
@@ -499,6 +503,18 @@ Return the generated code for ${fileName} without explanations or comments.
         } else {
             console.log(chalk.green("✅ Source files already exist. No need to create a new one."));
         }
+    },
+
+    async calculateTokenStats(inputTokens, outputTokens) {
+        const inputCost = (inputTokens / 1000000) * 3;
+        const outputCost = (outputTokens / 1000000) * 15;
+        const totalCost = inputCost + outputCost;
+
+        console.log(
+            chalk.cyan(
+                `📊 Token Statistics: Input: ${inputTokens}, Output: ${outputTokens}, Cost: $${totalCost.toFixed(4)}`
+            )
+        );
     },
 };
 
