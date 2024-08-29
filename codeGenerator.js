@@ -53,10 +53,9 @@ Please generate or update the ${fileName} file to implement the features describ
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("Code generated successfully");
             const generatedCode = response.content[0].text;
-            await this.calculateTokenStats(prompt.length, generatedCode.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             return generatedCode;
         } catch (error) {
             spinner.fail("Error generating code");
@@ -86,10 +85,9 @@ Please update the README.md file with new design ideas and considerations. Ensur
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("README updated successfully");
             const updatedReadme = response.content[0].text;
-            await this.calculateTokenStats(prompt.length, updatedReadme.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             return updatedReadme;
         } catch (error) {
             spinner.fail("Error updating README");
@@ -143,9 +141,7 @@ Please provide your suggestions in the following Markdown format:
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("File split suggestion generated");
-
             const splitSuggestion = response.content[0].text;
             console.log(chalk.cyan("📋 File splitting suggestion:"));
             console.log(splitSuggestion);
@@ -165,7 +161,7 @@ Please provide your suggestions in the following Markdown format:
                 console.log(chalk.yellow("⏹️ File split cancelled."));
             }
 
-            await this.calculateTokenStats(prompt.length, splitSuggestion.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error generating file split suggestion");
             throw error;
@@ -227,7 +223,7 @@ Focus on:
 7. Reusing functionality from other modules
 8. Following best practices and conventions for ${language}
 
-Return the optimized and refactored code ONLY!! without explanations or comments or md formatting.
+Return the optimized and refactored code ONLY!! without explanations or comments or md formatting. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const spinner = ora("Optimizing and refactoring...").start();
@@ -239,13 +235,11 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("Optimization and refactoring completed");
-
             const optimizedCode = response.content[0].text;
             await FileManager.write(filePath, optimizedCode);
             console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
-            await this.calculateTokenStats(prompt.length, optimizedCode.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error optimizing and refactoring");
             throw error;
@@ -310,7 +304,7 @@ ${readme}
 
 Include all necessary dependencies based on the project structure and features described in the README.md. Ensure the file is properly formatted and follows best practices for ${language} projects.
 
-Return the content of the ${dependencyFileName} file without explanations or comments.
+Return the content of the ${dependencyFileName} file without explanations or comments. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const spinner = ora(`Generating ${dependencyFileName}...`).start();
@@ -322,13 +316,11 @@ Return the content of the ${dependencyFileName} file without explanations or com
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed(`${dependencyFileName} generated successfully`);
-
             const dependencyFileContent = response.content[0].text;
             await FileManager.write(dependencyFileName, dependencyFileContent);
             console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
-            await this.calculateTokenStats(prompt.length, dependencyFileContent.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${dependencyFileName}`);
             throw error;
@@ -351,7 +343,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the agent's functionality. Reuse existing modules and avoid duplicating code.
 
-Return the generated code for the ${agentType} AI agent without explanations or comments. No formatting, just code.
+Return the generated code for the ${agentType} AI agent without explanations or comments. Do not include any explanations or comments in your response, just provide the code.
 `;
 
         const spinner = ora(`Generating ${agentType} AI agent code...`).start();
@@ -363,14 +355,12 @@ Return the generated code for the ${agentType} AI agent without explanations or 
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed(`${agentType} AI agent code generated successfully`);
-
             const agentCode = response.content[0].text;
             const fileName = `./agents/${agentType.replace(/\s+/g, "")}.js`;
             await FileManager.write(fileName, agentCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await this.calculateTokenStats(prompt.length, agentCode.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${agentType} AI agent code`);
             throw error;
@@ -407,14 +397,12 @@ Return the generated HTML code for the landing page without explanations or comm
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("Landing page generated successfully");
-
             const landingPageCode = response.content[0].text;
             const fileName = "landing.html";
             await FileManager.write(fileName, landingPageCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await this.calculateTokenStats(prompt.length, landingPageCode.length);
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error generating landing page");
             throw error;
@@ -487,15 +475,12 @@ Return the generated code for ${fileName} without explanations or comments.
                     temperature: await UserInterface.getTemperature(),
                     messages: [{ role: "user", content: prompt }],
                 });
-
                 spinner.succeed(`${fileName} generated successfully`);
-
                 const sourceFileContent = response.content[0].text;
                 await FileManager.write(fileName, sourceFileContent);
                 console.log(chalk.green(`✅ Generated ${fileName}`));
-
                 projectStructure[fileName] = null;
-                await this.calculateTokenStats(prompt.length, sourceFileContent.length);
+                await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             } catch (error) {
                 spinner.fail(`Error generating ${fileName}`);
                 throw error;
@@ -512,7 +497,7 @@ Return the generated code for ${fileName} without explanations or comments.
 
         console.log(
             chalk.cyan(
-                `📊 Token Statistics: Input: ${inputTokens}, Output: ${outputTokens}, Cost: $${totalCost.toFixed(4)}`
+                `📊 Token Statistics: Input: ${inputTokens}, Output: ${outputTokens}, Cost: $${totalCost.toFixed(2)}`
             )
         );
     },

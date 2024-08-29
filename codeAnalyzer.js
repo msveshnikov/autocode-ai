@@ -70,6 +70,7 @@ Please provide the corrected code that addresses all the linter errors. Consider
 
         await FileManager.write(filePath, response.content[0].text);
         console.log(chalk.green(`✅ Lint errors fixed for ${filePath}`));
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
     },
 
     async optimizeProjectStructure(projectStructure) {
@@ -98,6 +99,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green("📊 Project structure optimization suggestions:"));
         console.log(response.content[0].text);
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
     },
 
     async analyzeCodeQuality(filePath) {
@@ -133,6 +135,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green(`📊 Code quality analysis for ${filePath}:`));
         console.log(response.content[0].text);
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
     },
 
     async detectMissingDependencies(projectStructure) {
@@ -168,6 +171,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
 
         try {
             const structuredResults = JSON.parse(response.content?.[0]?.text?.match(/```json([\s\S]*?)```/)?.[1]);
@@ -421,6 +425,7 @@ Provide detailed performance optimization suggestions in a structured format.
 
         console.log(chalk.green(`📊 Performance analysis for ${filePath}:`));
         console.log(response.content[0].text);
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
     },
 
     async checkSecurityVulnerabilities(filePath) {
@@ -456,6 +461,7 @@ Provide detailed security vulnerability analysis and suggestions in a structured
 
         console.log(chalk.green(`📊 Security vulnerability analysis for ${filePath}:`));
         console.log(response.content[0].text);
+        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
     },
 
     async generateUnitTests(filePath, projectStructure) {
@@ -493,184 +499,13 @@ Provide the generated unit tests in a text code format, ready to be saved in a s
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
-
             spinner.succeed("Unit tests generated");
-
             const testFilePath = filePath.replace(/\.js$/, ".test.js");
             await FileManager.write(testFilePath, response.content[0].text);
             console.log(chalk.green(`✅ Unit tests generated and saved to ${testFilePath}`));
+            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error generating unit tests");
-            console.error(chalk.red(`Error: ${error.message}`));
-        }
-    },
-
-    async analyzeTestCoverage(projectStructure) {
-        console.log(chalk.cyan("📊 Analyzing test coverage..."));
-
-        const testFiles = Object.keys(projectStructure).filter((file) => file.endsWith(".test.js"));
-        const sourceFiles = Object.keys(projectStructure).filter(
-            (file) => file.endsWith(".js") && !file.endsWith(".test.js")
-        );
-
-        const prompt = `
-Analyze the test coverage for the following project structure:
-
-Source files:
-${sourceFiles.join("\n")}
-
-Test files:
-${testFiles.join("\n")}
-
-Please provide:
-1. An estimate of overall test coverage
-2. Identification of untested or under-tested modules
-3. Suggestions for improving test coverage
-4. Any potential gaps in the testing strategy
-
-Provide the analysis in a structured format.
-`;
-
-        const spinner = ora("Analyzing test coverage...").start();
-
-        try {
-            const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
-
-            spinner.succeed("Test coverage analysis completed");
-            console.log(chalk.green("📊 Test coverage analysis:"));
-            console.log(response.content[0].text);
-        } catch (error) {
-            spinner.fail("Error analyzing test coverage");
-            console.error(chalk.red(`Error: ${error.message}`));
-        }
-    },
-
-    async generateTypeDefinitions(filePath) {
-        console.log(chalk.cyan(`📝 Generating type definitions for ${filePath}...`));
-        const fileContent = await FileManager.read(filePath);
-        const fileExtension = path.extname(filePath);
-        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
-            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
-        );
-
-        const prompt = `
-Generate TypeScript type definitions for the following ${language} code:
-
-${fileContent}
-
-Please provide:
-1. Type definitions for all exported functions, classes, and variables
-2. Appropriate JSDoc comments for each type definition
-3. Any necessary import statements for external types
-
-Provide the generated type definitions in a text code format, ready to be saved in a separate .d.ts file. Do not include any explanations or comments in your response, just provide the code. Don't use md formatting or code snippets. Just code text
-`;
-
-        const spinner = ora("Generating type definitions...").start();
-
-        try {
-            const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
-
-            spinner.succeed("Type definitions generated");
-
-            const typeDefFilePath = filePath.replace(/\.js$/, ".d.ts");
-            await FileManager.write(typeDefFilePath, response.content[0].text);
-            console.log(chalk.green(`✅ Type definitions generated and saved to ${typeDefFilePath}`));
-        } catch (error) {
-            spinner.fail("Error generating type definitions");
-            console.error(chalk.red(`Error: ${error.message}`));
-        }
-    },
-
-    async analyzeCodeComplexity(filePath) {
-        console.log(chalk.cyan(`🧮 Analyzing code complexity for ${filePath}...`));
-        const fileContent = await FileManager.read(filePath);
-        const fileExtension = path.extname(filePath);
-        const language = Object.keys(CONFIG.languageConfigs).find((lang) =>
-            CONFIG.languageConfigs[lang].fileExtensions.includes(fileExtension)
-        );
-
-        const prompt = `
-Analyze the following ${language} code for complexity:
-
-${fileContent}
-
-Please provide:
-1. Cyclomatic complexity for each function
-2. Identification of overly complex functions or methods
-3. Suggestions for simplifying complex code
-4. Analysis of cognitive complexity
-5. Recommendations for improving overall code maintainability
-
-Provide the analysis in a structured format.
-`;
-
-        const spinner = ora("Analyzing code complexity...").start();
-
-        try {
-            const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
-
-            spinner.succeed("Code complexity analysis completed");
-            console.log(chalk.green(`📊 Code complexity analysis for ${filePath}:`));
-            console.log(response.content[0].text);
-        } catch (error) {
-            spinner.fail("Error analyzing code complexity");
-            console.error(chalk.red(`Error: ${error.message}`));
-        }
-    },
-
-    async analyzeCodeDuplication(projectStructure) {
-        console.log(chalk.cyan("🔍 Analyzing code duplication..."));
-
-        const sourceFiles = Object.keys(projectStructure).filter(
-            (file) => file.endsWith(".js") && !file.endsWith(".test.js")
-        );
-        const fileContents = await Promise.all(sourceFiles.map((file) => FileManager.read(file)));
-
-        const prompt = `
-Analyze the following source files for code duplication:
-
-${sourceFiles.map((file, index) => `${file}:\n${fileContents[index]}`).join("\n\n")}
-
-Please provide:
-1. Identification of duplicated code blocks
-2. Suggestions for refactoring duplicated code
-3. Potential common abstractions or utilities that could be created
-4. Impact of duplication on maintainability and performance
-
-Provide the analysis in a structured format.
-`;
-
-        const spinner = ora("Analyzing code duplication...").start();
-
-        try {
-            const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
-
-            spinner.succeed("Code duplication analysis completed");
-            console.log(chalk.green("📊 Code duplication analysis:"));
-            console.log(response.content[0].text);
-        } catch (error) {
-            spinner.fail("Error analyzing code duplication");
             console.error(chalk.red(`Error: ${error.message}`));
         }
     },

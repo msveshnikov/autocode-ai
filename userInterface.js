@@ -146,10 +146,8 @@ const UserInterface = {
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("AI request completed");
-
             await FileManager.write(filePath, response.content[0].text);
             console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
-
             await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("AI request failed");
