@@ -32,7 +32,7 @@ const UserInterface = {
                 "🤔 9. Analyze code quality",
                 "🔍 10. Optimize project structure",
                 "➕ 11. Add new file",
-                "🤖 12. Run AI Agents",
+                "🤖 12. Generate AI Agents",
                 "🔒 13. Security analysis",
                 "🧪 14. Generate unit tests",
                 "🚀 15. Analyze performance",
@@ -303,7 +303,7 @@ const UserInterface = {
                 }
                 break;
             }
-            case "🤖 12. Run AI Agents":
+            case "🤖 12. Generate AI Agents":
                 await this.runAIAgents(projectStructure, readme);
                 break;
             case "🔒 13. Security analysis": {
