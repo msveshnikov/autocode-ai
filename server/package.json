@@ -13,19 +13,19 @@
         "bcrypt": "^5.1.1",
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.4.5",
-        "ejs": "^3.1.9",
+        "ejs": "^3.1.10",
         "express": "^4.19.2",
         "express-rate-limit": "^7.4.0",
         "jsonwebtoken": "^9.0.2",
-        "mongoose": "^8.5.3",
+        "mongoose": "^8.6.0",
         "morgan": "^1.10.0",
         "nodemailer": "^6.9.14",
         "nodemailer-express-handlebars": "^6.1.2",
-        "stripe": "^16.8.0"
+        "stripe": "^16.9.0"
     },
     "devDependencies": {
         "eslint": "^8.57.0",
-        "nodemon": "^3.0.3"
+        "nodemon": "^3.1.4"
     },
     "engines": {
         "node": ">=20.0.0"
