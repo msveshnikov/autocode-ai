@@ -8,6 +8,52 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
+            body {
+                font-family: "Courier New", monospace;
+                line-height: 1.6;
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                background: linear-gradient(135deg, #000000, #0000ff);
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                color: #ffffff;
+                padding: 20px;
+            }
+            h1, h5 {
+                color: #00ffff;
+            }
+            .card {
+                /* background-color: rgba(0, 0, 0, 0.8); */
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                margin-bottom: 20px;
+            }
+            .card-body {
+                padding: 20px;
+            }
+            .table {
+                color: #ffffff;
+            }
+            .table-striped tbody tr:nth-of-type(odd) {
+                background-color: rgba(0, 255, 255, 0.05);
+            }
+            .btn-danger {
+                background-color: #ff0000;
+                border-color: #ff0000;
+            }
+            .btn-danger:hover {
+                background-color: #cc0000;
+                border-color: #cc0000;
+            }
+            .form-select {
+                background-color: rgba(0, 0, 0, 0.6);
+                color: #ffffff;
+                border-color: #00ffff;
+            }
             @media (max-width: 768px) {
                 .card {
                     margin-bottom: 1rem;
@@ -15,6 +61,10 @@
                 .table-responsive {
                     font-size: 0.8rem;
                 }
+            }
+            .user-table, .inquiries-table {
+                background-color: #333333;
+                color: #ffffff;
             }
         </style>
     </head>
@@ -54,7 +104,7 @@
                         <div class="card-body">
                             <h5 class="card-title">User List</h5>
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped user-table">
                                     <thead>
                                         <tr>
                                             <th>Email</th>
@@ -100,7 +150,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Inquiries</h5>
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table table-striped inquiries-table">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
