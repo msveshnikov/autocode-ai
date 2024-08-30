@@ -174,6 +174,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - On-premises deployment option
 
 
-# TODO
-
--   add inquires to dashboard
