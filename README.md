@@ -87,3 +87,6 @@ AutoCode currently supports the following programming languages:
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
+# TODO
+
+-   add Run AI Agents submenu instead of p.12 and run individual agents from it

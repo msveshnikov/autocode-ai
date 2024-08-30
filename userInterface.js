@@ -7,6 +7,11 @@ import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import LicenseManager from "./licenseManager.js";
+import ProjectManagerAgent from "./ProjectManagerAgent.js";
+import DevOpsAgent from "./DevOpsAgent.js";
+import InternationalizationAgent from "./InternationalizationAgent.js";
+import RedditPromotionAgent from "./RedditPromotionAgent.js";
+import TesterAgent from "./TesterAgent.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
@@ -32,7 +37,7 @@ const UserInterface = {
                 "🤔 9. Analyze code quality",
                 "🔍 10. Optimize project structure",
                 "➕ 11. Add new file",
-                "🤖 12. Generate AI Agents",
+                "🤖 12. Run AI Agents",
                 "🔒 13. Security analysis",
                 "🧪 14. Generate unit tests",
                 "🚀 15. Analyze performance",
@@ -159,16 +164,19 @@ const UserInterface = {
 
     async runAIAgents(projectStructure, readme) {
         console.log(chalk.cyan("🤖 Running AI Agents..."));
-        // eslint-disable-next-line no-unused-vars
-        for (const [agentKey, agentConfig] of Object.entries(CONFIG.aiAgents)) {
-            console.log(chalk.yellow(`Generating ${agentConfig.name}...`));
-            await CodeGenerator.generateAIAgentCode(
-                agentConfig.name,
-                agentConfig.description,
-                projectStructure,
-                readme
-            );
+        const agents = [
+            { name: "Project Manager Agent", agent: ProjectManagerAgent },
+            { name: "DevOps Agent", agent: DevOpsAgent },
+            { name: "Internationalization Agent", agent: InternationalizationAgent },
+            { name: "Reddit Promotion Agent", agent: RedditPromotionAgent },
+            { name: "Tester Agent", agent: TesterAgent },
+        ];
+
+        for (const { name, agent } of agents) {
+            console.log(chalk.yellow(`Running ${name}...`));
+            await agent.run(projectStructure, readme);
         }
+
         console.log(chalk.green("✅ All AI Agents have completed their tasks."));
     },
 
@@ -300,7 +308,7 @@ const UserInterface = {
                 }
                 break;
             }
-            case "🤖 12. Generate AI Agents":
+            case "🤖 12. Run AI Agents":
                 await this.runAIAgents(projectStructure, readme);
                 break;
             case "🔒 13. Security analysis": {
