@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AutoCode Dashboard</title>
+        <title>AutoCode Admin Dashboard</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
@@ -27,22 +27,26 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/profile">Profile</a>
                         </li>
-               
                     </ul>
                 </div>
             </div>
         </nav>
 
         <div class="container mt-4">
-            <h1 class="mb-4">Welcome, <%= user.email %></h1>
+            <h1 class="mb-4">Admin Dashboard</h1>
             <div class="row">
                 <div class="col-md-6">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Account Information</h5>
-                            <p class="card-text">Tier: <%= user.tier %></p>
-                            <p class="card-text">Daily Requests: <%= user.dailyRequests %></p>
-                            <p class="card-text">Devices: <%= user.devices.length %></p>
+                            <h5 class="card-title">User Statistics</h5>
+                            <p class="card-text">Total Users: <%= stats.totalUsers %></p>
+                            <p class="card-text">Free Tier: <%= stats.usersByTier.free %></p>
+                            <p class="card-text">Premium Tier: <%= stats.usersByTier.premium %></p>
+                            <p class="card-text">Enterprise Tier: <%= stats.usersByTier.enterprise %></p>
+                            <p class="card-text">Total Daily Requests: <%= stats.totalDailyRequests %></p>
+                            <p class="card-text">
+                                Average Requests per User: <%= stats.averageRequestsPerUser.toFixed(2) %>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -59,12 +63,49 @@
                 <div class="col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Recent Activity</h5>
-                            <ul class="list-group">
-                                <% for (let i = 0; i < 5; i++) { %>
-                                <li class="list-group-item">Activity <%= i + 1 %></li>
-                                <% } %>
-                            </ul>
+                            <h5 class="card-title">User List</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Tier</th>
+                                        <th>Daily Requests</th>
+                                        <th>Usage</th>
+                                        <th>Remaining Requests</th>
+                                        <th>Devices</th>
+                                        <th>Last Login</th>
+                                        <th>Registration Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% userStats.forEach(user => { %>
+                                    <tr>
+                                        <td><%= user.email %></td>
+                                        <td><%= user.tier %></td>
+                                        <td><%= user.dailyRequests %></td>
+                                        <td><%= user.usagePercentage.toFixed(2) %>%</td>
+                                        <td><%= user.remainingRequests %></td>
+                                        <td><%= user.devices %></td>
+                                        <td>
+                                            <%= user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A' %>
+                                        </td>
+                                        <td><%= new Date(user.registrationDate).toLocaleString() %></td>
+                                        <td>
+                                            <!-- <a href="/dashboard/user/<%= user._id %>" class="btn btn-sm btn-primary"
+                                                >Edit</a
+                                            > -->
+                                            <button
+                                                class="btn btn-sm btn-danger delete-user"
+                                                data-user-id="<%= user._id %>"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -75,14 +116,23 @@
         <script>
             const ctx = document.getElementById('usageChart').getContext('2d');
             new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    labels: ['Free', 'Premium', 'Enterprise'],
                     datasets: [{
-                        label: 'Daily Requests',
-                        data: [12, 19, 3, 5, 2, 3, <%= user.dailyRequests %>],
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
+                        label: 'Users per Tier',
+                        data: [<%= stats.usersByTier.free %>, <%= stats.usersByTier.premium %>, <%= stats.usersByTier.enterprise %>],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(153, 102, 255, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
                     }]
                 },
                 options: {
@@ -93,6 +143,30 @@
                         }
                     }
                 }
+            });
+
+            document.querySelectorAll('.delete-user').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    if (confirm('Are you sure you want to delete this user?')) {
+                        const userId = e.target.dataset.userId;
+                        try {
+                            const response = await fetch(`/dashboard/user/${userId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            if (response.ok) {
+                                e.target.closest('tr').remove();
+                            } else {
+                                alert('Failed to delete user');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('An error occurred while deleting the user');
+                        }
+                    }
+                });
             });
         </script>
     </body>

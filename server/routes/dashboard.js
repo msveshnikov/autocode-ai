@@ -7,19 +7,42 @@ const router = express.Router();
 
 router.get("/", authCookie, isAdmin, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).render("404");
-        }
+        const users = await User.find({}).lean();
+        const userStats = users.map((user) => {
+            const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
+            const usagePercentage = (user.dailyRequests / tierConfig.dailyRequests) * 100;
+            return {
+                email: user.email,
+                tier: user.tier,
+                dailyRequests: user.dailyRequests,
+                usagePercentage,
+                remainingRequests: Math.max(0, tierConfig.dailyRequests - user.dailyRequests),
+                devices: user.devices.length,
+                lastLogin: user.lastLogin,
+                registrationDate: user.createdAt,
+            };
+        });
 
-        const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
-        const usagePercentage = (user.dailyRequests / tierConfig.dailyRequests) * 100;
+        const stats = {
+            totalUsers: users.length,
+            usersByTier: {
+                free: users.filter((u) => u.tier === "Free").length,
+                premium: users.filter((u) => u.tier === "Premium").length,
+                enterprise: users.filter((u) => u.tier === "Enterprise").length,
+            },
+            totalDailyRequests: users.reduce((sum, user) => sum + user.dailyRequests, 0),
+            averageRequestsPerUser: users.length
+                ? users.reduce((sum, user) => sum + user.dailyRequests, 0) / users.length
+                : 0,
+        };
 
         res.render("dashboard", {
-            user,
-            tierConfig,
-            usagePercentage,
-            remainingRequests: Math.max(0, tierConfig.dailyRequests - user.dailyRequests),
+            userStats: userStats,
+            totalUsers: stats.totalUsers,
+            freeTierUsers: stats.usersByTier.free,
+            premiumTierUsers: stats.usersByTier.premium,
+            enterpriseTierUsers: stats.usersByTier.enterprise,
+            stats,
         });
     } catch (error) {
         console.error(error);
@@ -27,63 +50,35 @@ router.get("/", authCookie, isAdmin, async (req, res) => {
     }
 });
 
-router.get("/usage", authCookie, async (req, res) => {
+router.get("/user/:userId", authCookie, isAdmin, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.params.userId).lean();
         if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            return res.status(404).render("404");
         }
-
         const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
-        const usagePercentage = (user.dailyRequests / tierConfig.dailyRequests) * 100;
-
-        res.json({
-            dailyRequests: user.dailyRequests,
-            dailyLimit: tierConfig.dailyRequests,
-            usagePercentage,
+        const userDetails = {
+            ...user,
+            usagePercentage: (user.dailyRequests / tierConfig.dailyRequests) * 100,
             remainingRequests: Math.max(0, tierConfig.dailyRequests - user.dailyRequests),
-        });
+        };
+        res.render("userDetails", { user: userDetails });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).render("500");
     }
 });
 
-router.get("/devices", authCookie, async (req, res) => {
+router.delete("/user/:userId", authCookie, isAdmin, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
+        const result = await User.findByIdAndDelete(req.params.userId);
+        if (!result) {
+            return res.status(404).json({ message: "User not found" });
         }
-
-        const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
-
-        res.json({
-            devices: user.devices,
-            deviceLimit: tierConfig.devices,
-            remainingDevices: Math.max(0, tierConfig.devices - user.devices.length),
-        });
+        res.status(200).json({ message: "User deleted successfully" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
-router.post("/remove-device", authCookie, async (req, res) => {
-    try {
-        const { deviceId } = req.body;
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        user.removeDevice(deviceId);
-        await user.save();
-
-        res.json({ message: "Device removed successfully" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ message: "An error occurred while deleting the user" });
     }
 });
 
