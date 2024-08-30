@@ -10,14 +10,14 @@ router.get("/", authCookie, isAdmin, async (req, res) => {
         const users = await User.find({}).lean();
         const userStats = users.map((user) => {
             const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
-            const usagePercentage = (user.dailyRequests / 100) * 100;
+            const usagePercentage = (user.dailyRequests / tierConfig.requestsPerDay) * 100;
             return {
                 _id: user._id,
                 email: user.email,
                 tier: user.tier,
                 dailyRequests: user.dailyRequests,
                 usagePercentage,
-                remainingRequests: Math.max(0, 100 - user.dailyRequests),
+                remainingRequests: Math.max(0, tierConfig.requestsPerDay - user.dailyRequests),
                 devices: user.devices.length,
                 lastRequestDate: user.lastRequestDate,
             };

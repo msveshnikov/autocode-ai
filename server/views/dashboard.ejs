@@ -6,10 +6,21 @@
         <title>AutoCode Admin Dashboard</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            @media (max-width: 768px) {
+                .card {
+                    margin-bottom: 1rem;
+                }
+                .table-responsive {
+                    font-size: 0.8rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
+                <a class="navbar-brand" href="/">AutoCode</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -34,7 +45,7 @@
         <div class="container mt-4">
             <h1 class="mb-4">Admin Dashboard</h1>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-12">
                     <div class="card mb-4">
                         <div class="card-body">
                             <h5 class="card-title">User Statistics</h5>
@@ -49,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-12">
                     <div class="card mb-4">
                         <div class="card-body">
                             <h5 class="card-title">Usage Statistics</h5>
@@ -59,7 +70,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-body">
                             <h5 class="card-title">User List</h5>
@@ -71,7 +82,7 @@
                                             <th>Tier</th>
                                             <th>Daily Requests</th>
                                             <th>Usage</th>
-                                            <th>Remaining Requests</th>
+                                            <th>Remaining</th>
                                             <th>Devices</th>
                                             <th>Last Request</th>
                                             <th>Actions</th>
@@ -88,9 +99,6 @@
                                             <td><%= user.devices %></td>
                                             <td><%= new Date(user.lastRequestDate).toLocaleString() %></td>
                                             <td>
-                                                <!-- <a href="/dashboard/user/<%= user._id %>" class="btn btn-sm btn-primary"
-                                                    >Edit</a
-                                                > -->
                                                 <button
                                                     class="btn btn-sm btn-danger delete-user"
                                                     data-user-id="<%= user._id %>"
