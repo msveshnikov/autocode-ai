@@ -8,6 +8,7 @@ import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
+import dashboardRoutes from "./routes/dashboard.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
 
@@ -48,6 +49,7 @@ app.use("/license", licenseServer);
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
     res.render("landing", { user: req.cookies.token });

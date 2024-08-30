@@ -36,7 +36,7 @@ async function handleSubscriptionUpdate(subscription) {
     const customer = await stripe.customers.retrieve(subscription.customer);
     let user = await User.findOne({ email: customer.email });
     if (!user) {
-        console.log("User not found, skipping");
+        console.log("User not found, skipping " + customer.email);
         return;
     }
     user.subscriptionStatus = subscription.status;

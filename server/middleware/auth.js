@@ -43,7 +43,20 @@ export const checkDeviceLimit = async (req, res, next) => {
     }
 };
 
+export const isAdmin = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user || !user.isAdmin) {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
+        next();
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 export default {
     authCookie,
     checkDeviceLimit,
+    isAdmin,
 };

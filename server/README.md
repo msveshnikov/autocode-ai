@@ -173,3 +173,6 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
+# TODO
+
+-   add admin user prop, and implement admin dashboard

@@ -43,6 +43,10 @@ const UserSchema = new mongoose.Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 UserSchema.pre("save", async function (next) {
