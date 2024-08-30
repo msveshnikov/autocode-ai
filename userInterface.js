@@ -172,12 +172,21 @@ const UserInterface = {
             { name: "Tester Agent", agent: TesterAgent },
         ];
 
-        for (const { name, agent } of agents) {
-            console.log(chalk.yellow(`Running ${name}...`));
-            await agent.run(projectStructure, readme);
-        }
+        const { selectedAgent } = await inquirer.prompt({
+            type: "list",
+            name: "selectedAgent",
+            message: "Select an AI Agent to run:",
+            choices: agents.map((a) => a.name),
+        });
 
-        console.log(chalk.green("✅ All AI Agents have completed their tasks."));
+        const agentToRun = agents.find((a) => a.name === selectedAgent);
+        if (agentToRun) {
+            console.log(chalk.yellow(`Running ${agentToRun.name}...`));
+            await agentToRun.agent.run(projectStructure, readme);
+            console.log(chalk.green(`✅ ${agentToRun.name} has completed its tasks.`));
+        } else {
+            console.log(chalk.red("Invalid agent selection."));
+        }
     },
 
     async processFiles(files, readme, projectStructure) {
