@@ -10,16 +10,16 @@ router.get("/", authCookie, isAdmin, async (req, res) => {
         const users = await User.find({}).lean();
         const userStats = users.map((user) => {
             const tierConfig = CONFIG.pricingTiers[user.tier.toLowerCase()];
-            const usagePercentage = (user.dailyRequests / tierConfig.dailyRequests) * 100;
+            const usagePercentage = (user.dailyRequests / 100) * 100;
             return {
+                _id: user._id,
                 email: user.email,
                 tier: user.tier,
                 dailyRequests: user.dailyRequests,
                 usagePercentage,
-                remainingRequests: Math.max(0, tierConfig.dailyRequests - user.dailyRequests),
+                remainingRequests: Math.max(0, 100 - user.dailyRequests),
                 devices: user.devices.length,
-                lastLogin: user.lastLogin,
-                registrationDate: user.createdAt,
+                lastRequestDate: user.lastRequestDate,
             };
         });
 
@@ -37,11 +37,7 @@ router.get("/", authCookie, isAdmin, async (req, res) => {
         };
 
         res.render("dashboard", {
-            userStats: userStats,
-            totalUsers: stats.totalUsers,
-            freeTierUsers: stats.usersByTier.free,
-            premiumTierUsers: stats.usersByTier.premium,
-            enterpriseTierUsers: stats.usersByTier.enterprise,
+            userStats,
             stats,
         });
     } catch (error) {
