@@ -54,13 +54,20 @@ Please generate or update the ${fileName} file to implement the features describ
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("Code generated successfully");
-            const generatedCode = response.content[0].text;
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            let generatedCode = response.content[0].text;
+            generatedCode = this.cleanGeneratedCode(generatedCode);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             return generatedCode;
         } catch (error) {
             spinner.fail("Error generating code");
             throw error;
         }
+    },
+
+    cleanGeneratedCode(code) {
+        const codeBlockRegex = /```(?:javascript|js|python|csharp|java|ruby|go|rust|php|swift)?\n([\s\S]*?)\n```/;
+        const match = code.match(codeBlockRegex);
+        return match ? match[1] : code;
     },
 
     async updateReadme(readme, projectStructure) {
@@ -87,7 +94,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
             });
             spinner.succeed("README updated successfully");
             const updatedReadme = response.content[0].text;
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             return updatedReadme;
         } catch (error) {
             spinner.fail("Error updating README");
@@ -161,7 +168,7 @@ Please provide your suggestions in the following Markdown format:
                 console.log(chalk.yellow("⏹️ File split cancelled."));
             }
 
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error generating file split suggestion");
             throw error;
@@ -236,10 +243,10 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("Optimization and refactoring completed");
-            const optimizedCode = response.content[0].text;
+            const optimizedCode = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(filePath, optimizedCode);
             console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error optimizing and refactoring");
             throw error;
@@ -317,10 +324,10 @@ Return the content of the ${dependencyFileName} file without explanations or com
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed(`${dependencyFileName} generated successfully`);
-            const dependencyFileContent = response.content[0].text;
+            const dependencyFileContent = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(dependencyFileName, dependencyFileContent);
             console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${dependencyFileName}`);
             throw error;
@@ -369,11 +376,11 @@ Return the generated code for the ${agentType} AI agent without explanations or 
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed(`${agentType} AI agent code generated successfully`);
-            const agentCode = response.content[0].text;
-            const fileName = `./agents/${agentType.replace(/\s+/g, "")}.js`;
+            const agentCode = this.cleanGeneratedCode(response.content[0].text);
+            const fileName = `./${agentType.replace(/\s+/g, "")}.js`;
             await FileManager.write(fileName, agentCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${agentType} AI agent code`);
             throw error;
@@ -411,11 +418,11 @@ Return the generated HTML code for the landing page without explanations or comm
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("Landing page generated successfully");
-            const landingPageCode = response.content[0].text;
+            const landingPageCode = this.cleanGeneratedCode(response.content[0].text);
             const fileName = "landing.html";
             await FileManager.write(fileName, landingPageCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
         } catch (error) {
             spinner.fail("Error generating landing page");
             throw error;
@@ -489,11 +496,11 @@ Return the generated code for ${fileName} without explanations or comments.
                     messages: [{ role: "user", content: prompt }],
                 });
                 spinner.succeed(`${fileName} generated successfully`);
-                const sourceFileContent = response.content[0].text;
+                const sourceFileContent = this.cleanGeneratedCode(response.content[0].text);
                 await FileManager.write(fileName, sourceFileContent);
                 console.log(chalk.green(`✅ Generated ${fileName}`));
                 projectStructure[fileName] = null;
-                await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+                await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             } catch (error) {
                 spinner.fail(`Error generating ${fileName}`);
                 throw error;

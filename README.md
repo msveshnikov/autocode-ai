@@ -87,6 +87,3 @@ AutoCode currently supports the following programming languages:
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
-# TODO
-
--   in generateAIAgentCode() pass to AI model also contents of [text](fileManager.js) [text](userInterface.js) [text](config.js)

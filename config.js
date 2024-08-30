@@ -64,10 +64,6 @@ export const CONFIG = {
         },
     },
     aiAgents: {
-        sqlMigrations: {
-            name: "SQL Migrations Agent",
-            description: "Writes database migrations and type files",
-        },
         tester: {
             name: "Tester Agent",
             description: "Writes integration tests for endpoints",
@@ -76,10 +72,6 @@ export const CONFIG = {
             name: "Project Manager Agent",
             description:
                 "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
-        },
-        landingPage: {
-            name: "Landing Page Agent",
-            description: "Generates a visually appealing landing page for the project",
         },
         redditPromotion: {
             name: "Reddit Promotion Agent",
