@@ -330,6 +330,10 @@ Return the content of the ${dependencyFileName} file without explanations or com
     async generateAIAgentCode(agentType, agentDescription, projectStructure, readme) {
         console.log(chalk.cyan(`🤖 Generating AI agent code for ${agentType}...`));
 
+        const fileManagerContent = await FileManager.read("fileManager.js");
+        const userInterfaceContent = await FileManager.read("userInterface.js");
+        const configContent = await FileManager.read("config.js");
+
         const prompt = `
 Please generate code for the ${agentType} AI agent based on the project structure and features described in the README.md. The agent should be able to perform its specific tasks as outlined in the README.
 
@@ -340,6 +344,15 @@ ${readme}
 
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
+
+fileManager.js content:
+${fileManagerContent}
+
+userInterface.js content:
+${userInterfaceContent}
+
+config.js content:
+${configContent}
 
 Ensure the code is complete, functional, and follows best practices for JavaScript. Consider the project structure when implementing the agent's functionality. Reuse existing modules and avoid duplicating code.
 
