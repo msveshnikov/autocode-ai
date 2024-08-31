@@ -13,7 +13,7 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Code quality checks and suggestions/auto fixes
--   Detect missing files/references and ask user confirmation to create them
+-   Detect missing files/references
 -   Adherence to DRY, KISS, and SRP principles
 -   Automatic dependency management and creation of missing files
 -   Modular architecture for easy extensibility
