@@ -367,6 +367,9 @@ Provide the suggestions in a structured format.
     async addNewFile(filePath) {
         console.log(chalk.cyan(`➕ Adding new file: ${filePath}`));
         await FileManager.createSubfolders(filePath);
+        if (!path.extname(filePath)) {
+            filePath += ".js";
+        }
         await FileManager.write(filePath, "");
         console.log(chalk.green(`✅ New file ${filePath} has been created.`));
     },
