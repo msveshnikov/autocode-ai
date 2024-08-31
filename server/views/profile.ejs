@@ -61,7 +61,8 @@
             }
             .edit-form button,
             .upgrade-button,
-            .cancel-subscription {
+            .cancel-subscription,
+            .dashboard-button {
                 background-color: #00ffff;
                 color: #000000;
                 padding: 10px 20px;
@@ -69,18 +70,16 @@
                 border-radius: 5px;
                 cursor: pointer;
                 font-weight: bold;
+                text-decoration: none;
+                display: inline-block;
+                margin-top: 20px;
             }
             .edit-form button:hover,
             .upgrade-button:hover,
-            .cancel-subscription:hover {
+            .cancel-subscription:hover,
+            .dashboard-button:hover {
                 background-color: #0000ff;
                 color: #ffffff;
-            }
-            .upgrade-button,
-            .cancel-subscription {
-                display: inline-block;
-                text-decoration: none;
-                margin-top: 20px;
             }
             .progress-bar {
                 width: 100%;
@@ -194,6 +193,10 @@
                 <p>Devices: <span id="deviceCount"></span> / <span id="deviceLimit"></span></p>
                 <ul id="deviceList" class="device-list"></ul>
             </div>
+
+            <% if (user.isAdmin) { %>
+            <a href="/dashboard" class="dashboard-button">Dashboard</a>
+            <% } %>
         </div>
 
         <div id="confirmationModal" class="modal">
