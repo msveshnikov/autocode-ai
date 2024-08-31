@@ -160,7 +160,7 @@ Provide the suggestions in a structured format.
     4. Dependencies listed in the package file but not used in the project
     5. Dependencies used in the project but not listed in the package file
     
-    Provide the results in a structured format.
+    Provide the results in a JSON code snippet.
     `;
         const response = await anthropic.messages.create({
             model: CONFIG.anthropicModel,
