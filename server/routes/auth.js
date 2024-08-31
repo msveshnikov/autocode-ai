@@ -9,6 +9,7 @@ import {
     sanitizeInput,
     generatePasswordResetToken,
     sendPasswordResetEmail,
+    sendWelcomeEmail,
 } from "../utils.js";
 
 const router = express.Router();
@@ -32,6 +33,7 @@ router.post("/register", async (req, res) => {
             secure: true,
             sameSite: "strict",
         });
+        await sendWelcomeEmail(user.email);
         res.status(201).json({ token });
     } catch (error) {
         console.error(error);

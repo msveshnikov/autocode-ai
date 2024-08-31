@@ -1,272 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#100055" />
-        <title>AutoCode Admin Dashboard</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            body {
-                font-family: "Courier New", monospace;
-                line-height: 1.6;
-                color: #ffffff;
-                margin: 0;
-                padding: 0;
-                background: linear-gradient(135deg, #000000, #0000ff);
-            }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                color: #ffffff;
-                padding: 20px;
-            }
-            h1, h5 {
-                color: #00ffff;
-            }
-            .card {
-                /* background-color: rgba(0, 0, 0, 0.8); */
-                border: none;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                margin-bottom: 20px;
-            }
-            .card-body {
-                padding: 20px;
-            }
-            .table {
-                color: #ffffff;
-            }
-            .table-striped tbody tr:nth-of-type(odd) {
-                background-color: rgba(0, 255, 255, 0.05);
-            }
-            .btn-danger {
-                background-color: #ff0000;
-                border-color: #ff0000;
-            }
-            .btn-danger:hover {
-                background-color: #cc0000;
-                border-color: #cc0000;
-            }
-            .form-select {
-                background-color: rgba(0, 0, 0, 0.6);
-                color: #ffffff;
-                border-color: #00ffff;
-            }
-            @media (max-width: 768px) {
-                .card {
-                    margin-bottom: 1rem;
-                }
-                .table-responsive {
-                    font-size: 0.8rem;
-                }
-            }
-            .user-table, .inquiries-table {
-                background-color: #333333;
-                color: #ffffff;
-            }
-        </style>
-    </head>
-    <body>
-       
-
-        <div class="container mt-4">
-            <h1 class="mb-4">Admin Dashboard</h1>
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">User Statistics</h5>
-                            <p class="card-text">Total Users: <%= stats.totalUsers %></p>
-                            <p class="card-text">Free Tier: <%= stats.usersByTier.free %></p>
-                            <p class="card-text">Premium Tier: <%= stats.usersByTier.premium %></p>
-                            <p class="card-text">Enterprise Tier: <%= stats.usersByTier.enterprise %></p>
-                            <p class="card-text">Total Daily Requests: <%= stats.totalDailyRequests %></p>
-                            <p class="card-text">
-                                Average Requests per User: <%= stats.averageRequestsPerUser.toFixed(2) %>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Usage Statistics</h5>
-                            <canvas id="usageChart"></canvas>
-                        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#100055">
+    <title>AutoCode Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @media (max-width: 768px) {
+            .card { margin-bottom: 1rem; }
+            .table-responsive { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Admin Dashboard</h1>
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">User Statistics</h5>
+                        <p class="card-text">Total Users: <%= stats.totalUsers %></p>
+                        <p class="card-text">Free Tier: <%= stats.usersByTier.free %></p>
+                        <p class="card-text">Premium Tier: <%= stats.usersByTier.premium %></p>
+                        <p class="card-text">Enterprise Tier: <%= stats.usersByTier.enterprise %></p>
+                        <p class="card-text">Total Daily Requests: <%= stats.totalDailyRequests %></p>
+                        <p class="card-text">Average Requests per User: <%= stats.averageRequestsPerUser.toFixed(2) %></p>
+                        <p class="card-text">Total Inquiries: <%= stats.totalInquiries %></p>
+                        <p class="card-text">Pending Inquiries: <%= stats.pendingInquiries %></p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">User List</h5>
-                            <div class="table-responsive">
-                                <table class="table table-striped user-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th>Tier</th>
-                                            <th>Daily Requests</th>
-                                            <th>Usage</th>
-                                            <th>Remaining</th>
-                                            <th>Devices</th>
-                                            <th>Last Request</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% userStats.forEach(user => { %>
-                                        <tr>
-                                            <td><%= user.email %></td>
-                                            <td><%= user.tier %></td>
-                                            <td><%= user.dailyRequests %></td>
-                                            <td><%= user.usagePercentage.toFixed(2) %>%</td>
-                                            <td><%= user.remainingRequests %></td>
-                                            <td><%= user.devices %></td>
-                                            <td><%= new Date(user.lastRequestDate).toLocaleString() %></td>
-                                            <td>
-                                                <button
-                                                    class="btn btn-sm btn-danger delete-user"
-                                                    data-user-id="<%= user._id %>"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Usage Statistics</h5>
+                        <canvas id="usageChart"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Inquiries</h5>
-                            <div class="table-responsive">
-                                <table class="table table-striped inquiries-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Message</th>
-                                            <th>Created At</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% inquiries.forEach(inquiry => { %>
-                                        <tr>
-                                            <td><%= inquiry.name %></td>
-                                            <td><%= inquiry.email %></td>
-                                            <td><%= inquiry.message %></td>
-                                            <td><%= new Date(inquiry.createdAt).toLocaleString() %></td>
-                                            <td><%= inquiry.status %></td>
-                                            <td>
-                                                <select class="form-select inquiry-status" data-inquiry-id="<%= inquiry._id %>">
-                                                    <option value="pending" <%= inquiry.status === 'pending' ? 'selected' : '' %>>Pending</option>
-                                                    <option value="in-progress" <%= inquiry.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
-                                                    <option value="resolved" <%= inquiry.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                    </tbody>
-                                </table>
-                            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">User List</h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Tier</th>
+                                        <th>Daily Requests</th>
+                                        <th>Usage</th>
+                                        <th>Remaining</th>
+                                        <th>Devices</th>
+                                        <th>Last Request</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% userStats.forEach(user => { %>
+                                    <tr>
+                                        <td><%= user.email %></td>
+                                        <td><%= user.tier %></td>
+                                        <td><%= user.dailyRequests %></td>
+                                        <td><%= user.usagePercentage.toFixed(2) %>%</td>
+                                        <td><%= user.remainingRequests %></td>
+                                        <td><%= user.devices %></td>
+                                        <td><%= new Date(user.lastRequestDate).toLocaleString() %></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger delete-user" data-user-id="<%= user._id %>">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Recent Inquiries</h5>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Message</th>
+                                        <th>Created At</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% inquiries.forEach(inquiry => { %>
+                                    <tr>
+                                        <td><%= inquiry.name %></td>
+                                        <td><%= inquiry.email %></td>
+                                        <td><%= inquiry.message %></td>
+                                        <td><%= new Date(inquiry.createdAt).toLocaleString() %></td>
+                                        <td><%= inquiry.status %></td>
+                                        <td>
+                                            <select class="form-select inquiry-status" data-inquiry-id="<%= inquiry._id %>">
+                                                <option value="pending" <%= inquiry.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="in-progress" <%= inquiry.status === 'in-progress' ? 'selected' : '' %>>In Progress</option>
+                                                <option value="resolved" <%= inquiry.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            const ctx = document.getElementById('usageChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Free', 'Premium', 'Enterprise'],
-                    datasets: [{
-                        label: 'Users per Tier',
-                        data: [<%= stats.usersByTier.free %>, <%= stats.usersByTier.premium %>, <%= stats.usersByTier.enterprise %>],
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(153, 102, 255, 0.6)'
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Free', 'Premium', 'Enterprise'],
+                datasets: [{
+                    label: 'Users per Tier',
+                    data: [<%= stats.usersByTier.free %>, <%= stats.usersByTier.premium %>, <%= stats.usersByTier.enterprise %>],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            document.querySelectorAll('.delete-user').forEach(button => {
-                button.addEventListener('click', async (e) => {
-                    if (confirm('Are you sure you want to delete this user?')) {
-                        const userId = e.target.dataset.userId;
-                        try {
-                            const response = await fetch(`/dashboard/user/${userId}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                }
-                            });
-                            if (response.ok) {
-                                e.target.closest('tr').remove();
-                            } else {
-                                alert('Failed to delete user');
-                            }
-                        } catch (error) {
-                            console.error('Error:', error);
-                            alert('An error occurred while deleting the user');
-                        }
-                    }
-                });
-            });
-
-            document.querySelectorAll('.inquiry-status').forEach(select => {
-                select.addEventListener('change', async (e) => {
-                    const inquiryId = e.target.dataset.inquiryId;
-                    const newStatus = e.target.value;
+        document.querySelectorAll('.delete-user').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                if (confirm('Are you sure you want to delete this user?')) {
+                    const userId = e.target.dataset.userId;
                     try {
-                        const response = await fetch(`/dashboard/inquiry/${inquiryId}`, {
-                            method: 'PATCH',
+                        const response = await fetch(`/dashboard/user/${userId}`, {
+                            method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ status: newStatus })
+                            }
                         });
-                        if (!response.ok) {
-                            alert('Failed to update inquiry status');
-                            e.target.value = e.target.dataset.originalValue;
+                        if (response.ok) {
+                            e.target.closest('tr').remove();
+                        } else {
+                            alert('Failed to delete user');
                         }
                     } catch (error) {
                         console.error('Error:', error);
-                        alert('An error occurred while updating the inquiry status');
+                        alert('An error occurred while deleting the user');
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.inquiry-status').forEach(select => {
+            select.addEventListener('change', async (e) => {
+                const inquiryId = e.target.dataset.inquiryId;
+                const newStatus = e.target.value;
+                try {
+                    const response = await fetch(`/dashboard/inquiry/${inquiryId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    if (!response.ok) {
+                        alert('Failed to update inquiry status');
                         e.target.value = e.target.dataset.originalValue;
                     }
-                });
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the inquiry status');
+                    e.target.value = e.target.dataset.originalValue;
+                }
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>

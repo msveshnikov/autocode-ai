@@ -63,3 +63,25 @@ export const sendPasswordResetEmail = async (email, resetUrl) => {
 
     await transporter.sendMail(mailOptions);
 };
+
+export const sendWelcomeEmail = async (email) => {
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD,
+        },
+    });
+
+    const templatePath = path.join(__dirname, "templates", "welcome.html");
+    const html = await fs.readFile(templatePath, "utf-8");
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Welcome to AutoCode",
+        html,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
