@@ -80,7 +80,7 @@ ${readme}
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
-Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Include information about multi-language support and any new features or changes. Do not include any explanations or comments in your response, just provide the updated README.md content.
+Please update the README.md file with new design ideas and considerations. Ensure the content is well-structured and follows best practices. Consider the current project structure when suggesting improvements or new features. Do not include any explanations or comments in your response, just provide the updated README.md content.
 `;
 
         const spinner = ora("Updating README...").start();

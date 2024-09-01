@@ -1,6 +1,6 @@
 {
     "name": "autocode-ai",
-    "version": "0.9.4",
+    "version": "1.0.0",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",

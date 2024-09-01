@@ -3,7 +3,7 @@ export const CONFIG = {
     // licenseServerUrl: "http://localhost:3000",
     excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
     excludedDirs: [".git", "node_modules"],
-    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
+    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico", ".avif"],
     anthropicModel: "claude-3-5-sonnet-20240620",
     maxTokens: 8192,
     maxFileLines: 700,
@@ -94,7 +94,7 @@ export const CONFIG = {
         free: {
             name: "Free",
             price: 0,
-            requestsPerDay: 100,
+            requestsPerDay: 10,
             features: ["Basic features"],
             devices: 3,
             support: "Community support",
@@ -117,25 +117,9 @@ export const CONFIG = {
             onPremises: true,
         },
     },
-    landingPage: {
-        templatePath: "landing.html",
-        theme: {
-            primaryColor: "#00FFFF",
-            secondaryColor: "#000080",
-            backgroundColor: "#000000",
-        },
-    },
     contextManagement: {
         autoUpdate: true,
         maxContextSize: 200000,
-    },
-    sandbox: {
-        enabled: true,
-        versionControl: "git",
-    },
-    syntaxChecking: {
-        autoFix: true,
-        supportedLanguages: 30,
     },
     temperatureOptions: [0, 0.5, 0.7, 1],
     tokenStoragePath: ".autocode_token",

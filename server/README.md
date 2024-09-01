@@ -152,7 +152,7 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
 1. **Free Tier**
 
     - $0/month
-    - 100 requests/day
+    - 10 requests/day
     - Basic features
     - 3 devices
     - Community support

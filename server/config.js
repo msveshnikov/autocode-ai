@@ -117,7 +117,7 @@ export const CONFIG = {
         free: {
             name: "Free",
             price: 0,
-            requestsPerDay: 100,
+            requestsPerDay: 10,
             features: ["Basic features"],
             devices: 3,
             support: "Community support",
