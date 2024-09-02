@@ -3,17 +3,7 @@
 // Select the database to use.
 use("autocode");
 
-db.getCollection("users").updateOne(
-    { email: "msveshnikov@gmail.com" },
-    {
-        $set: {
-            tier: "Premium",
-            subscriptionStatus: "active",
-            stripeCustomerId: "cus_QjTq4Yu2EkwrwO7OR",
-            stripeSubscriptionId: "sub_221Ps0sMAl2orw8XNzrO0vY64lky",
-        },
-    }
-);
+db.getCollection("users").updateOne( { email: "enzocm888@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus: "active", stripeCustomerId: "cus_QlsezKXpyQAcRd", stripeSubscriptionId: "sub_1PuKtBAl2o8XNzrOpsaETnUK", }, } );
 
 // Create index for username and email
 db.users.dropIndex({ username: 1 }, { unique: true });
@@ -143,7 +133,7 @@ db.users.find({
 db.users.updateMany({}, { $set: { isAdmin: false } });
 
 use("autocode");
-db.users.updateOne({ email: "msveshnikov@gmail.com" }, { $set: { isAdmin: true } });
+db.users.updateOne({ email: "msveshnikov@gmail.com" }, { $set: { isAdmin: true, tier: "Premium" } });
 
 // Get all admin users
 db.users.find({ isAdmin: true });

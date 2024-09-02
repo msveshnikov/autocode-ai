@@ -69,6 +69,16 @@ const LicenseManager = {
         }
     },
 
+    async getLicenseTier() {
+        const response = await fetch(`${serverUrl}/license/tier-info`, {
+            headers: {
+                Authorization: `Bearer ${currentToken}`,
+            },
+        });
+        const data = await response.json();
+        return data;
+    },
+
     async saveToken(token) {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 14);
