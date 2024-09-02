@@ -133,7 +133,6 @@
                                         <th>Tier</th>
                                         <th>Daily Requests</th>
                                         <th>Usage</th>
-                                        <th>Remaining</th>
                                         <th>Devices</th>
                                         <th>Last Request</th>
                                         <th>Actions</th>
@@ -150,7 +149,6 @@
                                                 <div class="progress-bar bg-<%= user.usagePercentage < 50 ? 'success' : (user.usagePercentage < 80 ? 'warning' : 'danger') %>" role="progressbar" style="width: <%= user.usagePercentage %>%;" aria-valuenow="<%= user.usagePercentage %>" aria-valuemin="0" aria-valuemax="100"><%= user.usagePercentage.toFixed(2) %>%</div>
                                             </div>
                                         </td>
-                                        <td><%= user.remainingRequests %></td>
                                         <td><%= user.devices %></td>
                                         <td><%= new Date(user.lastRequestDate).toLocaleString() %></td>
                                         <td>
