@@ -41,11 +41,13 @@ Ensure your response is structured and easy to read. Use markdown formatting whe
 
             spinner.succeed("Analysis complete");
 
-            const outputPath = "product_owner_recommendations.md";
+            const outputPath = "docs/product_owner_recommendations.md";
             await FileManager.write(outputPath, response.content[0].text);
 
             console.log(chalk.green(`✅ Product Owner recommendations have been saved to ${outputPath}`));
             console.log(chalk.yellow("Please review the recommendations and update your project accordingly."));
+            await this.updateBacklog(projectStructure, readme);
+            await this.generateSprintPlan(projectStructure, readme);
         } catch (error) {
             spinner.fail("Analysis failed");
             console.error(chalk.red(`Error: ${error.message}`));
@@ -58,7 +60,7 @@ Ensure your response is structured and easy to read. Use markdown formatting whe
         const spinner = ora("Updating backlog...").start();
 
         try {
-            const backlogPath = "product_backlog.md";
+            const backlogPath = "docs/product_backlog.md";
             const currentBacklog = (await FileManager.read(backlogPath)) || "";
 
             const prompt = `
@@ -106,7 +108,7 @@ Format the backlog in markdown, with clear sections and priorities.
         const spinner = ora("Creating sprint plan...").start();
 
         try {
-            const backlogPath = "product_backlog.md";
+            const backlogPath = "docs/product_backlog.md";
             const currentBacklog = (await FileManager.read(backlogPath)) || "";
 
             const prompt = `
@@ -140,7 +142,7 @@ Format the sprint plan in markdown, with clear sections and priorities.
 
             spinner.succeed("Sprint plan created");
 
-            const sprintPlanPath = "sprint_plan.md";
+            const sprintPlanPath = "docs/sprint_plan.md";
             await FileManager.write(sprintPlanPath, response.content[0].text);
 
             console.log(chalk.green(`✅ Sprint plan has been generated and saved to ${sprintPlanPath}`));
