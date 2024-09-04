@@ -73,21 +73,25 @@ export const CONFIG = {
             description:
                 "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
         },
-        redditPromotion: {
-            name: "Reddit Promotion Agent",
-            description: "Manages Reddit promotions using the /u/AutoCode community",
-        },
         devOps: {
             name: "DevOps Agent",
             description: "Configures CI/CD pipelines and manages deployment processes",
         },
-        performance: {
-            name: "Performance Agent",
-            description: "Analyzes code for performance bottlenecks and optimizations",
-        },
         internationalization: {
             name: "Internationalization Agent",
             description: "Implements multi-language support in projects",
+        },
+        marketing: {
+            name: "Marketing Agent",
+            description: "Develops marketing strategies and content for the project",
+        },
+        businessAnalyst: {
+            name: "Business Analyst Agent",
+            description: "Analyzes requirements and provides business insights",
+        },
+        productOwner: {
+            name: "Product Owner Agent",
+            description: "Manages product backlog and prioritizes features",
         },
     },
     pricingTiers: {

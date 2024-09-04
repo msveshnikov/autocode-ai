@@ -10,8 +10,10 @@ import LicenseManager from "./licenseManager.js";
 import ProjectManagerAgent from "./ProjectManagerAgent.js";
 import DevOpsAgent from "./DevOpsAgent.js";
 import InternationalizationAgent from "./InternationalizationAgent.js";
-import RedditPromotionAgent from "./RedditPromotionAgent.js";
 import TesterAgent from "./TesterAgent.js";
+import MarketingAgent from "./MarketingAgent.js";
+import BusinessAnalystAgent from "./BusinessAnalystAgent.js";
+import ProductOwnerAgent from "./ProductOwnerAgent.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
@@ -162,14 +164,31 @@ const UserInterface = {
         return { continue: true, updatedReadme: readme };
     },
 
+    async generateAIAgents(projectStructure, readme) {
+        console.log(chalk.cyan("🤖 Generating AI Agents..."));
+        // eslint-disable-next-line no-unused-vars
+        for (const [agentKey, agentConfig] of Object.entries(CONFIG.aiAgents)) {
+            console.log(chalk.yellow(`Generating ${agentConfig.name}...`));
+            await CodeGenerator.generateAIAgentCode(
+                agentConfig.name,
+                agentConfig.description,
+                projectStructure,
+                readme
+            );
+        }
+        console.log(chalk.green("✅ All AI Agents have completed their tasks."));
+    },
+
     async runAIAgents(projectStructure, readme) {
         console.log(chalk.cyan("🤖 Running AI Agents..."));
         const agents = [
             { name: "Project Manager Agent", agent: ProjectManagerAgent },
             { name: "DevOps Agent", agent: DevOpsAgent },
             { name: "Internationalization Agent", agent: InternationalizationAgent },
-            { name: "Reddit Promotion Agent", agent: RedditPromotionAgent },
             { name: "Tester Agent", agent: TesterAgent },
+            { name: "Marketing Agent", agent: MarketingAgent },
+            { name: "Business Analyst Agent", agent: BusinessAnalystAgent },
+            { name: "Product Owner Agent", agent: ProductOwnerAgent },
         ];
 
         const { selectedAgent } = await inquirer.prompt({
@@ -251,7 +270,7 @@ const UserInterface = {
                 const filesToProcess = await FileManager.getFilesToProcess();
                 const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
                 await this.processFiles(selectedFiles, readme, projectStructure);
-                console.log(chalk.green("\n✅ AutoCode has successfully generated/updated your project files."));
+                console.log(chalk.green("✅ AutoCode has successfully generated/updated your project files."));
                 break;
             }
             case "🔍 3. Detect missing dependencies":

@@ -4,152 +4,137 @@ import chalk from "chalk";
 import FileManager from "./fileManager.js";
 
 const InternationalizationAgent = {
-    async run(projectStructure) {
+    async run(projectStructure, readme) {
         console.log(chalk.cyan("🌐 Running Internationalization Agent..."));
 
-        const supportedLanguages = ["en", "es", "fr", "de", "ja", "zh"];
-        const localesDir = path.join(process.cwd(), "locales");
+        const supportedLanguages = await this.getSupportedLanguages();
+        const stringFiles = await this.findStringFiles(projectStructure);
 
-        await this.createLocalesDirectory(localesDir);
-        await this.generateLanguageFiles(localesDir, supportedLanguages);
-        await this.updateConfigFile(supportedLanguages);
-        await this.updateMainFile();
-        await this.updateComponents(projectStructure);
-        await this.generateLanguageSwitcher();
+        for (const file of stringFiles) {
+            await this.internationalizeFile(file, supportedLanguages);
+        }
 
-        console.log(chalk.green("✅ Internationalization implemented successfully."));
+        await this.generateLanguageSelectionComponent(supportedLanguages);
+        await this.updateReadmeWithI18nInfo(readme, supportedLanguages);
+
+        console.log(chalk.green("✅ Internationalization completed successfully."));
     },
 
-    async createLocalesDirectory(localesDir) {
+    async getSupportedLanguages() {
+        const defaultLanguages = ["en", "es", "fr", "de", "ja"];
         try {
-            await fs.mkdir(localesDir, { recursive: true });
-            console.log(chalk.green(`Created locales directory: ${localesDir}`));
+            const configPath = path.join(process.cwd(), "i18n.config.json");
+            const config = JSON.parse(await fs.readFile(configPath, "utf-8"));
+            return config.supportedLanguages || defaultLanguages;
         } catch (error) {
-            console.error(chalk.red(`Error creating locales directory: ${error.message}`));
+            console.log(chalk.yellow("No i18n.config.json found. Using default languages."));
+            return defaultLanguages;
         }
     },
 
-    async generateLanguageFiles(localesDir, languages) {
-        for (const lang of languages) {
-            const filePath = path.join(localesDir, `${lang}.json`);
-            const content = JSON.stringify({ greeting: `Hello in ${lang}` }, null, 2);
-            await FileManager.write(filePath, content);
-        }
-    },
+    async findStringFiles(projectStructure) {
+        const stringFiles = [];
+        const queue = [{ structure: projectStructure, path: "" }];
 
-    async updateConfigFile(languages) {
-        const configPath = path.join(process.cwd(), "config.js");
-        const configContent = await FileManager.read(configPath);
-        const updatedContent = configContent.replace(
-            /export const CONFIG = {/,
-            `export const CONFIG = {\n  supportedLanguages: ${JSON.stringify(languages)},`
-        );
-        await FileManager.write(configPath, updatedContent);
-    },
-
-    async updateMainFile() {
-        const mainFilePath = path.join(process.cwd(), "index.js");
-        const mainContent = await FileManager.read(mainFilePath);
-        const i18nSetup = `
-import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-import { CONFIG } from './config.js';
-
-i18next
-  .use(Backend)
-  .init({
-    fallbackLng: 'en',
-    supportedLngs: CONFIG.supportedLanguages,
-    backend: {
-      loadPath: './locales/{{lng}}.json'
-    }
-  });
-`;
-        const updatedContent = i18nSetup + mainContent;
-        await FileManager.write(mainFilePath, updatedContent);
-    },
-
-    async updateComponents(projectStructure) {
-        const files = await FileManager.getFilesToProcess();
-        for (const file of files) {
-            if (file.endsWith(".js") || file.endsWith(".jsx") || file.endsWith(".ts") || file.endsWith(".tsx")) {
-                const content = await FileManager.read(file);
-                const updatedContent = this.addI18nToComponent(content);
-                await FileManager.write(file, updatedContent);
+        while (queue.length > 0) {
+            const { structure, path } = queue.shift();
+            for (const [name, value] of Object.entries(structure)) {
+                const fullPath = path ? `${path}/${name}` : name;
+                if (value === null && name.endsWith(".js")) {
+                    const content = await FileManager.read(fullPath);
+                    if (content.includes("export const strings") || content.includes("export default {")) {
+                        stringFiles.push(fullPath);
+                    }
+                } else if (typeof value === "object") {
+                    queue.push({ structure: value, path: fullPath });
+                }
             }
         }
+
+        return stringFiles;
     },
 
-    addI18nToComponent(content) {
-        const i18nImport = "import { useTranslation } from 'react-i18next';";
-        const i18nHook = "const { t } = useTranslation();";
-        let updatedContent = content;
-
-        if (!content.includes(i18nImport)) {
-            updatedContent = i18nImport + "\n" + updatedContent;
-        }
-
-        if (!content.includes(i18nHook)) {
-            const functionBodyRegex = /function.*?{|const.*?=.*?{|class.*?{/;
-            updatedContent = updatedContent.replace(functionBodyRegex, (match) => `${match}\n  ${i18nHook}`);
-        }
-
-        updatedContent = updatedContent.replace(/(['"])(.+?)(['"])/g, (match, p1, p2) => `{t('${p2}')}`);
-
-        return updatedContent;
+    async internationalizeFile(file, languages) {
+        const content = await FileManager.read(file);
+        const strings = this.extractStrings(content);
+        const i18nStrings = this.createI18nStrings(strings, languages);
+        const updatedContent = this.updateFileContent(content, i18nStrings);
+        await FileManager.write(file, updatedContent);
     },
 
-    async generateLanguageSwitcher() {
-        const content = `
+    extractStrings(content) {
+        const stringRegex = /['"`](.*?)['"`]/g;
+        const matches = content.match(stringRegex);
+        return matches ? matches.map((m) => m.slice(1, -1)) : [];
+    },
+
+    createI18nStrings(strings, languages) {
+        const i18nStrings = {};
+        for (const lang of languages) {
+            i18nStrings[lang] = {};
+            for (const str of strings) {
+                i18nStrings[lang][str] = str;
+            }
+        }
+        return i18nStrings;
+    },
+
+    updateFileContent(content, i18nStrings) {
+        return `
+import i18next from 'i18next';
+
+const strings = ${JSON.stringify(i18nStrings, null, 2)};
+
+export const t = (key, lang = i18next.language) => {
+  return strings[lang][key] || key;
+};
+
+export default strings;
+`;
+    },
+
+    async generateLanguageSelectionComponent(languages) {
+        const componentContent = `
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { CONFIG } from './config.js';
+import i18next from 'i18next';
 
-const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
-
+const LanguageSelector = () => {
   const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+    i18next.changeLanguage(lng);
   };
 
   return (
     <div>
-      {CONFIG.supportedLanguages.map((lng) => (
-        <button key={lng} onClick={() => changeLanguage(lng)}>
-          {lng}
+      {${JSON.stringify(languages)}.map((lang) => (
+        <button key={lang} onClick={() => changeLanguage(lang)}>
+          {lang.toUpperCase()}
         </button>
       ))}
     </div>
   );
 };
 
-export default LanguageSwitcher;
+export default LanguageSelector;
 `;
-        const filePath = path.join(process.cwd(), "components", "LanguageSwitcher.js");
-        await FileManager.createSubfolders(filePath);
-        await FileManager.write(filePath, content);
+
+        await FileManager.write("src/components/LanguageSelector.js", componentContent);
     },
 
-    async updateREADME(projectStructure) {
-        const readmePath = path.join(process.cwd(), "README.md");
-        const readmeContent = await FileManager.read(readmePath);
-        const updatedContent =
-            readmeContent +
-            "\n\n## Internationalization\n\nThis project supports multiple languages. Use the `LanguageSwitcher` component to change the language at runtime.";
-        await FileManager.write(readmePath, updatedContent);
-    },
+    async updateReadmeWithI18nInfo(readme, languages) {
+        const i18nSection = `
+## Internationalization
 
-    async updatePackageJSON() {
-        const packagePath = path.join(process.cwd(), "package.json");
-        const packageContent = await FileManager.read(packagePath);
-        const packageJSON = JSON.parse(packageContent);
-        packageJSON.dependencies = {
-            ...packageJSON.dependencies,
-            i18next: "^21.8.0",
-            "i18next-fs-backend": "^1.1.5",
-            "react-i18next": "^11.17.0",
-        };
-        await FileManager.write(packagePath, JSON.stringify(packageJSON, null, 2));
+This project supports the following languages:
+
+${languages.map((lang) => `- ${lang.toUpperCase()}`).join("\n")}
+
+To add or modify translations, update the string files in the \`src/i18n\` directory.
+
+To change the language at runtime, use the \`LanguageSelector\` component or call \`i18next.changeLanguage(lang)\`.
+`;
+
+        const updatedReadme = readme + "\n" + i18nSection;
+        await FileManager.write("README.md", updatedReadme);
     },
 };
 
