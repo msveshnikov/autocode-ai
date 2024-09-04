@@ -86,7 +86,3 @@ AutoCode currently supports the following programming languages:
 -   Swift
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
-
-# TODO
-
--   update AI agents section in landing page
