@@ -194,7 +194,7 @@ Please provide your suggestions in the following Markdown format:
         for (const [fileName, content] of Object.entries(files)) {
             const filePath =
                 fileName === path.basename(originalFilePath) ? originalFilePath : path.join(originalDir, fileName);
-            await FileManager.write(filePath, content);
+            await FileManager.write(filePath, this.cleanGeneratedCode(content));
             console.log(chalk.green(`✅ Saved file: ${filePath}`));
         }
     },
