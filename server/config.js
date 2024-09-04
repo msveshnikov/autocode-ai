@@ -1,8 +1,9 @@
 export const CONFIG = {
     licenseServerUrl: "https://autocode.work",
+    // licenseServerUrl: "http://localhost:3000",
     excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
     excludedDirs: [".git", "node_modules"],
-    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"],
+    excludedExtensions: [".md", ".svg", ".csv", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico", ".avif"],
     anthropicModel: "claude-3-5-sonnet-20240620",
     maxTokens: 8192,
     maxFileLines: 700,
@@ -63,18 +64,6 @@ export const CONFIG = {
         },
     },
     aiAgents: {
-        sqlMigrations: {
-            name: "SQL Migrations Agent",
-            description: "Writes database migrations and type files",
-        },
-        services: {
-            name: "Services Agent",
-            description: "Creates services that interact with the database and process data",
-        },
-        apiRoutes: {
-            name: "API Routes Agent",
-            description: "Handles input validation, auth checks, and service calls for HTTP requests",
-        },
         tester: {
             name: "Tester Agent",
             description: "Writes integration tests for endpoints",
@@ -84,33 +73,25 @@ export const CONFIG = {
             description:
                 "Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks",
         },
-        landingPage: {
-            name: "Landing Page Agent",
-            description: "Generates a visually appealing landing page for the project",
-        },
-        redditPromotion: {
-            name: "Reddit Promotion Agent",
-            description: "Manages Reddit promotions using the /u/AutoCode community",
-        },
-        codeReview: {
-            name: "Code Review Agent",
-            description: "Provides automated code quality feedback and suggestions",
-        },
         devOps: {
             name: "DevOps Agent",
             description: "Configures CI/CD pipelines and manages deployment processes",
         },
-        security: {
-            name: "Security Agent",
-            description: "Performs security audits and suggests vulnerability fixes",
-        },
-        performance: {
-            name: "Performance Agent",
-            description: "Analyzes code for performance bottlenecks and optimizations",
-        },
         internationalization: {
             name: "Internationalization Agent",
             description: "Implements multi-language support in projects",
+        },
+        marketing: {
+            name: "Marketing Agent",
+            description: "Develops marketing strategies and content for the project",
+        },
+        businessAnalyst: {
+            name: "Business Analyst Agent",
+            description: "Analyzes requirements and provides business insights",
+        },
+        productOwner: {
+            name: "Product Owner Agent",
+            description: "Manages product backlog and prioritizes features",
         },
     },
     pricingTiers: {
@@ -140,26 +121,10 @@ export const CONFIG = {
             onPremises: true,
         },
     },
-    landingPage: {
-        templatePath: "landing.html",
-        theme: {
-            primaryColor: "#00FFFF",
-            secondaryColor: "#000080",
-            backgroundColor: "#000000",
-        },
-    },
     contextManagement: {
         autoUpdate: true,
         maxContextSize: 200000,
     },
-    sandbox: {
-        enabled: true,
-        versionControl: "git",
-    },
-    syntaxChecking: {
-        autoFix: true,
-        supportedLanguages: 30,
-    },
-    temperatureOptions: [0, 0.5, 0.7],
+    temperatureOptions: [0, 0.5, 0.7, 1],
     tokenStoragePath: ".autocode_token",
 };
