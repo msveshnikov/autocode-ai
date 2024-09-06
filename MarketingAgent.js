@@ -44,7 +44,7 @@ const MarketingAgent = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write("marketing_strategy.md", response.content[0].text);
+        await FileManager.write("docs/marketing_strategy.md", response.content[0].text);
         console.log(chalk.green("📊 Marketing strategy generated and saved to marketing_strategy.md"));
     },
 
@@ -68,7 +68,7 @@ const MarketingAgent = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write("social_media_content.json", response.content[0].text);
+        await FileManager.write("docs/social_media_content.json", response.content[0].text);
         console.log(chalk.green("📱 Social media content generated and saved to social_media_content.json"));
     },
 
@@ -92,7 +92,7 @@ const MarketingAgent = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write("email_campaign.md", response.content[0].text);
+        await FileManager.write("docs/email_campaign.md", response.content[0].text);
         console.log(chalk.green("📧 Email campaign developed and saved to email_campaign.md"));
     },
 
@@ -116,7 +116,7 @@ const MarketingAgent = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write("competitor_analysis.md", response.content[0].text);
+        await FileManager.write("docs/competitor_analysis.md", response.content[0].text);
         console.log(chalk.green("🔍 Competitor analysis completed and saved to competitor_analysis.md"));
     },
 
