@@ -17,6 +17,7 @@ class TesterAgent {
         await this.generateIntegrationTests(projectStructure, readme);
         await this.generateUnitTests(projectStructure, readme);
         await this.runTests();
+        await this.optimizeTests();
         console.log("Tester Agent completed.");
     }
 
@@ -74,7 +75,7 @@ Generate a complete Jest test file for this endpoint. Include necessary imports,
                 messages: [{ role: "user", content: prompt }],
             });
 
-            const testContent = response.content[0].text;
+            const testContent = this.extractCodeSnippet(response.content[0].text);
             const testFileName = `${endpoint.file.replace(".js", "")}.test.js`;
             const testFilePath = path.join(process.cwd(), this.testsDirectory, testFileName);
 
@@ -122,7 +123,7 @@ Generate a complete Jest test file for this module. Include necessary imports, m
                 messages: [{ role: "user", content: prompt }],
             });
 
-            const testContent = response.content[0].text;
+            const testContent = this.extractCodeSnippet(response.content[0].text);
             const testFileName = `${path.basename(file, ".js")}.test.js`;
             const testFilePath = path.join(process.cwd(), this.testsDirectory, testFileName);
 
@@ -156,6 +157,12 @@ Generate a complete Jest test file for this module. Include necessary imports, m
             const optimizedContent = await CodeGenerator.optimizeAndRefactorFile(testFile, content);
             await FileManager.write(testFile, optimizedContent);
         }
+    }
+
+    extractCodeSnippet(text) {
+        const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)\n```/;
+        const match = text.match(codeBlockRegex);
+        return match ? match[1] : text;
     }
 }
 

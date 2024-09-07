@@ -14,10 +14,18 @@ const ProjectManagerAgent = {
     async run(projectStructure, readme) {
         console.log(chalk.cyan("🚀 Project Manager Agent starting..."));
 
-        await this.orchestrateAgents(projectStructure, readme);
         await this.buildApp();
         await this.runTests();
         await this.performUIChecks();
+        await this.checkDependencies();
+        await this.optimizeAssets();
+        await this.monitorPerformance();
+        await this.generateDockerfile();
+        await this.setupCICD();
+        await this.generateChangeLog();
+        await this.setupEnvironmentConfig();
+        await this.generateBuildScript();
+        await this.orchestrateAgents(projectStructure, readme);
 
         console.log(chalk.green("✅ Project Manager Agent completed its tasks."));
     },
