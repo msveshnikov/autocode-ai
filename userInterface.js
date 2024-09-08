@@ -14,6 +14,7 @@ import TesterAgent from "./TesterAgent.js";
 import MarketingAgent from "./MarketingAgent.js";
 import BusinessAnalystAgent from "./BusinessAnalystAgent.js";
 import ProductOwnerAgent from "./ProductOwnerAgent.js";
+import AppStorePublisherAgent from "./AppStorePublisherAgent.js";
 import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
@@ -189,6 +190,7 @@ const UserInterface = {
             { name: "Marketing Agent", agent: MarketingAgent },
             { name: "Business Analyst Agent", agent: BusinessAnalystAgent },
             { name: "Product Owner Agent", agent: ProductOwnerAgent },
+            { name: "App Store Publisher Agent", agent: AppStorePublisherAgent },
         ];
 
         const { selectedAgent } = await inquirer.prompt({

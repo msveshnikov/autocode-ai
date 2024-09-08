@@ -93,6 +93,10 @@ export const CONFIG = {
             name: "Product Owner Agent",
             description: "Manages product backlog and prioritizes features",
         },
+        appStorePublisher: {
+            name: "App Store Publisher Agent",
+            description: "Handles publishing to Google Play and App Store",
+        },
     },
     pricingTiers: {
         free: {
@@ -127,4 +131,5 @@ export const CONFIG = {
     },
     temperatureOptions: [0, 0.5, 0.7, 1],
     tokenStoragePath: ".autocode_token",
+    changelogPath: "CHANGELOG.md",
 };

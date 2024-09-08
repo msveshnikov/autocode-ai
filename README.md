@@ -87,3 +87,8 @@ AutoCode currently supports the following programming languages:
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
+# TODO
+
+-   maintain CHANGELOG.md after every code generation with summary, date/time and type of fix
+-   add google play/app store publisher agent
+-   create all app description and metadata files in AppStorePublisherAgent 
