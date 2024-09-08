@@ -5,12 +5,15 @@ import { exec } from "child_process";
 import util from "util";
 import FileManager from "./fileManager.js";
 import { CONFIG } from "./config.js";
+import UserInterface from "./userInterface.js";
+import CodeGenerator from "./codeGenerator.js";
 
 const execPromise = util.promisify(exec);
 
 const AppStorePublisherAgent = {
     async run(projectStructure, readme) {
         console.log("App Store Publisher Agent: Starting publishing process...");
+        await CodeGenerator.createAppDescriptionFiles(projectStructure, readme);
 
         const platform = await this.detectPlatform(projectStructure);
         if (!platform) {
@@ -20,6 +23,7 @@ const AppStorePublisherAgent = {
 
         await this.prepareApp(platform);
         await this.generateMetadata(platform, readme);
+        await this.createDescriptionFiles(platform);
         await this.uploadScreenshots(platform);
         await this.submitForReview(platform);
 
@@ -70,6 +74,50 @@ const AppStorePublisherAgent = {
             : [];
 
         return { description, shortDescription, keywords };
+    },
+
+    async createDescriptionFiles(platform) {
+        console.log("Creating app description and metadata files...");
+        const metadata = await this.generateAppMetadata();
+
+        const metadataDir = path.join(
+            process.cwd(),
+            "fastlane",
+            "metadata",
+            platform === "android" ? "android" : "ios",
+            "en-US"
+        );
+        await fs.mkdir(metadataDir, { recursive: true });
+
+        const files = {
+            "name.txt": metadata.name,
+            "subtitle.txt": metadata.subtitle,
+            "privacy_url.txt": metadata.privacyUrl,
+            "support_url.txt": metadata.supportUrl,
+            "marketing_url.txt": metadata.marketingUrl,
+            "release_notes.txt": metadata.releaseNotes,
+        };
+
+        for (const [fileName, content] of Object.entries(files)) {
+            await FileManager.write(path.join(metadataDir, fileName), content);
+        }
+
+        console.log("App description and metadata files created successfully.");
+    },
+
+    async generateAppMetadata() {
+        const prompt = `Generate app metadata for the App Store and Google Play Store, including:
+        1. App name
+        2. Subtitle
+        3. Privacy policy URL
+        4. Support URL
+        5. Marketing URL
+        6. Release notes for the latest version
+
+        Provide the information in a JSON format.`;
+
+        const metadata = await UserInterface.promptAI(prompt);
+        return JSON.parse(metadata);
     },
 
     async uploadScreenshots(platform) {

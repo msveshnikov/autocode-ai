@@ -8,6 +8,7 @@ import ora from "ora";
 import CodeAnalyzer from "./codeAnalyzer.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import UserInterface from "./userInterface.js";
+import fs from "fs/promises";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -522,6 +523,101 @@ Return the generated code for ${fileName} without explanations or comments.
                 )}`
             )
         );
+    },
+
+    async updateChangelog(changes) {
+        const changelogPath = "CHANGELOG.md";
+        let changelog = "";
+
+        try {
+            changelog = await fs.readFile(changelogPath, "utf-8");
+        } catch (error) {
+            console.log(chalk.yellow("CHANGELOG.md not found. Creating a new one."));
+        }
+
+        const currentDate = new Date().toISOString().split("T")[0];
+        const newEntry = `
+## [Unreleased] - ${currentDate}
+
+${changes.map((change) => `- ${change}`).join("\n")}
+
+`;
+
+        changelog = newEntry + changelog;
+
+        await fs.writeFile(changelogPath, changelog);
+        console.log(chalk.green("✅ CHANGELOG.md updated successfully"));
+    },
+
+    async createAppDescriptionFiles(projectStructure, readme) {
+        console.log(chalk.cyan("📝 Creating app description and metadata files..."));
+
+        const prompt = `
+Please generate the following app description and metadata files for both Google Play Store and Apple App Store:
+
+1. app_description.txt (max 4000 characters)
+2. short_description.txt (max 80 characters)
+3. keywords.txt (comma-separated, max 100 characters)
+4. title.txt (max 30 characters)
+5. subtitle.txt (max 30 characters)
+6. privacy_policy.html
+7. release_notes.txt
+
+Base the content on the project's README.md and existing features. Ensure the descriptions are engaging and highlight the key features of the app.
+
+README.md content:
+${readme}
+
+Project structure:
+${JSON.stringify(projectStructure, null, 2)}
+
+
+Return the content for each file in the following format:
+
+# File: [filename]
+[content]
+
+# File: [filename]
+[content]
+
+...and so on for all files.
+`;
+
+        const spinner = ora("Generating app description and metadata files...").start();
+
+        try {
+            const response = await anthropic.messages.create({
+                model: CONFIG.anthropicModel,
+                max_tokens: CONFIG.maxTokens,
+                temperature: await UserInterface.getTemperature(),
+                messages: [{ role: "user", content: prompt }],
+            });
+            spinner.succeed("App description and metadata files generated successfully");
+
+            const files = this.parseGeneratedFiles(response.content[0].text);
+            for (const [fileName, content] of Object.entries(files)) {
+                await FileManager.write(`docs/${fileName}`, content);
+                console.log(chalk.green(`✅ Generated docs/${fileName}`));
+            }
+
+            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        } catch (error) {
+            spinner.fail("Error generating app description and metadata files");
+            throw error;
+        }
+    },
+
+    parseGeneratedFiles(content) {
+        const files = {};
+        const fileRegex = /# File: (.+)\n([\s\S]+?)(?=\n# File:|$)/g;
+        let match;
+
+        while ((match = fileRegex.exec(content)) !== null) {
+            const [, fileName, fileContent] = match;
+            files[fileName.trim()] = fileContent.trim();
+        }
+
+        return files;
     },
 };
 
