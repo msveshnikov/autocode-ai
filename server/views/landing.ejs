@@ -360,6 +360,22 @@
                 filter: invert(1);
             }
 
+            .video-container {
+                position: relative;
+                width: 100%;
+                padding-bottom: 56.25%;
+                margin-top: 2rem;
+            }
+
+            .video-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
@@ -505,6 +521,10 @@
                     <h3>Product Owner Agent</h3>
                     <p>Manages product backlog and prioritizes features</p>
                 </div>
+                <div class="agent">
+                    <h3>App Store Publisher Agent</h3>
+                    <p>Manages app store submissions and updates</p>
+                </div>
             </section>
             <section id="languages" class="container">
                 <h2>Supported Languages</h2>
@@ -597,6 +617,17 @@
                             >
                         </li>
                     </ul>
+                    <div class="video-container">
+                        <iframe
+                            width="560"
+                            height="315"
+                            src="https://www.youtube.com/embed/PaHFko3tMow"
+                            title="AutoCode Demo Video"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
                 </div>
             </section>
         </main>

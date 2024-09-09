@@ -90,5 +90,4 @@ Each language has its own configuration for file extensions, recommended linter,
 # TODO
 
 -   maintain CHANGELOG.md after every code generation with summary, date/time and type of fix
--   add google play/app store publisher agent
--   create all app description and metadata files in AppStorePublisherAgent 
+-   add https://youtu.be/PaHFko3tMow to ShowCase section as a preview!!! centered
