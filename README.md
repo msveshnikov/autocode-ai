@@ -90,4 +90,3 @@ Each language has its own configuration for file extensions, recommended linter,
 # TODO
 
 -   maintain CHANGELOG.md after every code generation with summary, date/time and type of fix
--   add https://youtu.be/PaHFko3tMow to ShowCase section as a preview!!! centered
