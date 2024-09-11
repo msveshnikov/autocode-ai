@@ -155,7 +155,7 @@ Provide the suggestions in a structured format.
     
     Please identify:
     1. Missing packages based on import statements for each supported language
-    2. Missing files that are referenced but not present in the project structure
+    2. Missing files that are referenced but not present in the project structure (please always return filenames based on repo root)
     3. Potential circular dependencies
     4. Dependencies listed in the package file but not used in the project
     5. Dependencies used in the project but not listed in the package file

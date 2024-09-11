@@ -13,23 +13,16 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
 -   Code quality checks and suggestions/auto fixes
--   Detect missing files/references
--   Adherence to DRY, KISS, and SRP principles
 -   Automatic dependency management and creation of missing files
--   Modular architecture for easy extensibility
+-   Adherence to DRY, KISS, and SRP principles
 -   Intelligent code analysis and refactoring suggestions
 -   Automated documentation generation
 -   User-friendly command-line interface
 -   Support for multiple programming languages
--   Language-specific linting and formatting
--   Customizable configuration for different programming languages
--   Multi-language project handling
 -   AI-powered agents for specialized tasks
 -   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
--   Context management system
 -   Syntax checking and auto-fixing
--   Iterative development alongside AI
 
 ## Installation
 
@@ -89,4 +82,4 @@ Each language has its own configuration for file extensions, recommended linter,
 
 # TODO
 
--   maintain CHANGELOG.md after every code generation with summary, date/time and type of fix
+-   show remaining Anthropic API balance after each generation
