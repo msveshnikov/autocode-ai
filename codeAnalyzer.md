@@ -2,62 +2,55 @@
 
 ## Overview
 
-`CodeAnalyzer.js` is a core module in the project that provides various code analysis and optimization functionalities. It leverages ESLint for linting, uses the Anthropic AI API for advanced code analysis and suggestions, and integrates with other project modules like `FileManager` and `CodeGenerator`.
+`CodeAnalyzer.js` is a crucial component of the project that provides various code analysis and optimization functionalities. It works in conjunction with other modules like `FileManager`, `CodeGenerator`, and `UserInterface` to perform tasks such as linting, fixing errors, optimizing project structure, analyzing code quality, detecting missing dependencies, and generating unit tests.
 
-This module is responsible for:
-
--   Running lint checks
--   Fixing lint errors
--   Optimizing project structure
--   Analyzing code quality
--   Detecting missing dependencies
--   Creating missing files
+The module utilizes the Anthropic AI API to assist with code analysis and generation tasks. It supports multiple programming languages and adapts its behavior based on the file extensions and language-specific configurations defined in the `CONFIG` object.
 
 ## Functions
 
 ### runLintChecks(filePath)
 
-Runs ESLint on the specified file.
+Runs linting checks on the specified file.
 
 **Parameters:**
 
--   `filePath` (string): Path to the file to be linted
+-   `filePath` (string): The path to the file to be linted.
 
 **Returns:**
 
--   Promise<string>: ESLint output (warnings or errors)
+-   Promise<string>: The linting output or an empty string if no linter is configured.
 
-**Example:**
+**Usage Example:**
 
 ```javascript
-const lintOutput = await CodeAnalyzer.runLintChecks("./src/index.js");
+const lintOutput = await CodeAnalyzer.runLintChecks("./src/main.js");
 ```
 
 ### fixLintErrors(filePath, lintOutput, projectStructure)
 
-Attempts to fix lint errors in the specified file using AI assistance.
+Attempts to fix linting errors in the specified file using AI assistance.
 
 **Parameters:**
 
--   `filePath` (string): Path to the file with lint errors
--   `lintOutput` (string): ESLint output containing errors
--   `projectStructure` (object): Current project structure
+-   `filePath` (string): The path to the file with lint errors.
+-   `lintOutput` (string): The output from the linter.
+-   `projectStructure` (object): The structure of the project.
 
-**Example:**
+**Usage Example:**
 
 ```javascript
-await CodeAnalyzer.fixLintErrors("./src/index.js", lintOutput, projectStructure);
+await CodeAnalyzer.fixLintErrors("./src/main.js", lintOutput, projectStructure);
 ```
 
 ### optimizeProjectStructure(projectStructure)
 
-Provides suggestions for optimizing the project structure using AI analysis.
+Analyzes the project structure and provides optimization suggestions.
 
 **Parameters:**
 
--   `projectStructure` (object): Current project structure
+-   `projectStructure` (object): The current structure of the project.
 
-**Example:**
+**Usage Example:**
 
 ```javascript
 await CodeAnalyzer.optimizeProjectStructure(projectStructure);
@@ -65,16 +58,16 @@ await CodeAnalyzer.optimizeProjectStructure(projectStructure);
 
 ### analyzeCodeQuality(filePath)
 
-Analyzes the code quality of a specific file and provides improvement suggestions.
+Performs a detailed code quality analysis for the specified file.
 
 **Parameters:**
 
--   `filePath` (string): Path to the file to be analyzed
+-   `filePath` (string): The path to the file to be analyzed.
 
-**Example:**
+**Usage Example:**
 
 ```javascript
-await CodeAnalyzer.analyzeCodeQuality("./src/index.js");
+await CodeAnalyzer.analyzeCodeQuality("./src/main.js");
 ```
 
 ### detectMissingDependencies(projectStructure)
@@ -83,81 +76,133 @@ Detects missing dependencies and files in the project.
 
 **Parameters:**
 
--   `projectStructure` (object): Current project structure
+-   `projectStructure` (object): The structure of the project.
 
-**Example:**
+**Usage Example:**
 
 ```javascript
 await CodeAnalyzer.detectMissingDependencies(projectStructure);
 ```
 
+### getPackageFileContent(projectStructure)
+
+Retrieves the content of the package file (e.g., package.json) from the project structure.
+
+**Parameters:**
+
+-   `projectStructure` (object): The structure of the project.
+
+**Returns:**
+
+-   Promise<string>: The content of the package file or "No package file found".
+
 ### analyzeDependencies(projectStructure)
 
-Analyzes dependencies across all files in the project.
+Analyzes dependencies for all files in the project structure.
 
 **Parameters:**
 
--   `projectStructure` (object): Current project structure
+-   `projectStructure` (object): The structure of the project.
 
 **Returns:**
 
--   Promise<object>: Dependency graph of the project
+-   Promise<object>: An object containing file paths and their dependencies.
 
-**Example:**
+### extractDependencies(content, fileExtension)
 
-```javascript
-const dependenciesGraph = await CodeAnalyzer.analyzeDependencies(projectStructure);
-```
-
-### extractDependencies(content)
-
-Extracts import statements from file content.
+Extracts dependencies from file content based on the file extension.
 
 **Parameters:**
 
--   `content` (string): File content
+-   `content` (string): The content of the file.
+-   `fileExtension` (string): The file extension.
 
 **Returns:**
 
--   Array<string>: List of extracted dependencies
+-   Array<string>: An array of extracted dependencies.
 
-**Example:**
+### createMissingFiles(missingFiles)
 
-```javascript
-const dependencies = CodeAnalyzer.extractDependencies(fileContent);
-```
+Creates missing files detected during dependency analysis.
+
+**Parameters:**
+
+-   `missingFiles` (Array<string>): An array of missing file paths.
 
 ### addNewFile(filePath)
 
-Creates a new file at the specified path.
+Adds a new file to the project.
 
 **Parameters:**
 
--   `filePath` (string): Path where the new file should be created
+-   `filePath` (string): The path of the new file to be created.
 
-**Example:**
+### createMissingFilesFromLint(lintOutput, projectStructure)
 
-```javascript
-await CodeAnalyzer.addNewFile("./src/newModule.js");
-```
-
-### createMissingFiles(lintOutput, projectStructure)
-
-Creates missing files detected from lint errors, with user confirmation.
+Creates missing files detected during linting.
 
 **Parameters:**
 
--   `lintOutput` (string): ESLint output containing errors
--   `projectStructure` (object): Current project structure
+-   `lintOutput` (string): The output from the linter.
+-   `projectStructure` (object): The structure of the project.
 
-**Example:**
+### analyzePerformance(filePath)
+
+Analyzes the performance of the specified file.
+
+**Parameters:**
+
+-   `filePath` (string): The path to the file to be analyzed.
+
+**Usage Example:**
 
 ```javascript
-await CodeAnalyzer.createMissingFiles(lintOutput, projectStructure);
+await CodeAnalyzer.analyzePerformance("./src/main.js");
 ```
 
-## Usage in the Project
+### checkSecurityVulnerabilities(filePath)
 
-`CodeAnalyzer.js` plays a crucial role in maintaining code quality and project structure. It is likely used by other modules like `index.js` or `userInterface.js` to provide code analysis features to the user. The module interacts closely with `FileManager.js` for file operations and `CodeGenerator.js` for generating content for new files.
+Checks for security vulnerabilities in the specified file.
 
-The AI-powered analysis features make this module particularly powerful for providing intelligent suggestions and automating code improvements.
+**Parameters:**
+
+-   `filePath` (string): The path to the file to be checked.
+
+**Usage Example:**
+
+```javascript
+await CodeAnalyzer.checkSecurityVulnerabilities("./src/main.js");
+```
+
+### generateUnitTests(filePath, projectStructure)
+
+Generates unit tests for the specified file.
+
+**Parameters:**
+
+-   `filePath` (string): The path to the file for which tests will be generated.
+-   `projectStructure` (object): The structure of the project.
+
+**Usage Example:**
+
+```javascript
+await CodeAnalyzer.generateUnitTests("./src/main.js", projectStructure);
+```
+
+## Dependencies
+
+-   `chalk`: For colorful console output.
+-   `child_process`: For executing shell commands.
+-   `util`: For promisifying functions.
+-   `@anthropic-ai/sdk`: For AI-assisted code analysis and generation.
+-   `path`: For file path operations.
+-   `inquirer`: For interactive command-line user interfaces.
+-   `ora`: For elegant terminal spinners.
+
+## Configuration
+
+The module relies on the `CONFIG` object imported from `./config.js`, which should contain language-specific configurations and other settings.
+
+## Note
+
+This module is designed to work in conjunction with other components of the project, such as `FileManager`, `CodeGenerator`, and `UserInterface`. It plays a central role in code analysis, optimization, and maintenance tasks within the project.

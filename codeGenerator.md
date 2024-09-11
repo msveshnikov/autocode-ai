@@ -2,138 +2,133 @@
 
 ## Overview
 
-`CodeGenerator.js` is a core module in the project that handles the generation and modification of code files. It interacts with the Anthropic API to leverage AI for code generation, README updates, file splitting, and code optimization. This module is designed to work within the project structure, considering other components like `FileManager` and `config.js`.
+`CodeGenerator.js` is a core module in the project that handles various code generation tasks using the Anthropic AI model. It provides functionality for generating and updating code files, optimizing and refactoring existing code, splitting large files, generating dependency files, creating AI agent code, and more.
 
-## Dependencies
+## Main Functions
 
--   `@anthropic-ai/sdk`: For interacting with the Anthropic API
--   `chalk`: For console text styling
--   `inquirer`: For user prompts
--   `path`: For file path operations
--   `FileManager`: Custom module for file operations
--   `CONFIG`: Configuration object imported from `config.js`
+### generate(readme, currentCode, fileName, projectStructure, allFileContents)
 
-## Main Object: CodeGenerator
-
-### Methods
-
-#### 1. generate(readme, currentCode, fileName, projectStructure)
-
-Generates or updates a code file based on README instructions and project structure.
+Generates or updates a code file based on the provided information.
 
 **Parameters:**
 
 -   `readme` (string): Content of the README.md file
--   `currentCode` (string): Current content of the file (if exists)
--   `fileName` (string): Name of the file to generate/update
--   `projectStructure` (object): Current project structure
+-   `currentCode` (string): Current content of the file (if it exists)
+-   `fileName` (string): Name of the file to generate or update
+-   `projectStructure` (object): Structure of the project
+-   `allFileContents` (object): Contents of all other files in the project
 
-**Returns:**
+**Returns:** Promise<string> - The generated code
 
--   Promise<string>: Generated or updated code content
+### updateReadme(readme, projectStructure)
 
-**Usage Example:**
-
-```javascript
-const newCode = await CodeGenerator.generate(readmeContent, existingCode, "index.js", projectStructure);
-```
-
-#### 2. updateReadme(readme, projectStructure)
-
-Updates the README.md file with new design ideas based on the current project structure.
+Updates the README.md file with new design ideas and considerations.
 
 **Parameters:**
 
 -   `readme` (string): Current content of the README.md file
--   `projectStructure` (object): Current project structure
+-   `projectStructure` (object): Structure of the project
 
-**Returns:**
+**Returns:** Promise<string> - The updated README content
 
--   Promise<string>: Updated README content
-
-**Usage Example:**
-
-```javascript
-const updatedReadme = await CodeGenerator.updateReadme(currentReadme, projectStructure);
-```
-
-#### 3. splitLargeFile(filePath, content, projectStructure)
+### splitLargeFile(filePath, content, projectStructure)
 
 Splits a large file into smaller, more manageable parts.
 
 **Parameters:**
 
 -   `filePath` (string): Path of the file to split
--   `content` (string): Content of the file to split
--   `projectStructure` (object): Current project structure
+-   `content` (string): Content of the file
+-   `projectStructure` (object): Structure of the project
 
-**Returns:**
+### optimizeAndRefactorFile(filePath, projectStructure)
 
--   Promise<void>
+Optimizes and refactors a given file.
 
-**Usage Example:**
+**Parameters:**
+
+-   `filePath` (string): Path of the file to optimize and refactor
+-   `projectStructure` (object): Structure of the project
+
+### generateDependencyFile(language, projectStructure, readme)
+
+Generates a dependency file (e.g., package.json, requirements.txt) for the specified language.
+
+**Parameters:**
+
+-   `language` (string): Programming language of the project
+-   `projectStructure` (object): Structure of the project
+-   `readme` (string): Content of the README.md file
+
+### generateAIAgentCode(agentType, agentDescription, projectStructure, readme)
+
+Generates code for an AI agent based on the provided information.
+
+**Parameters:**
+
+-   `agentType` (string): Type of the AI agent
+-   `agentDescription` (string): Description of the AI agent
+-   `projectStructure` (object): Structure of the project
+-   `readme` (string): Content of the README.md file
+
+### generateLandingPage(projectStructure, readme)
+
+Generates an HTML landing page for the project.
+
+**Parameters:**
+
+-   `projectStructure` (object): Structure of the project
+-   `readme` (string): Content of the README.md file
+
+### generateFullProject(projectStructure, readme)
+
+Generates a full project structure based on the provided information.
+
+**Parameters:**
+
+-   `projectStructure` (object): Structure of the project
+-   `readme` (string): Content of the README.md file
+
+### updateChangelog(changes)
+
+Updates the CHANGELOG.md file with new changes.
+
+**Parameters:**
+
+-   `changes` (array): Array of change descriptions
+
+### createAppDescriptionFiles(projectStructure, readme)
+
+Creates app description and metadata files for app store submissions.
+
+**Parameters:**
+
+-   `projectStructure` (object): Structure of the project
+-   `readme` (string): Content of the README.md file
+
+## Helper Functions
+
+-   `cleanGeneratedCode(code)`: Cleans the generated code by removing markdown formatting.
+-   `getLanguageFromExtension(fileExtension)`: Determines the programming language based on the file extension.
+-   `calculateTokenStats(inputTokens, outputTokens)`: Calculates and displays token usage statistics.
+-   `parseGeneratedFiles(content)`: Parses generated file content into separate files.
+
+## Usage Example
 
 ```javascript
-await CodeGenerator.splitLargeFile("/path/to/large/file.js", fileContent, projectStructure);
+import CodeGenerator from "./codeGenerator.js";
+
+// Generate a new file
+const readme = "# My Project\n\nThis is a sample project.";
+const fileName = "app.js";
+const projectStructure = { "app.js": null, "README.md": null };
+const generatedCode = await CodeGenerator.generate(readme, "", fileName, projectStructure, {});
+
+// Optimize and refactor an existing file
+await CodeGenerator.optimizeAndRefactorFile("app.js", projectStructure);
+
+// Generate a full project
+await CodeGenerator.generateFullProject(projectStructure, readme);
 ```
 
-#### 4. parseSplitSuggestion(suggestion)
-
-Parses the AI-generated file splitting suggestion.
-
-**Parameters:**
-
--   `suggestion` (string): AI-generated splitting suggestion
-
-**Returns:**
-
--   object: Parsed files with their contents
-
-#### 5. saveFiles(originalFilePath, files)
-
-Saves the split files to the file system.
-
-**Parameters:**
-
--   `originalFilePath` (string): Path of the original file
--   `files` (object): Object containing file names and their contents
-
-**Returns:**
-
--   Promise<void>
-
-#### 6. optimizeAndRefactorFile(filePath, projectStructure)
-
-Optimizes and refactors a given file using AI suggestions.
-
-**Parameters:**
-
--   `filePath` (string): Path of the file to optimize
--   `projectStructure` (object): Current project structure
-
-**Returns:**
-
--   Promise<void>
-
-**Usage Example:**
-
-```javascript
-await CodeGenerator.optimizeAndRefactorFile("/path/to/file.js", projectStructure);
-```
-
-## Integration with Project Structure
-
-`CodeGenerator.js` works closely with other modules in the project:
-
--   It uses `FileManager` for reading and writing files.
--   It relies on `config.js` for configuration settings like `maxFileLines` and API model details.
--   It's likely called by `index.js` or `userInterface.js` to perform code generation tasks.
--   It considers the entire project structure when generating or modifying code to ensure consistency and avoid duplication.
-
-## Error Handling
-
-The module uses `console.log` with `chalk` to provide colorful feedback about its operations. However, it doesn't explicitly handle errors, so it's recommended to implement try-catch blocks when using these methods in other parts of the application.
-
-## Note on API Usage
-
-This module requires an Anthropic API key to be set in the environment variable `CLAUDE_KEY`. Ensure this is properly set before using the CodeGenerator functions.
+This module is central to the project's code generation and management capabilities, interacting with various other modules like `FileManager`, `CodeAnalyzer`, `DocumentationGenerator`, and `UserInterface` to provide a comprehensive code generation solution.

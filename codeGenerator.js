@@ -523,17 +523,6 @@ Return the generated code for ${fileName} without explanations or comments.
                 )}`
             )
         );
-
-        try {
-            const balanceResponse = await anthropic.getBalance();
-            console.log(
-                chalk.cyan(
-                    `💰 Remaining Anthropic API balance: ${chalk.yellow(`$${balanceResponse.balance.toFixed(2)}`)}`
-                )
-            );
-        } catch (error) {
-            console.error(chalk.red("Error fetching Anthropic API balance:", error.message));
-        }
     },
 
     async updateChangelog(changes) {
