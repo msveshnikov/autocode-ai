@@ -8,7 +8,6 @@ import UserInterface from "./userInterface.js";
 const serverUrl = CONFIG.licenseServerUrl;
 let currentToken = null;
 const tokenFile = path.join(os.homedir(), ".autocode_token");
-const usageFile = path.join(os.homedir(), ".autocode_usage");
 
 const LicenseManager = {
     async login(email, password) {
@@ -36,9 +35,10 @@ const LicenseManager = {
         }
 
         if (!currentToken) {
-            return this.checkLocalTrialLicense();
+            if (!(await UserInterface.handleLogin())) {
+                return false;
+            }
         }
-
         try {
             const response = await fetch(`${serverUrl}/license/check`, {
                 method: "POST",
@@ -53,7 +53,13 @@ const LicenseManager = {
                     await UserInterface.handleLogin();
                     return this.checkLicense();
                 }
-                throw new Error("License check failed");
+                if (response.status === 429) {
+                    console.log(chalk.red("You've reached the daily request limit for the Free Tier."));
+                    return false;
+                }
+
+                console.log(chalk.red("License check failed"));
+                return false;
             }
             const data = await response.json();
             return data.message === "Request allowed";
@@ -63,39 +69,14 @@ const LicenseManager = {
         }
     },
 
-    async checkLocalTrialLicense() {
-        const usage = await this.loadUsage();
-        if (usage.requests >= 10) {
-            return false;
-        }
-
-        usage.requests++;
-        await this.saveUsage(usage);
-        return true;
-    },
-
     async getLicenseTier() {
-        if (!currentToken) {
-            await this.loadToken();
-        }
-
-        if (!currentToken) {
-            return "Local Trial";
-        }
-
-        try {
-            const response = await fetch(`${serverUrl}/license/tier-info`, {
-                headers: {
-                    Authorization: `Bearer ${currentToken}`,
-                },
-            });
-            if (!response.ok) throw new Error("Failed to get tier info");
-            const data = await response.json();
-            return data.name;
-        } catch (error) {
-            console.error("Failed to get tier info:", error.message);
-            return "Free";
-        }
+        const response = await fetch(`${serverUrl}/license/tier-info`, {
+            headers: {
+                Authorization: `Bearer ${currentToken}`,
+            },
+        });
+        const data = await response.json();
+        return data;
     },
 
     async saveToken(token) {
@@ -116,19 +97,6 @@ const LicenseManager = {
             }
         } catch (error) {
             // Token file doesn't exist or is invalid
-        }
-    },
-
-    async saveUsage(usage) {
-        await fs.writeFile(usageFile, JSON.stringify(usage), "utf8");
-    },
-
-    async loadUsage() {
-        try {
-            const data = await fs.readFile(usageFile, "utf8");
-            return JSON.parse(data);
-        } catch (error) {
-            return { date: "", requests: 0 };
         }
     },
 };
