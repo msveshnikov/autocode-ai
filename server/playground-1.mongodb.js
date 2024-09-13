@@ -3,46 +3,12 @@
 // Select the database to use.
 use("autocode");
 
-db.getCollection("users").updateOne( { email: "enzocm888@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus: "active", stripeCustomerId: "cus_QlsezKXpyQAcRd", stripeSubscriptionId: "sub_1PuKtBAl2o8XNzrOpsaETnUK", }, } );
+db.getCollection("users").updateOne( { email: "mollygun00@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus: "active", stripeCustomerId: "cus_QpwWtpamCYajlO", stripeSubscriptionId: "sub_1PyGdYAl2o8XNzrOEBwQ9vgI", }, } );
 
 // Create index for username and email
 db.users.dropIndex({ username: 1 }, { unique: true });
 db.users.createIndex({ email: 1 }, { unique: true });
 
-// Insert sample users
-db.users.insertMany([
-    {
-        email: "user1@example.com",
-        password: "$2b$10$1234567890123456789012",
-        tier: "Free",
-        subscriptionStatus: "none",
-        dailyRequests: 0,
-        devices: [],
-        lastRequestDate: new Date(),
-    },
-    {
-        email: "user2@example.com",
-        password: "$2b$10$2345678901234567890123",
-        tier: "Premium",
-        stripeCustomerId: "cus_123456789",
-        subscriptionStatus: "active",
-        stripeSubscriptionId: "sub_123456789",
-        dailyRequests: 0,
-        devices: [],
-        lastRequestDate: new Date(),
-    },
-    {
-        email: "user3@example.com",
-        password: "$2b$10$3456789012345678901234",
-        tier: "Enterprise",
-        stripeCustomerId: "cus_987654321",
-        subscriptionStatus: "active",
-        stripeSubscriptionId: "sub_987654321",
-        dailyRequests: 0,
-        devices: [],
-        lastRequestDate: new Date(),
-    },
-]);
 
 // Create function to reset daily requests
 db.system.js.save({
