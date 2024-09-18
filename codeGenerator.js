@@ -66,7 +66,8 @@ Please generate or update the ${fileName} file to implement the features describ
     },
 
     cleanGeneratedCode(code) {
-        const codeBlockRegex = /```(?:javascript|js|python|csharp|java|ruby|go|rust|php|swift)?\n([\s\S]*?)\n```/;
+        const codeBlockRegex =
+            /```(?:javascript|js|python|csharp|java|ruby|go|rust|php|swift|kotlin)?\n([\s\S]*?)\n```/;
         const match = code.match(codeBlockRegex);
         return match ? match[1] : code;
     },
@@ -294,6 +295,9 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 break;
             case "swift package manager":
                 dependencyFileName = "Package.swift";
+                break;
+            case "gradle":
+                dependencyFileName = "build.gradle";
                 break;
             default:
                 console.log(chalk.red(`Unsupported package manager: ${languageConfig.packageManager}`));

@@ -77,5 +77,6 @@ AutoCode currently supports the following programming languages:
 -   Rust
 -   PHP
 -   Swift
+-   Kotlin
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.

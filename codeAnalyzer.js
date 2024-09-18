@@ -249,6 +249,8 @@ Provide the suggestions in a structured format.
                 return this.extractPHPDependencies(content);
             case "swift":
                 return this.extractSwiftDependencies(content);
+            case "kotlin":
+                return this.extractKotlinDependencies(content);
             default:
                 return [];
         }
@@ -351,6 +353,16 @@ Provide the suggestions in a structured format.
             dependencies.push(match[1]);
         }
         return dependencies;
+    },
+
+    extractKotlinDependencies(content) {
+        const importRegex = /import\s+([^;\n]+)/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            dependencies.push(match[1].split(".")[0]);
+        }
+        return [...new Set(dependencies)];
     },
 
     async createMissingFiles(missingFiles) {
