@@ -186,7 +186,6 @@ Provide the suggestions in a structured format.
     async getPackageFileContent(projectStructure) {
         const packageFiles = [
             "package.json",
-            "*.csproj",
             "pom.xml",
             "build.gradle",
             "Gemfile",

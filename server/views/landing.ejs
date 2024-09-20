@@ -376,6 +376,34 @@
                 border: none;
             }
 
+            .faq {
+                background-color: rgba(0, 0, 0, 0.6);
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                margin-top: 2rem;
+            }
+
+            .faq h2 {
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+
+            .faq-item {
+                margin-bottom: 1.5rem;
+            }
+
+            .faq-question {
+                font-weight: bold;
+                color: var(--secondary-color);
+                cursor: pointer;
+            }
+
+            .faq-answer {
+                margin-top: 0.5rem;
+                display: none;
+            }
+
             @media (max-width: 768px) {
                 .hero h1 {
                     font-size: 3rem;
@@ -407,6 +435,7 @@
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
                     <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
                     <% if (user) { %>
                     <li><a href="/profile">Profile</a></li>
                     <% } %>
@@ -434,7 +463,7 @@
                     </div>
                     <div class="feature">
                         <h3>Multi-Language Support</h3>
-                        <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP,  Dart and Swift</p>
+                        <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Dart and Swift</p>
                     </div>
                     <div class="feature">
                         <h3>Incremental Building</h3>
@@ -483,11 +512,7 @@
                     </p>
                 </div>
             </section>
-            <img
-                src="/autocode.png"
-                alt="AutoCode Logo"
-                style="display: block; margin: 2rem auto; max-width: 100%"
-            />
+            <img src="/autocode.png" alt="AutoCode Logo" style="display: block; margin: 2rem auto; max-width: 100%" />
             <section id="ai-agents" class="container ai-agents">
                 <h2>AI Agents</h2>
 
@@ -636,6 +661,56 @@
                     </div>
                 </div>
             </section>
+            <section id="faq" class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq">
+                    <div class="faq-item">
+                        <div class="faq-question">What is AutoCode?</div>
+                        <div class="faq-answer">
+                            AutoCode is an innovative automatic coding tool designed to bootstrap any software project
+                            incrementally, transforming README.md instructions into a fully functional software project
+                            using Claude 3.5 Sonnet API.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How does AutoCode work?</div>
+                        <div class="faq-answer">
+                            AutoCode reads your README.md file and existing source code, interprets the instructions
+                            using the Claude 3.5 Sonnet API, and generates the necessary code structure, files, and
+                            content for your project.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What programming languages does AutoCode support?</div>
+                        <div class="faq-answer">
+                            AutoCode supports multiple programming languages, including JavaScript, Python, C#, Java,
+                            Ruby, Go, Rust, PHP, Swift, Kotlin, and Dart.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Is there a free version of AutoCode?</div>
+                        <div class="faq-answer">
+                            Yes, AutoCode offers a free tier with 10 requests per day, basic features, and support for
+                            up to 3 devices.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can I use AutoCode for commercial projects?</div>
+                        <div class="faq-answer">
+                            Yes, you can use AutoCode for commercial projects. We offer Premium and Enterprise plans
+                            that are suitable for commercial use with additional features and support.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Does the subscription cover Anthropic API costs?</div>
+                        <div class="faq-answer">
+                            While our subscription provides many valuable features, Anthropic API usage is billed
+                            separately. This allows you to have more control over your API consumption and associated
+                            costs.
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer>
@@ -676,6 +751,13 @@
                     document.querySelector(this.getAttribute("href")).scrollIntoView({
                         behavior: "smooth",
                     });
+                });
+            });
+
+            document.querySelectorAll(".faq-question").forEach((question) => {
+                question.addEventListener("click", function () {
+                    const answer = this.nextElementSibling;
+                    answer.style.display = answer.style.display === "block" ? "none" : "block";
                 });
             });
         </script>
