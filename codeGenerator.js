@@ -55,10 +55,8 @@ Please generate or update the ${fileName} file to implement the features describ
                 messages: [{ role: "user", content: prompt }],
             });
             spinner.succeed("Code generated successfully");
-            let generatedCode = response.content[0].text;
-            generatedCode = this.cleanGeneratedCode(generatedCode);
             await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
-            return generatedCode;
+            return this.cleanGeneratedCode(response.content[0].text);
         } catch (error) {
             spinner.fail("Error generating code");
             throw error;
@@ -67,7 +65,7 @@ Please generate or update the ${fileName} file to implement the features describ
 
     cleanGeneratedCode(code) {
         const codeBlockRegex =
-            /```(?:javascript|js|python|csharp|java|ruby|go|rust|php|swift|kotlin)?\n([\s\S]*?)\n```/;
+            /```(?:javascript|js|python|csharp|java|ruby|go|rust|php|swift|kotlin|dart)?\n([\s\S]*?)\n```/;
         const match = code.match(codeBlockRegex);
         return match ? match[1] : code;
     },
@@ -298,6 +296,9 @@ Return the optimized and refactored code ONLY!! without explanations or comments
                 break;
             case "gradle":
                 dependencyFileName = "build.gradle";
+                break;
+            case "pub":
+                dependencyFileName = "pubspec.yaml";
                 break;
             default:
                 console.log(chalk.red(`Unsupported package manager: ${languageConfig.packageManager}`));

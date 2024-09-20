@@ -194,6 +194,7 @@ Provide the suggestions in a structured format.
             "Cargo.toml",
             "composer.json",
             "Package.swift",
+            "pubspec.yaml",
         ];
 
         for (const file of packageFiles) {
@@ -251,6 +252,8 @@ Provide the suggestions in a structured format.
                 return this.extractSwiftDependencies(content);
             case "kotlin":
                 return this.extractKotlinDependencies(content);
+            case "dart":
+                return this.extractDartDependencies(content);
             default:
                 return [];
         }
@@ -361,6 +364,16 @@ Provide the suggestions in a structured format.
         let match;
         while ((match = importRegex.exec(content)) !== null) {
             dependencies.push(match[1].split(".")[0]);
+        }
+        return [...new Set(dependencies)];
+    },
+
+    extractDartDependencies(content) {
+        const importRegex = /import\s+['"]([^'"]+)['"]/g;
+        const dependencies = [];
+        let match;
+        while ((match = importRegex.exec(content)) !== null) {
+            dependencies.push(match[1].split("/")[0]);
         }
         return [...new Set(dependencies)];
     },

@@ -78,5 +78,10 @@ AutoCode currently supports the following programming languages:
 -   PHP
 -   Swift
 -   Kotlin
+-   Dart
 
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
+
+# TODO
+
+-   add Dart/Flutter support

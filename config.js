@@ -19,6 +19,8 @@ export const CONFIG = {
         ".mp4",
         ".webp",
         ".class",
+        ".bin",
+        ".lock",
     ],
     anthropicModel: "claude-3-5-sonnet-20240620",
     maxTokens: 8192,
@@ -83,6 +85,12 @@ export const CONFIG = {
             linter: "ktlint",
             formatter: "ktlint",
             packageManager: "gradle",
+        },
+        dart: {
+            fileExtensions: [".dart"],
+            linter: "dart analyze",
+            formatter: "dart format",
+            packageManager: "pub",
         },
     },
     aiAgents: {
