@@ -9,6 +9,7 @@ import UserInterface from "./userInterface.js";
 import path from "path";
 import inquirer from "inquirer";
 import ora from "ora";
+import fs from "fs/promises";
 
 const execAsync = promisify(exec);
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
@@ -394,8 +395,16 @@ Provide the suggestions in a structured format.
         if (!path.extname(filePath)) {
             filePath += ".js";
         }
-        await FileManager.write(filePath, "");
-        console.log(chalk.green(`✅ New file ${filePath} has been created.`));
+        const fileExists = await fs
+            .access(filePath)
+            .then(() => true)
+            .catch(() => false);
+        if (!fileExists) {
+            await FileManager.write(filePath, "");
+            console.log(chalk.green(`✅ New file ${filePath} has been created.`));
+        } else {
+            console.log(chalk.yellow(`⚠️ File ${filePath} already exists. Skipping creation.`));
+        }
     },
 
     async createMissingFilesFromLint(lintOutput, projectStructure) {

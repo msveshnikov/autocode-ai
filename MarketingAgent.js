@@ -140,7 +140,7 @@ const MarketingAgent = {
             messages: [{ role: "user", content: prompt }],
         });
 
-        await FileManager.write("landing_page_copy.html", response.content[0].text);
+        await FileManager.write("docs/landing_page_copy.html", response.content[0].text);
         console.log(chalk.green("🌐 Landing page copy created and saved to landing_page_copy.html"));
     },
 };
