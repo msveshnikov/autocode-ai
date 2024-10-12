@@ -12,7 +12,7 @@
             content="AutoCode, AI, software development, code generation, Claude API, JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Kotlin, Swift"
         />
         <title>AutoCode - AI-Powered Software Development</title>
-        <meta name="theme-color" content="#100055" />
+        <meta name="theme-color" content="#ffffff" />
         <meta property="og:title" content="AutoCode - AI-Powered Software Development" />
         <meta
             property="og:description"
@@ -41,400 +41,16 @@
             gtag("config", "G-VBF8NT9KCF");
         </script>
         <style>
-            :root {
-                --primary-color: #000000;
-                --secondary-color: #00ffff;
-                --accent-color: #0000ff;
-                --text-color: #ffffff;
-            }
-
-            body {
-                font-family: "Courier New", monospace;
-                line-height: 1.6;
-                color: var(--text-color);
-                margin: 0;
-                padding: 0;
-                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            }
-
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-
-            header {
-                background-color: rgba(0, 0, 0, 0.8);
-                padding: 1rem 0;
-                position: fixed;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-                display: flex;
-                justify-content: space-around;
-                flex-wrap: wrap;
-            }
-
-            a {
-                color: #00ffff;
-            }
-
-            nav ul li {
-                margin: 0.5rem;
-            }
-
-            nav ul li a {
-                color: var(--secondary-color);
-                text-decoration: none;
-                font-weight: bold;
-            }
-
-            .hero {
-                background-image: url("/hero.jpg");
-                background-size: cover;
-                background-position: center;
-                height: 100vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                position: relative;
-            }
-
-            .hero::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.6);
-            }
-
-            .hero-content {
-                position: relative;
-                z-index: 1;
-            }
-
-            .hero h1 {
-                font-size: 4rem;
-                margin-bottom: 1rem;
-                text-shadow: 0 0 10px var(--secondary-color);
-            }
-
-            .cta-button {
-                display: inline-block;
-                background-color: var(--secondary-color);
-                color: var(--primary-color);
-                padding: 15px 30px;
-                text-decoration: none;
-                border-radius: 5px;
-                font-weight: bold;
-                transition: all 0.3s;
-                text-transform: uppercase;
-            }
-
-            .cta-button:hover {
-                background-color: var(--accent-color);
-                color: var(--text-color);
-                box-shadow: 0 0 15px var(--secondary-color);
-            }
-
-            .features {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 2rem;
-                margin: 2rem 0;
-            }
-
-            .feature {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                transition: all 0.3s;
-            }
-
-            .feature:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
-            }
-
-            .feature h3 {
-                color: var(--secondary-color);
-                margin-bottom: 1rem;
-            }
-
-            .agent {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                margin-bottom: 2rem;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                display: inline-block;
-                width: 40%;
-                margin: 1rem;
-                vertical-align: top;
-            }
-
-            .agent h3 {
-                color: var(--secondary-color);
-                margin-bottom: 1rem;
-            }
-
-            footer {
-                background-color: rgba(0, 0, 0, 0.8);
-                color: var(--text-color);
-                text-align: center;
-                padding: 2rem 0;
-                margin-top: 4rem;
-            }
-
-            .how-it-works {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-            }
-
-            .how-it-works ol {
-                margin-left: 2rem;
-                margin-bottom: 1rem;
-            }
-
-            .how-it-works pre {
-                background-color: rgba(0, 0, 0, 0.8);
-                padding: 1rem;
-                border-radius: 5px;
-                overflow-x: auto;
-                margin-bottom: 1rem;
-            }
-
-            .how-it-works code {
-                color: var(--secondary-color);
-                font-family: "Courier New", monospace;
-            }
-
-            .pricing-plans {
-                display: flex;
-                justify-content: center;
-                gap: 2rem;
-                margin: 2rem 0;
-                flex-wrap: wrap;
-            }
-
-            .pricing-plan {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                transition: all 0.3s;
-                text-align: center;
-                flex: 1;
-                min-width: 250px;
-                max-width: 300px;
-            }
-
-            .pricing-plan:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
-            }
-
-            .pricing-plan h3 {
-                color: var(--secondary-color);
-                margin-bottom: 1rem;
-            }
-
-            .pricing-plan .price {
-                font-size: 2rem;
-                font-weight: bold;
-                margin-bottom: 1rem;
-            }
-
-            .pricing-plan ul {
-                list-style-type: none;
-                padding: 0;
-                margin-bottom: 2rem;
-            }
-
-            .pricing-plan ul li {
-                margin-bottom: 0.5rem;
-            }
-
-            .pricing-plan.featured {
-                background-color: rgba(0, 255, 255, 0.1);
-                border: 2px solid var(--secondary-color);
-            }
-
-            .languages {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-                margin: 2rem 0;
-            }
-
-            .language {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 1rem;
-                border-radius: 5px;
-                font-weight: bold;
-            }
-
-            .future-enhancements {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                margin-top: 4rem;
-            }
-
-            .future-enhancements ul {
-                list-style-type: none;
-                padding: 0;
-            }
-
-            .future-enhancements li {
-                margin-bottom: 0.5rem;
-            }
-
-            .showcase {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                margin-top: 2rem;
-            }
-
-            .showcase h2 {
-                color: var(--secondary-color);
-                margin-bottom: 1rem;
-            }
-
-            .showcase ul {
-                list-style-type: none;
-                padding: 0;
-            }
-
-            .showcase li {
-                margin-bottom: 1rem;
-            }
-
-            .showcase a {
-                color: var(--secondary-color);
-                text-decoration: none;
-                font-weight: bold;
-            }
-
-            .showcase a:hover {
-                text-decoration: underline;
-            }
-
-            .social-links {
-                display: flex;
-                justify-content: center;
-                gap: 1rem;
-                margin-top: 2rem;
-            }
-
-            .social-links a {
-                color: var(--secondary-color);
-                text-decoration: none;
-                font-weight: bold;
-                display: flex;
-                align-items: center;
-            }
-
-            .social-links a:hover {
-                text-decoration: underline;
-            }
-
-            .social-links img {
-                width: 24px;
-                height: 24px;
-                margin-right: 0.5rem;
-                filter: invert(1);
-            }
-
-            .video-container {
-                position: relative;
-                width: 100%;
-                padding-bottom: 56.25%;
-                margin-top: 2rem;
-            }
-
-            .video-container iframe {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border: none;
-            }
-
-            .faq {
-                background-color: rgba(0, 0, 0, 0.6);
-                padding: 2rem;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-                margin-top: 2rem;
-            }
-
-            .faq h2 {
-                color: var(--secondary-color);
-                margin-bottom: 1rem;
-            }
-
-            .faq-item {
-                margin-bottom: 1.5rem;
-            }
-
-            .faq-question {
-                font-weight: bold;
-                color: var(--secondary-color);
-                cursor: pointer;
-            }
-
-            .faq-answer {
-                margin-top: 0.5rem;
-                display: none;
-            }
-
-            @media (max-width: 768px) {
-                .hero h1 {
-                    font-size: 3rem;
-                }
-
-                .features {
-                    grid-template-columns: 1fr;
-                }
-
-                .pricing-plans {
-                    flex-direction: column;
-                    align-items: center;
-                }
-
-                .pricing-plan {
-                    width: 100%;
-                }
-
-                .agent {
-                    width: 70%;
-                }
-            }
+            <%- include('landing.css') %>
         </style>
     </head>
     <body>
         <header>
             <nav class="container">
                 <ul>
+                    <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
                     <% if (user) { %>
                     <li><a href="/profile">Profile</a></li>
                     <% } %>
@@ -443,53 +59,50 @@
         </header>
 
         <main>
-            <section class="hero">
+            <section class="hero parallax">
                 <div class="hero-content">
-                    <h1>AutoCode</h1>
-                    <p>Build complex software with AI. An innovative, terminal-based AI coding engine.</p>
-                    <a href="/register?tier=Free" class="cta-button">Get Started</a>
+                    <h1 class="animated-text">AutoCode</h1>
+                    <p class="typing-effect">Build complex software with AI. An innovative, terminal-based AI coding engine.</p>
+                    <a href="/register?tier=Free" class="cta-button ripple-effect">Get Started</a>
                 </div>
             </section>
 
-            <section id="features" class="container">
-                <br />
-                <br />
-                <h2>Features</h2>
+            <section id="features" class="container glass-effect">
+                <h2 class="gradient-text">Features</h2>
                 <div class="features">
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Automatic Code Generation</h3>
                         <p>Generate code based on README.md instructions using Claude 3.5 Sonnet API</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Multi-Language Support</h3>
                         <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Dart and Swift</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Incremental Building</h3>
-                        <p>
-                            Build your project incrementally with intelligent code analysis and refactoring suggestions
-                        </p>
+                        <p>Build your project incrementally with intelligent code analysis and refactoring suggestions</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Automated Documentation</h3>
                         <p>Generate comprehensive documentation for your project automatically</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>User-Friendly Interface</h3>
                         <p>Easy-to-use command-line interface for seamless project management</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Landing Page Generator</h3>
                         <p>Create visually appealing landing pages to showcase your project</p>
                     </div>
-                    <div class="feature">
+                    <div class="feature shake-on-hover">
                         <h3>Cross-Platform Support</h3>
-                        <p>AutoCode is compatible with Windows, macOS, and Linux operating systems.</p>
+                        <p>AutoCode is compatible with Windows, macOS, and Linux operating systems</p>
                     </div>
                 </div>
             </section>
-            <section id="how-it-works" class="container">
-                <h2>How It Works</h2>
+
+            <section id="how-it-works" class="container glass-effect">
+                <h2 class="gradient-text">How It Works</h2>
                 <div class="how-it-works">
                     <p>Getting started with AutoCode is simple:</p>
                     <ol>
@@ -497,7 +110,7 @@
                         <li>Navigate to your project folder in the terminal.</li>
                         <li>Run the following command:</li>
                     </ol>
-                    <pre><code>npx autocode-ai</code></pre>
+                    <pre><code class="neon-glow">npx autocode-ai</code></pre>
                     <p>
                         AutoCode will then read your README.md file and existing source code, interpret the instructions
                         using the Claude 3.5 Sonnet API, and generate the necessary code structure, files, and content.
@@ -511,108 +124,91 @@
                     </p>
                 </div>
             </section>
-            <img src="/autocode.png" alt="AutoCode Logo" style="display: block; margin: 2rem auto; max-width: 100%" />
-            <section id="ai-agents" class="container ai-agents">
-                <h2>AI Agents</h2>
 
-                <div class="agent">
-                    <h3>Tester Agent</h3>
-                    <p>Writes integration tests for endpoints</p>
-                </div>
-                <div class="agent">
-                    <h3>Project Manager Agent</h3>
-                    <p>
-                        Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks
-                    </p>
-                </div>
-                <div class="agent">
-                    <h3>DevOps Agent</h3>
-                    <p>Configures CI/CD pipelines and manages deployment processes</p>
-                </div>
-                <div class="agent">
-                    <h3>Internationalization Agent</h3>
-                    <p>Implements multi-language support in projects</p>
-                </div>
-                <div class="agent">
-                    <h3>Marketing Agent</h3>
-                    <p>Develops marketing strategies and content for the project</p>
-                </div>
-                <div class="agent">
-                    <h3>Business Analyst Agent</h3>
-                    <p>Analyzes requirements and provides business insights</p>
-                </div>
-                <div class="agent">
-                    <h3>Product Owner Agent</h3>
-                    <p>Manages product backlog and prioritizes features</p>
-                </div>
-                <div class="agent">
-                    <h3>App Store Publisher Agent</h3>
-                    <p>Manages app store submissions and updates</p>
+            <img src="/autocode.png" alt="AutoCode Logo" class="scale-on-hover" style="display: block; margin: 2rem auto; max-width: 100%" />
+
+            <section id="ai-agents" class="container glass-effect">
+                <h2 class="gradient-text">AI Agents</h2>
+                <div class="ai-agents">
+                    <div class="agent bounce-on-hover">
+                        <h3>Tester Agent</h3>
+                        <p>Writes integration tests for endpoints</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>Project Manager Agent</h3>
+                        <p>Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI checks</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>DevOps Agent</h3>
+                        <p>Configures CI/CD pipelines and manages deployment processes</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>Internationalization Agent</h3>
+                        <p>Implements multi-language support in projects</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>Marketing Agent</h3>
+                        <p>Develops marketing strategies and content for the project</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>Business Analyst Agent</h3>
+                        <p>Analyzes requirements and provides business insights</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>Product Owner Agent</h3>
+                        <p>Manages product backlog and prioritizes features</p>
+                    </div>
+                    <div class="agent bounce-on-hover">
+                        <h3>App Store Publisher Agent</h3>
+                        <p>Manages app store submissions and updates</p>
+                    </div>
                 </div>
             </section>
-            <section id="languages" class="container">
-                <h2>Supported Languages</h2>
+
+            <section id="languages" class="container glass-effect">
+                <h2 class="gradient-text">Supported Languages</h2>
                 <div class="languages">
-                    <div class="language">JavaScript</div>
-                    <div class="language">Python</div>
-                    <div class="language">C#</div>
-                    <div class="language">Java</div>
-                    <div class="language">Ruby</div>
-                    <div class="language">Go</div>
-                    <div class="language">Rust</div>
-                    <div class="language">PHP</div>
-                    <div class="language">Swift</div>
-                    <div class="language">Kotlin</div>
-                    <div class="language">Dart</div>
+                    <div class="language rotate-on-hover">JavaScript</div>
+                    <div class="language rotate-on-hover">Python</div>
+                    <div class="language rotate-on-hover">C#</div>
+                    <div class="language rotate-on-hover">Java</div>
+                    <div class="language rotate-on-hover">Ruby</div>
+                    <div class="language rotate-on-hover">Go</div>
+                    <div class="language rotate-on-hover">Rust</div>
+                    <div class="language rotate-on-hover">PHP</div>
+                    <div class="language rotate-on-hover">Swift</div>
+                    <div class="language rotate-on-hover">Kotlin</div>
+                    <div class="language rotate-on-hover">Dart</div>
                 </div>
             </section>
-            <section id="showcase" class="container">
-                <h2>Showcase</h2>
+
+            <section id="showcase" class="container glass-effect">
+                <h2 class="gradient-text">Showcase</h2>
                 <div class="showcase">
                     <p>Check out these amazing projects created by AutoCode in just 20 minutes each:</p>
                     <ul>
                         <li>
-                            <a
-                                href="https://github.com/msveshnikov/real-estate-autocode"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://github.com/msveshnikov/real-estate-autocode" target="_blank" rel="noopener noreferrer">
                                 Real Estate Platform
                             </a>
                         </li>
                         <li>
-                            <a
-                                href="https://github.com/msveshnikov/jira-clone-autocode"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://github.com/msveshnikov/jira-clone-autocode" target="_blank" rel="noopener noreferrer">
                                 JIRA Clone
                             </a>
                         </li>
                         <li>
-                            <a
-                                href="https://github.com/msveshnikov/fx-trader-autocode"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://github.com/msveshnikov/fx-trader-autocode" target="_blank" rel="noopener noreferrer">
                                 FX Trader Platform
                             </a>
                         </li>
                         <li>
-                            <a
-                                href="https://github.com/msveshnikov/cars-market-autocode"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://github.com/msveshnikov/cars-market-autocode" target="_blank" rel="noopener noreferrer">
                                 Cars Market
                             </a>
                         </li>
                         <li>
-                            <a
-                                href="https://cyberia.fun"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
+                            <a href="https://cyberia.fun" target="_blank" rel="noopener noreferrer">
                                 Cyberia
                             </a>
                         </li>
@@ -630,34 +226,35 @@
                     </div>
                 </div>
             </section>
-            <section id="pricing" class="container">
-                <h2>Pricing</h2>
+
+            <section id="pricing" class="container glass-effect">
+                <h2 class="gradient-text">Pricing</h2>
                 <div class="pricing-plans">
                     <div class="pricing-plan">
                         <h3>Free Tier</h3>
-                        <p class="price">$0/month</p>
+                        <p class="price rainbow-text">$0/month</p>
                         <ul>
                             <li>10 requests/day</li>
                             <li>Basic features</li>
                             <li>3 devices</li>
                             <li>Community support</li>
                         </ul>
-                        <a href="/register?tier=Free" class="cta-button">Get Started</a>
+                        <a href="/register?tier=Free" class="cta-button ripple-effect">Get Started</a>
                     </div>
                     <div class="pricing-plan featured">
                         <h3>Premium</h3>
-                        <p class="price">$10/month</p>
+                        <p class="price rainbow-text">$10/month</p>
                         <ul>
                             <li>Unlimited requests</li>
                             <li>All features</li>
                             <li>10 devices</li>
                             <li>Priority support</li>
                         </ul>
-                        <a href="/register?tier=Premium" class="cta-button">Upgrade Now</a>
+                        <a href="/register?tier=Premium" class="cta-button ripple-effect">Upgrade Now</a>
                     </div>
                     <div class="pricing-plan">
                         <h3>Enterprise</h3>
-                        <p class="price">Custom</p>
+                        <p class="price rainbow-text">Custom</p>
                         <ul>
                             <li>Unlimited requests</li>
                             <li>All features + custom integrations</li>
@@ -665,12 +262,13 @@
                             <li>Dedicated support team</li>
                             <li>On-premises deployment option</li>
                         </ul>
-                        <a href="/contact" class="cta-button">Contact Us</a>
+                        <a href="/contact" class="cta-button ripple-effect">Contact Us</a>
                     </div>
                 </div>
             </section>
-            <section id="faq" class="container">
-                <h2>Frequently Asked Questions</h2>
+
+            <section id="faq" class="container glass-effect">
+                <h2 class="gradient-text">Frequently Asked Questions</h2>
                 <div class="faq">
                     <div class="faq-item">
                         <div class="faq-question">What is AutoCode?</div>
@@ -729,43 +327,25 @@
                 <a href="https://github.com/msveshnikov" target="_blank" rel="noopener noreferrer">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
                 </a>
-                
             </div>
             <div class="social-links">
                 <a
                     href="https://www.producthunt.com/posts/autocode-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-autocode&#0045;2"
                     target="_blank"
-                    ><img
+                >
+                    <img
                         src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=483466&theme=light"
                         alt="AutoCode - AI&#0045;Powered&#0032;Software&#0032;Development | Product Hunt"
                         style="width: 250px; height: 54px"
                         width="250"
                         height="54"
-                /></a>
-                <br />
-                <br />
-                <br />
+                    />
+                </a>
             </div>
             <p>&copy; 2024 MaxSoft. All rights reserved.</p>
             <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
         </footer>
 
-        <script>
-            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                anchor.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute("href")).scrollIntoView({
-                        behavior: "smooth",
-                    });
-                });
-            });
-
-            document.querySelectorAll(".faq-question").forEach((question) => {
-                question.addEventListener("click", function () {
-                    const answer = this.nextElementSibling;
-                    answer.style.display = answer.style.display === "block" ? "none" : "block";
-                });
-            });
-        </script>
+        <%- include('landing.js') %>
     </body>
 </html>
