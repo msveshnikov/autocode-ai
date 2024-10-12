@@ -74,17 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 100);
     });
 
-    const randomizeColors = () => {
-        const colors = ['#007bff', '#28a745', '#dc3545', '#ffc107', '#17a2b8'];
-        languageElements.forEach(el => {
-            el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            el.style.color = '#ffffff';
-        });
-    };
-
-    randomizeColors();
-    setInterval(randomizeColors, 5000);
-
     const typewriterEffect = (element, text, speed = 50) => {
         let i = 0;
         const type = () => {

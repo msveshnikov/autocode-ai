@@ -23,7 +23,7 @@ body {
 
 header {
     background-color: var(--primary-color);
-    padding: rem 0;
+    padding: 0rem 0;
     position: fixed;
     width: 100%;
     z-index: 1000;
@@ -46,7 +46,6 @@ a {
 
 a:hover {
     color: var(--text-color);
-    text-shadow: 0 0 10px var(--accent-color);
 }
 
 nav ul li {
@@ -73,30 +72,6 @@ nav ul li a {
     overflow: hidden;
 }
 
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
-    opacity: 0.1;
-    animation: gradientShift 10s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% {
-        opacity: 0.1;
-    }
-    50% {
-        opacity: 0.2;
-    }
-    100% {
-        opacity: 0.1;
-    }
-}
-
 .hero-content {
     max-width: 800px;
     position: relative;
@@ -106,24 +81,12 @@ nav ul li a {
 .hero h1 {
     font-size: 4rem;
     margin-bottom: 1rem;
-    animation: glowText 2s ease-in-out infinite alternate;
     color: var(--accent-color);
-}
-
-@keyframes glowText {
-    from {
-        text-shadow: 0 0 5px var(--accent-color);
-    }
-    to {
-        text-shadow: 0 0 20px var(--accent-color), 0 0 30px var(--accent-color);
-    }
 }
 
 .hero p {
     font-size: 1.5rem;
     margin-bottom: 2rem;
-    animation: fadeInUp 1s ease-out 0.5s;
-    animation-fill-mode: both;
 }
 
 .cta-button {
@@ -137,23 +100,6 @@ nav ul li a {
     transition: all 0.3s;
     text-transform: uppercase;
     letter-spacing: 1px;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: all 0.5s;
-}
-
-.cta-button:hover::before {
-    left: 100%;
 }
 
 .cta-button:hover {
@@ -170,34 +116,23 @@ nav ul li a {
     margin: 4rem 0;
 }
 
+.ai-agents { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 2fr));
+    gap: 2rem;
+    margin: 4rem 0;
+}
+
 .feature {
     background-color: var(--secondary-color);
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.feature::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.feature:hover::before {
-    opacity: 1;
 }
 
 .feature:hover {
-    transform: translateY(-10px) scale(1.03);
+    transform: translateY(-10px);
     box-shadow: 0 10px 30px rgba(52, 152, 219, 0.2);
 }
 
@@ -214,25 +149,6 @@ nav ul li a {
     margin-bottom: 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-.agent::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--accent-color), var(--text-color));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease-out;
-}
-
-.agent:hover::after {
-    transform: scaleX(1);
 }
 
 .agent:hover {
@@ -300,28 +216,10 @@ footer {
     flex: 1;
     min-width: 250px;
     max-width: 300px;
-    position: relative;
-    overflow: hidden;
-}
-
-.pricing-plan::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, rgba(52, 152, 219, 0.1), rgba(240, 240, 240, 0.1));
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.pricing-plan:hover::before {
-    opacity: 1;
 }
 
 .pricing-plan:hover {
-    transform: translateY(-10px) scale(1.05);
+    transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(52, 152, 219, 0.3);
 }
 
@@ -377,7 +275,7 @@ footer {
 }
 
 .language:hover {
-    transform: translateY(-3px) rotate(5deg);
+    transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
     background-color: var(--accent-color);
     color: var(--primary-color);
@@ -442,25 +340,17 @@ footer {
     color: var(--text-color);
     text-decoration: none;
     font-weight: bold;
-    display: flex;
-    align-items: center;
     transition: all 0.3s;
 }
 
 .social-links a:hover {
     transform: translateY(-3px);
-    filter: brightness(1.2);
 }
 
 .social-links img {
     width: 24px;
     height: 24px;
     margin-right: 0.5rem;
-    transition: all 0.3s;
-}
-
-.social-links a:hover img {
-    transform: rotate(15deg);
 }
 
 .video-container {
@@ -504,18 +394,6 @@ footer {
     cursor: pointer;
     padding: 0.5rem 0;
     transition: all 0.3s;
-    position: relative;
-}
-
-.faq-question::after {
-    content: "+";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-    color: var(--accent-color);
-    transition: all 0.3s;
 }
 
 .faq-question:hover {
@@ -528,17 +406,6 @@ footer {
     padding-left: 1rem;
     border-left: 2px solid var(--accent-color);
     color: var(--text-color);
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 @media (max-width: 768px) {
@@ -569,67 +436,6 @@ footer {
     }
 }
 
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-    100% {
-        transform: translateY(0px);
-    }
-}
-
-.feature,
-.agent,
-.pricing-plan {
-    animation: float 5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.cta-button {
-    animation: pulse 2s infinite;
-}
-
-@keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-body {
-    background: linear-gradient(-45deg, #ffffff, #f0f0f0, #e0e0e0, #d0d0d0);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-}
-
-.container {
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-top: 2rem;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-}
-
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -647,6 +453,10 @@ body {
     background: var(--text-color);
 }
 
+.animated-text {
+    animation: colorShift 5s infinite;
+}
+
 @keyframes colorShift {
     0% {
         color: var(--accent-color);
@@ -659,8 +469,8 @@ body {
     }
 }
 
-.animated-text {
-    animation: colorShift 5s infinite;
+.shake-on-hover:hover {
+    animation: shake 0.5s ease-in-out;
 }
 
 @keyframes shake {
@@ -681,8 +491,8 @@ body {
     }
 }
 
-.shake-on-hover:hover {
-    animation: shake 0.5s ease-in-out;
+.rotate-on-hover:hover {
+    animation: rotate 2s linear infinite;
 }
 
 @keyframes rotate {
@@ -694,8 +504,8 @@ body {
     }
 }
 
-.rotate-on-hover:hover {
-    animation: rotate 2s linear infinite;
+.bounce-on-hover:hover {
+    animation: bounce 1s;
 }
 
 @keyframes bounce {
@@ -712,10 +522,6 @@ body {
     60% {
         transform: translateY(-15px);
     }
-}
-
-.bounce-on-hover:hover {
-    animation: bounce 1s;
 }
 
 .parallax {
@@ -741,6 +547,10 @@ body {
     transform: scale(1.1);
 }
 
+.slide-in {
+    animation: slideIn 1s ease-out;
+}
+
 @keyframes slideIn {
     from {
         transform: translateX(-100%);
@@ -752,8 +562,8 @@ body {
     }
 }
 
-.slide-in {
-    animation: slideIn 1s ease-out;
+.fade-in {
+    animation: fadeIn 1s ease-in;
 }
 
 @keyframes fadeIn {
@@ -763,10 +573,6 @@ body {
     to {
         opacity: 1;
     }
-}
-
-.fade-in {
-    animation: fadeIn 1s ease-in;
 }
 
 .gradient-text {
@@ -787,6 +593,10 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.ripple-effect:hover {
+    animation: ripple 1s linear;
+}
+
 @keyframes ripple {
     0% {
         box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.3);
@@ -794,10 +604,6 @@ body {
     100% {
         box-shadow: 0 0 0 20px rgba(52, 152, 219, 0);
     }
-}
-
-.ripple-effect:hover {
-    animation: ripple 1s linear;
 }
 
 .typing-effect::after {

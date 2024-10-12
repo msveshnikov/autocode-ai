@@ -84,4 +84,4 @@ Each language has its own configuration for file extensions, recommended linter,
 
 # TODO
 
--   make design nice and professional, white background
+-   remove excessive animations and make colors better
