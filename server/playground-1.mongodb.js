@@ -3,12 +3,23 @@
 // Select the database to use.
 use("autocode");
 
-db.getCollection("users").updateOne( { email: "mollygun00@gmail.com" }, { $set: { tier: "Premium", subscriptionStatus: "active", stripeCustomerId: "cus_QpwWtpamCYajlO", stripeSubscriptionId: "sub_1PyGdYAl2o8XNzrOEBwQ9vgI", }, } );
+db.getCollection("users").updateOne(
+    { email: "illia.brylov@gmail.com" },
+    {
+        $set: {
+            tier: "Premium",
+            subscriptionStatus: "active",
+            stripeCustomerId: "cus_QpwWtpamCYajlO",
+            stripeSubscriptionId: "sub_1PyGdYAl2o8XNzrOEBwQ9vgI",
+        },
+    }
+);
+
+db.getCollection("users").updateOne({ email: "illia.brylov@gmail.com" }, { $set: { tier: "Premium" } });
 
 // Create index for username and email
 db.users.dropIndex({ username: 1 }, { unique: true });
 db.users.createIndex({ email: 1 }, { unique: true });
-
 
 // Create function to reset daily requests
 db.system.js.save({
