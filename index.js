@@ -7,6 +7,22 @@ import FileManager from "./fileManager.js";
 import UserInterface from "./userInterface.js";
 import LicenseManager from "./licenseManager.js";
 
+async function checkLicense() {
+    const isValid = await LicenseManager.checkLicense();
+    if (!isValid) {
+        const tier = await LicenseManager.getLicenseTier();
+        if (tier === "Local Trial") {
+            return await UserInterface.handleLogin();
+        } else if (tier === "Free") {
+            console.log(chalk.yellow("You've reached the daily request limit for the Free Tier."));
+        } else {
+            console.log(chalk.red("Invalid or expired license. Please renew your subscription."));
+        }
+        return false;
+    }
+    return true;
+}
+
 async function main() {
     console.log(chalk.blue("👋 Welcome to AutoCode!"));
     if (!process.env.CLAUDE_KEY) {
@@ -22,7 +38,7 @@ async function main() {
             console.error(chalk.red("❌ README.md not found or unable to read."));
             return;
         }
-        if (!(await LicenseManager.checkLicense())) {
+        if (!(await checkLicense())) {
             break;
         }
         const projectStructure = await FileManager.getProjectStructure();
