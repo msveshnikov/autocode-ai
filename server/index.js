@@ -12,6 +12,8 @@ import dashboardRoutes from "./routes/dashboard.js";
 import redeemRoutes from "./routes/redeem.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
+import { generateRedeemCodes } from "./models/code.js";
+import Code from "./models/code.js";
 
 dotenv.config();
 
@@ -98,8 +100,16 @@ app.use((err, req, res) => {
     res.status(500).render("500");
 });
 
-app.listen(port, () => {
+const generateCodesIfEmpty = async () => {
+    const codesCount = await Code.countDocuments();
+    if (codesCount === 0) {
+        await generateRedeemCodes();
+    }
+};
+
+app.listen(port, async () => {
     console.log(`Server running on port ${port}`);
+    await generateCodesIfEmpty();
 });
 
 process.on("uncaughtException", (err, origin) => {
