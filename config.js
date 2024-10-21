@@ -1,7 +1,6 @@
 export const CONFIG = {
     licenseServerUrl: "https://autocode.work",
-    // licenseServerUrl: "http://localhost:3000",
-    excludedFiles: ["package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
+    excludedFiles: ["bun.lockb", "package-lock.json", ".gitignore", "eslint.config.js", ".env", "reportWebVitals.js"],
     excludedDirs: [".git", "node_modules"],
     excludedExtensions: [
         ".md",
