@@ -9,7 +9,6 @@ import authRoutes from "./routes/auth.js";
 import profileRoutes from "./routes/profile.js";
 import paymentRoutes from "./routes/payment.js";
 import dashboardRoutes from "./routes/dashboard.js";
-import redeemRoutes from "./routes/redeem.js";
 import licenseServer from "./license-server.js";
 import dotenv from "dotenv";
 
@@ -51,7 +50,6 @@ app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/dashboard", dashboardRoutes);
-app.use("/redeem", redeemRoutes);
 
 app.get("/", (req, res) => {
     res.render("landing", { user: req.cookies.token });
@@ -83,10 +81,6 @@ app.get("/forgot-password", (req, res) => {
 
 app.get("/reset-password/:token", (req, res) => {
     res.render("reset", { token: req.params.token });
-});
-
-app.get("/redeem", (req, res) => {
-    res.render("redeem");
 });
 
 app.use((req, res) => {

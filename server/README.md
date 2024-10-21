@@ -173,7 +173,3 @@ The system uses Stripe Checkout for payment processing. When a user registers fo
     - Dedicated support team
     - On-premises deployment option
 
-# TODO
-
--   add generation of 1000 redeem codes (for lifetime Premium access), save to codes collection one time
--   add /redeem view with code and email, and endpoint so when user enters code is deleted and Premium tier is granted
