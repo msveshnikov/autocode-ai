@@ -667,7 +667,12 @@
                             <li>10 devices</li>
                             <li>Priority support</li>
                         </ul>
-                        <a href="/register?tier=Premium" class="cta-button">Upgrade Now</a>
+                        <% if (user) { %>
+                            <a href="/profile" class="cta-button">Get Now</a>
+                          <% } %>
+                          <% if (!user) { %>
+                            <a href="/register?tier=Premium" class="cta-button">Get Now</a>
+                          <% } %>
                     </div>
                     <div class="pricing-plan">
                         <h3>Life Time Deal</h3>
@@ -678,7 +683,12 @@
                             <li>Unlimited devices</li>
                             <li>Dedicated support team</li>
                         </ul>
-                        <a href="/register?tier=LifeTime" class="cta-button">Get Now</a>
+                        <% if (user) { %>
+                          <a href="/profile" class="cta-button">Get Now</a>
+                        <% } %>
+                        <% if (!user) { %>
+                          <a href="/register?tier=LifeTime" class="cta-button">Get Now</a>
+                        <% } %>
                     </div>
                 </div>
             </section>
