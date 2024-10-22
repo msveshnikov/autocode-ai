@@ -11,7 +11,7 @@ The `UserSchema` defines the structure of user documents in the database:
 - `username`: String (required, unique, trimmed)
 - `email`: String (required, unique, trimmed, lowercase)
 - `password`: String (required, hashed before saving)
-- `tier`: String (enum: ["Free", "Premium", "Enterprise"], default: "Free")
+- `tier`: String (enum: ["Free", "Premium", "Enterprise","LTD"], default: "Free")
 - `stripeCustomerId`: String (optional, for payment integration)
 - `googleId`: String (optional, for Google OAuth)
 - `lastRequestDate`: String (tracks the date of last request)

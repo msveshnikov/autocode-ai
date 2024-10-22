@@ -47,7 +47,7 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher)
--   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20240620", max_tokens: 8192)
+-   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20241022", max_tokens: 8192)
 -   Use async/await, ES6 modules, and fetch (no axios please)
 
 ## Project Structure

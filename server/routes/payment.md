@@ -2,116 +2,138 @@
 
 ## Overview
 
-This file (`routes/payment.js`) contains the Express router for handling payment-related operations in the application. It integrates with Stripe for processing payments, managing subscriptions, and retrieving pricing information. The router includes endpoints for creating checkout sessions, handling Stripe webhooks, canceling subscriptions, and fetching pricing details.
+This file (`server/routes/payment.js`) handles payment-related routes and webhook handlers for Stripe integration in the application. It manages subscription updates, checkout sessions, and subscription cancellations for users.
 
 ## Dependencies
 
--   express
--   stripe
--   ../models/user.js
--   ../middleware/auth.js
+-   `express`: Web framework for routing
+-   `stripe`: Stripe API client
+-   `User`: MongoDB user model
+-   `authCookie`: Authentication middleware
+-   `dotenv`: Environment variable management
 
-## Router Configuration
+## Routes and Handlers
+
+### 1. Stripe Webhook Handler
 
 ```javascript
-import express from "express";
-import Stripe from "stripe";
-import User from "../models/user.js";
-import { authCookie, checkUserTier } from "../middleware/auth.js";
-
-const router = express.Router();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+POST / webhook;
 ```
 
-The router is configured with necessary imports and initializes a Stripe instance using the secret key from environment variables.
+Handles incoming webhook events from Stripe.
 
-## Endpoints
+**Configuration:**
 
-### 1. Create Checkout Session
+-   Uses `express.raw()` middleware to receive raw request body
+-   Validates webhook signature using `stripe-signature` header
 
-**Route:** `POST /create-checkout-session`
+**Supported Event Types:**
 
-**Middleware:** `authCookie`
+-   `customer.subscription.updated`
+-   `customer.subscription.created`
+-   `customer.subscription.deleted`
+-   `checkout.session.completed`
 
-**Description:** Creates a Stripe checkout session for user subscription.
+**Response:**
+
+-   200: Success
+-   400: Webhook Error
+
+### 2. Cancel Subscription
+
+```javascript
+POST / cancel - subscription;
+```
+
+Cancels a user's active subscription.
+
+**Authentication:**
+
+-   Requires valid authentication cookie (`authCookie` middleware)
+
+**Response:**
+
+-   200: `{ message: "Subscription cancelled successfully" }`
+-   400: `{ error: "No active subscription found" }`
+-   500: `{ error: "Failed to cancel subscription" }`
+
+## Helper Functions
+
+### `handleSubscriptionUpdate(subscription)`
+
+Updates user subscription status in the database based on Stripe subscription events.
 
 **Parameters:**
 
--   `req.body.tier`: The subscription tier (Premium or Enterprise)
+-   `subscription` (Object): Stripe subscription object
 
-**Returns:** JSON object with `sessionId`
+**Actions:**
 
-**Usage Example:**
+-   Retrieves customer information from Stripe
+-   Updates user's subscription status, IDs, and tier
+-   Sets tier to "Premium" for active subscriptions, "Free" otherwise
 
-```javascript
-const response = await fetch("/create-checkout-session", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer <JWT_TOKEN>",
-    },
-    body: JSON.stringify({ tier: "Premium" }),
-});
-const data = await response.json();
-// Use data.sessionId to redirect to Stripe Checkout
+### `handleCheckout(session)`
+
+Processes completed checkout sessions.
+
+**Parameters:**
+
+-   `session` (Object): Stripe checkout session object
+
+**Actions:**
+
+-   Verifies user and payment amount
+-   Updates user tier to "LTD" for successful payments
+-   Logs checkout process status
+
+## Integration with Project Structure
+
+This file is part of the server's payment processing system and works in conjunction with:
+
+-   `/server/models/user.js`: User model for database operations
+-   `/server/middleware/auth.js`: Authentication middleware
+-   Frontend payment integration in dashboard views
+
+## Environment Variables Required
+
+```
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-### 2. Stripe Webhook Handler
+## Usage Examples
 
-**Route:** `POST /webhook`
-
-**Description:** Handles Stripe webhook events, particularly for completed checkout sessions.
-
-**Returns:** JSON object with `{ received: true }`
-
-### 3. Cancel Subscription
-
-**Route:** `POST /cancel-subscription`
-
-**Middleware:** `authCookie`, `checkUserTier`
-
-**Description:** Cancels the user's active subscription.
-
-**Returns:** JSON object with success message
-
-**Usage Example:**
+### Setting Up Webhook Handler
 
 ```javascript
-const response = await fetch("/cancel-subscription", {
-    method: "POST",
-    headers: {
-        Authorization: "Bearer <JWT_TOKEN>",
-    },
-});
-const data = await response.json();
+// Stripe CLI testing
+stripe listen --forward-to localhost:3000/payment/webhook
 ```
 
-### 4. Get Pricing Information
-
-**Route:** `GET /pricing`
-
-**Description:** Retrieves pricing information for all tiers.
-
-**Returns:** JSON object with pricing details for Free, Premium, and Enterprise tiers
-
-**Usage Example:**
+### Canceling a Subscription
 
 ```javascript
-const response = await fetch("/pricing");
-const pricingData = await response.json();
+// Frontend API call
+await fetch("/payment/cancel-subscription", {
+    method: "POST",
+    credentials: "include",
+});
 ```
 
 ## Error Handling
 
-Each route includes error handling to catch and respond to potential issues during execution. Errors are logged to the console and appropriate error responses are sent to the client.
+-   Webhook signature verification
+-   User existence validation
+-   Subscription status verification
+-   Database operation error handling
+-   Payment amount validation
 
-## Project Context
+## Security Considerations
 
-This payment routes file is a crucial part of the application's subscription and payment system. It interacts with:
+-   Uses Stripe signature verification
+-   Requires authentication for sensitive operations
+-   Validates user permissions and subscription status
+-   Handles sensitive payment data securely
 
--   The User model (`../models/user.js`) for updating user subscription details.
--   Authentication middleware (`../middleware/auth.js`) to secure routes.
--   Environment variables for Stripe configuration.
--   Frontend views (in the `views` directory) for success and cancellation pages.
-
-The routes defined here support the subscription-based features of the application, allowing users to upgrade their accounts, process payments, and manage their subscriptions.
+This documentation provides a comprehensive overview of the payment routes and their functionality within the application. For specific implementation details, refer to the inline comments in the code.

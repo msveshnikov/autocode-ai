@@ -30,6 +30,7 @@ router.get("/", authCookie, isAdmin, async (req, res) => {
             usersByTier: {
                 free: users.filter((u) => u.tier === "Free").length,
                 premium: users.filter((u) => u.tier === "Premium").length,
+                ltd: users.filter((u) => u.tier === "LTD").length,
                 enterprise: users.filter((u) => u.tier === "Enterprise").length,
             },
             totalDailyRequests: users.reduce((sum, user) => sum + user.dailyRequests, 0),

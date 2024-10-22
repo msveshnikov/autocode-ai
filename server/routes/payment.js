@@ -21,6 +21,11 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
                 await handleSubscriptionUpdate(subscription);
                 break;
             }
+            case "checkout.session.completed": {
+                const checkoutSessionCompleted = event.data.object;
+                await handleCheckout(checkoutSessionCompleted);
+                break;
+            }
             default:
                 console.log(`Unhandled event type ${event.type}`);
         }
@@ -49,6 +54,22 @@ async function handleSubscriptionUpdate(subscription) {
     }
     await user.save();
 }
+
+export const handleCheckout = async (session) => {
+    console.log("handleCheckout started", session);
+    try {
+        const user = await User.findOne({ email: session.customer_details.email });
+        if (!user || session.amount_total !== 3000) {
+            console.error("handleCheckout failed, not AutoCode user");
+            return;
+        }
+        user.tier = "LTD";
+        await user.save();
+        console.log("handleCheckout succesfull", user);
+    } catch (e) {
+        console.error(e);
+    }
+};
 
 router.post("/cancel-subscription", authCookie, async (req, res) => {
     try {

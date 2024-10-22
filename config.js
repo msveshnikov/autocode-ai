@@ -21,7 +21,7 @@ export const CONFIG = {
         ".bin",
         ".lock",
     ],
-    anthropicModel: "claude-3-5-sonnet-20240620",
+    anthropicModel: "claude-3-5-sonnet-20241022",
     maxTokens: 8192,
     maxFileLines: 700,
     languageConfigs: {

@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     tier: {
         type: String,
-        enum: ["Free", "Premium", "Enterprise"],
+        enum: ["Free", "Premium", "Enterprise", "LTD"],
         default: "Free",
     },
     stripeCustomerId: {
