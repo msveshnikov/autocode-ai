@@ -49,7 +49,7 @@ Please generate or update the ${fileName} file to implement the features describ
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -87,7 +87,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -143,7 +143,7 @@ Please provide your suggestions in the following Markdown format:
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -237,7 +237,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -324,7 +324,7 @@ Return the content of the ${dependencyFileName} file without explanations or com
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -376,7 +376,7 @@ Return the generated code for the ${agentType} AI agent without explanations or 
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -418,7 +418,7 @@ Return the generated HTML code for the landing page without explanations or comm
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -496,7 +496,7 @@ Return the generated code for ${fileName} without explanations or comments.
 
             try {
                 const response = await anthropic.messages.create({
-                    model: CONFIG.anthropicModel,
+                    model: await UserInterface.getModel(),
                     max_tokens: CONFIG.maxTokens,
                     temperature: await UserInterface.getTemperature(),
                     messages: [{ role: "user", content: prompt }],
@@ -592,7 +592,7 @@ Return the content for each file in the following format:
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],

@@ -2,6 +2,7 @@ import chalk from "chalk";
 import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
+import UserInterface from "./userInterface.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -38,9 +39,9 @@ const MarketingAgent = {
         `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
+            temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -62,9 +63,9 @@ const MarketingAgent = {
         `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
+            temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -86,9 +87,9 @@ const MarketingAgent = {
         `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
+            temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -110,9 +111,9 @@ const MarketingAgent = {
         `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
+            temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
         });
 
@@ -134,9 +135,9 @@ const MarketingAgent = {
         `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
-            temperature: 0.7,
+            temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
         });
 

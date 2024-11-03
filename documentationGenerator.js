@@ -32,7 +32,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -69,7 +69,7 @@ Please provide a detailed project overview, architecture description, module int
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -119,7 +119,7 @@ Please provide comprehensive documentation for the unit tests above. Include an 
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -168,7 +168,7 @@ Format the documentation in Markdown, suitable for inclusion in a README or sepa
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -205,7 +205,7 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],

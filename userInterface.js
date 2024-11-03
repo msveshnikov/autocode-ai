@@ -48,10 +48,46 @@ const UserInterface = {
                 "📊 17. Generate API documentation",
                 "🔄 18. Generate full project",
                 "🌡️ Change temperature",
+                "🤖 Change model",
                 "🔑 Login",
                 "🚪 Exit",
             ],
         });
+    },
+
+    async promptForModel() {
+        return inquirer.prompt({
+            type: "list",
+            name: "model",
+            message: "Select the Claude model to use:",
+            choices: ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022"],
+        });
+    },
+
+    async setModel() {
+        const { model } = await this.promptForModel();
+        await FileManager.write(
+            path.join(os.homedir(), ".settings.json"),
+            JSON.stringify(
+                {
+                    model,
+                    temperature: await this.getTemperature(),
+                },
+                null,
+                2
+            )
+        );
+        console.log(chalk.green(`Model set to ${model}`));
+    },
+
+    async getModel() {
+        try {
+            const settings = await fs.readFile(path.join(os.homedir(), ".settings.json"), "utf8");
+            const { model } = JSON.parse(settings);
+            return model || "claude-3-5-sonnet-20241022";
+        } catch {
+            return "claude-3-5-sonnet-20241022";
+        }
     },
 
     async promptForFiles(files) {
@@ -148,7 +184,7 @@ const UserInterface = {
         const spinner = ora("Processing AI request...").start();
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await this.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await this.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
@@ -377,6 +413,9 @@ const UserInterface = {
             case "🌡️ Change temperature":
                 await this.setTemperature();
                 break;
+            case "🤖 Change model":
+                await this.setModel();
+                break;
             case "🔑 Login":
                 await this.handleLogin();
                 break;
@@ -390,8 +429,8 @@ const UserInterface = {
 
     async getTemperature() {
         try {
-            const temperatureData = await fs.readFile(path.join(process.cwd(), ".temperature.json"), "utf8");
-            const { temperature } = JSON.parse(temperatureData);
+            const settings = await fs.readFile(path.join(os.homedir(), ".settings.json"), "utf8");
+            const { temperature } = JSON.parse(settings);
             return temperature || 0.7;
         } catch {
             return 0.7;
@@ -400,10 +439,11 @@ const UserInterface = {
 
     async setTemperature() {
         const { temperature } = await this.promptForTemperature();
-        await FileManager.write(
-            path.join(os.homedir(), ".temperature.json"),
-            JSON.stringify({ temperature: parseFloat(temperature) }, null, 2)
-        );
+        const settings = {
+            temperature: parseFloat(temperature),
+            model: await this.getModel(),
+        };
+        await FileManager.write(path.join(os.homedir(), ".settings.json"), JSON.stringify(settings, null, 2));
         console.log(chalk.green(`Temperature set to ${temperature}`));
     },
 

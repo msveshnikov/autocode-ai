@@ -3,6 +3,7 @@ import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import chalk from "chalk";
 import ora from "ora";
+import UserInterface from "./userInterface.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -33,9 +34,9 @@ Ensure your response is structured and easy to read. Use markdown formatting whe
 `;
 
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -85,9 +86,9 @@ Format the backlog in markdown, with clear sections and priorities.
 `;
 
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -134,9 +135,9 @@ Format the sprint plan in markdown, with clear sections and priorities.
 `;
 
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 

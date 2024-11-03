@@ -4,6 +4,7 @@ import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import CodeGenerator from "./codeGenerator.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
+import UserInterface from "./userInterface.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -69,9 +70,9 @@ Generate a complete Jest test file for this endpoint. Include necessary imports,
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 
@@ -117,9 +118,9 @@ Generate a complete Jest test file for this module. Include necessary imports, m
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
-                temperature: 0.7,
+                temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
             });
 

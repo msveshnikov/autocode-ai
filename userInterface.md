@@ -2,155 +2,167 @@
 
 ## Overview
 
-`UserInterface.js` is a core component of the AutoCode project, responsible for handling user interactions and coordinating various actions within the application. It provides a command-line interface for users to interact with different features of the project, such as code generation, analysis, documentation, and more.
+`UserInterface.js` is a core module in the AutoCode project that handles user interactions and orchestrates various operations within the application. It provides a command-line interface for users to interact with different features of AutoCode, including code generation, analysis, documentation, and AI agent execution.
 
-This module integrates with other components of the project, including:
+The module imports various dependencies and other project modules to facilitate its operations. It uses the `inquirer` library for interactive prompts, `chalk` for colored console output, and `ora` for loading spinners.
 
-- FileManager
-- CodeAnalyzer
-- CodeGenerator
-- DocumentationGenerator
+## Key Components
 
-It also utilizes external libraries like `inquirer` for user prompts and `chalk` for colorful console output.
+### `anthropic` Instance
 
-## Main Object: UserInterface
+An instance of the Anthropic API client is created using the API key stored in the environment variables.
 
-The `UserInterface` object contains methods for managing user interactions and executing various actions based on user input.
+### `UserInterface` Object
 
-### Methods
+This is the main export of the module, containing all the methods for user interaction and action handling.
 
-#### promptForAction()
+## Methods
 
-Prompts the user to choose an action from a list of available options.
+### `promptForAction()`
+
+Prompts the user to select an action from a list of available options.
 
 **Returns:** Promise<Object> - An object containing the selected action.
 
-**Usage Example:**
-```javascript
-const { action } = await UserInterface.promptForAction();
-```
+### `promptForModel()`
 
-#### promptForFiles(files)
+Prompts the user to select a Claude model.
 
-Prompts the user to select files from a given list for processing.
+**Returns:** Promise<Object> - An object containing the selected model.
+
+### `setModel()`
+
+Sets the selected model in the user's settings file.
+
+### `getModel()`
+
+Retrieves the currently set model from the user's settings file.
+
+**Returns:** Promise<string> - The name of the current model.
+
+### `promptForFiles(files)`
+
+Prompts the user to select files for processing.
 
 **Parameters:**
-- `files` (Array): List of file names to choose from.
+- `files`: Array<string> - List of available files.
 
 **Returns:** Promise<Object> - An object containing the selected files.
 
-**Usage Example:**
-```javascript
-const filesToProcess = await FileManager.getFilesToProcess();
-const { selectedFiles } = await UserInterface.promptForFiles(filesToProcess);
-```
-
-#### promptForNewFile()
+### `promptForNewFile()`
 
 Prompts the user to enter the name of a new file to create.
 
 **Returns:** Promise<Object> - An object containing the new file name.
 
-**Usage Example:**
-```javascript
-const { newFile } = await UserInterface.promptForNewFile();
-```
-
-#### promptForLanguage()
+### `promptForLanguage()`
 
 Prompts the user to select a programming language.
 
 **Returns:** Promise<Object> - An object containing the selected language.
 
-**Usage Example:**
-```javascript
-const { language } = await UserInterface.promptForLanguage();
-```
+### `promptForTemperature()`
 
-#### chatInterface(readme, projectStructure)
+Prompts the user to select a temperature for AI generation.
 
-Initiates an interactive chat interface for the user to provide suggestions and make changes to the project.
+**Returns:** Promise<Object> - An object containing the selected temperature.
 
-**Parameters:**
-- `readme` (String): Content of the README.md file.
-- `projectStructure` (Object): Current project structure.
+### `promptForLogin()`
 
-**Returns:** Promise<Object> - An object containing whether to continue the chat and the updated README content.
+Prompts the user for login credentials.
 
-**Usage Example:**
-```javascript
-const result = await UserInterface.chatInterface(readme, projectStructure);
-```
+**Returns:** Promise<Object> - An object containing the email and password.
 
-#### extractCodeSnippet(markdown)
+### `chatInterface(projectStructure, readme)`
 
-Extracts a code snippet from a markdown string.
+Implements an interactive chat interface for processing user suggestions.
 
 **Parameters:**
-- `markdown` (String): Markdown content containing a code snippet.
+- `projectStructure`: Object - The current project structure.
+- `readme`: string - The content of the README file.
 
-**Returns:** String | null - The extracted code snippet or null if not found.
+**Returns:** Promise<Object> - An object indicating whether to continue and the updated README.
 
-#### runAIAgents(projectStructure)
+### `generateAIAgents(projectStructure, readme)`
 
-Runs various AI agents to perform tasks on the project.
+Generates code for AI agents based on the project structure and README.
 
 **Parameters:**
-- `projectStructure` (Object): Current project structure.
+- `projectStructure`: Object - The current project structure.
+- `readme`: string - The content of the README file.
 
-**Usage Example:**
-```javascript
-await UserInterface.runAIAgents(projectStructure);
-```
+### `runAIAgents(projectStructure, readme)`
 
-#### processFiles(files, readme, projectStructure)
+Runs selected AI agents on the project.
+
+**Parameters:**
+- `projectStructure`: Object - The current project structure.
+- `readme`: string - The content of the README file.
+
+### `processFiles(files, readme, projectStructure)`
 
 Processes selected files by generating or updating their content.
 
 **Parameters:**
-- `files` (Array): List of files to process.
-- `readme` (String): Content of the README.md file.
-- `projectStructure` (Object): Current project structure.
+- `files`: Array<string> - List of files to process.
+- `readme`: string - The content of the README file.
+- `projectStructure`: Object - The current project structure.
 
-**Usage Example:**
-```javascript
-await UserInterface.processFiles(selectedFiles, readme, projectStructure);
-```
+### `handleAction(action, readme, readmePath, projectStructure)`
 
-#### handleAction(action, readme, readmePath, projectStructure)
-
-Handles the execution of the selected action by the user.
+Handles the execution of the selected action.
 
 **Parameters:**
-- `action` (String): The selected action to perform.
-- `readme` (String): Content of the README.md file.
-- `readmePath` (String): Path to the README.md file.
-- `projectStructure` (Object): Current project structure.
+- `action`: string - The selected action.
+- `readme`: string - The content of the README file.
+- `readmePath`: string - The path to the README file.
+- `projectStructure`: Object - The current project structure.
 
-**Returns:** Boolean - Whether to continue execution or exit the application.
+**Returns:** Promise<boolean> - Indicates whether to continue execution.
 
-**Usage Example:**
+### `getTemperature()`
+
+Retrieves the current temperature setting from the user's settings file.
+
+**Returns:** Promise<number> - The current temperature setting.
+
+### `setTemperature()`
+
+Sets a new temperature in the user's settings file.
+
+### `handleLogin()`
+
+Handles the user login process.
+
+**Returns:** Promise<boolean> - Indicates whether the login was successful.
+
+## Usage Example
+
 ```javascript
-const continueExecution = await UserInterface.handleAction(action, readme, readmePath, projectStructure);
+import UserInterface from './userInterface.js';
+import FileManager from './fileManager.js';
+
+async function main() {
+    const readme = await FileManager.read('README.md');
+    const projectStructure = await FileManager.getProjectStructure();
+    
+    let continueExecution = true;
+    while (continueExecution) {
+        const { action } = await UserInterface.promptForAction();
+        continueExecution = await UserInterface.handleAction(action, readme, 'README.md', projectStructure);
+    }
+}
+
+main().catch(console.error);
 ```
 
-## Usage in the Project
+This example demonstrates how to use the `UserInterface` module to create an interactive command-line interface for the AutoCode project. It continuously prompts the user for actions and handles them until the user chooses to exit.
 
-The `UserInterface` module plays a central role in the AutoCode project by:
+## Notes
 
-1. Providing a user-friendly interface for interacting with various features.
-2. Coordinating actions between different components of the project.
-3. Managing the flow of the application based on user choices.
-4. Facilitating file selection, code generation, and project modifications.
+- The `UserInterface` module plays a central role in the AutoCode project, connecting various components and providing a user-friendly interface for interacting with the system.
+- It integrates with other modules like `FileManager`, `CodeGenerator`, `CodeAnalyzer`, and various AI agents to provide a comprehensive set of features.
+- The module handles file operations, code generation, documentation, and project management tasks through its various methods.
+- It also manages user settings, including model selection and temperature settings for AI operations.
 
-It is likely used in the main execution flow of the application, possibly in the `index.js` file, to drive the overall functionality of the AutoCode tool.
-
-## Dependencies
-
-- `inquirer`: For creating interactive command-line user interfaces.
-- `chalk`: For styling console output with colors.
-- `@anthropic-ai/sdk`: For interacting with the Anthropic AI API.
-- `path`: For handling file paths.
-- Other project modules: `FileManager`, `CodeAnalyzer`, `CodeGenerator`, `DocumentationGenerator`.
-
-This module is essential for providing a seamless and interactive experience for users of the AutoCode project, allowing them to leverage AI-powered code generation, analysis, and documentation features through a simple command-line interface.
+This documentation provides an overview of the `UserInterface.js` file and its role in the AutoCode project. For more detailed information about specific functions or components, refer to the inline comments and function descriptions within the code.

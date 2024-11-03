@@ -63,7 +63,7 @@ Please provide the corrected code that addresses all the linter errors. Consider
 `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -92,7 +92,7 @@ Provide the suggestions in a structured format.
 `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -128,7 +128,7 @@ Provide the suggestions in a structured format.
 `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -164,7 +164,7 @@ Provide the suggestions in a structured format.
     Provide the results in a JSON code snippet.
     `;
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -453,7 +453,7 @@ Provide detailed performance optimization suggestions in a structured format.
 `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -489,7 +489,7 @@ Provide detailed security vulnerability analysis and suggestions in a structured
 `;
 
         const response = await anthropic.messages.create({
-            model: CONFIG.anthropicModel,
+            model: await UserInterface.getModel(),
             max_tokens: CONFIG.maxTokens,
             temperature: await UserInterface.getTemperature(),
             messages: [{ role: "user", content: prompt }],
@@ -530,7 +530,7 @@ Provide the generated unit tests in a text code format, ready to be saved in a s
 
         try {
             const response = await anthropic.messages.create({
-                model: CONFIG.anthropicModel,
+                model: await UserInterface.getModel(),
                 max_tokens: CONFIG.maxTokens,
                 temperature: await UserInterface.getTemperature(),
                 messages: [{ role: "user", content: prompt }],
