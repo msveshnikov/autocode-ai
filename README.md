@@ -83,8 +83,3 @@ AutoCode currently supports the following programming languages:
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
 # TODO
-
--   add sonnet model selector similar to temperature and move both params to settings.json in ~
-    - claude-3-5-sonnet-20240620
-    - claude-3-5-sonnet-20241022
--   send model name to all functions along with temperature

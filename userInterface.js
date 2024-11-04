@@ -60,7 +60,7 @@ const UserInterface = {
             type: "list",
             name: "model",
             message: "Select the Claude model to use:",
-            choices: ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022"],
+            choices: ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-latest"],
         });
     },
 
