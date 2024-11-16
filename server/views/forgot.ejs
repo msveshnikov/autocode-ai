@@ -7,28 +7,28 @@
         <title>Forgot Password - AutoCode</title>
         <style>
             body {
-                font-family: "Courier New", monospace;
+                font-family: Arial, sans-serif;
                 line-height: 1.6;
-                color: #ffffff;
+                color: #333;
                 margin: 0;
                 padding: 0;
-                background: linear-gradient(135deg, #000000, #0000ff);
+                background: #ffffff;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
             }
             .container {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: #ffffff;
                 padding: 2rem;
                 border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
                 width: 100%;
                 max-width: 400px;
             }
             h1 {
                 text-align: center;
-                color: #00ffff;
+                color: #333;
                 margin-bottom: 1.5rem;
             }
             form {
@@ -38,16 +38,16 @@
             input {
                 padding: 0.5rem;
                 margin-top: 0.5rem;
-                background-color: rgba(255, 255, 255, 0.1);
-                border: 1px solid #00ffff;
-                color: #ffffff;
+                background-color: #f5f5f5;
+                border: 1px solid #ddd;
+                color: #333;
                 border-radius: 4px;
             }
             button {
                 margin-top: 1.5rem;
                 padding: 0.75rem;
-                background-color: #00ffff;
-                color: #000000;
+                background-color: #100055;
+                color: #ffffff;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
@@ -55,9 +55,8 @@
                 transition: all 0.3s;
             }
             button:hover {
-                background-color: #0000ff;
-                color: #ffffff;
-                box-shadow: 0 0 15px #00ffff;
+                background-color: #357abd;
+                transform: translateY(-2px);
             }
             .message {
                 text-align: center;
@@ -68,8 +67,11 @@
                 margin-top: 1rem;
             }
             .login-link a {
-                color: #00ffff;
+                color: #100055;
                 text-decoration: none;
+            }
+            .login-link a:hover {
+                text-decoration: underline;
             }
         </style>
     </head>
@@ -101,15 +103,15 @@
                     const data = await response.json();
                     if (response.ok) {
                         document.getElementById("message").textContent = data.message;
-                        document.getElementById("message").style.color = "#00ff00";
+                        document.getElementById("message").style.color = "#4caf50";
                     } else {
                         document.getElementById("message").textContent = data.error;
-                        document.getElementById("message").style.color = "#ff0000";
+                        document.getElementById("message").style.color = "#f44336";
                     }
                 } catch (error) {
                     console.error("Error:", error);
                     document.getElementById("message").textContent = "An error occurred. Please try again.";
-                    document.getElementById("message").style.color = "#ff0000";
+                    document.getElementById("message").style.color = "#f44336";
                 }
             });
         </script>

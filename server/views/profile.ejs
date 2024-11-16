@@ -17,21 +17,20 @@
         </script>
         <style>
             body {
-                font-family: "Courier New", monospace;
+                font-family: Arial, sans-serif;
                 line-height: 1.6;
-                color: #ffffff;
+                color: #333;
                 margin: 0;
                 padding: 0;
-                background: linear-gradient(135deg, #000000, #0000ff);
+                background: #ffffff;
             }
             .container {
                 max-width: 800px;
                 margin: 0 auto;
                 padding: 20px;
             }
-            h1,
-            h2 {
-                color: #00ffff;
+            h1, h2 {
+                color: #100055;
                 text-align: center;
             }
             .profile-info,
@@ -39,32 +38,35 @@
             .license-usage,
             .subscription-info,
             .device-info {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: #ffffff;
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border: 1px solid #e0e0e0;
             }
             .profile-info p,
             .license-usage p,
             .subscription-info p,
             .device-info p {
                 margin: 10px 0;
+                color: #333;
             }
             .edit-form input,
             .edit-form select {
                 width: 100%;
                 padding: 10px;
                 margin-bottom: 10px;
-                background-color: rgba(255, 255, 255, 0.1);
-                border: 1px solid #00ffff;
-                color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                color: #333;
             }
             .edit-form button,
             .upgrade-button,
             .cancel-subscription,
             .dashboard-button {
-                background-color: #00ffff;
-                color: #000000;
+                background-color: #100055;
+                color: #ffffff;
                 padding: 10px 20px;
                 border: none;
                 border-radius: 5px;
@@ -78,18 +80,18 @@
             .upgrade-button:hover,
             .cancel-subscription:hover,
             .dashboard-button:hover {
-                background-color: #0000ff;
-                color: #ffffff;
+                background-color: #0000cc;
             }
             .progress-bar {
                 width: 100%;
-                background-color: #ddd;
+                background-color: #f0f0f0;
                 border-radius: 5px;
+                overflow: hidden;
             }
             .progress {
                 width: 0%;
                 height: 20px;
-                background-color: #00ffff;
+                background-color: #100055;
                 border-radius: 5px;
                 transition: width 0.5s ease-in-out;
             }
@@ -99,6 +101,7 @@
             }
             .device-list li {
                 margin-bottom: 5px;
+                color: #333;
             }
             .modal {
                 display: none;
@@ -108,14 +111,13 @@
                 top: 0;
                 width: 100%;
                 height: 100%;
-                overflow: auto;
                 background-color: rgba(0, 0, 0, 0.4);
             }
             .modal-content {
-                background-color: #fefefe;
+                background-color: #ffffff;
                 margin: 15% auto;
                 padding: 20px;
-                border: 1px solid #888;
+                border: 1px solid #ddd;
                 width: 80%;
                 max-width: 500px;
                 border-radius: 10px;
@@ -133,12 +135,12 @@
                 font-weight: bold;
             }
             .confirm-button {
-                background-color: #ff0000;
+                background-color: #dc3545;
                 color: #ffffff;
             }
             .cancel-button {
-                background-color: #cccccc;
-                color: #000000;
+                background-color: #6c757d;
+                color: #ffffff;
             }
             .success-message,
             .error-message {
@@ -148,12 +150,14 @@
                 text-align: center;
             }
             .success-message {
-                background-color: #4caf50;
-                color: white;
+                background-color: #d4edda;
+                color: #155724;
+                border: 1px solid #c3e6cb;
             }
             .error-message {
-                background-color: #f44336;
-                color: white;
+                background-color: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
             }
         </style>
     </head>
@@ -281,8 +285,7 @@
                         method: "POST",
                     });
                     if (response.ok) {
-                        modalMessage.innerHTML =
-                            '<div class="success-message">Subscription cancelled successfully</div>';
+                        modalMessage.innerHTML = '<div class="success-message">Subscription cancelled successfully</div>';
                         setTimeout(() => {
                             modal.style.display = "none";
                             modalMessage.innerHTML = "";
@@ -293,8 +296,7 @@
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    modalMessage.innerHTML =
-                        '<div class="error-message">An error occurred while cancelling the subscription</div>';
+                    modalMessage.innerHTML = '<div class="error-message">An error occurred while cancelling the subscription</div>';
                 }
             });
 

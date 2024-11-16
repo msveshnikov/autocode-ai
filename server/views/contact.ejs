@@ -7,19 +7,20 @@
         <title>Contact Us - AutoCode</title>
         <style>
             body {
-                font-family: "Courier New", monospace;
+                font-family: Arial, sans-serif;
                 line-height: 1.6;
-                color: #ffffff;
+                color: #333;
                 margin: 0;
                 padding: 0;
-                background: linear-gradient(135deg, #000000, #0000ff);
+                background: #ffffff;
                 display: flex;
                 flex-direction: column;
                 min-height: 100vh;
             }
             header {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: #f8f9fa;
                 padding: 1rem;
+                border-bottom: 1px solid #dee2e6;
             }
             nav ul {
                 list-style-type: none;
@@ -31,7 +32,7 @@
                 margin: 0 1rem;
             }
             nav ul li a {
-                color: #00ffff;
+                color: #0066cc;
                 text-decoration: none;
             }
             nav ul li a.active {
@@ -45,32 +46,32 @@
                 padding: 2rem;
             }
             .contact-container {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: #ffffff;
                 padding: 2rem;
                 border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
                 width: 100%;
                 max-width: 500px;
             }
             h1 {
                 text-align: center;
-                color: #00ffff;
+                color: #333;
             }
             form {
                 display: flex;
                 flex-direction: column;
             }
             label {
-                color: #00ffff;
+                color: #333;
                 margin-bottom: 0.5rem;
             }
             input,
             textarea {
                 margin-bottom: 1rem;
                 padding: 0.5rem;
-                border: 1px solid #00ffff;
-                background-color: rgba(255, 255, 255, 0.1);
-                color: #ffffff;
+                border: 1px solid #dee2e6;
+                background-color: #ffffff;
+                color: #333;
                 border-radius: 4px;
             }
             textarea {
@@ -78,8 +79,8 @@
                 min-height: 100px;
             }
             button {
-                background-color: #00ffff;
-                color: #000000;
+                background-color: #0066cc;
+                color: #ffffff;
                 border: none;
                 padding: 0.5rem;
                 border-radius: 4px;
@@ -87,23 +88,23 @@
                 font-weight: bold;
             }
             button:hover {
-                background-color: #0000ff;
-                color: #ffffff;
+                background-color: #0052a3;
             }
             footer {
-                background-color: rgba(0, 0, 0, 0.6);
+                background-color: #f8f9fa;
                 text-align: center;
                 padding: 1rem;
-                color: #00ffff;
+                color: #333;
+                border-top: 1px solid #dee2e6;
             }
             .success-message {
-                color: #00ff00;
+                color: #28a745;
                 text-align: center;
                 margin-top: 1rem;
                 display: none;
             }
             .error-message {
-                color: #ff0000;
+                color: #dc3545;
                 text-align: center;
                 margin-top: 1rem;
                 display: none;
@@ -129,7 +130,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2024 MaxSoft. All rights reserved.</p>
+            <p>&copy; 2024 AutoCode. All rights reserved.</p>
         </footer>
 
         <script>
@@ -151,8 +152,7 @@
                         e.target.reset();
                     } else {
                         const errorData = await response.json();
-                        document.getElementById("errorMessage").textContent =
-                            errorData.error || "Failed to send message. Please try again.";
+                        document.getElementById("errorMessage").textContent = errorData.error || "Failed to send message. Please try again.";
                         document.getElementById("errorMessage").style.display = "block";
                         document.getElementById("successMessage").style.display = "none";
                     }
