@@ -458,7 +458,10 @@
                 <div class="features">
                     <div class="feature">
                         <h3>Automatic Code Generation</h3>
-                        <p>Generate code based on README.md instructions using Claude 3.5 Sonnet API (October update). Haiku 3.5 also supported!</p>
+                        <p>
+                            Generate code based on README.md instructions using Claude 3.5 Sonnet API (October update).
+                            Haiku 3.5 also supported!
+                        </p>
                     </div>
                     <div class="feature">
                         <h3>Multi-Language Support</h3>
@@ -668,27 +671,22 @@
                             <li>Priority support</li>
                         </ul>
                         <% if (user) { %>
-                            <a href="/profile" class="cta-button">Get Now</a>
-                          <% } %>
-                          <% if (!user) { %>
-                            <a href="/register?tier=Premium" class="cta-button">Get Now</a>
-                          <% } %>
+                        <a href="/profile" class="cta-button">Get Now</a>
+                        <% } %> <% if (!user) { %>
+                        <a href="/register?tier=Premium" class="cta-button">Get Now</a>
+                        <% } %>
                     </div>
                     <div class="pricing-plan">
-                        <h3>Life Time Deal</h3>
-                        <p class="price">$30</p>
+                        <h3>Enterprise</h3>
+                        <p class="price">Custom</p>
                         <ul>
                             <li>Unlimited requests</li>
-                            <li>All features + upgrades</li>
+                            <li>All features + custom integrations</li>
                             <li>Unlimited devices</li>
                             <li>Dedicated support team</li>
+                            <li>On-premises deployment option</li>
                         </ul>
-                        <% if (user) { %>
-                          <a href="/profile" class="cta-button">Get Now</a>
-                        <% } %>
-                        <% if (!user) { %>
-                          <a href="/register?tier=LifeTime" class="cta-button">Get Now</a>
-                        <% } %>
+                        <a href="/contact" class="cta-button">Contact Us</a>
                     </div>
                 </div>
             </section>
