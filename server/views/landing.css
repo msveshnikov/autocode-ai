@@ -75,10 +75,14 @@
     --accent-color: #3182ce;
     --text-color: #2d3748;
     --background-color: #ffffff;
+    --gradient-start: #3182ce;
+    --gradient-end: #2d3748;
 }
 
+
+
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
     margin: 0;
@@ -130,29 +134,43 @@ nav ul li a {
 }
 
 .hero {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(240, 240, 240, 0.8)), url("/hero2.jpg");
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: var(--text-color);
+    background: linear-gradient(135deg, rgba(49, 130, 206, 0.1), rgba(45, 55, 72, 0.1));
     position: relative;
     overflow: hidden;
 }
 
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/hero2.jpg");
+    opacity: 0.1;
+    z-index: 0;
+}
+
 .hero-content {
-    max-width: 800px;
     position: relative;
     z-index: 1;
+    max-width: 800px;
+    padding: 2rem;
 }
 
 .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
+    font-size: 4.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 8s ease infinite;
 }
 
 .hero p {
