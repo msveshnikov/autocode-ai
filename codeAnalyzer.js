@@ -64,7 +64,7 @@ Please provide the corrected code that addresses all the linter errors. Consider
 
         await FileManager.write(filePath, response.content[0].text);
         console.log(chalk.green(`✅ Lint errors fixed for ${filePath}`));
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
     },
 
     async optimizeProjectStructure(projectStructure) {
@@ -88,7 +88,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green("📊 Project structure optimization suggestions:"));
         console.log(response.content[0].text);
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
     },
 
     async analyzeCodeQuality(filePath) {
@@ -119,7 +119,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green(`📊 Code quality analysis for ${filePath}:`));
         console.log(response.content[0].text);
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
     },
 
     async detectMissingDependencies(projectStructure) {
@@ -150,7 +150,7 @@ Provide the suggestions in a structured format.
 
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
 
         try {
             const structuredResults = JSON.parse(response.content?.[0]?.text?.match(/```json([\s\S]*?)```/)?.[1]);
@@ -434,7 +434,7 @@ Provide detailed performance optimization suggestions in a structured format.
 
         console.log(chalk.green(`📊 Performance analysis for ${filePath}:`));
         console.log(response.content[0].text);
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
     },
 
     async checkSecurityVulnerabilities(filePath) {
@@ -465,7 +465,7 @@ Provide detailed security vulnerability analysis and suggestions in a structured
 
         console.log(chalk.green(`📊 Security vulnerability analysis for ${filePath}:`));
         console.log(response.content[0].text);
-        await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+        await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
     },
 
     async generateUnitTests(filePath, projectStructure) {
@@ -502,7 +502,7 @@ Provide the generated unit tests in a text code format, ready to be saved in a s
             const testFilePath = filePath.replace(/\.js$/, ".test.js");
             await FileManager.write(testFilePath, response.content[0].text);
             console.log(chalk.green(`✅ Unit tests generated and saved to ${testFilePath}`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("Error generating unit tests");
             console.error(chalk.red(`Error: ${error.message}`));

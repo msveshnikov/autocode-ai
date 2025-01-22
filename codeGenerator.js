@@ -48,7 +48,7 @@ Please generate or update the ${fileName} file to implement the features describ
         try {
             const response = await getResponse(prompt);
             spinner.succeed("Code generated successfully");
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
             return this.cleanGeneratedCode(response.content[0].text);
         } catch (error) {
             spinner.fail("Error generating code");
@@ -82,7 +82,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
             const response = await getResponse(prompt);
             spinner.succeed("README updated successfully");
             const updatedReadme = response.content[0].text;
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
             return updatedReadme;
         } catch (error) {
             spinner.fail("Error updating README");
@@ -151,7 +151,7 @@ Please provide your suggestions in the following Markdown format:
                 console.log(chalk.yellow("⏹️ File split cancelled."));
             }
 
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("Error generating file split suggestion");
             throw error;
@@ -224,7 +224,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
             const optimizedCode = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(filePath, optimizedCode);
             console.log(chalk.green(`✅ ${filePath} has been optimized and refactored.`));
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("Error optimizing and refactoring");
             throw error;
@@ -306,7 +306,7 @@ Return the content of the ${dependencyFileName} file without explanations or com
             const dependencyFileContent = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(dependencyFileName, dependencyFileContent);
             console.log(chalk.green(`✅ Generated ${dependencyFileName}`));
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${dependencyFileName}`);
             throw error;
@@ -354,7 +354,7 @@ Return the generated code for the ${agentType} AI agent without explanations or 
             const fileName = `./${agentType.replace(/\s+/g, "")}.js`;
             await FileManager.write(fileName, agentCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail(`Error generating ${agentType} AI agent code`);
             throw error;
@@ -391,7 +391,7 @@ Return the generated HTML code for the landing page without explanations or comm
             const fileName = "landing.html";
             await FileManager.write(fileName, landingPageCode);
             console.log(chalk.green(`✅ Generated ${fileName}`));
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("Error generating landing page");
             throw error;
@@ -464,7 +464,7 @@ Return the generated code for ${fileName} without explanations or comments.
                 await FileManager.write(fileName, sourceFileContent);
                 console.log(chalk.green(`✅ Generated ${fileName}`));
                 projectStructure[fileName] = null;
-                await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+                await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
             } catch (error) {
                 spinner.fail(`Error generating ${fileName}`);
                 throw error;
@@ -475,6 +475,9 @@ Return the generated code for ${fileName} without explanations or comments.
     },
 
     async calculateTokenStats(inputTokens, outputTokens) {
+        if (!inputTokens || !outputTokens) {
+            return;
+        }
         const inputCost = (inputTokens / 1000000) * 3;
         const outputCost = (outputTokens / 1000000) * 15;
         const totalCost = inputCost + outputCost;
@@ -558,7 +561,7 @@ Return the content for each file in the following format:
                 console.log(chalk.green(`✅ Generated docs/${fileName}`));
             }
 
-            await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("Error generating app description and metadata files");
             throw error;

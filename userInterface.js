@@ -58,7 +58,12 @@ const UserInterface = {
             type: "list",
             name: "model",
             message: "Select the Claude model to use:",
-            choices: ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022", "claude-3-5-haiku-latest"],
+            choices: [
+                "claude-3-5-sonnet-20240620",
+                "claude-3-5-sonnet-20241022",
+                "claude-3-5-haiku-latest",
+                "deepseek-reasoner",
+            ],
         });
     },
 
@@ -185,7 +190,7 @@ const UserInterface = {
             spinner.succeed("AI request completed");
             await FileManager.write(filePath, CodeGenerator.cleanGeneratedCode(response.content[0].text));
             console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));
-            await CodeGenerator.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
+            await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
             spinner.fail("AI request failed");
             console.error(chalk.red(`Error: ${error.message}`));
