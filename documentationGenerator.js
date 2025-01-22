@@ -1,13 +1,9 @@
 import chalk from "chalk";
 import path from "path";
-import Anthropic from "@anthropic-ai/sdk";
-import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
-import UserInterface from "./userInterface.js";
 import ora from "ora";
 import CodeGenerator from "./codeGenerator.js";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 const DocumentationGenerator = {
     async generate(filePath, content, projectStructure) {
@@ -31,12 +27,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
         const spinner = ora("Generating documentation...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Documentation generated");
             await FileManager.write(docFilePath, response.content[0].text);
@@ -68,12 +59,7 @@ Please provide a detailed project overview, architecture description, module int
         const spinner = ora("Generating project documentation...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Project documentation generated");
             await FileManager.write("DOCUMENTATION.md", response.content[0].text);
@@ -118,12 +104,7 @@ Please provide comprehensive documentation for the unit tests above. Include an 
         const spinner = ora("Generating unit test documentation...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Unit test documentation generated");
             await FileManager.write(docFilePath, response.content[0].text);
@@ -167,12 +148,7 @@ Format the documentation in Markdown, suitable for inclusion in a README or sepa
         const spinner = ora("Generating API documentation...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("API documentation generated");
             await FileManager.write("API_DOCUMENTATION.md", response.content[0].text);
@@ -204,12 +180,7 @@ Format the change log in Markdown, suitable for inclusion in a CHANGELOG.md file
         const spinner = ora("Generating change log...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Change log generated");
             await FileManager.write("CHANGELOG.md", response.content[0].text);

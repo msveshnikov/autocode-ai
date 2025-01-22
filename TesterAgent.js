@@ -1,12 +1,8 @@
 import path from "path";
-import Anthropic from "@anthropic-ai/sdk";
-import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import CodeGenerator from "./codeGenerator.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
-import UserInterface from "./userInterface.js";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 class TesterAgent {
     constructor() {
@@ -69,12 +65,7 @@ Generate a complete Jest test file for this endpoint. Include necessary imports,
 `;
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             const testContent = this.extractCodeSnippet(response.content[0].text);
             const testFileName = `${endpoint.file.replace(".js", "")}.test.js`;
@@ -117,12 +108,7 @@ Generate a complete Jest test file for this module. Include necessary imports, m
 `;
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             const testContent = this.extractCodeSnippet(response.content[0].text);
             const testFileName = `${path.basename(file, ".js")}.test.js`;

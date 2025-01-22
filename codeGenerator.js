@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import chalk from "chalk";
 import inquirer from "inquirer";
@@ -9,8 +8,7 @@ import CodeAnalyzer from "./codeAnalyzer.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import UserInterface from "./userInterface.js";
 import fs from "fs/promises";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 const CodeGenerator = {
     async generate(readme, currentCode, fileName, projectStructure, allFileContents) {
@@ -48,12 +46,7 @@ Please generate or update the ${fileName} file to implement the features describ
         const spinner = ora("Generating code...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("Code generated successfully");
             await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
             return this.cleanGeneratedCode(response.content[0].text);
@@ -86,12 +79,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
         const spinner = ora("Updating README...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("README updated successfully");
             const updatedReadme = response.content[0].text;
             await this.calculateTokenStats(response.usage.input_tokens, response.usage.output_tokens);
@@ -142,12 +130,7 @@ Please provide your suggestions in the following Markdown format:
         const spinner = ora("Generating file split suggestion...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("File split suggestion generated");
             const splitSuggestion = response.content[0].text;
             console.log(chalk.cyan("📋 File splitting suggestion:"));
@@ -236,12 +219,7 @@ Return the optimized and refactored code ONLY!! without explanations or comments
         const spinner = ora("Optimizing and refactoring...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("Optimization and refactoring completed");
             const optimizedCode = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(filePath, optimizedCode);
@@ -323,12 +301,7 @@ Return the content of the ${dependencyFileName} file without explanations or com
         const spinner = ora(`Generating ${dependencyFileName}...`).start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed(`${dependencyFileName} generated successfully`);
             const dependencyFileContent = this.cleanGeneratedCode(response.content[0].text);
             await FileManager.write(dependencyFileName, dependencyFileContent);
@@ -375,12 +348,7 @@ Return the generated code for the ${agentType} AI agent without explanations or 
         const spinner = ora(`Generating ${agentType} AI agent code...`).start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed(`${agentType} AI agent code generated successfully`);
             const agentCode = this.cleanGeneratedCode(response.content[0].text);
             const fileName = `./${agentType.replace(/\s+/g, "")}.js`;
@@ -417,12 +385,7 @@ Return the generated HTML code for the landing page without explanations or comm
         const spinner = ora("Generating landing page...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("Landing page generated successfully");
             const landingPageCode = this.cleanGeneratedCode(response.content[0].text);
             const fileName = "landing.html";
@@ -495,12 +458,7 @@ Return the generated code for ${fileName} without explanations or comments.
             const spinner = ora(`Generating ${fileName}...`).start();
 
             try {
-                const response = await anthropic.messages.create({
-                    model: await UserInterface.getModel(),
-                    max_tokens: CONFIG.maxTokens,
-                    temperature: await UserInterface.getTemperature(),
-                    messages: [{ role: "user", content: prompt }],
-                });
+                const response = await getResponse(prompt);
                 spinner.succeed(`${fileName} generated successfully`);
                 const sourceFileContent = this.cleanGeneratedCode(response.content[0].text);
                 await FileManager.write(fileName, sourceFileContent);
@@ -591,12 +549,7 @@ Return the content for each file in the following format:
         const spinner = ora("Generating app description and metadata files...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("App description and metadata files generated successfully");
 
             const files = this.parseGeneratedFiles(response.content[0].text);

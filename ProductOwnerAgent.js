@@ -1,11 +1,7 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import chalk from "chalk";
 import ora from "ora";
-import UserInterface from "./userInterface.js";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 const ProductOwnerAgent = {
     async run(projectStructure, readme) {
@@ -33,12 +29,7 @@ Please provide the following:
 Ensure your response is structured and easy to read. Use markdown formatting where appropriate.
 `;
 
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Analysis complete");
 
@@ -85,12 +76,7 @@ Please provide an updated product backlog with the following:
 Format the backlog in markdown, with clear sections and priorities.
 `;
 
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Backlog updated");
 
@@ -134,12 +120,7 @@ Please provide a sprint plan with the following:
 Format the sprint plan in markdown, with clear sections and priorities.
 `;
 
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
 
             spinner.succeed("Sprint plan created");
 

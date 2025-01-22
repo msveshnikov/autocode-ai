@@ -1,10 +1,6 @@
 import chalk from "chalk";
-import Anthropic from "@anthropic-ai/sdk";
-import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
-import UserInterface from "./userInterface.js";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 const MarketingAgent = {
     async run(projectStructure, readme) {
@@ -38,12 +34,7 @@ const MarketingAgent = {
         Based on this information, create a comprehensive marketing strategy for the project. Include target audience, key messaging, marketing channels, and potential campaign ideas. Provide the strategy in a structured format suitable for a markdown file.
         `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write("docs/marketing_strategy.md", response.content[0].text);
         console.log(chalk.green("📊 Marketing strategy generated and saved to marketing_strategy.md"));
@@ -62,12 +53,7 @@ const MarketingAgent = {
         Provide 3 posts for each platform, highlighting key features and benefits of the project. Format the output as a JSON object with keys for each platform and an array of post content.
         `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write("docs/social_media_content.json", response.content[0].text);
         console.log(chalk.green("📱 Social media content generated and saved to social_media_content.json"));
@@ -85,13 +71,7 @@ const MarketingAgent = {
 
         Create a series of 3 emails: an introduction email, a feature highlight email, and a call-to-action email. Provide the email subjects and body content in a format suitable for a markdown file.
         `;
-
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write("docs/email_campaign.md", response.content[0].text);
         console.log(chalk.green("📧 Email campaign developed and saved to email_campaign.md"));
@@ -110,12 +90,7 @@ const MarketingAgent = {
         Identify 3-5 potential competitors, their key features, strengths, and weaknesses compared to this project. Provide the analysis in a structured format suitable for a markdown file.
         `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write("docs/competitor_analysis.md", response.content[0].text);
         console.log(chalk.green("🔍 Competitor analysis completed and saved to competitor_analysis.md"));
@@ -134,12 +109,7 @@ const MarketingAgent = {
         Generate a headline, subheadline, key features section, benefits section, and a call-to-action. Provide the content in HTML format, using appropriate tags for structure.
         `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write("docs/landing_page_copy.html", response.content[0].text);
         console.log(chalk.green("🌐 Landing page copy created and saved to landing_page_copy.html"));

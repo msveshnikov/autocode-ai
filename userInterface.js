@@ -1,6 +1,5 @@
 import inquirer from "inquirer";
 import chalk from "chalk";
-import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import CodeAnalyzer from "./codeAnalyzer.js";
@@ -19,8 +18,7 @@ import path from "path";
 import ora from "ora";
 import fs from "fs/promises";
 import os from "os";
-
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
+import { getResponse } from "./model.js";
 
 const UserInterface = {
     async promptForAction() {
@@ -183,12 +181,7 @@ const UserInterface = {
 
         const spinner = ora("Processing AI request...").start();
         try {
-            const response = await anthropic.messages.create({
-                model: await this.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await this.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("AI request completed");
             await FileManager.write(filePath, CodeGenerator.cleanGeneratedCode(response.content[0].text));
             console.log(chalk.green(`✅ ${selectedFile} has been updated with the extracted code snippet.`));

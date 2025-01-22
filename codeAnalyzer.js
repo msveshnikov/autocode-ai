@@ -1,18 +1,16 @@
 import chalk from "chalk";
 import { exec } from "child_process";
 import { promisify } from "util";
-import Anthropic from "@anthropic-ai/sdk";
 import { CONFIG } from "./config.js";
 import FileManager from "./fileManager.js";
 import CodeGenerator from "./codeGenerator.js";
-import UserInterface from "./userInterface.js";
 import path from "path";
 import inquirer from "inquirer";
 import ora from "ora";
 import fs from "fs/promises";
+import { getResponse } from "./model.js";
 
 const execAsync = promisify(exec);
-const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
 const CodeAnalyzer = {
     async runLintChecks(filePath) {
@@ -62,12 +60,7 @@ ${JSON.stringify(projectStructure, null, 2)}
 Please provide the corrected code that addresses all the linter errors. Consider the project structure when making changes. Do not include any explanations or comments in your response, just provide the code.
 `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         await FileManager.write(filePath, response.content[0].text);
         console.log(chalk.green(`✅ Lint errors fixed for ${filePath}`));
@@ -91,12 +84,7 @@ Please provide suggestions for optimizing the project structure, including:
 Provide the suggestions in a structured format.
 `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         console.log(chalk.green("📊 Project structure optimization suggestions:"));
         console.log(response.content[0].text);
@@ -127,12 +115,7 @@ Please consider:
 Provide the suggestions in a structured format.
 `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         console.log(chalk.green(`📊 Code quality analysis for ${filePath}:`));
         console.log(response.content[0].text);
@@ -163,12 +146,7 @@ Provide the suggestions in a structured format.
     
     Provide the results in a JSON code snippet.
     `;
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         console.log(chalk.green("📊 Missing dependencies analysis:"));
         console.log(response.content[0].text);
@@ -452,12 +430,7 @@ Please consider:
 Provide detailed performance optimization suggestions in a structured format.
 `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         console.log(chalk.green(`📊 Performance analysis for ${filePath}:`));
         console.log(response.content[0].text);
@@ -488,12 +461,7 @@ Please consider:
 Provide detailed security vulnerability analysis and suggestions in a structured format.
 `;
 
-        const response = await anthropic.messages.create({
-            model: await UserInterface.getModel(),
-            max_tokens: CONFIG.maxTokens,
-            temperature: await UserInterface.getTemperature(),
-            messages: [{ role: "user", content: prompt }],
-        });
+        const response = await getResponse(prompt);
 
         console.log(chalk.green(`📊 Security vulnerability analysis for ${filePath}:`));
         console.log(response.content[0].text);
@@ -529,12 +497,7 @@ Provide the generated unit tests in a text code format, ready to be saved in a s
         const spinner = ora("Generating unit tests...").start();
 
         try {
-            const response = await anthropic.messages.create({
-                model: await UserInterface.getModel(),
-                max_tokens: CONFIG.maxTokens,
-                temperature: await UserInterface.getTemperature(),
-                messages: [{ role: "user", content: prompt }],
-            });
+            const response = await getResponse(prompt);
             spinner.succeed("Unit tests generated");
             const testFilePath = filePath.replace(/\.js$/, ".test.js");
             await FileManager.write(testFilePath, response.content[0].text);
