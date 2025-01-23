@@ -16,6 +16,8 @@ As the Product Owner Agent, your task is to manage the product backlog and prior
 README.md content:
 ${readme}
 
+Today is ${new Date().toDateString()} 
+
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
@@ -61,6 +63,8 @@ As the Product Owner Agent, update the product backlog based on the current proj
 README.md content:
 ${readme}
 
+Today is ${new Date().toDateString()} 
+
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
 
@@ -103,6 +107,8 @@ As the Product Owner Agent, create a sprint plan based on the current product ba
 
 README.md content:
 ${readme}
+
+Today is ${new Date().toDateString()} 
 
 Project structure:
 ${JSON.stringify(projectStructure, null, 2)}
