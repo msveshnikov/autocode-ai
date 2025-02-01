@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import OpenAI from "openai";
 
-export const getTextDeepseek = async (prompt, temperature) => {
+export const getTextDeepseek = async (prompt, temperature, model) => {
     if (!process.env.DEEPSEEK_KEY) {
         console.log(chalk.red("Please set up DEEPSEEK_KEY environment variable"));
         process.exit(1);
@@ -14,7 +14,7 @@ export const getTextDeepseek = async (prompt, temperature) => {
     const messages = [{ role: "user", content: prompt }];
 
     const completion = await openai.chat.completions.create({
-        model: "deepseek-reasoner",
+        model,
         max_tokens: 8192,
         messages,
         temperature: temperature || 0.7,

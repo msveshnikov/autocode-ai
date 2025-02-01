@@ -63,6 +63,8 @@ const UserInterface = {
                 "claude-3-5-sonnet-20241022",
                 "claude-3-5-haiku-latest",
                 "deepseek-reasoner",
+                "deepseek-chat",
+                "o3-mini",
             ],
         });
     },
