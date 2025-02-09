@@ -18,6 +18,7 @@ export const getTextGpt = async (prompt, temperature, model) => {
     const completion = await openai.chat.completions.create({
         model: model,
         messages,
+        reasoning_effort: "high",
     });
 
     return { content: [{ text: completion?.choices?.[0]?.message.content }] };

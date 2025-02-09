@@ -42,7 +42,7 @@ const MarketingAgent = {
 
     async createSocialMediaContent(projectStructure, readme) {
         const prompt = `
-        Create a set of social media posts for Twitter, LinkedIn, and Facebook to promote the following project:
+        Create a set of social media posts for Twitter, LinkedIn, Reddit and Facebook to promote the following project:
 
         README:
         ${readme}
