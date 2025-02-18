@@ -3,6 +3,7 @@ import UserInterface from "./userInterface.js";
 import { CONFIG } from "./config.js";
 import { getTextDeepseek } from "./deepseek.js";
 import { getTextGpt } from "./openai.js";
+import { getTextGemini } from "./gemini.js";
 
 const anthropic = new Anthropic({ apiKey: process.env.CLAUDE_KEY });
 
@@ -16,6 +17,10 @@ export async function getResponse(prompt) {
 
     if (model.startsWith("o3")) {
         return await getTextGpt(prompt, temperature, model);
+    }
+
+    if (model.startsWith("gemini")) {
+        return await getTextGemini(prompt, temperature, model);
     }
 
     const response = await anthropic.messages.create({

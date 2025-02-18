@@ -1,6 +1,6 @@
 {
     "name": "autocode-ai",
-    "version": "1.0.17",
+    "version": "1.0.22",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -27,19 +27,20 @@
         "node": ">=20.0.0"
     },
     "dependencies": {
-        "@anthropic-ai/sdk": "^0.27.1",
-        "chalk": "^5.3.0",
-        "ignore": "^5.3.2",
-        "inquirer": "^10.1.8",
+        "@anthropic-ai/sdk": "^0.36.3",
+        "@google/generative-ai": "^0.21.0",
+        "chalk": "^5.4.1",
+        "ignore": "^7.0.3",
+        "inquirer": "^12.4.2",
         "js-yaml": "^4.1.0",
-        "openai": "^4.79.4",
-        "ora": "^8.1.0"
+        "openai": "^4.85.1",
+        "ora": "^8.2.0"
     },
     "devDependencies": {
-        "@eslint/js": "^9.9.1",
-        "eslint": "^8.57.0",
+        "@eslint/js": "^9.20.0",
+        "eslint": "^9.20.1",
         "eslint-config-standard": "^17.1.0",
-        "globals": "^15.9.0",
+        "globals": "^15.15.0",
         "javascript-obfuscator": "^4.1.1"
     }
 }
