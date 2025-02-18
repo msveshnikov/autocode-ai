@@ -83,3 +83,5 @@ AutoCode currently supports the following programming languages:
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
 # TODO
+
+- add gemini-2.0-flash-thinking-exp-01-21 to the models
