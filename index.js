@@ -25,10 +25,6 @@ async function checkLicense() {
 
 async function main() {
     console.log(chalk.blue("👋 Welcome to AutoCode!"));
-    if (!process.env.CLAUDE_KEY) {
-        console.log(chalk.red("Please set up CLAUDE_KEY environment variable"));
-        return;
-    }
 
     let continueExecution = true;
     while (continueExecution) {
