@@ -58,7 +58,7 @@ Please generate or update the ${fileName} file to implement the features describ
 
     cleanGeneratedCode(code) {
         const codeBlockRegex =
-            /```(?:javascript|js|jsx|ts|tsx|markdown|html|python|csharp|java|ruby|go|rust|php|swift|kotlin|dart)?\n([\s\S]*?)\n```/;
+            /`{3,4}(?:javascript|js|jsx|ts|tsx|markdown|json|html|python|csharp|java|ruby|go|rust|php|swift|kotlin|dart)?\n([\s\S]*?)\n`{3,4}/;
         const match = code.match(codeBlockRegex);
         return match ? match[1] : code;
     },
@@ -497,7 +497,7 @@ Return the generated code for ${fileName} without explanations or comments.
 
         try {
             changelog = await fs.readFile(changelogPath, "utf-8");
-        } catch (error) {
+        } catch {
             console.log(chalk.yellow("CHANGELOG.md not found. Creating a new one."));
         }
 

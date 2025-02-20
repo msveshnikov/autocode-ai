@@ -30,7 +30,7 @@ Please provide comprehensive documentation for the code above. Include an overvi
             const response = await getResponse(prompt);
 
             spinner.succeed("Documentation generated");
-            await FileManager.write(docFilePath, response.content[0].text);
+            await FileManager.write(docFilePath, CodeGenerator.cleanGeneratedCode(response.content[0].text));
             console.log(chalk.green(`✅ Documentation generated for ${filePath}`));
             await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
@@ -62,7 +62,7 @@ Please provide a detailed project overview, architecture description, module int
             const response = await getResponse(prompt);
 
             spinner.succeed("Project documentation generated");
-            await FileManager.write("DOCUMENTATION.md", response.content[0].text);
+            await FileManager.write("DOCUMENTATION.md", CodeGenerator.cleanGeneratedCode(response.content[0].text));
             console.log(chalk.green("✅ Project documentation generated"));
             await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
