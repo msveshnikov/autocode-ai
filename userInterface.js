@@ -54,10 +54,12 @@ const UserInterface = {
     },
 
     async promptForModel() {
+        const currentModel = await this.getModel();
         return inquirer.prompt({
             type: "list",
             name: "model",
-            message: "Select the Claude model to use:",
+            message: "Select model to use",
+            default: currentModel,
             choices: [
                 "claude-3-5-sonnet-20240620",
                 "claude-3-5-sonnet-20241022",
@@ -124,10 +126,12 @@ const UserInterface = {
     },
 
     async promptForTemperature() {
+        const currentTemperature = await this.getTemperature();
         return inquirer.prompt({
             type: "list",
             name: "temperature",
-            message: "Select the temperature for AI generation:",
+            message: "Select the temperature for AI generation",
+            default: currentTemperature.toString(),
             choices: CONFIG.temperatureOptions.map(String),
         });
     },
