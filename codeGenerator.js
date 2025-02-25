@@ -58,7 +58,7 @@ Please generate or update the ${fileName} file to implement the features describ
 
     cleanGeneratedCode(code) {
         const codeBlockRegex =
-            /`{3,4}(?:javascript|js|jsx|ts|tsx|markdown|json|html|python|csharp|java|ruby|go|rust|php|swift|kotlin|dart)?\n([\s\S]*?)\n`{3,4}/;
+            /`{3,4}(?:javascript|js|jsx|css|ts|tsx|markdown|json|html|python|csharp|java|ruby|go|rust|php|swift|kotlin|dart)?\n([\s\S]*?)\n`{3,4}/;
         const match = code.match(codeBlockRegex);
         return match ? match[1] : code;
     },

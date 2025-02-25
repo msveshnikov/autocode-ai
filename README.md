@@ -84,4 +84,4 @@ Each language has its own configuration for file extensions, recommended linter,
 
 # TODO
 
-- add gemini-2.0-flash-thinking-exp-01-21 to the models
+- in promptForModel, show currently selected model
