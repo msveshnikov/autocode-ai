@@ -81,7 +81,7 @@ Please update the README.md file with new design ideas and considerations. Ensur
         try {
             const response = await getResponse(prompt);
             spinner.succeed("README updated successfully");
-            const updatedReadme = response.content[0].text;
+            const updatedReadme = this.cleanGeneratedCode(response.content[0].text);
             await this.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
             return updatedReadme;
         } catch (error) {
