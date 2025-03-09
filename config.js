@@ -158,7 +158,7 @@ export const CONFIG = {
         autoUpdate: true,
         maxContextSize: 200000,
     },
-    temperatureOptions: [0, 0.5, 0.7, 1],
+    temperatureOptions: [0.1, 0.5, 0.7, 1.0],
     tokenStoragePath: ".autocode_token",
     changelogPath: "CHANGELOG.md",
 };
