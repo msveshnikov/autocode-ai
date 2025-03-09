@@ -69,6 +69,7 @@ const UserInterface = {
                 "deepseek-chat",
                 "o3-mini",
                 "gemini-2.0-flash-thinking-exp-01-21",
+                "gemini-2.0-pro-exp-02-05",
             ],
         });
     },

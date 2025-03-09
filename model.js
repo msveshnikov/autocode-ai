@@ -29,10 +29,21 @@ export async function getResponse(prompt) {
         process.exit(1);
     }
 
+    let maxTokens = CONFIG.maxTokens;
+    let thinkingConfig = undefined;
+
+    if (model.includes("3.7")) {
+        maxTokens = 20000;
+        thinkingConfig = {
+            type: "enabled",
+            budget_tokens: 10000,
+        };
+    }
 
     const response = await anthropic.messages.create({
         model: model,
-        max_tokens: CONFIG.maxTokens,
+        max_tokens: maxTokens,
+        ...(thinkingConfig && { thinking: thinkingConfig }),
         temperature: temperature,
         messages: [{ role: "user", content: prompt }],
     });

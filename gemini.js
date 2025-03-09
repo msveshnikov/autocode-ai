@@ -12,8 +12,6 @@ export async function getTextGemini(prompt, temperature, modelName) {
 
     const generationConfig = {
         temperature,
-        // topP: 0.95,
-        // topK: 64,
         maxOutputTokens: 65536,
         responseMimeType: "text/plain",
     };
