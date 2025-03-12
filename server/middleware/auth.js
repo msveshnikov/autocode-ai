@@ -26,7 +26,7 @@ export const checkDeviceLimit = async (req, res, next) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 10 : Infinity;
+        const deviceLimit = user.tier === "Free" ? 3 : user.tier === "Premium" ? 20 : Infinity;
 
         const deviceIp = getIpFromRequest(req);
         if (!user.devices.includes(deviceIp)) {
