@@ -47,7 +47,7 @@ async function handleSubscriptionUpdate(subscription) {
     user.subscriptionStatus = subscription.status;
     user.stripeSubscriptionId = subscription.id;
     user.stripeCustomerId = customer.id;
-    if (subscription.status === "active") {
+    if (subscription.status === "active" || subscription.status === "trialing") {
         user.tier = "Premium";
     } else {
         user.tier = "Free";
