@@ -25,7 +25,7 @@ const LicenseManager = {
             currentToken = data.token;
             await this.saveToken(currentToken);
             return true;
-        } catch (error) {
+        } catch  {
             return false;
         }
     },
@@ -114,7 +114,7 @@ const LicenseManager = {
             } else {
                 await fs.unlink(tokenFile);
             }
-        } catch (error) {
+        } catch  {
             // Token file doesn't exist or is invalid
         }
     },
@@ -127,7 +127,7 @@ const LicenseManager = {
         try {
             const data = await fs.readFile(usageFile, "utf8");
             return JSON.parse(data);
-        } catch (error) {
+        } catch {
             return { date: "", requests: 0 };
         }
     },
