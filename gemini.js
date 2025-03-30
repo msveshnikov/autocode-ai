@@ -1,13 +1,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import chalk from "chalk";
 
-export async function getTextGemini(prompt, temperature, modelName) {
-    if (!process.env.GEMINI_KEY) {
+export async function getTextGemini(prompt, temperature, modelName, apiKey) {
+    if (!(apiKey || process.env.GEMINI_KEY)) {
         console.log(chalk.red("Please set up GEMINI_KEY environment variable"));
         process.exit(1);
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+    const genAI = new GoogleGenerativeAI(apiKey || process.env.GEMINI_KEY);
     const model = genAI.getGenerativeModel({ model: modelName });
 
     const generationConfig = {

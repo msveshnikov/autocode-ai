@@ -1,13 +1,13 @@
 import OpenAI from "openai";
 import chalk from "chalk";
 
-export const getTextGpt = async (prompt, temperature, model) => {
-    if (!process.env.OPENAI_KEY) {
+export const getTextGpt = async (prompt, temperature, model, apiKey) => {
+    if (!(apiKey || process.env.OPENAI_KEY)) {
         console.log(chalk.red("Please set up OPENAI_KEY environment variable"));
         process.exit(1);
     }
 
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+    const openai = new OpenAI({ apiKey: apiKey || process.env.OPENAI_KEY });
     const messages = [
         {
             role: "user",

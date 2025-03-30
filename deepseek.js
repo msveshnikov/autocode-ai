@@ -1,14 +1,14 @@
 import chalk from "chalk";
 import OpenAI from "openai";
 
-export const getTextDeepseek = async (prompt, temperature, model) => {
-    if (!process.env.DEEPSEEK_KEY) {
+export const getTextDeepseek = async (prompt, temperature, model, apiKey) => {
+    if (!(apiKey || process.env.DEEPSEEK_KEY)) {
         console.log(chalk.red("Please set up DEEPSEEK_KEY environment variable"));
         process.exit(1);
     }
 
     const openai = new OpenAI({
-        apiKey: process.env.DEEPSEEK_KEY,
+        apiKey: apiKey || process.env.DEEPSEEK_KEY,
         baseURL: "https://api.deepseek.com",
     });
     const messages = [{ role: "user", content: prompt }];

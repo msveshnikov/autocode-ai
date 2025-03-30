@@ -254,7 +254,7 @@ const UserInterface = {
         }
     },
 
-    async processFiles(files, readme, projectStructure) {
+    async processFiles(files, readme, projectStructure, model, apiKey) {
         const allFileContents = {};
         for (const file of files) {
             const filePath = path.join(process.cwd(), file);
@@ -272,12 +272,14 @@ const UserInterface = {
                     currentContent,
                     file,
                     projectStructure,
-                    allFileContents
+                    allFileContents,
+                    model,
+                    apiKey
                 );
                 spinner.succeed("Content generated");
                 await FileManager.write(filePath, generatedContent);
 
-                if (generatedContent.split("\n").length > CONFIG.maxFileLines) {
+                if (!model && generatedContent.split("\n").length > CONFIG.maxFileLines) {
                     const { confirm } = await inquirer.prompt({
                         type: "confirm",
                         name: "confirm",
