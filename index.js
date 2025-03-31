@@ -25,28 +25,33 @@ async function checkLicense() {
 }
 
 async function runAutomatedMode(model, apiKey) {
-    console.log(chalk.blue("🚀 Running in automated mode..."));
-    const readmePath = path.join(process.cwd(), "README.md");
-    let readme = await FileManager.read(readmePath);
-    if (!readme) {
-        console.error(chalk.red("❌ README.md not found or unable to read."));
-        return false;
+    try {
+        console.log(chalk.blue("🚀 Running in automated mode..."));
+        const readmePath = path.join(process.cwd(), "README.md");
+        let readme = await FileManager.read(readmePath);
+        if (!readme) {
+            console.error(chalk.red("❌ README.md not found or unable to read."));
+            process.exit(1);
+        }
+
+        console.log(chalk.cyan("📝 Brainstorming README.md..."));
+        const projectStructure = await FileManager.getProjectStructure();
+        const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure, model, apiKey);
+        await FileManager.write(readmePath, updatedReadme);
+        readme = updatedReadme;
+        console.log(chalk.green("✅ README.md brainstorming complete."));
+
+        console.log(chalk.cyan("🔧 Generating code for all files..."));
+        const filesToProcess = await FileManager.getFilesToProcess();
+        await UserInterface.processFiles(filesToProcess, readme, projectStructure, model, apiKey);
+        console.log(chalk.green("✅ Code generation for all files complete."));
+
+        console.log(chalk.green("🎉 Automated mode completed successfully!"));
+        process.exit(0);
+    } catch (error) {
+        console.error(chalk.red("❌ Error occured:"), error.message);
+        process.exit(1);
     }
-
-    console.log(chalk.cyan("📝 Brainstorming README.md..."));
-    const projectStructure = await FileManager.getProjectStructure();
-    const updatedReadme = await CodeGenerator.updateReadme(readme, projectStructure, model, apiKey);
-    await FileManager.write(readmePath, updatedReadme);
-    readme = updatedReadme;
-    console.log(chalk.green("✅ README.md brainstorming complete."));
-
-    console.log(chalk.cyan("🔧 Generating code for all files..."));
-    const filesToProcess = await FileManager.getFilesToProcess();
-    await UserInterface.processFiles(filesToProcess, readme, projectStructure, model, apiKey);
-    console.log(chalk.green("✅ Code generation for all files complete."));
-
-    console.log(chalk.green("🎉 Automated mode completed successfully!"));
-    return true;
 }
 
 async function main() {
@@ -67,7 +72,7 @@ async function main() {
         let readme = await FileManager.read(readmePath);
         if (!readme) {
             console.error(chalk.red("❌ README.md not found or unable to read."));
-            return;
+            process.exit(1);
         }
         if (!(await checkLicense())) {
             break;
