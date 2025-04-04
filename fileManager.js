@@ -8,7 +8,10 @@ const FileManager = {
     async read(filePath) {
         try {
             return await fs.readFile(filePath, "utf8");
-        } catch (error) {
+        } catch {
+            if (filePath.includes(".gitignore")) {
+                return null; 
+            }
             console.error(chalk.red(`Error reading file ${filePath}`));
             return null;
         }

@@ -73,7 +73,7 @@
                 <div class="features">
                     <div class="feature shake-on-hover">
                         <h3>Automatic Code Generation</h3>
-                        <p>Generate code based on README.md instructions using Claude 3.5/3.7 Sonnet API.</p>
+                        <p>Generate code based on README.md instructions using LLMs.</p>
                     </div>
                     <div class="feature shake-on-hover">
                         <h3>Multi-Language Support</h3>
@@ -103,7 +103,7 @@
                     </div>
                     <div class="feature shake-on-hover">
                         <h3>Advanced AI Models</h3>
-                        <p>Generate code using Claude 3.5/3.7 Sonnet API, Flash-thinking and o3-mini</p>
+                        <p>Generate code using Gemini Pro 2.5, o3-mini and Claude Sonnet</p>
                     </div>
                 </div>
             </section>
@@ -112,16 +112,20 @@
                 <h2 class="gradient-text">Supported AI Models</h2>
                 <div class="ai-models">
                     <div class="model pulse-on-hover">
-                        <h3>Claude 3.5/3.7 Sonnet</h3>
-                        <p>Primary code generation model with advanced reasoning capabilities</p>
+                        <h3>gemini-2.5-pro-exp-03-25</h3>
+                        <p>Best SOTA model from Google</p>
+                    </div>
+                    <div class="model pulse-on-hover">
+                        <h3>gemini-2.0-flash-thinking</h3>
+                        <p>Free reasoning model from Google</p>
                     </div>
                     <div class="model pulse-on-hover">
                         <h3>o3-mini</h3>
                         <p>Newest, most cost-efficient reasoning model from OpenAI</p>
                     </div>
                     <div class="model pulse-on-hover">
-                        <h3>gemini-2.0-flash-thinking</h3>
-                        <p>Free reasoning model from Google</p>
+                        <h3>Claude 3.5/3.7 Sonnet</h3>
+                        <p>Model with advanced reasoning capabilities</p>
                     </div>
                 </div>
             </section>
@@ -131,15 +135,15 @@
                 <div class="how-it-works">
                     <p>Getting started with AutoCode is simple:</p>
                     <ol>
-                        <li>Create a CLAUDE_KEY environment variable with your API key.</li>
+                        <li>Create a CLAUDE_KEY or GEMINI_KEY environment variable with your API key.</li>
                         <li>Navigate to your project folder in the terminal.</li>
                         <li>Run the following command:</li>
                     </ol>
                     <pre><code class="neon-glow">npx autocode-ai</code></pre>
                     <p>
                         AutoCode will then read your README.md file and existing source code, interpret the instructions
-                        using the Claude Sonnet API, and generate the necessary code structure, files, and content. It's
-                        that easy!
+                        using the Gemini Pro 2.5 API, and generate the necessary code structure, files, and content.
+                        It's that easy!
                     </p>
                     <p>
                         For more detailed information, please consult the
@@ -302,6 +306,9 @@
                         <li>
                             <a href="https://avatrly.com" target="_blank" rel="noopener noreferrer"> Avatrly </a>
                         </li>
+                        <li>
+                            <a href="https://autovibe.dev" target="_blank" rel="noopener noreferrer"> AutoVibe </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="video-container">
@@ -369,16 +376,15 @@
                         <div class="faq-question">What is AutoCode?</div>
                         <div class="faq-answer">
                             AutoCode is an innovative automatic coding tool designed to bootstrap any software project
-                            incrementally, transforming README.md instructions into a fully functional software project
-                            using Claude Sonnet API.
+                            incrementally, transforming README.md instructions into a fully functional software project.
                         </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">How does AutoCode work?</div>
                         <div class="faq-answer">
                             AutoCode reads your README.md file and existing source code, interprets the instructions
-                            using the Claude Sonnet API, and generates the necessary code structure, files, and content
-                            for your project.
+                            using the LLM, and generates the necessary code structure, files, and content for your
+                            project.
                         </div>
                     </div>
                     <div class="faq-item">
@@ -438,7 +444,10 @@
                 </a>
             </div>
             <p>&copy; 2025 MaxSoft. All rights reserved.</p>
-            <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p> | <a href="https://blog.autocode.work">Blog</a></p>
+            <p>
+                <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a> |
+                <a href="https://blog.autocode.work">Blog</a>
+            </p>
         </footer>
 
         <%- include('landing.js') %>
