@@ -22,7 +22,7 @@
         "multi-language"
     ],
     "author": "Max Sveshnikov",
-    "license": "Commercial",
+    "license": "MIT",
     "engines": {
         "node": ">=20.0.0"
     },
