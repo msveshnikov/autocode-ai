@@ -6,10 +6,10 @@ import CodeAnalyzer from "./codeAnalyzer.js";
 import CodeGenerator from "./codeGenerator.js";
 import DocumentationGenerator from "./documentationGenerator.js";
 import LicenseManager from "./licenseManager.js";
-// import ProjectManagerAgent from "./ProjectManagerAgent.js";
-// import DevOpsAgent from "./DevOpsAgent.js";
-// import InternationalizationAgent from "./InternationalizationAgent.js";
-// import TesterAgent from "./TesterAgent.js";
+import ProjectManagerAgent from "./ProjectManagerAgent.js";
+import DevOpsAgent from "./DevOpsAgent.js";
+import InternationalizationAgent from "./InternationalizationAgent.js";
+import TesterAgent from "./TesterAgent.js";
 import MarketingAgent from "./MarketingAgent.js";
 import BusinessAnalystAgent from "./BusinessAnalystAgent.js";
 import ProductOwnerAgent from "./ProductOwnerAgent.js";
@@ -30,21 +30,21 @@ const UserInterface = {
                 "📝 1. Brainstorm README.md",
                 "🔧 2. Generate code",
                 "🔍 3. Detect missing dependencies",
-                // "🚀 4. Run static code quality checks",
+                "🚀 4. Run static code quality checks",
                 "📚 5. Generate documentation",
-                // "🔄 6. Optimize and refactor file",
+                "🔄 6. Optimize and refactor file",
                 "💬 7. Chat interface",
                 "📚 8. Generate project documentation",
-                // "🤔 9. Analyze code quality",
-                // "🔍 10. Optimize project structure",
-                // "➕ 11. Add new file",
+                "🤔 9. Analyze code quality",
+                "🔍 10. Optimize project structure",
+                "➕ 11. Add new file",
                 "🤖 12. Run AI Agents",
-                // "🔒 13. Security analysis",
-                // "🧪 14. Generate unit tests",
-                // "🚀 15. Analyze performance",
+                "🔒 13. Security analysis",
+                "🧪 14. Generate unit tests",
+                "🚀 15. Analyze performance",
                 "🌐 16. Generate landing page",
-                // "📊 17. Generate API documentation",
-                // "🔄 18. Generate full project",
+                "📊 17. Generate API documentation",
+                "🔄 18. Generate full project",
                 "🌡️ Change temperature",
                 "🤖 Change model",
                 "🔑 Login",
@@ -66,7 +66,7 @@ const UserInterface = {
                 "o4-mini",
                 "gemini-2.0-flash-thinking-exp-01-21",
                 "gemini-2.5-flash-preview-05-20",
-                "gemini-2.5-pro-preview-05-06",
+                "gemini-2.5-pro-preview-06-05",
             ],
         });
     },
@@ -91,9 +91,9 @@ const UserInterface = {
         try {
             const settings = await fs.readFile(path.join(os.homedir(), ".settings.json"), "utf8");
             const { model } = JSON.parse(settings);
-            return model || "claude-3-5-sonnet-20241022";
+            return model || "claude-4-sonnet-20250514";
         } catch {
-            return "claude-3-5-sonnet-20241022";
+            return "claude-4-sonnet-20250514";
         }
     },
 
@@ -223,10 +223,10 @@ const UserInterface = {
     async runAIAgents(projectStructure, readme) {
         console.log(chalk.cyan("🤖 Running AI Agents..."));
         const agents = [
-            // { name: "Project Manager Agent", agent: ProjectManagerAgent },
-            // { name: "DevOps Agent", agent: DevOpsAgent },
-            // { name: "Internationalization Agent", agent: InternationalizationAgent },
-            // { name: "Tester Agent", agent: TesterAgent },
+            { name: "Project Manager Agent", agent: ProjectManagerAgent },
+            { name: "DevOps Agent", agent: DevOpsAgent },
+            { name: "Internationalization Agent", agent: InternationalizationAgent },
+            { name: "Tester Agent", agent: TesterAgent },
             { name: "Marketing Agent", agent: MarketingAgent },
             { name: "Business Analyst Agent", agent: BusinessAnalystAgent },
             { name: "Product Owner Agent", agent: ProductOwnerAgent },

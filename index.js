@@ -74,9 +74,9 @@ async function main() {
             console.error(chalk.red("❌ README.md not found or unable to read."));
             process.exit(1);
         }
-        if (!(await checkLicense())) {
-            break;
-        }
+        // if (!(await checkLicense())) {
+        //     break;
+        // }
         const projectStructure = await FileManager.getProjectStructure();
         const { action } = await UserInterface.promptForAction();
         readme = await FileManager.read(readmePath);
