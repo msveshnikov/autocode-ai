@@ -5,24 +5,7 @@ import chalk from "chalk";
 
 import FileManager from "./fileManager.js";
 import UserInterface from "./userInterface.js";
-import LicenseManager from "./licenseManager.js";
 import CodeGenerator from "./codeGenerator.js";
-
-async function checkLicense() {
-    const isValid = await LicenseManager.checkLicense();
-    if (!isValid) {
-        const tier = await LicenseManager.getLicenseTier();
-        if (tier === "Local Trial") {
-            return await UserInterface.handleLogin();
-        } else if (tier === "Free") {
-            console.log(chalk.yellow("You've reached the daily request limit for the Free Tier."));
-        } else {
-            console.log(chalk.red("Invalid or expired license. Please renew your subscription."));
-        }
-        return false;
-    }
-    return true;
-}
 
 async function runAutomatedMode(model, apiKey) {
     try {
@@ -74,9 +57,7 @@ async function main() {
             console.error(chalk.red("❌ README.md not found or unable to read."));
             process.exit(1);
         }
-        // if (!(await checkLicense())) {
-        //     break;
-        // }
+
         const projectStructure = await FileManager.getProjectStructure();
         const { action } = await UserInterface.promptForAction();
         readme = await FileManager.read(readmePath);
