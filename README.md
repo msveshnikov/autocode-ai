@@ -23,7 +23,6 @@ https://autocode.work/
 -   User-friendly command-line interface
 -   Support for multiple programming languages
 -   AI-powered agents for specialized tasks
--   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
 -   Syntax checking and auto-fixing
 
