@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "@anthropic-ai/sdk": "^0.36.3",
-        "@google/generative-ai": "^0.21.0",
+        "@google/generative-ai": "^0.24.1",
         "chalk": "^5.4.1",
         "ignore": "^7.0.3",
         "inquirer": "^12.4.2",
