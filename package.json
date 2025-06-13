@@ -34,7 +34,8 @@
         "inquirer": "^12.4.2",
         "js-yaml": "^4.1.0",
         "openai": "^4.85.1",
-        "ora": "^8.2.0"
+        "ora": "^8.2.0",
+        "axios": "^1.7.2"
     },
     "devDependencies": {
         "fs-extra": "^11.3.0",

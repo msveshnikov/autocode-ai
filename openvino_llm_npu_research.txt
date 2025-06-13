@@ -1,0 +1,73 @@
+## OpenVINO LLM NPU Research Summary
+
+This document summarizes findings for converting and running Large Language Models (LLMs) on Intel NPUs using OpenVINO, with a focus on `optimum-cli` and `openvino_genai`.
+
+**Target Models:**
+*   `TinyLlama/TinyLlama-1.1B-Chat-v1.0`
+*   `microsoft/Phi-3-mini-4k-instruct`
+
+**Key Findings:**
+
+*   **INT4 Symmetric Quantization is Preferred for NPU:** Documentation strongly indicates that INT4 symmetric quantization is the recommended format for deploying LLMs on NPUs with `openvino_genai`.
+*   **FP16 for NPU LLMs:** While `optimum-cli` can convert models to FP16 (often the default for `export=True` in Python API or without specifying `--weight-format`), the NPU-specific documentation for GenAI does not highlight FP16 as an optimized path for LLMs. Specific NPU optimizations like dynamic quantization of activations are mentioned primarily in the context of INT4/INT8 weights, and one note stated dynamic quantization is *not* enabled for BF16. This suggests INT4 is currently the more viable and performant option for NPU.
+*   **`openvino_genai.LLMPipeline`:** This is the recommended Python API for running LLM inference, including on NPU by specifying `device="NPU"`.
+
+**`optimum-cli export openvino` Commands:**
+
+**1. `TinyLlama/TinyLlama-1.1B-Chat-v1.0`**
+
+*   **NPU-Optimized (INT4 Symmetric, Group Quantization):**
+    ```bash
+    optimum-cli export openvino --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 --weight-format int4 --sym --ratio 1.0 --group-size 128 TinyLlama-1.1B-Chat-v1.0-int4-sym-gs128-npu
+    ```
+    *   `--weight-format int4`: Specifies 4-bit quantization.
+    *   `--sym`: Enforces symmetric quantization.
+    *   `--ratio 1.0`: Quantizes 100% of linear layers.
+    *   `--group-size 128`: Uses a group size of 128 for quantization, recommended for NPU.
+
+*   **FP16 (General Conversion):**
+    ```bash
+    optimum-cli export openvino --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 TinyLlama-1.1B-Chat-v1.0-fp16
+    ```
+    *(Note: This typically defaults to FP16 or FP32 converted to FP16. Further precision control might be available via additional flags if needed, but FP16 is not the primary NPU recommendation for these models with openvino_genai.)*
+
+*   **INT8 (General Conversion):**
+    ```bash
+    optimum-cli export openvino --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 --weight-format int8 TinyLlama-1.1B-Chat-v1.0-int8
+    ```
+
+**2. `microsoft/Phi-3-mini-4k-instruct`**
+
+*   **NPU-Optimized (INT4 Symmetric, Group Quantization):**
+    ```bash
+    optimum-cli export openvino --model microsoft/Phi-3-mini-4k-instruct --weight-format int4 --sym --ratio 1.0 --group-size 128 Phi-3-mini-4k-instruct-int4-sym-gs128-npu
+    ```
+    *   Parameters are the same as for TinyLlama, assuming group quantization is appropriate. Phi-3-mini is listed as supported on NPU with INT4 symmetric.
+
+*   **FP16 (General Conversion):**
+    ```bash
+    optimum-cli export openvino --model microsoft/Phi-3-mini-4k-instruct Phi-3-mini-4k-instruct-fp16
+    ```
+
+*   **INT8 (General Conversion):**
+    ```bash
+    optimum-cli export openvino --model microsoft/Phi-3-mini-4k-instruct --weight-format int8 Phi-3-mini-4k-instruct-int8
+    ```
+
+**Considerations for NPU INT4 Quantization from Documentation:**
+
+*   **Channel-wise Quantization:** For models >1B parameters, `--group-size -1` can be used for channel-wise quantization. This might be an alternative for TinyLlama, and potentially Phi-3 if it's larger than expected, though "mini" implies it's not. Example for Llama-2-7B (channel-wise, data-free):
+    `optimum-cli export openvino -m meta-llama/Llama-2-7b-chat-hf --weight-format int4 --sym --ratio 1.0 --group-size -1 Llama-2-7b-chat-hf`
+*   **Data-Aware Quantization:** For potentially higher accuracy with channel-wise INT4, NNCF v2.13+ allows `--awq --scale-estimation --dataset <dataset_name>` (e.g., `wikitext2`).
+*   **GPTQ Models:** Models already quantized with GPTQ to INT4 can be exported directly, and OpenVINO will preserve the INT4 optimization. Example:
+    `optimum-cli export openvino -m TheBloke/Llama-2-7B-Chat-GPTQ`
+
+**FP16 NPU Investigation Summary:**
+
+Based on the OpenVINO 2025.1 documentation reviewed (specifically the "Inference with Optimum Intel" and "NPU with OpenVINO GenAI" pages):
+*   The primary recommendation for LLMs on NPU with `openvino_genai` is INT4 symmetric quantization.
+*   FP16 is not explicitly mentioned or recommended as an optimized path for LLMs on NPU in the context of `openvino_genai`.
+*   Runtime optimizations like dynamic quantization of activations are detailed for INT4/INT8, with a note that it's *not* enabled for BF16 on CPU/GPU, further implying that lower precision integer formats are prioritized for NPU.
+*   Therefore, while FP16 conversion is possible, it is not considered the most viable or performant option for NPU inference with `openvino_genai` for the selected LLMs based on the current documentation. The focus for NPU deployment should be on the documented INT4 symmetric quantization methods.
+
+This completes Task 1 (Model Conversion Research) and the documentation part of Task 3 (FP16 NPU Investigation). The next step is to create `npu_inference.py`.
