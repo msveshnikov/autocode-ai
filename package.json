@@ -33,7 +33,7 @@
         "ignore": "^7.0.3",
         "inquirer": "^12.4.2",
         "js-yaml": "^4.1.0",
-        "openai": "^4.85.1",
+        "openai": "^5.3.0",
         "ora": "^8.2.0"
     },
     "devDependencies": {
