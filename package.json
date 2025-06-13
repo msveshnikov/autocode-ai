@@ -29,13 +29,13 @@
     "dependencies": {
         "@anthropic-ai/sdk": "^0.36.3",
         "@google/generative-ai": "^0.21.0",
+        "axios": "^1.9.0",
         "chalk": "^5.4.1",
         "ignore": "^7.0.3",
         "inquirer": "^12.4.2",
         "js-yaml": "^4.1.0",
         "openai": "^4.85.1",
-        "ora": "^8.2.0",
-        "axios": "^1.7.2"
+        "ora": "^8.2.0"
     },
     "devDependencies": {
         "fs-extra": "^11.3.0",
