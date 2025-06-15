@@ -85,3 +85,5 @@ AutoCode currently supports the following programming languages:
 Each language has its own configuration for file extensions, recommended linter, formatter, and package manager.
 
 # TODO
+
+- remove pricing and add link to https://github.com/msveshnikov/autocode-ai
