@@ -5,29 +5,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
             name="description"
-            content="AutoCode - AI-Powered Software Development. Build complex software with AI using our innovative, terminal-based coding engine."
+            content="AutoCode - AI-Powered Software Development. Bootstrap your software projects from README.md with AI."
         />
         <meta
             name="keywords"
-            content="AutoCode, AI, software development, code generation, Claude API, JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Kotlin, Swift"
+            content="AutoCode, AI, software development, code generation, LLM, NodeJS, CLI, README.md, automatic coding"
         />
         <title>AutoCode - AI-Powered Software Development</title>
         <meta name="theme-color" content="#ffffff" />
         <meta property="og:title" content="AutoCode - AI-Powered Software Development" />
         <meta
             property="og:description"
-            content="Build complex software with AI using our innovative, terminal-based coding engine."
+            content="Bootstrap your software projects from README.md with AI using AutoCode."
         />
         <meta property="og:image" content="/autocode.png" />
         <meta property="og:url" content="https://autocode.work" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="AutoCode" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@MangaTVShop" />
+        <meta name="twitter:site" content="@msveshnikov" />
         <meta name="twitter:title" content="AutoCode - AI-Powered Software Development" />
         <meta
             name="twitter:description"
-            content="Build complex software with AI using our innovative, terminal-based coding engine."
+            content="Bootstrap your software projects from README.md with AI using AutoCode."
         />
         <meta name="twitter:image" content="/autocode.png" />
         <link rel="canonical" href="https://autocode.work" />
@@ -51,6 +51,7 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#ai-agents">AI Agents</a></li>
+                    <li><a href="https://github.com/msveshnikov/autocode-ai" target="_blank">GitHub</a></li>
                     <% if (user) { %>
                     <li><a href="/profile">Profile</a></li>
                     <% } %>
@@ -62,48 +63,50 @@
             <section class="hero parallax">
                 <div class="hero-content">
                     <h1 class="animated-text">AutoCode</h1>
-                    <p class="typing-effect">Transform Your Ideas into Code with AI</p>
-                    <a href="/register?tier=Free" class="cta-button ripple-effect">Start Building</a>
+                    <p class="typing-effect">Bootstrap Your Software Projects from README.md with AI</p>
+                    <a
+                        href="https://github.com/msveshnikov/autocode-ai"
+                        class="cta-button ripple-effect"
+                        target="_blank"
+                        >View on GitHub</a
+                    >
                 </div>
             </section>
-            <br />
-            <br />
+
             <section id="features" class="container glass-effect">
                 <h2 class="gradient-text">Features</h2>
                 <div class="features">
                     <div class="feature shake-on-hover">
-                        <h3>Automatic Code Generation</h3>
-                        <p>Generate code based on README.md instructions using LLMs.</p>
+                        <h3>NodeJS Console Application</h3>
+                        <p>Run AutoCode directly in your terminal with no installation required</p>
                     </div>
                     <div class="feature shake-on-hover">
-                        <h3>Multi-Language Support</h3>
-                        <p>Support for JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Dart and Swift</p>
+                        <h3>README.md Bootstrapping</h3>
+                        <p>Transform your README.md instructions into a fully functional software project</p>
                     </div>
                     <div class="feature shake-on-hover">
                         <h3>Incremental Building</h3>
-                        <p>
-                            Build your project incrementally with intelligent code analysis and refactoring suggestions
-                        </p>
+                        <p>Build projects step-by-step with intelligent code analysis and refactoring</p>
+                    </div>
+                    <div class="feature shake-on-hover">
+                        <h3>Dependency & File Management</h3>
+                        <p>Automatically manage dependencies and create missing files</p>
+                    </div>
+                    <div class="feature shake-on-hover">
+                        <h3>Code Quality & Auto-Fixing</h3>
+                        <p>Enforce DRY, KISS, and SRP principles with syntax checking and auto-fixes</p>
                     </div>
                     <div class="feature shake-on-hover">
                         <h3>Automated Documentation</h3>
-                        <p>Generate comprehensive documentation for your project automatically</p>
+                        <p>Generate comprehensive documentation for your project</p>
                     </div>
                     <div class="feature shake-on-hover">
-                        <h3>User-Friendly Interface</h3>
-                        <p>Easy-to-use command-line interface for seamless project management</p>
+                        <h3>Multi-Language Support</h3>
+                        <p>Supports JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Swift, Kotlin, Dart</p>
                     </div>
                     <div class="feature shake-on-hover">
-                        <h3>Landing Page Generator</h3>
-                        <p>Create visually appealing landing pages to showcase your project</p>
-                    </div>
-                    <div class="feature shake-on-hover">
-                        <h3>Cross-Platform Support</h3>
-                        <p>AutoCode is compatible with Windows, macOS, and Linux operating systems</p>
-                    </div>
-                    <div class="feature shake-on-hover">
-                        <h3>Advanced AI Models</h3>
-                        <p>Generate code using Gemini Pro 2.5, o4-mini and Claude Sonnet 4</p>
+                        <h3>AI-Powered Agents</h3>
+                        <p>Leverage specialized agents for testing, DevOps, marketing, and more</p>
                     </div>
                 </div>
             </section>
@@ -112,8 +115,8 @@
                 <h2 class="gradient-text">Supported AI Models</h2>
                 <div class="ai-models">
                     <div class="model pulse-on-hover">
-                        <h3>gemini-2.5-pro-preview-05-06</h3>
-                        <p>Best SOTA model from Google</p>
+                        <h3>gemini-2.5-pro</h3>
+                        <p>Google's state-of-the-art reasoning model</p>
                     </div>
                     <div class="model pulse-on-hover">
                         <h3>gemini-2.0-flash-thinking</h3>
@@ -121,11 +124,11 @@
                     </div>
                     <div class="model pulse-on-hover">
                         <h3>o4-mini</h3>
-                        <p>Newest, most cost-efficient reasoning model from OpenAI</p>
+                        <p>Cost-efficient reasoning model from OpenAI</p>
                     </div>
                     <div class="model pulse-on-hover">
-                        <h3>Claude 4 Sonnet</h3>
-                        <p>Model with advanced reasoning capabilities</p>
+                        <h3>claude-4-sonnet</h3>
+                        <p>Anthropic's advanced reasoning model</p>
                     </div>
                 </div>
             </section>
@@ -141,19 +144,17 @@
                     </ol>
                     <pre><code class="neon-glow">npx autocode-ai</code></pre>
                     <p>
-                        AutoCode will then read your README.md file and existing source code, interpret the instructions
-                        using the Gemini Pro 2.5 API, and generate the necessary code structure, files, and content.
-                        It's that easy!
+                        AutoCode reads your README.md file and existing source code, interprets instructions using LLMs,
+                        and generates the necessary project files and structure.
                     </p>
                     <p>
-                        For more detailed information, please consult the
+                        For more details, see the
                         <a
                             href="https://blog.autocode.work/2024/09/21/autocode-user-manual"
                             target="_blank"
                             rel="noopener noreferrer"
-                        >
-                            User Manual
-                        </a>
+                            >User Manual</a
+                        >.
                     </p>
                     <img
                         src="/autocode.png"
@@ -163,8 +164,6 @@
                 </div>
             </section>
 
-            <br />
-            <br />
             <section id="ai-agents" class="container glass-effect">
                 <h2 class="gradient-text">AI Agents</h2>
                 <div class="ai-agents">
@@ -174,34 +173,31 @@
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>Project Manager Agent</h3>
-                        <p>
-                            Orchestrates the work of other agents, builds the app, runs tests, and performs basic UI
-                            checks
-                        </p>
+                        <p>Orchestrates agents, builds the app, and runs tests</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>DevOps Agent</h3>
-                        <p>Configures CI/CD pipelines and manages deployment processes</p>
+                        <p>Configures CI/CD pipelines and manages deployments</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>Internationalization Agent</h3>
-                        <p>Implements multi-language support in projects</p>
+                        <p>Adds multi-language support</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>Marketing Agent</h3>
-                        <p>Develops marketing strategies and content for the project</p>
+                        <p>Develops marketing strategies and content</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>Business Analyst Agent</h3>
-                        <p>Analyzes requirements and provides business insights</p>
+                        <p>Analyzes requirements and provides insights</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>Product Owner Agent</h3>
-                        <p>Manages product backlog and prioritizes features</p>
+                        <p>Manages backlog and prioritizes features</p>
                     </div>
                     <div class="agent bounce-on-hover">
                         <h3>App Store Publisher Agent</h3>
-                        <p>Manages app store submissions and updates</p>
+                        <p>Handles app store submissions and updates</p>
                     </div>
                 </div>
             </section>
@@ -226,89 +222,62 @@
             <section id="showcase" class="container glass-effect">
                 <h2 class="gradient-text">Showcase</h2>
                 <div class="showcase">
-                    <p>Check out these amazing projects created by AutoCode in just 20 minutes each:</p>
+                    <p>Explore amazing projects created by AutoCode:</p>
                     <ul>
                         <li>
                             <a
                                 href="https://github.com/msveshnikov/real-estate-autocode"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                >Real Estate Platform</a
                             >
-                                Real Estate Platform
-                            </a>
                         </li>
                         <li>
                             <a
                                 href="https://github.com/msveshnikov/jira-clone-autocode"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                >JIRA Clone</a
                             >
-                                JIRA Clone
-                            </a>
                         </li>
                         <li>
                             <a
                                 href="https://github.com/msveshnikov/fx-trader-autocode"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                >FX Trader Platform</a
                             >
-                                FX Trader Platform
-                            </a>
                         </li>
                         <li>
                             <a
                                 href="https://github.com/msveshnikov/cars-market-autocode"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                >Cars Market</a
                             >
-                                Cars Market
-                            </a>
                         </li>
                         <li>
                             <a
                                 href="https://github.com/msveshnikov/mental-health-autocode"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                >Mental Health Platform</a
                             >
-                                Mental Health Platform
-                            </a>
                         </li>
+                        <li><a href="https://cyberia.fun" target="_blank" rel="noopener noreferrer">Cyberia</a></li>
+                        <li><a href="https://mytrip.city" target="_blank" rel="noopener noreferrer">MyTrip</a></li>
                         <li>
-                            <a href="https://cyberia.fun" target="_blank" rel="noopener noreferrer"> Cyberia </a>
+                            <a href="https://genious.name" target="_blank" rel="noopener noreferrer">Genious.Name</a>
                         </li>
+                        <li><a href="https://mylog.food" target="_blank" rel="noopener noreferrer">MyLog.food</a></li>
                         <li>
-                            <a href="https://mytrip.city" target="_blank" rel="noopener noreferrer"> MyTrip </a>
+                            <a href="https://autoresearch.pro" target="_blank" rel="noopener noreferrer"
+                                >AutoResearch</a
+                            >
                         </li>
-                        <!-- <li>
-                            <a href="https://holidaycard.shop" target="_blank" rel="noopener noreferrer">
-                                Holiday Cards
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://makeyour.vote" target="_blank" rel="noopener noreferrer">
-                                Make Your Vote
-                            </a>
-                        </li> -->
-                        <li>
-                            <a href="https://genious.name" target="_blank" rel="noopener noreferrer"> Genious.Name </a>
-                        </li>
-                        <li>
-                            <a href="https://mylog.food" target="_blank" rel="noopener noreferrer"> MyLog.food </a>
-                        </li>
-                        <li>
-                            <a href="https://autoresearch.pro" target="_blank" rel="noopener noreferrer">
-                                AutoResearch
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://maxnotes.app" target="_blank" rel="noopener noreferrer"> MaxNotes </a>
-                        </li>
-                        <li>
-                            <a href="https://avatrly.com" target="_blank" rel="noopener noreferrer"> Avatrly </a>
-                        </li>
-                        <li>
-                            <a href="https://autovibe.dev" target="_blank" rel="noopener noreferrer"> AutoVibe </a>
-                        </li>
+                        <li><a href="https://maxnotes.app" target="_blank" rel="noopener noreferrer">MaxNotes</a></li>
+                        <li><a href="https://avatrly.com" target="_blank" rel="noopener noreferrer">Avatrly</a></li>
+                        <li><a href="https://autovibe.dev" target="_blank" rel="noopener noreferrer">AutoVibe</a></li>
                     </ul>
                 </div>
                 <div class="video-container">
@@ -324,126 +293,68 @@
                 </div>
             </section>
 
-            <br />
-            <br />
-            <section id="pricing" class="container glass-effect">
-                <h2 class="gradient-text">Pricing</h2>
-                <div class="pricing-plans">
-                    <div class="pricing-plan">
-                        <h3>Free Tier</h3>
-                        <p class="price rainbow-text">$0/month</p>
-                        <ul>
-                            <li>10 requests/day</li>
-                            <li>Basic features</li>
-                            <li>3 devices</li>
-                            <li>Community support</li>
-                        </ul>
-                        <a href="/register?tier=Free" class="cta-button ripple-effect">Get Started</a>
-                    </div>
-                    <div class="pricing-plan featured">
-                        <h3>Premium</h3>
-                        <p class="price rainbow-text">$10/month</p>
-                        <ul>
-                            <li>Unlimited requests</li>
-                            <li>All features</li>
-                            <li>10 devices</li>
-                            <li>Priority support</li>
-                        </ul>
-                        <% if (user) { %>
-                        <a href="/profile" class="cta-button">Get Now</a>
-                        <% } %> <% if (!user) { %>
-                        <a href="/register?tier=Premium" class="cta-button">Get Now</a>
-                        <% } %>
-                    </div>
-                    <div class="pricing-plan">
-                        <h3>Enterprise</h3>
-                        <p class="price rainbow-text">Custom</p>
-                        <ul>
-                            <li>Unlimited requests</li>
-                            <li>All features + custom integrations</li>
-                            <li>Unlimited devices</li>
-                            <li>On-premises deployment option</li>
-                        </ul>
-                        <a href="/contact" class="cta-button ripple-effect">Contact Us</a>
-                    </div>
-                </div>
-            </section>
-
             <section id="faq" class="container glass-effect">
                 <h2 class="gradient-text">Frequently Asked Questions</h2>
                 <div class="faq">
                     <div class="faq-item">
                         <div class="faq-question">What is AutoCode?</div>
                         <div class="faq-answer">
-                            AutoCode is an innovative automatic coding tool designed to bootstrap any software project
-                            incrementally, transforming README.md instructions into a fully functional software project.
+                            AutoCode is an AI-driven tool that bootstraps any software project from README.md
+                            instructions.
                         </div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">How does AutoCode work?</div>
                         <div class="faq-answer">
-                            AutoCode reads your README.md file and existing source code, interprets the instructions
-                            using the LLM, and generates the necessary code structure, files, and content for your
-                            project.
+                            It reads your README.md and existing code, interprets instructions with LLMs, and generates
+                            project files.
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">What programming languages does AutoCode support?</div>
+                        <div class="faq-question">Which languages are supported?</div>
                         <div class="faq-answer">
-                            AutoCode supports multiple programming languages, including JavaScript, Python, C#, Java,
-                            Ruby, Go, Rust, PHP, Swift, Kotlin, and Dart.
+                            JavaScript, Python, C#, Java, Ruby, Go, Rust, PHP, Swift, Kotlin, and Dart.
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">Is there a free version of AutoCode?</div>
+                        <div class="faq-question">Is AutoCode free?</div>
+                        <div class="faq-answer">Yes, it’s open source. Explore the code on GitHub.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can I use AutoCode commercially?</div>
                         <div class="faq-answer">
-                            Yes, AutoCode offers a free tier with 10 requests per day, basic features, and support for
-                            up to 3 devices.
+                            Absolutely. AutoCode is released under MIT License for both personal and commercial
+                            projects.
                         </div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">Can I use AutoCode for commercial projects?</div>
+                        <div class="faq-question">Are API costs included?</div>
                         <div class="faq-answer">
-                            Yes, you can use AutoCode for commercial projects. We offer Premium and Enterprise plans
-                            that are suitable for commercial use with additional features and support.
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Does the subscription cover Anthropic API costs?</div>
-                        <div class="faq-answer">
-                            While our subscription provides many valuable features, Anthropic API usage is billed
-                            separately. This allows you to have more control over your API consumption and associated
-                            costs.
+                            API usage is billed separately to give you direct control over your consumption.
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section id="get-started" class="container glass-effect">
+                <h2 class="gradient-text">Get the Code</h2>
+                <p>Contribute or explore AutoCode on GitHub:</p>
+                <a href="https://github.com/msveshnikov/autocode-ai" class="cta-button ripple-effect" target="_blank"
+                    >GitHub Repository</a
+                >
             </section>
         </main>
 
         <footer>
             <div class="social-links">
-                <a href="https://twitter.com/MangaTVShop" target="_blank" rel="noopener noreferrer">
+                <a href="https://twitter.com/msveshnikov" target="_blank" rel="noopener noreferrer">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" />
                 </a>
-                <a href="https://github.com/msveshnikov" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/msveshnikov/autocode-ai" target="_blank" rel="noopener noreferrer">
                     <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
                 </a>
             </div>
-            <div class="social-links">
-                <a
-                    href="https://www.producthunt.com/posts/autocode-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-autocode&#0045;2"
-                    target="_blank"
-                >
-                    <img
-                        src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=483466&theme=light"
-                        alt="AutoCode - AI&#0045;Powered&#0032;Software&#0032;Development | Product Hunt"
-                        style="width: 250px; height: 54px"
-                        width="250"
-                        height="54"
-                    />
-                </a>
-            </div>
-            <p>&copy; 2025 MaxSoft. All rights reserved.</p>
+            <p>&copy; 2025 AutoCode. All rights reserved.</p>
             <p>
                 <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a> |
                 <a href="https://blog.autocode.work">Blog</a>
