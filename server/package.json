@@ -18,7 +18,7 @@
         "express-rate-limit": "^7.5.0",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.15.2",
-        "morgan": "^1.10.0",
+        "morgan": "^1.10.1",
         "nodemailer": "^6.9.14",
         "nodemailer-express-handlebars": "^6.1.2",
         "stripe": "^18.2.1"
