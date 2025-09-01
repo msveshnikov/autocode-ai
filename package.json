@@ -27,7 +27,7 @@
         "node": ">=20.0.0"
     },
     "dependencies": {
-        "@anthropic-ai/sdk": "^0.54.0",
+        "@anthropic-ai/sdk": "^0.56.0",
         "@google/generative-ai": "^0.24.1",
         "chalk": "^5.4.1",
         "ignore": "^7.0.5",
