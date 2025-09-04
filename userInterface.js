@@ -64,6 +64,7 @@ const UserInterface = {
                 "claude-sonnet-4-20250514",
                 "o3-mini",
                 "o4-mini",
+                "gpt-5-mini",
                 "deepseek-reasoner",
                 "deepseek-chat",
                 "gemini-2.0-flash-thinking-exp-01-21",

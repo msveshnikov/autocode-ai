@@ -14,7 +14,7 @@ export async function getResponse(prompt, model, apiKey) {
         return await getTextDeepseek(prompt, temperature, model, apiKey);
     }
 
-    if (model.startsWith("o3") || model.startsWith("o4")) {
+    if (model.startsWith("o3") || model.startsWith("o4") || model.startsWith("gpt")) {
         return await getTextGpt(prompt, temperature, model, apiKey);
     }
 
