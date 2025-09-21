@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-export async function getTextGrok(prompt, temperature = 0.7, model = "grok-4-fast",  apiKey) {
+export async function getTextGrok(prompt, temperature = 0.7, model = "grok-4-fast", apiKey) {
     const openai = new OpenAI({
         apiKey: apiKey || process.env.GROK_KEY,
         baseURL: "https://api.x.ai/v1",
@@ -12,5 +12,5 @@ export async function getTextGrok(prompt, temperature = 0.7, model = "grok-4-fas
         temperature,
     };
     const completion = await openai.chat.completions.create(requestParams);
-    return completion?.choices?.[0]?.message?.content;
+    return { content: [{ text: completion?.choices?.[0]?.message.content }] };
 }
