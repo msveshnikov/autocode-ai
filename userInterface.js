@@ -70,6 +70,7 @@ const UserInterface = {
                 "gemini-2.0-flash-thinking-exp-01-21",
                 "gemini-2.5-flash",
                 "gemini-2.5-pro",
+                "grok-4-fast"
             ],
         });
     },

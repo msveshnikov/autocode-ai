@@ -4,6 +4,7 @@ import { CONFIG } from "./config.js";
 import { getTextDeepseek } from "./deepseek.js";
 import { getTextGpt } from "./openai.js";
 import { getTextGemini } from "./gemini.js";
+import { getTextGrok } from "./grok.js";
 import chalk from "chalk";
 
 export async function getResponse(prompt, model, apiKey) {
@@ -12,6 +13,10 @@ export async function getResponse(prompt, model, apiKey) {
 
     if (model.startsWith("deepseek")) {
         return await getTextDeepseek(prompt, temperature, model, apiKey);
+    }
+
+    if (model.startsWith("grok")) {
+        return await getTextGrok(prompt, temperature, model, apiKey);
     }
 
     if (model.startsWith("o3") || model.startsWith("o4") || model.startsWith("gpt")) {
