@@ -69,6 +69,7 @@ const UserInterface = {
                 "deepseek-chat",
                 "gemini-2.0-flash-thinking-exp-01-21",
                 "gemini-2.5-flash",
+                "gemini-flash-latest",
                 "gemini-2.5-pro",
                 "grok-4-fast"
             ],
