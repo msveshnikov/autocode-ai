@@ -62,6 +62,7 @@ const UserInterface = {
             default: currentModel,
             choices: [
                 "claude-sonnet-4-20250514",
+                "claude-sonnet-4-5",
                 "o3-mini",
                 "o4-mini",
                 "gpt-5-mini",
