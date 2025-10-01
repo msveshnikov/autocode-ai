@@ -508,6 +508,24 @@ Provide the generated unit tests in a text code format, ready to be saved in a s
             console.error(chalk.red(`Error: ${error.message}`));
         }
     },
+
+    async runHardwareAnalysis() {
+        console.log(chalk.cyan("🔍 Running hardware analysis..."));
+        const spinner = ora("Gathering hardware information...").start();
+        try {
+            const { stdout, stderr } = await execAsync("python3 hardware_analyzer.py");
+            if (stderr) {
+                spinner.fail("Hardware analysis failed");
+                console.error(chalk.red(`❌ Error running hardware analyzer:\n${stderr}`));
+                return;
+            }
+            spinner.succeed("Hardware analysis complete");
+            console.log(stdout);
+        } catch (error) {
+            spinner.fail("Hardware analysis failed");
+            console.error(chalk.red(`❌ Error running hardware analyzer: ${error.message}`));
+        }
+    },
 };
 
 export default CodeAnalyzer;
