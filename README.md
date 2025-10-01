@@ -4,10 +4,6 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 
 ![AutoCode Logo](image.png)
 
-# Promo
-
-https://autocode.work/
-
 ## Features
 
 -   NodeJS-based console application
