@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import fetch from "node-fetch";
 import { exec } from "child_process";
 import util from "util";
 import FileManager from "./fileManager.js";

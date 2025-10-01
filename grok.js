@@ -1,16 +1,25 @@
-import OpenAI from "openai";
+import Groq from "groq-sdk";
+import { CONFIG } from "./config.js";
 
-export async function getTextGrok(prompt, temperature = 0.7, model = "grok-4-fast", apiKey) {
-    const openai = new OpenAI({
-        apiKey: apiKey || process.env.GROK_KEY,
-        baseURL: "https://api.x.ai/v1",
+export async function getTextGrok(prompt, temperature, model, apiKey) {
+    if (!(apiKey || process.env.GROK_KEY)) {
+        console.log("Please set up GROK_KEY environment variable");
+        process.exit(1);
+    }
+    const groq = new Groq({ apiKey: apiKey || process.env.GROK_KEY });
+
+    const response = await groq.chat.completions.create({
+        model: model,
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: CONFIG.maxTokens,
+        temperature: temperature,
     });
 
-    const requestParams = {
-        model,
-        messages: [{ role: "user", content: prompt }],
-        temperature,
+    return {
+        content: [{ type: "text", text: response.choices[0].message.content }],
+        usage: {
+            input_tokens: response.usage.prompt_tokens,
+            output_tokens: response.usage.completion_tokens,
+        },
     };
-    const completion = await openai.chat.completions.create(requestParams);
-    return { content: [{ text: completion?.choices?.[0]?.message.content }] };
 }
