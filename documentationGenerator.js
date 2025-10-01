@@ -23,14 +23,13 @@ ${JSON.stringify(projectStructure, null, 2)}
 
 Please provide comprehensive documentation for the code above. Include an overview, function/method descriptions, parameters, return values, and usage examples where applicable. Consider the project structure when describing the file's role in the overall project. Format the documentation in Markdown.
 `;
-
         const spinner = ora("Generating documentation...").start();
 
         try {
             const response = await getResponse(prompt);
 
             spinner.succeed("Documentation generated");
-            await FileManager.write(docFilePath, CodeGenerator.cleanGeneratedCode(response.content[0].text));
+            await FileManager.write(docFilePath, response.content[0].text);
             console.log(chalk.green(`✅ Documentation generated for ${filePath}`));
             await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {

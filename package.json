@@ -1,6 +1,6 @@
 {
     "name": "autocode-ai",
-    "version": "2.0.40",
+    "version": "2.0.51",
     "description": "An innovative automatic coding tool that generates projects from README.md using Claude 3.5 Sonnet API",
     "main": "index.js",
     "type": "module",
@@ -22,7 +22,7 @@
         "multi-language"
     ],
     "author": "Max Sveshnikov",
-    "license": "Commercial",
+    "license": "MIT",
     "engines": {
         "node": ">=20.0.0"
     },
@@ -30,11 +30,13 @@
         "@anthropic-ai/sdk": "^0.36.3",
         "@google/generative-ai": "^0.21.0",
         "axios": "^1.9.0",
+        "@anthropic-ai/sdk": "^0.56.0",
+        "@google/generative-ai": "^0.24.1",
         "chalk": "^5.4.1",
-        "ignore": "^7.0.3",
-        "inquirer": "^12.4.2",
+        "ignore": "^7.0.5",
+        "inquirer": "^12.6.3",
         "js-yaml": "^4.1.0",
-        "openai": "^4.85.1",
+        "openai": "^5.3.0",
         "ora": "^8.2.0"
     },
     "devDependencies": {

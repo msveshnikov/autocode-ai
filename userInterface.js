@@ -65,10 +65,17 @@ const UserInterface = {
                 "claude-sonnet-4-20250514",
                 "o3-mini",
                 "o4-mini",
+                "gpt-5-mini",
+                "deepseek-reasoner",
+                "deepseek-chat",
                 "gemini-2.0-flash-thinking-exp-01-21",
                 "gemini-2.5-flash-preview-05-20",
                 "gemini-2.5-pro-preview-06-05",
                 { name: `Local OpenVINO (${CONFIG.defaultLocalModelName})`, value: "openvino_local" },
+                "gemini-2.5-flash",
+                "gemini-flash-latest",
+                "gemini-2.5-pro",
+                "grok-4-fast"
             ],
         });
     },

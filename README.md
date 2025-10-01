@@ -1,14 +1,17 @@
 # AutoCode
 
-AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 3.5 Sonnet API. AutoCode was bootstrapped by itself from one simple prompt.
+AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 4 Sonnet, Gemini 2.5 Pro and others. AutoCode was bootstrapped by itself from one simple prompt.
 
 ![AutoCode Logo](image.png)
+
+# Promo
+
+https://autocode.work/
 
 ## Features
 
 -   NodeJS-based console application
 -   Automatic code generation based on README.md instructions
--   Utilizes Claude 3.5 Sonnet API for intelligent code generation
 -   Incremental project building
 -   Creates and modifies source files in the current folder and subfolders
 -   Self-updating README.md with new design ideas and considerations
@@ -20,7 +23,6 @@ AutoCode is an innovative automatic coding tool designed to bootstrap any softwa
 -   User-friendly command-line interface
 -   Support for multiple programming languages
 -   AI-powered agents for specialized tasks
--   Pricing tiers with license management
 -   Cross-platform compatibility (Windows, macOS, Linux)
 -   Syntax checking and auto-fixing
 
@@ -30,7 +32,7 @@ No installation is required. AutoCode can be run directly using npx.
 
 ## Usage
 
-1. Create CLAUDE_KEY environment variable (get your key here https://console.anthropic.com/settings/keys)
+1. Create CLAUDE_KEY (GEMINI_KEY, OPENAI_KEY) environment variable (get your key here https://console.anthropic.com/settings/keys)
 2. Navigate to your project folder in the terminal.
 3. Run the following command:
 
@@ -38,7 +40,8 @@ No installation is required. AutoCode can be run directly using npx.
 npx autocode-ai
 ```
 
-4. Follow the prompts and watch as your project comes to life!
+4. Select your model from menu
+5. Follow the prompts and watch as your project comes to life!
 
 ## How It Works
 
@@ -47,7 +50,6 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 ## Requirements
 
 -   Node.js (version 20.0.0 or higher)
--   Claude 3.5 Sonnet API (model: "claude-3-5-sonnet-20241022", max_tokens: 8192)
 -   Use async/await, ES6 modules, and fetch (no axios please)
 
 ## Project Structure
