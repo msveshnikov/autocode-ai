@@ -45,7 +45,6 @@ const UserInterface = {
                 "🌐 16. Generate landing page",
                 "📊 17. Generate API documentation",
                 "🔄 18. Generate full project",
-                "💻 19. Analyze Hardware & Get Compiler Flags",
                 "🌡️ Change temperature",
                 "🤖 Change model",
                 "🔑 Login",
@@ -63,17 +62,12 @@ const UserInterface = {
             default: currentModel,
             choices: [
                 "claude-sonnet-4-20250514",
-                "claude-sonnet-4-5",
                 "o3-mini",
                 "o4-mini",
-                "gpt-5-mini",
-                "deepseek-reasoner",
-                "deepseek-chat",
                 "gemini-2.0-flash-thinking-exp-01-21",
-                "gemini-2.5-flash",
-                "gemini-flash-latest",
-                "gemini-2.5-pro",
-                "grok-4-fast"
+                "gemini-2.5-flash-preview-05-20",
+                "gemini-2.5-pro-preview-06-05",
+                { name: `Local OpenVINO (${CONFIG.defaultLocalModelName})`, value: "openvino_local" },
             ],
         });
     },
@@ -422,9 +416,6 @@ const UserInterface = {
                 break;
             case "🔄 18. Generate full project":
                 await CodeGenerator.generateFullProject(projectStructure, readme);
-                break;
-            case "💻 19. Analyze Hardware & Get Compiler Flags":
-                await CodeAnalyzer.runHardwareAnalysis();
                 break;
             case "🌡️ Change temperature":
                 await this.setTemperature();

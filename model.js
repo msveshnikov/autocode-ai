@@ -6,9 +6,8 @@ import { getTextGpt } from "./openai.js";
 import { getTextGemini } from "./gemini.js";
 import { getTextGrok } from "./grok.js";
 import chalk from "chalk";
-import axios from "axios"; // Added axios import
 
-export async function getResponse(prompt, model, apiKey, maxNewTokens = 100) { // Added maxNewTokens
+export async function getResponse(prompt, model, apiKey) {
     model = model || (await UserInterface.getModel());
     const temperature = await UserInterface.getTemperature(); // Temperature might not be used by OpenVINO server directly
 

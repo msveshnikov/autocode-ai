@@ -9,7 +9,7 @@ router.get("/", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
         res.render("profile", { user });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Server error" });
     }
 });
@@ -18,7 +18,7 @@ router.get("/subscription", authCookie, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("tier subscriptionStatus");
         res.json({ tier: user.tier, subscriptionStatus: user.subscriptionStatus });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Server error" });
     }
 });
@@ -37,7 +37,7 @@ router.get("/usage", authCookie, async (req, res) => {
             requestLimit,
             remainingRequests,
         });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Server error" });
     }
 });
@@ -51,7 +51,7 @@ router.get("/devices", authCookie, async (req, res) => {
             devices: user.devices,
             deviceLimit,
         });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Server error" });
     }
 });

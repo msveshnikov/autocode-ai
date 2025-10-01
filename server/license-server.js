@@ -48,7 +48,7 @@ router.post("/check", authenticateToken, checkDeviceLimit, async (req, res) => {
             return res.status(429).json({ error: "Daily request limit exceeded", suggestUpgrade: true });
         }
         res.json({ message: "Request allowed" });
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -60,7 +60,7 @@ router.get("/user", authenticateToken, async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
         res.json(user);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -78,7 +78,7 @@ router.get("/tier-info", authenticateToken, async (req, res) => {
         }
 
         res.json(tierInfo);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: "Internal server error" });
     }
 });
