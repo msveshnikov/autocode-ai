@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /profile
-Disallow: /payment
-Sitemap: https://autocode.work/sitemap.xml

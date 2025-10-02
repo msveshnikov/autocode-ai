@@ -22,8 +22,8 @@ export const CONFIG = {
         ".lock",
     ],
     anthropicModel: "claude-3-5-sonnet-20241022",
-    maxTokens: 8192,
-    maxFileLines: 1300,
+    maxTokens: 20000,
+    maxFileLines: 1500,
     languageConfigs: {
         javascript: {
             fileExtensions: [".js", ".jsx", ".ts", ".tsx"],
