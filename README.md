@@ -2,8 +2,6 @@
 
 AutoCode is an innovative automatic coding tool designed to bootstrap any software project incrementally, transforming README.md instructions into a fully functional software project using Claude 4 Sonnet, Gemini 2.5 Pro and others. AutoCode was bootstrapped by itself from one simple prompt.
 
-![AutoCode Logo](image.png)
-
 ## Features
 
 -   NodeJS-based console application
@@ -47,6 +45,17 @@ AutoCode reads your README.md file and your sources and sends the instructions t
 
 -   Node.js (version 20.0.0 or higher)
 -   Use async/await, ES6 modules, and fetch (no axios please)
+
+## Boilerplate
+
+-   https://github.com/msveshnikov/boiler-plate (MERN stack with auth, roles, payments, chat, notifications, settings, admin panel and more)
+-   put your project description in README.md
+-   start brainstorming (p.1)
+-   replace "boiler" with your project name in all source files
+-   generate code (p.2) - not too much at once (5-7 files max)
+-   revisit README often, it is your main source of truth. Remove unrealistic goals and tasks.
+-   your MVP ready in 2-3 hours
+-   fix deploy to your VPS/nginx/certbot/docker
 
 ## Project Structure
 
