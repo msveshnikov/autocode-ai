@@ -61,7 +61,7 @@ Please provide a detailed project overview, architecture description, module int
             const response = await getResponse(prompt);
 
             spinner.succeed("Project documentation generated");
-            await FileManager.write("DOCUMENTATION.md", CodeGenerator.cleanGeneratedCode(response.content[0].text));
+            await FileManager.write("DOCUMENTATION.md", response.content[0].text);
             console.log(chalk.green("✅ Project documentation generated"));
             await CodeGenerator.calculateTokenStats(response.usage?.input_tokens, response.usage?.output_tokens);
         } catch (error) {
